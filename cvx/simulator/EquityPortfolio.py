@@ -4,15 +4,14 @@ import numpy as np
 import pandas as pd
 
 
-def build(prices, capital):
+def build(prices):
     stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=np.NaN)
-    return _EquityPortfolio(prices=prices, capital=capital, stocks=stocks)
+    return _EquityPortfolio(prices=prices, stocks=stocks)
 
 
 @dataclass(frozen=True)
 class _EquityPortfolio:
     prices: pd.DataFrame
-    capital: float
     stocks: pd.DataFrame
 
     @property
@@ -25,7 +24,7 @@ class _EquityPortfolio:
 
     def __iter__(self):
         for before, now in zip(self.index[:-1], self.index[1:]):
-            self.stocks.loc[now] = self.stocks.loc[before]
+            #self.stocks.loc[now] = self.stocks.loc[before]
             yield before, now
 
     def __setitem__(self, key, value):
@@ -37,7 +36,7 @@ class _EquityPortfolio:
         return self.stocks.loc[item]
 
     @property
-    def value(self):
+    def equity(self):
         return self.prices * self.stocks
 
     @property
@@ -50,13 +49,18 @@ class _EquityPortfolio:
     def trades_currency(self):
         return self.trades_stocks * self.prices
 
+    def cash(self, initial_cash):
+        return -self.trades_currency.sum(axis=1).cumsum() + initial_cash
+
+    def nav(self, initial_cash):
+        return self.equity.sum(axis=1) + self.cash(initial_cash)
 
 
 if __name__ == '__main__':
     index = pd.date_range('2021-01-01', periods=8, freq='D')
 
     prices=pd.DataFrame(columns=["A","B"], index=index, data=np.random.rand(8,2))
-    portfolio = build(prices, capital=1e6)
+    portfolio = build(prices)
 
     # set the initial position outside the loop
     portfolio.stocks.loc[index[0]] = pd.Series(index=["A","B"], data=[3.0, 4.0])
@@ -68,3 +72,4 @@ if __name__ == '__main__':
     print(portfolio.value.sum(axis=1))
     print(portfolio.trades_currency)
     print(portfolio.trades_stocks)
+    print(portfolio.cash(initial_cash=10))

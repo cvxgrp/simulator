@@ -11,7 +11,7 @@ def prices(resource_dir):
 
 @pytest.fixture()
 def portfolio(prices):
-    return build(prices=prices, capital=1e6)
+    return build(prices=prices)
 
 
 def test_assets(portfolio):
@@ -24,10 +24,11 @@ def test_index(portfolio):
 
 def test_iter(portfolio):
     portfolio.stocks.loc[portfolio.index[0], "A"] = 1.0
-    for before, now in portfolio:
-        assert before < now
 
-    pd.testing.assert_series_equal(portfolio.value.sum(axis=1), portfolio.prices["A"], check_names=False)
+    for before, now in portfolio:
+        portfolio.stocks.loc[now] = portfolio.stocks.loc[before]
+
+    pd.testing.assert_series_equal(portfolio.equity.sum(axis=1), portfolio.prices["A"], check_names=False)
 
     s = pd.Series(index=portfolio.index, data=0.0)
     s[s.index[0]] = 1.0
@@ -35,7 +36,17 @@ def test_iter(portfolio):
     pd.testing.assert_series_equal(portfolio.trades_stocks["A"], s, check_names=False)
     pd.testing.assert_series_equal(portfolio.trades_currency["A"], s*portfolio.prices["A"], check_names=False)
 
+
 def test_set_stocks(portfolio):
     portfolio[portfolio.index[0]] = pd.Series(index = portfolio.assets, data=0.0)
     pd.testing.assert_series_equal(portfolio[portfolio.index[0]], pd.Series(index = portfolio.assets, data=0.0), check_names=False)
 
+
+def test_cash(portfolio):
+    portfolio.stocks.loc[portfolio.index[0], "A"] = 2.0
+    portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
+
+    for before, now in portfolio:
+        portfolio.stocks.loc[now] = portfolio.stocks.loc[before]
+
+    assert portfolio.nav(100000).values[-1] == pytest.approx(117665.06)
