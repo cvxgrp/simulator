@@ -4,6 +4,7 @@ import pytest
 from cvx.simulator.EquityPortfolio import build_portfolio
 
 
+
 @pytest.fixture()
 def prices(resource_dir):
     return pd.read_csv(resource_dir / "price.csv", index_col=0, parse_dates=True, header=0)
@@ -24,7 +25,6 @@ def test_index(portfolio):
 
 def test_iter(portfolio):
     portfolio.stocks.loc[portfolio.index[0], "A"] = 1.0
-
     for before, now in portfolio:
         portfolio[now] = portfolio[before]
 
@@ -56,4 +56,5 @@ def test_cash(portfolio):
     assert portfolio.cash(initial_cash=100000).values[-1] == pytest.approx(117665.06 - 114260.54)
     assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
     assert portfolio.equity.sum(axis=1).diff().cumsum().values[-1] == pytest.approx(17665.06)
+
 
