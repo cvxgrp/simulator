@@ -32,6 +32,10 @@ class _EquityPortfolio:
         assert isinstance(value, pd.Series)
         self.stocks.loc[key, value.index] = value
 
+    def __getitem__(self, item):
+        assert item in self.index
+        return self.stocks.loc[item]
+
     @property
     def value(self):
         return self.prices * self.stocks
