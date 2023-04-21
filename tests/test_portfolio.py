@@ -1,7 +1,8 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.EquityPortfolio import build
+from cvx.simulator.EquityPortfolio import build_portfolio
+
 
 
 @pytest.fixture()
@@ -11,7 +12,7 @@ def prices(resource_dir):
 
 @pytest.fixture()
 def portfolio(prices):
-    return build(prices=prices, capital=1e6)
+    return build_portfolio(prices=prices)
 
 
 def test_assets(portfolio):
@@ -25,17 +26,35 @@ def test_index(portfolio):
 def test_iter(portfolio):
     portfolio.stocks.loc[portfolio.index[0], "A"] = 1.0
     for before, now in portfolio:
-        assert before < now
+        portfolio[now] = portfolio[before]
 
-    pd.testing.assert_series_equal(portfolio.value.sum(axis=1), portfolio.prices["A"], check_names=False)
+    pd.testing.assert_series_equal(portfolio.equity.sum(axis=1), portfolio.prices["A"], check_names=False)
 
     s = pd.Series(index=portfolio.index, data=0.0)
     s[s.index[0]] = 1.0
 
     pd.testing.assert_series_equal(portfolio.trades_stocks["A"], s, check_names=False)
-    pd.testing.assert_series_equal(portfolio.trades_currency["A"], s*portfolio.prices["A"], check_names=False)
+    pd.testing.assert_series_equal(portfolio.trades_currency["A"], s * portfolio.prices["A"], check_names=False)
+
 
 def test_set_stocks(portfolio):
-    portfolio[portfolio.index[0]] = pd.Series(index = portfolio.assets, data=0.0)
-    pd.testing.assert_series_equal(portfolio[portfolio.index[0]], pd.Series(index = portfolio.assets, data=0.0), check_names=False)
+    portfolio[portfolio.index[0]] = pd.Series(index=portfolio.assets, data=0.0)
+    pd.testing.assert_series_equal(portfolio[portfolio.index[0]], pd.Series(index=portfolio.assets, data=0.0),
+                                   check_names=False)
+
+
+def test_cash(portfolio):
+    portfolio.stocks.loc[portfolio.index[0], "A"] = 2.0
+    portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
+
+    for before, now in portfolio:
+        portfolio[now] = portfolio[before]
+
+    assert portfolio.nav(initial_cash=100000).values[-1] == pytest.approx(117665.06)
+    assert portfolio.equity.sum(axis=1).values[-1] == pytest.approx(114260.54)
+    assert portfolio.cash(initial_cash=100000).values[0] == pytest.approx(117665.06 - 114260.54)
+    assert portfolio.cash(initial_cash=100000).values[-1] == pytest.approx(117665.06 - 114260.54)
+    assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
+    assert portfolio.equity.sum(axis=1).diff().cumsum().values[-1] == pytest.approx(17665.06)
+
 
