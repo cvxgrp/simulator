@@ -65,10 +65,11 @@ class _EquityPortfolio:
     @property
     def profit(self):
         """
+        Profit
         """
         price_changes = self.prices.ffill().diff()
-        previous_stocks = self.stocks.shift(1)
-        return (previous_stocks * price_changes).sum(axis=1)
+        previous_stocks = self.stocks.shift(1).fillna(0.0)
+        return (previous_stocks * price_changes).dropna(axis=0, how="all").sum(axis=1)
 
     def __mul__(self, scalar):
         """
