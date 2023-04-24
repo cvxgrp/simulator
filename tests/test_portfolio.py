@@ -1,18 +1,22 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.EquityPortfolio import build_portfolio
-
+from cvx.simulator.portfolio import build_portfolio
+from cvx.simulator.metrics import Metrics
 
 
 @pytest.fixture()
 def prices(resource_dir):
     return pd.read_csv(resource_dir / "price.csv", index_col=0, parse_dates=True, header=0)
 
-
 @pytest.fixture()
 def portfolio(prices):
-    return build_portfolio(prices=prices)
+    positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
+    return build_portfolio(prices, stocks=positions)
+
+#@pytest.fixture()
+#def portfolio(prices):
+#    return build_portfolio(prices=prices)
 
 
 def test_assets(portfolio):
@@ -23,7 +27,8 @@ def test_index(portfolio):
     assert len(portfolio.index) == 602
 
 
-def test_iter(portfolio):
+def test_iter(prices):
+    portfolio = build_portfolio(prices)
     portfolio.stocks.loc[portfolio.index[0], "A"] = 1.0
     for before, now in portfolio:
         portfolio[now] = portfolio[before]
@@ -43,7 +48,8 @@ def test_set_stocks(portfolio):
                                    check_names=False)
 
 
-def test_cash(portfolio):
+def test_cash(prices):
+    portfolio = build_portfolio(prices=prices)
     portfolio.stocks.loc[portfolio.index[0], "A"] = 2.0
     portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
 
@@ -69,8 +75,6 @@ def test_add(prices, resource_dir):
     pos_left = pd.DataFrame(data={"A": [0, 1], "C": [3, 3]}, index=index_left)
     pos_right = pd.DataFrame(data={"A": [1, 1, 2], "B": [2, 3, 4]}, index=index_right)
 
-    print(pos_left)
-    print(pos_right)
     port_left = build_portfolio(prices, stocks=pos_left)
     port_right = build_portfolio(prices, stocks=pos_right)
 
@@ -80,3 +84,17 @@ def test_add(prices, resource_dir):
     port_add = port_left + port_right
     www = pd.read_csv(resource_dir / "positions.csv", index_col=0, parse_dates=[0])
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
+
+#def test_profit(portfolio):
+#    print(portfolio.profit)
+#    assert False
+
+def test_profit(portfolio):
+    print(portfolio.profit)
+    m = Metrics(daily_profit=portfolio.profit)
+    pd.testing.assert_series_equal(m.daily_profit, portfolio.profit)
+
+    assert m.mean_profit == pytest.approx(-5.810981697171386)
+    assert m.std_profit == pytest.approx(840.5615726803527)
+    assert m.total_profit == pytest.approx(-3492.4000000000033)
+    assert m.sr_profit == pytest.approx(-0.10974386369939439)
