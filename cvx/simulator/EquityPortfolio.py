@@ -88,11 +88,11 @@ class _EquityPortfolio:
         left = pd.DataFrame(index=index, columns=assets)
         left.update(self.stocks)
         # this is a problem...
-        left = left.ffill().fillna(0.0)
+        left = left.fillna(0.0)
 
         right = pd.DataFrame(index=index, columns=assets)
         right.update(port_new.stocks)
-        right = right.ffill().fillna(0.0)
+        right = right.fillna(0.0)
 
         positions = left + right
 
