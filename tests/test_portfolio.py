@@ -84,80 +84,67 @@ def test_long_only(prices, resource_dir):
     # the investor has made approximately 17665 USD over the lifespan of the portfolio
     assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
 
-
     # We assume the (retail) investor is allocating some capital C to his/her strategy.
     # Here we need enough capital to buy the initial position
-    # We spend
     #portfolio.trades_currency.to_csv(resource_dir / "trades_usd.csv")
     pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "trades_usd.csv", index_col=0, header=0, parse_dates=True),
                                   portfolio.trades_currency)
 
     # The available cash is the initial cash - costs for trading, e.g.
-    pd.testing.assert_series_equal(portfolio.cash(initial_cash=ic), -portfolio.trades_currency.sum(axis=1).cumsum() + ic)
+    pd.testing.assert_series_equal(portfolio.cash(initial_cash=ic), ic -portfolio.trades_currency.sum(axis=1).cumsum())
 
     # The NAV (net asset value) is cash + equity
     pd.testing.assert_series_equal(portfolio.nav(initial_cash=ic), portfolio.cash(initial_cash=ic) + portfolio.equity.sum(axis=1))
 
 
 
-# def test_long_short(prices, resource_dir):
-#     # Let's setup a portfolio with two assets: A and B
-#     portfolio = build_portfolio(prices=prices[["B", "C"]])
-#     assert set(portfolio.assets) == {"B", "C"}
-#     assert len(portfolio.index) == 602
-#
-#     pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
-#
-#     # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
-#     portfolio.stocks.loc[portfolio.index[0], "B"] = 3.0
-#     portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
-#
-#     # We now iterate through the underlying timestamps of the portfolio
-#     for before, now in portfolio:
-#         # before is t_{i-1} and now is t_{i}
-#         portfolio[now] = portfolio[before]
-#
-#     # Our assets have hopefully increased in value
-#     portfolio.equity.to_csv(resource_dir / "equity_ls.csv")
-#     assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(7385.84)
-#     assert portfolio.equity.sum(axis=1).values[-1] == pytest.approx(30133.25)
-#     pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "equity_ls.csv", index_col=0, header=0, parse_dates=True),
-#                                   portfolio.equity)
-#
-#     # Our daily profit is the daily change in valuation. No! Only if you don't change the position
-#     total_profit = portfolio.equity.sum(axis=1).diff().dropna()
-#     pd.testing.assert_series_equal(total_profit, portfolio.profit)
-#     #print(total_profit.cumsum())
-#     #assert False
-#
-#     # the investor has made approximately 17665 USD over the lifespan of the portfolio
-#     assert portfolio.profit.cumsum().values[-1] == pytest.approx(22747.41)
-#
-#     # We assume the (retail) investor is allocating some capital C to his/her strategy.
-#     # Here we need enough capital to buy the initial position
-#     # We spend
-#     # portfolio.trades_currency.to_csv(resource_dir / "trades_usd.csv")
-#     #pd.testing.assert_frame_equal(
-#     #    pd.read_csv(resource_dir / "trades_usd.csv", index_col=0, header=0, parse_dates=True),
-#     #    portfolio.trades_currency)
-#
-#     # The available cash is the initial cash - costs for trading, e.g.
-#     pd.testing.assert_series_equal(portfolio.cash(initial_cash=20000),
-#                                    -portfolio.trades_currency.sum(axis=1).cumsum() + 20000)
-#
-#     # The NAV (net asset value) is cash + equity
-#     pd.testing.assert_series_equal(portfolio.nav(initial_cash=20000),
-#                                    portfolio.cash(initial_cash=20000) + portfolio.equity.sum(axis=1))
-#
-#     print((portfolio.equity.abs().sum(axis=1) / 20000).max())
-#     print(portfolio.cash(initial_cash=20000).min())
-#     assert False
-#
-# #assert portfolio.nav(initial_cash=100000).values[-1] == pytest.approx(117665.06)
-# #assert portfolio.cash(initial_cash=100000).values[0] == pytest.approx(117665.06 - 114260.54)
-# #assert portfolio.cash(initial_cash=100000).values[-1] == pytest.approx(117665.06 - 114260.54)
-# #assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
-# #assert portfolio.equity.sum(axis=1).diff().cumsum().values[-1] == pytest.approx(17665.06)
+def test_long_short(prices, resource_dir):
+    # Let's setup a portfolio with two assets: B and C
+    portfolio = build_portfolio(prices=prices[["B", "C"]])
+    assert set(portfolio.assets) == {"B", "C"}
+    assert len(portfolio.index) == 602
+
+    pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
+
+    # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
+    portfolio.stocks.loc[portfolio.index[0], "B"] =  3.0
+    portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
+
+    # We now iterate through the underlying timestamps of the portfolio
+    for before, now in portfolio:
+        # before is t_{i-1} and now is t_{i}
+        portfolio[now] = portfolio[before]
+
+    # Our assets have hopefully increased in value
+    #portfolio.equity.to_csv(resource_dir / "equity_ls.csv")
+    assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(7385.84)
+    assert portfolio.equity.sum(axis=1).values[-1] == pytest.approx(30133.25)
+    pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "equity_ls.csv", index_col=0, header=0, parse_dates=True),
+                                  portfolio.equity)
+
+    # let's set some initial cash
+    ic = 20000.0
+    # the nav at time t is the value of the stocks and the cash at time t
+    nav = portfolio.nav(initial_cash=ic)
+    # the (absolute) profit is the difference between nav and initial cash
+    profit = (nav - ic).diff().dropna()
+
+    # We don't need to set the initial cash to estimate the (absolute) profit
+    # The daily profit is also the change in valuation of the previous position
+    pd.testing.assert_series_equal(profit, portfolio.profit)
+
+    # the investor has made approximately 17665 USD over the lifespan of the portfolio
+    assert portfolio.profit.cumsum().values[-1] == pytest.approx(22747.41)
+
+    #portfolio.trades_currency.to_csv(resource_dir / "trades_usd_ls.csv")
+    pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "trades_usd_ls.csv", index_col=0, header=0, parse_dates=True),
+                                  portfolio.trades_currency)
+
+    # The available cash is the initial cash - costs for trading, e.g.
+    pd.testing.assert_series_equal(portfolio.cash(initial_cash=ic), ic -portfolio.trades_currency.sum(axis=1).cumsum())
+
+    # The NAV (net asset value) is cash + equity
+    pd.testing.assert_series_equal(portfolio.nav(initial_cash=ic), portfolio.cash(initial_cash=ic) + portfolio.equity.sum(axis=1))
 
 
 def test_add(prices, resource_dir):
