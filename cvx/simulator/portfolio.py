@@ -44,6 +44,7 @@ class _EquityPortfolio:
 
     @property
     def equity(self):
+        # same as a cash position
         return (self.prices * self.stocks).ffill()
 
     @property
@@ -56,10 +57,10 @@ class _EquityPortfolio:
     def trades_currency(self):
         return self.trades_stocks * self.prices.ffill()
 
-    def cash(self, initial_cash):
+    def cash(self, initial_cash=0):
         return -self.trades_currency.sum(axis=1).cumsum() + initial_cash
 
-    def nav(self, initial_cash):
+    def nav(self, initial_cash=0):
         return self.equity.sum(axis=1) + self.cash(initial_cash)
 
     @property

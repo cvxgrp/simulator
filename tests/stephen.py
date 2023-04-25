@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from cvx.simulator.EquityPortfolio import build_portfolio
+from cvx.simulator.portfolio import build_portfolio
 
 if __name__ == '__main__':
     prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
