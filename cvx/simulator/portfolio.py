@@ -6,7 +6,7 @@ def build_portfolio(prices, stocks=None):
     assert isinstance(prices, pd.DataFrame)
 
     if stocks is None:
-        stocks = pd.DataFrame(index=prices.index, columns=prices.columns, dtype=float)
+        stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
 
     assert set(stocks.index).issubset(set(prices.index))
     assert set(stocks.columns).issubset(set(prices.columns))
