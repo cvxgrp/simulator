@@ -18,6 +18,7 @@ yfinance = "*"
 quantstats = "*"
 plotly = "*"
 jupyterlab = "*"
+loguru = "*"
 
 [build-system]
 requires = ["poetry-core"]
