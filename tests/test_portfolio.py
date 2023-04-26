@@ -161,3 +161,15 @@ def test_add(prices, resource_dir):
     www = pd.read_csv(resource_dir / "positions.csv", index_col=0, parse_dates=[0])
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
+
+def test_head(prices, resource_dir):
+    portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
+
+    for before, now, nav, cash in portfolio:
+        # before is t_{i-1} and now is t_{i}
+        assert before == portfolio.index[0]
+        assert now == portfolio.index[1]
+        assert nav == 20000.0
+        assert cash == 20000.0
+
+        #portfolio[now] = portfolio[before]

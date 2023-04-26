@@ -33,7 +33,7 @@ class _EquityPortfolio:
         for before, now in zip(self.index[:-1], self.index[1:]):
             self.stocks.loc[now] = self.stocks.loc[before]
             nav = self.nav[now]
-            value = self.equity.loc[now]
+            value = self.equity.loc[now].sum()
             cash = nav - value
             yield before, now, nav, cash
             # easy to return equity...
@@ -118,5 +118,5 @@ class _EquityPortfolio:
 
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
-        return build_portfolio(prices=prices_right, stocks=positions)
+        return build_portfolio(prices=prices_right, stocks=positions, initial_cash=self.initial_cash + port_new.initial_cash)
 
