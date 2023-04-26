@@ -1,3 +1,6 @@
+import pandas as pd
+pd.options.plotting.backend = "plotly"
+
 import yfinance as yf
 
 from cvx.simulator.portfolio import build_portfolio
@@ -15,8 +18,9 @@ if __name__ == '__main__':
 
     portfolio = build_portfolio(prices=prices, initial_cash=capital)
 
-    print(portfolio._state.cash)
-
     for before, now, snapshot in portfolio:
         # each day we invest a quarter of the capital in the assets
         portfolio[now] = 0.25 * snapshot.nav / portfolio.prices.loc[now]
+
+    fig = portfolio.cash.plot()
+    fig.show()
