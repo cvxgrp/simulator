@@ -25,7 +25,7 @@ jobs:
       run: |
         poetry install -vv
         poetry run pip install jupyter-book
-        poetry run python -m ipykernel install --user --name="antarctic"
+        poetry run python -m ipykernel install --user --name="simulator"
 
     # Build the book
     - name: Build the book
