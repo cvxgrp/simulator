@@ -13,7 +13,7 @@ def test_index(portfolio):
 
 
 def test_prices(portfolio, prices):
-    pd.testing.assert_frame_equal(portfolio.prices, prices)
+    pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
 
 
 def test_stocks(portfolio):
@@ -30,8 +30,8 @@ def test_iter(prices):
     portfolio.stocks["A"].loc[portfolio.index[0]] = 1.0
 
     # don't change the position at all and loop through the entire history
-    for before, now, nav, cash in portfolio:
-        portfolio[now] = portfolio[before]
+    for slice in portfolio:
+        portfolio[slice.now] = portfolio[slice.before]
 
     # given our position is exactly one stock in A the price of A and the equity match
     pd.testing.assert_series_equal(portfolio.equity["A"], portfolio.prices["A"], check_names=False)
@@ -59,9 +59,9 @@ def test_long_only(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, nav, cash in portfolio:
+    for slice in portfolio:
         # before is t_{i-1} and now is t_{i}
-        portfolio[now] = portfolio[before]
+        portfolio[slice.now] = portfolio[slice.before]
 
     # Our assets have hopefully increased in value
     # portfolio.equity.to_csv(resource_dir / "equity.csv")
@@ -107,9 +107,9 @@ def test_long_short(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, nav, cash in portfolio:
+    for slice in portfolio:
         # before is t_{i-1} and now is t_{i}
-        portfolio[now] = portfolio[before]
+        portfolio[slice.now] = portfolio[slice.before]
 
     # Our assets have hopefully increased in value
     #portfolio.equity.to_csv(resource_dir / "equity_ls.csv")
@@ -165,11 +165,11 @@ def test_add(prices, resource_dir):
 def test_head(prices, resource_dir):
     portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
-    for before, now, nav, cash in portfolio:
+    for slice in portfolio:
         # before is t_{i-1} and now is t_{i}
-        assert before == portfolio.index[0]
-        assert now == portfolio.index[1]
-        assert nav == 20000.0
-        assert cash == 20000.0
+        assert slice.before == portfolio.index[0]
+        assert slice.now == portfolio.index[1]
+        assert slice.nav == 20000.0
+        assert slice.cash == 20000.0
 
         #portfolio[now] = portfolio[before]
