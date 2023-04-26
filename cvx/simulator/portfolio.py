@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-
-import numpy as np
 import pandas as pd
 
 
@@ -63,6 +61,15 @@ class _EquityPortfolio:
     def nav(self, initial_cash=0):
         return self.equity.sum(axis=1) + self.cash(initial_cash)
 
+    #def returns(self, initial_cash=1):
+    #    return self.profit / initial_cash
+
+    #def accumulated(self, initial_cash=0):
+    #    return self.profit.cumsum() + initial_cash
+
+    #def compounded(self, initial_cash=1):
+    #    return (1.0 + self.returns(initial_cash=initial_cash)).cumprod()
+
     @property
     def profit(self):
         """
@@ -105,22 +112,3 @@ class _EquityPortfolio:
 
         return build_portfolio(prices=prices_right, stocks=positions)
 
-
-if __name__ == '__main__':
-    index = pd.date_range('2021-01-01', periods=8, freq='D')
-
-    prices=pd.DataFrame(columns=["A","B"], index=index, data=np.random.rand(8,2))
-    portfolio = build_portfolio(prices)
-
-    # set the initial position outside the loop
-    portfolio.stocks.loc[index[0]] = pd.Series(index=["A","B"], data=[3.0, 4.0])
-
-    for before, now in portfolio:
-        portfolio[now] = portfolio[before]
-        portfolio[now] = pd.Series(index=["A"], data=[5.0])
-
-    print(portfolio.stocks)
-    print(portfolio.equity.sum(axis=1))
-    print(portfolio.trades_currency)
-    print(portfolio.trades_stocks)
-    print(portfolio.cash(initial_cash=10))
