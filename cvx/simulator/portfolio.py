@@ -1,8 +1,30 @@
 from dataclasses import dataclass
 import pandas as pd
 
+from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
 
-def build_portfolio(prices, stocks=None, initial_cash=1e6):
+
+@dataclass
+class _Snapshot:
+    prices: pd.Series = None
+    position: pd.Series = None
+    trade: pd.Series = None
+    cash: float = 1e6
+
+    @property
+    def value(self):
+        return (self.prices * self.position).sum()
+
+    @property
+    def nav(self):
+        return self.value + self.cash
+
+    @property
+    def trade_volume(self):
+        return self.trade * self.prices
+
+
+def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
     assert isinstance(prices, pd.DataFrame)
 
     if stocks is None:
@@ -12,14 +34,24 @@ def build_portfolio(prices, stocks=None, initial_cash=1e6):
     assert set(stocks.columns).issubset(set(prices.columns))
 
     prices = prices[stocks.columns].loc[stocks.index]
-    return _EquityPortfolio(stocks=stocks, prices=prices, initial_cash=float(initial_cash))
+
+    trading_cost_model = trading_cost_model or LinearCostModel(name="LinearCostModel cost model")
+    return _EquityPortfolio(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
+                            trading_cost_model=trading_cost_model)
 
 
 @dataclass(frozen=True)
 class _EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
+    trading_cost_model: TradingCostModel
     initial_cash: float = 1e6
+    _state: _Snapshot = _Snapshot()
+
+    def __post_init__(self):
+        self._state.position = self.stocks.loc[self.index[0]]
+        self._state.prices = self.prices.loc[self.index[0]]
+        self._state.cash = self.initial_cash - self._state.value
 
     @property
     def index(self):
@@ -31,55 +63,57 @@ class _EquityPortfolio:
 
     def __iter__(self):
         for before, now in zip(self.index[:-1], self.index[1:]):
-            self.stocks.loc[now] = self.stocks.loc[before]
-            nav = self.nav[now]
-            value = self.equity.loc[now].sum()
-            cash = nav - value
-            yield before, now, nav, cash
-            # easy to return equity...
+            # valuation of the current position
+            self._state.prices = self.prices.loc[now]
 
-    def __setitem__(self, key, value):
-        assert isinstance(value, pd.Series)
-        self.stocks.loc[key, value.index] = value
+            yield before, now, self._state
+
+    def __setitem__(self, key, position):
+        assert isinstance(position, pd.Series)
+        self.stocks.loc[key, position.index] = position
+
+        # trade
+        #prices = self.prices.loc[key]
+        self._state.trade = position - self._state.position
+
+        #trade = position - self._state.position
+        #trade_usd = trade * self._state.prices
+        self._state.position = position
+        self._state.cash = self._state.cash - self._state.trade_volume.sum() - self.trading_cost_model.eval(self._state.trade_volume.abs(), self._state.trade).sum()
 
     def __getitem__(self, item):
         assert item in self.index
         return self.stocks.loc[item]
 
     @property
-    def equity(self):
+    def trading_costs(self) -> pd.DataFrame:
+        return self.trading_cost_model.eval(self.trades_currency, self.trades_stocks)
+
+    @property
+    def equity(self) -> pd.DataFrame:
         # same as a cash position
         return (self.prices * self.stocks).ffill()
 
     @property
-    def trades_stocks(self):
+    def trades_stocks(self) -> pd.DataFrame:
         t = self.stocks.diff()
         t.loc[self.index[0]] = self.stocks.loc[self.index[0]]
         return t.fillna(0.0)
 
     @property
-    def trades_currency(self):
+    def trades_currency(self) -> pd.DataFrame:
         return self.trades_stocks * self.prices.ffill()
 
     @property
-    def cash(self):
-        return -self.trades_currency.sum(axis=1).cumsum() + self.initial_cash
+    def cash(self) -> pd.Series:
+        return self.initial_cash - self.trades_currency.sum(axis=1).cumsum() - self.trading_costs.sum(axis=1).cumsum()
 
     @property
-    def nav(self):
+    def nav(self) -> pd.Series:
         return self.equity.sum(axis=1) + self.cash
 
-    #def returns(self, initial_cash=1):
-    #    return self.profit / initial_cash
-
-    #def accumulated(self, initial_cash=0):
-    #    return self.profit.cumsum() + initial_cash
-
-    #def compounded(self, initial_cash=1):
-    #    return (1.0 + self.returns(initial_cash=initial_cash)).cumprod()
-
     @property
-    def profit(self):
+    def profit(self) -> pd.Series:
         """
         Profit
         """
@@ -118,5 +152,5 @@ class _EquityPortfolio:
 
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
-        return build_portfolio(prices=prices_right, stocks=positions, initial_cash=self.initial_cash + port_new.initial_cash)
-
+        return build_portfolio(prices=prices_right, stocks=positions,
+                               initial_cash=self.initial_cash + port_new.initial_cash)

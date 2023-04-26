@@ -1,7 +1,17 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.portfolio import build_portfolio
+from cvx.simulator.portfolio import build_portfolio, _Snapshot
+
+
+def test_snapshot():
+    prices = pd.Series(data=[2.0, 3.0])
+    positions = pd.Series(data=[100, 300])
+    cash = 400
+    snapshot = _Snapshot(cash=cash, prices=prices, position=positions)
+    assert snapshot.value == 1100.0
+    assert snapshot.nav == 1500.0
+
 
 def test_assets(portfolio):
     assert set(portfolio.assets) == {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
@@ -13,7 +23,7 @@ def test_index(portfolio):
 
 
 def test_prices(portfolio, prices):
-    pd.testing.assert_frame_equal(portfolio.prices, prices)
+    pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
 
 
 def test_stocks(portfolio):
@@ -30,7 +40,7 @@ def test_iter(prices):
     portfolio.stocks["A"].loc[portfolio.index[0]] = 1.0
 
     # don't change the position at all and loop through the entire history
-    for before, now, nav, cash in portfolio:
+    for before, now, _ in portfolio:
         portfolio[now] = portfolio[before]
 
     # given our position is exactly one stock in A the price of A and the equity match
@@ -43,7 +53,6 @@ def test_iter(prices):
     # trades can either be measured in stocks or in currency units
     pd.testing.assert_series_equal(portfolio.trades_stocks["A"], s, check_names=False)
     pd.testing.assert_series_equal(portfolio.trades_currency["A"], s * portfolio.prices["A"], check_names=False)
-
 
 
 def test_long_only(prices, resource_dir):
@@ -59,7 +68,7 @@ def test_long_only(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, nav, cash in portfolio:
+    for before, now, _ in portfolio:
         # before is t_{i-1} and now is t_{i}
         portfolio[now] = portfolio[before]
 
@@ -93,7 +102,6 @@ def test_long_only(prices, resource_dir):
     pd.testing.assert_series_equal(portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1))
 
 
-
 def test_long_short(prices, resource_dir):
     # Let's setup a portfolio with two assets: B and C
     portfolio = build_portfolio(prices=prices[["B", "C"]], initial_cash=20000)
@@ -107,7 +115,7 @@ def test_long_short(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, nav, cash in portfolio:
+    for before, now, _ in portfolio:
         # before is t_{i-1} and now is t_{i}
         portfolio[now] = portfolio[before]
 
@@ -165,11 +173,12 @@ def test_add(prices, resource_dir):
 def test_head(prices, resource_dir):
     portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
-    for before, now, nav, cash in portfolio:
+    for before, now, snapshot in portfolio:
         # before is t_{i-1} and now is t_{i}
         assert before == portfolio.index[0]
         assert now == portfolio.index[1]
-        assert nav == 20000.0
-        assert cash == 20000.0
+        assert snapshot.nav == 20000.0
+        assert snapshot.cash == 20000.0
+        assert snapshot.value == 0.0
 
         #portfolio[now] = portfolio[before]
