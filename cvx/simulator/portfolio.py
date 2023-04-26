@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 
-def build_portfolio(prices, stocks=None):
+def build_portfolio(prices, stocks=None, initial_cash=1e6):
     assert isinstance(prices, pd.DataFrame)
 
     if stocks is None:
@@ -12,13 +12,14 @@ def build_portfolio(prices, stocks=None):
     assert set(stocks.columns).issubset(set(prices.columns))
 
     prices = prices[stocks.columns].loc[stocks.index]
-    return _EquityPortfolio(stocks=stocks, prices=prices)
+    return _EquityPortfolio(stocks=stocks, prices=prices, initial_cash=float(initial_cash))
 
 
 @dataclass(frozen=True)
 class _EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
+    initial_cash: float = 1e6
 
     @property
     def index(self):
@@ -30,7 +31,12 @@ class _EquityPortfolio:
 
     def __iter__(self):
         for before, now in zip(self.index[:-1], self.index[1:]):
-            yield before, now
+            self.stocks.loc[now] = self.stocks.loc[before]
+            nav = self.nav[now]
+            value = self.equity.loc[now]
+            cash = nav - value
+            yield before, now, nav, cash
+            # easy to return equity...
 
     def __setitem__(self, key, value):
         assert isinstance(value, pd.Series)
@@ -55,11 +61,13 @@ class _EquityPortfolio:
     def trades_currency(self):
         return self.trades_stocks * self.prices.ffill()
 
-    def cash(self, initial_cash=0):
-        return -self.trades_currency.sum(axis=1).cumsum() + initial_cash
+    @property
+    def cash(self):
+        return -self.trades_currency.sum(axis=1).cumsum() + self.initial_cash
 
-    def nav(self, initial_cash=0):
-        return self.equity.sum(axis=1) + self.cash(initial_cash)
+    @property
+    def nav(self):
+        return self.equity.sum(axis=1) + self.cash
 
     #def returns(self, initial_cash=1):
     #    return self.profit / initial_cash
