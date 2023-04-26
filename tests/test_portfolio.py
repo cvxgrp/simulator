@@ -7,10 +7,12 @@ from cvx.simulator.portfolio import build_portfolio, _Snapshot
 def test_snapshot():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
+    trade = pd.Series(data=[4.0, 5.0])
     cash = 400
-    snapshot = _Snapshot(cash=cash, prices=prices, position=positions)
+    snapshot = _Snapshot(cash=cash, prices=prices, position=positions, trade=trade)
     assert snapshot.value == 1100.0
     assert snapshot.nav == 1500.0
+    pd.testing.assert_series_equal(snapshot.trade_volume, pd.Series(data=[8.0, 15.0]))
 
 
 def test_assets(portfolio):

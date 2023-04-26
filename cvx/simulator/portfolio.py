@@ -73,13 +73,10 @@ class _EquityPortfolio:
         self.stocks.loc[key, position.index] = position
 
         # trade
-        #prices = self.prices.loc[key]
         self._state.trade = position - self._state.position
-
-        #trade = position - self._state.position
-        #trade_usd = trade * self._state.prices
         self._state.position = position
-        self._state.cash = self._state.cash - self._state.trade_volume.sum() - self.trading_cost_model.eval(self._state.trade_volume.abs(), self._state.trade).sum()
+        self._state.cash = self._state.cash - self._state.trade_volume.sum() - \
+                           self.trading_cost_model.eval(self._state.trade_volume, self._state.trade).sum()
 
     def __getitem__(self, item):
         assert item in self.index
