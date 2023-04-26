@@ -30,7 +30,7 @@ def test_iter(prices):
     portfolio.stocks["A"].loc[portfolio.index[0]] = 1.0
 
     # don't change the position at all and loop through the entire history
-    for before, now in portfolio:
+    for before, now, nav, cash in portfolio:
         portfolio[now] = portfolio[before]
 
     # given our position is exactly one stock in A the price of A and the equity match
@@ -48,7 +48,7 @@ def test_iter(prices):
 
 def test_long_only(prices, resource_dir):
     # Let's setup a portfolio with two assets: A and B
-    portfolio = build_portfolio(prices=prices[["A", "B"]])
+    portfolio = build_portfolio(prices=prices[["A", "B"]], initial_cash=100000)
     assert set(portfolio.assets) == {"A", "B"}
     assert len(portfolio.index) == 602
 
@@ -59,7 +59,7 @@ def test_long_only(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now in portfolio:
+    for before, now, nav, cash in portfolio:
         # before is t_{i-1} and now is t_{i}
         portfolio[now] = portfolio[before]
 
@@ -70,12 +70,8 @@ def test_long_only(prices, resource_dir):
     pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "equity.csv", index_col=0, header=0, parse_dates=True),
                                   portfolio.equity)
 
-    # let's set some initial cash
-    ic = 100000.0
-    # the nav at time t is the value of the stocks and the cash at time t
-    nav = portfolio.nav(initial_cash=ic)
     # the (absolute) profit is the difference between nav and initial cash
-    profit = (nav - ic).diff().dropna()
+    profit = (portfolio.nav - portfolio.initial_cash).diff().dropna()
     
     # We don't need to set the initial cash to estimate the (absolute) profit
     # The daily profit is also the change in valuation of the previous position
@@ -91,16 +87,16 @@ def test_long_only(prices, resource_dir):
                                   portfolio.trades_currency)
 
     # The available cash is the initial cash - costs for trading, e.g.
-    pd.testing.assert_series_equal(portfolio.cash(initial_cash=ic), ic -portfolio.trades_currency.sum(axis=1).cumsum())
+    pd.testing.assert_series_equal(portfolio.cash, portfolio.initial_cash -portfolio.trades_currency.sum(axis=1).cumsum())
 
     # The NAV (net asset value) is cash + equity
-    pd.testing.assert_series_equal(portfolio.nav(initial_cash=ic), portfolio.cash(initial_cash=ic) + portfolio.equity.sum(axis=1))
+    pd.testing.assert_series_equal(portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1))
 
 
 
 def test_long_short(prices, resource_dir):
     # Let's setup a portfolio with two assets: B and C
-    portfolio = build_portfolio(prices=prices[["B", "C"]])
+    portfolio = build_portfolio(prices=prices[["B", "C"]], initial_cash=20000)
     assert set(portfolio.assets) == {"B", "C"}
     assert len(portfolio.index) == 602
 
@@ -111,7 +107,7 @@ def test_long_short(prices, resource_dir):
     portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now in portfolio:
+    for before, now, nav, cash in portfolio:
         # before is t_{i-1} and now is t_{i}
         portfolio[now] = portfolio[before]
 
@@ -122,12 +118,9 @@ def test_long_short(prices, resource_dir):
     pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "equity_ls.csv", index_col=0, header=0, parse_dates=True),
                                   portfolio.equity)
 
-    # let's set some initial cash
-    ic = 20000.0
-    # the nav at time t is the value of the stocks and the cash at time t
-    nav = portfolio.nav(initial_cash=ic)
+
     # the (absolute) profit is the difference between nav and initial cash
-    profit = (nav - ic).diff().dropna()
+    profit = (portfolio.nav - portfolio.initial_cash).diff().dropna()
 
     # We don't need to set the initial cash to estimate the (absolute) profit
     # The daily profit is also the change in valuation of the previous position
@@ -141,10 +134,10 @@ def test_long_short(prices, resource_dir):
                                   portfolio.trades_currency)
 
     # The available cash is the initial cash - costs for trading, e.g.
-    pd.testing.assert_series_equal(portfolio.cash(initial_cash=ic), ic -portfolio.trades_currency.sum(axis=1).cumsum())
+    pd.testing.assert_series_equal(portfolio.cash, portfolio.initial_cash - portfolio.trades_currency.sum(axis=1).cumsum())
 
     # The NAV (net asset value) is cash + equity
-    pd.testing.assert_series_equal(portfolio.nav(initial_cash=ic), portfolio.cash(initial_cash=ic) + portfolio.equity.sum(axis=1))
+    pd.testing.assert_series_equal(portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1))
 
 
 def test_add(prices, resource_dir):
@@ -168,3 +161,15 @@ def test_add(prices, resource_dir):
     www = pd.read_csv(resource_dir / "positions.csv", index_col=0, parse_dates=[0])
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
+
+def test_head(prices, resource_dir):
+    portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
+
+    for before, now, nav, cash in portfolio:
+        # before is t_{i-1} and now is t_{i}
+        assert before == portfolio.index[0]
+        assert now == portfolio.index[1]
+        assert nav == 20000.0
+        assert cash == 20000.0
+
+        #portfolio[now] = portfolio[before]

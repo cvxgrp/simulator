@@ -14,24 +14,26 @@ from cvx.simulator.portfolio import build_portfolio
 
 if __name__ == '__main__':
     prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
-    portfolio = build_portfolio(prices=prices)
+    portfolio = build_portfolio(prices=prices, initial_cash=1e6)
 
-    # we assume a constant portfolio size throughout the backtest
-    initial_cash = 1e6
+    for before, now, nav, cash in portfolio:
+        # before = previous timestamp
+        # now = current timestamp
+        # nav = current  total value of the portfolio
+        # cash = current cash available
 
-    for before, now in portfolio:
         # pick two assets at random
         pair = np.random.choice(portfolio.assets, 2)
         # prices for the pair
         prices = portfolio.prices.loc[now][pair]
         # compute the pair
         stocks = pd.Series(index=portfolio.assets, data=0.0)
-        stocks[pair] = [1e6, -1e6]/prices.values
+        stocks[pair] = 0.1*np.array([nav, -nav])/prices.values
 
         portfolio[now] = stocks
 
     print(portfolio.stocks)
     print(portfolio.trades_currency.sum(axis=1))
-    print(portfolio.nav(initial_cash=initial_cash))
+    print(portfolio.nav)
 
 

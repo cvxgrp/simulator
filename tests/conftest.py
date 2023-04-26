@@ -19,5 +19,5 @@ def prices(resource_dir):
 @pytest.fixture()
 def portfolio(prices):
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    return build_portfolio(prices, stocks=positions)
+    return build_portfolio(prices, stocks=positions, initial_cash=1e6)
 
