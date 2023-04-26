@@ -14,7 +14,7 @@ class TradingCostModel(abc.ABC):
 
 
 @dataclass(frozen=True)
-class Linear(TradingCostModel):
+class LinearCostModel(TradingCostModel):
     factor: float = 0.0
     bias: float = 0.0
 

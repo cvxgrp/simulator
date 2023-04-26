@@ -1,10 +1,22 @@
-from collections import namedtuple
 from dataclasses import dataclass
 import pandas as pd
 
-from cvx.simulator.trading_costs import Linear, TradingCostModel
+from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
 
-State = namedtuple("State", "before now cash nav value")
+
+@dataclass
+class _Snapshot:
+    prices: pd.Series = None
+    position: pd.Series = None
+    cash: float = 1e6
+
+    @property
+    def value(self):
+        return (self.prices * self.position).sum()
+
+    @property
+    def nav(self):
+        return self.value + self.cash
 
 
 def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
@@ -18,22 +30,23 @@ def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=No
 
     prices = prices[stocks.columns].loc[stocks.index]
 
-    trading_cost_model = trading_cost_model or Linear(name="Linear cost model")
-    return _EquityPortfolio(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash), trading_cost_model=trading_cost_model)
+    trading_cost_model = trading_cost_model or LinearCostModel(name="LinearCostModel cost model")
+    return _EquityPortfolio(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
+                            trading_cost_model=trading_cost_model)
 
 
-@dataclass
+@dataclass(frozen=True)
 class _EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel
     initial_cash: float = 1e6
-    _current_cash: float = 1e6
-    _current_position: pd.Series = None
+    _state: _Snapshot = _Snapshot()
 
     def __post_init__(self):
-        self._current_position = self.stocks.loc[self.index[0]]
-        self._current_cash = self.initial_cash
+        self._state.position = self.stocks.loc[self.index[0]]
+        self._state.prices = self.prices.loc[self.index[0]]
+        self._state.cash = self.initial_cash - self._state.value
 
     @property
     def index(self):
@@ -46,20 +59,19 @@ class _EquityPortfolio:
     def __iter__(self):
         for before, now in zip(self.index[:-1], self.index[1:]):
             # valuation of the current position
-            value = (self.prices.loc[now] * self._current_position).sum()
-            # current nav is the valuation + current cash holdings
-            nav = value + self._current_cash
-            yield State(before=before, now=now, nav=nav, cash=self._current_cash, value=value)
+            yield before, now, self._state
 
     def __setitem__(self, key, value):
         assert isinstance(value, pd.Series)
         self.stocks.loc[key, value.index] = value
 
         # trade
-        trade = value - self._current_position
+        prices = self.prices.loc[key]
+        trade = value - self._state.position
         trade_usd = trade * self.prices.loc[key]
-        self._current_position = value
-        self._current_cash = self._current_cash - trade_usd.sum() - self.trading_cost_model.eval(trade_usd, trade).sum()
+        self._state.prices = prices
+        self._state.position = value
+        self._state.cash = self._state.cash - trade_usd.sum() - self.trading_cost_model.eval(trade_usd, trade).sum()
 
     def __getitem__(self, item):
         assert item in self.index
@@ -132,5 +144,5 @@ class _EquityPortfolio:
 
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
-        return build_portfolio(prices=prices_right, stocks=positions, initial_cash=self.initial_cash + port_new.initial_cash)
-
+        return build_portfolio(prices=prices_right, stocks=positions,
+                               initial_cash=self.initial_cash + port_new.initial_cash)
