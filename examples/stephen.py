@@ -17,7 +17,7 @@ pd.options.plotting.backend = "plotly"
 
 if __name__ == '__main__':
     logger.info("Load prices")
-    prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
+    prices = pd.read_csv(Path("data") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
 
     # Let's pay a fee of 10 bps every time
     logger.info("Build trading cost model")
