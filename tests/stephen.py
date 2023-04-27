@@ -33,11 +33,9 @@ if __name__ == '__main__':
 
         # pick two assets at random
         pair = np.random.choice(portfolio.assets, 2, replace=False)
-        # prices for the pair
-        prices = portfolio.prices.loc[now][pair]
         # compute the pair
         stocks = pd.Series(index=portfolio.assets, data=0.0)
-        stocks[pair] = [snapshot.nav, -snapshot.nav] / prices.values
+        stocks[pair] = [snapshot.nav, -snapshot.nav] / snapshot.prices[pair].values
 
         portfolio[now] = 0.1*stocks
 

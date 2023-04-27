@@ -18,9 +18,9 @@ if __name__ == '__main__':
 
     portfolio = build_portfolio(prices=prices, initial_cash=capital)
 
-    for before, now, snapshot in portfolio:
+    for _, now, snapshot in portfolio:
         # each day we invest a quarter of the capital in the assets
-        portfolio[now] = 0.25 * snapshot.nav / portfolio.prices.loc[now]
+        portfolio[now] = 0.25 * snapshot.nav / snapshot.prices
 
     fig = portfolio.cash.plot()
     fig.show()
