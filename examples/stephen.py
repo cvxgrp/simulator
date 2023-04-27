@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Let's pay a fee of 10 bps every time
     logger.info("Build trading cost model")
-    linearCostModel = LinearCostModel(name="LinearCostModel cost model", factor=0.0010)
+    linearCostModel = LinearCostModel(name="LinearCostModel cost model", factor=0.0000)
 
     logger.info("Build portfolio")
     portfolio = build_portfolio(prices=prices, initial_cash=1e6, trading_cost_model=linearCostModel)
@@ -40,5 +40,6 @@ if __name__ == '__main__':
         portfolio[now] = 0.1*stocks
 
     fig = portfolio.nav.plot()
+    
     fig.show()
 
