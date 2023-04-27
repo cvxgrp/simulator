@@ -43,7 +43,11 @@ The snapshot gives access to the currently available cash, the current prices an
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
 
 ```python
-for before, now, snapshot in portfolio:
+for _, now, snapshot in portfolio:
     # each day we invest a quarter of the capital in the assets
     portfolio[now] = 0.25 * snapshot.nav / snapshot.prices
 ```
+
+Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
+Future versions of this package may support such conventions, too.
+
