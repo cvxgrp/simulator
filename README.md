@@ -2,7 +2,7 @@
 
 [![binder](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml)
 [![Book](https://github.com/cvxgrp/simulator/actions/workflows/book.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/book.yml)
-
+[![Test](https://github.com/cvxgrp/simulator/actions/workflows/test.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/test.yml)
 
 Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$, 
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
