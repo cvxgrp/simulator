@@ -8,10 +8,20 @@ e.g. we operate using $n \times m$ matrix where each column corresponds to a par
 In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
 This tool shall help to simplify the accounting. It keeps track of the available cash, the profits achieved, etc.
 
-Our approach follows an object-oriented pattern. The users defines a portfolio object and by looping through this object (we have overloaded '__iter__') 
-we can update the target position at each step.
+## Modus operandi
 
-We create the portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
+The simulator shall be completely agnostic as to the trading policy/strategy.
+Our approach follows a rather common pattern:
+
+* Create the portfolio object
+* Loop through time
+* Analyse results
+
+We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
+
+### Create the portfolio object
+
+The users defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
 
 ```python
 import pandas as pd
@@ -21,10 +31,13 @@ prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=T
 portfolio = build_portfolio(prices=prices, initial_cash=1e6)
 ```
 
-The simulator should always be completely agnostic as to the trading policy.
-We demonstrate this with silly policies. Like here’s one:  Each day choose names from the universe at random.
+It is also possible to specify a model for trading costs.
+
+### Loop through time
+
+We have overloaded the '__iter__' method to create a custom loop. 
+Let's start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
-Not a good strategy, but a valid one.
 
 ```python
 for before, now, snapshot in portfolio:
@@ -34,7 +47,7 @@ for before, now, snapshot in portfolio:
     stocks = pd.Series(index=portfolio.assets, data=0.0)
     stocks[pair] = [snapshot.nav, -snapshot.nav] / snapshot.prices[pair].values
     # update the position 
-    portfolio[now] = 0.1*stocks
+    portfolio[now] = 0.1 * stocks
 ```
 
 A lot of magic is hidden in the snapshot variable. 
@@ -50,4 +63,5 @@ for _, now, snapshot in portfolio:
 
 Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
 Future versions of this package may support such conventions, too.
+
 
