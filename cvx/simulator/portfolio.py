@@ -76,7 +76,7 @@ class _EquityPortfolio:
         self._state.trade = position - self._state.position
         self._state.position = position
         self._state.cash = self._state.cash - self._state.trade_volume.sum() - \
-                           self.trading_cost_model.eval(self._state.trade_volume, self._state.trade).sum()
+                           self.trading_cost_model.eval(self._state.prices, self._state.trade).sum()
 
     def __getitem__(self, item):
         assert item in self.index
@@ -84,7 +84,7 @@ class _EquityPortfolio:
 
     @property
     def trading_costs(self) -> pd.DataFrame:
-        return self.trading_cost_model.eval(self.trades_currency, self.trades_stocks)
+        return self.trading_cost_model.eval(self.prices, self.trades_stocks)
 
     @property
     def equity(self) -> pd.DataFrame:
