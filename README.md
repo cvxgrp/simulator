@@ -1,4 +1,4 @@
-# simulator
+# cvx.simulator
 
 [![binder](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml)
 [![Book](https://github.com/cvxgrp/simulator/actions/workflows/book.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/book.yml)
@@ -97,8 +97,10 @@ to replicate the virtual environment we have defined in pyproject.toml.
 
 ## Kernel
 
-We install jupyter lab within your new virtual environment. 
+We install [JupyterLab](https://jupyter.org) within your new virtual environment. Executing
 
-Future versions of this package may support such conventions, too.
+```bash
+./create_kernel.sh
+```
 
-
+constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html) for the project.
