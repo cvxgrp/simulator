@@ -11,8 +11,12 @@ This tool shall help to simplify the accounting. It keeps track of the available
 Our approach follows an object-oriented pattern. The users defines a portfolio object and by looping through this object (we have overloaded '__iter__') 
 we can update the target position at each step.
 
-Let's discuss an example:
+We create the portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
 
-'''python
-
-'''
+```python
+    import pandas as pd
+    from cvx.simulator.portfolio import build_portfolio
+    
+    prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill(
+    portfolio = build_portfolio(prices=prices, initial_cash=1e6)
+```
