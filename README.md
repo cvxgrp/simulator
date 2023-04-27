@@ -33,7 +33,7 @@ It is also possible to specify a model for trading costs.
 
 ### Loop through time
 
-We have overloaded the '__iter__' method to create a custom loop. 
+We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop. 
 Let's start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
@@ -59,7 +59,7 @@ for _, now, snapshot in portfolio:
     portfolio[now] = 0.25 * snapshot.nav / snapshot.prices
 ```
 
-Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
+Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
 Future versions of this package may support such conventions, too.
 
 ### Analyse results
@@ -76,8 +76,10 @@ portfolio.equity
 
 ## The dirty path
 
-Some may know the positions they want to enter for eternity. Running through a loop is rather non-pythonic waste of time in such a case.
-It is possible to completely bypass this step by submitting a frame of positions together with a frame of prices when creating the portfolio object.
+Some may know the positions they want to enter for eternity. 
+Running through a loop is rather non-pythonic waste of time in such a case.
+It is possible to completely bypass this step by submitting 
+a frame of positions together with a frame of prices when creating the portfolio object.
 
 ## Poetry
 
