@@ -13,9 +13,9 @@ This tool shall help to simplify the accounting. It keeps track of the available
 The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
-* Create the portfolio object
-* Loop through time
-* Analyse results
+* [Create the portfolio object](#Create the portfolio object)
+* [Loop through time](#Loop through time)
+* [Analyse results](#Analyse results)
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
 
