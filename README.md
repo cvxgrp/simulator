@@ -22,7 +22,7 @@ We demonstrate those steps with somewhat silly policies. They are never good str
 ### Create the portfolio object
 
 The users defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
-
+u
 ```python
 import pandas as pd
 from cvx.simulator.portfolio import build_portfolio
@@ -62,6 +62,10 @@ for _, now, snapshot in portfolio:
 ```
 
 Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
+
+### Analyse results
+
+The loop above is filling up the desired positions 
 Future versions of this package may support such conventions, too.
 
 
