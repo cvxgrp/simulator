@@ -20,3 +20,9 @@ We create the portfolio object by loading a frame of prices and initialize the i
     prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill(
     portfolio = build_portfolio(prices=prices, initial_cash=1e6)
 ```
+
+The simulator should always be completely agnostic as to the trading policy.
+We demonstrate this with silly policies. Like here’s one:  Each day choose names from the universe at random.
+Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
+Not a good strategy, but a valid one.
+
