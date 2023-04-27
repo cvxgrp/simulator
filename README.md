@@ -1,6 +1,8 @@
-# simulator
-Tool to support backtests
+# cvx.simulator
 
+[![binder](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml)
+[![Book](https://github.com/cvxgrp/simulator/actions/workflows/book.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/book.yml)
+[![Test](https://github.com/cvxgrp/simulator/actions/workflows/test.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/test.yml)
 
 Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$, 
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
@@ -13,16 +15,16 @@ This tool shall help to simplify the accounting. It keeps track of the available
 The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
-* Create the portfolio object
-* Loop through time
-* Analyse results
+* [Create the portfolio object](#create-the-portfolio-object)
+* [Loop through time](#loop-through-time)
+* [Analyse results](#analyse-results)
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
 
 ### Create the portfolio object
 
 The users defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
-u
+
 ```python
 import pandas as pd
 from cvx.simulator.portfolio import build_portfolio
@@ -35,7 +37,7 @@ It is also possible to specify a model for trading costs.
 
 ### Loop through time
 
-We have overloaded the '__iter__' method to create a custom loop. 
+We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop. 
 Let's start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
@@ -61,7 +63,7 @@ for _, now, snapshot in portfolio:
     portfolio[now] = 0.25 * snapshot.nav / snapshot.prices
 ```
 
-Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
+Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
 Future versions of this package may support such conventions, too.
 
 ### Analyse results
@@ -78,12 +80,14 @@ portfolio.equity
 
 ## The dirty path
 
-Some may know the positions they want to enter for eternity. Running through a loop is rather non-pythonic waste of time in such a case.
-It is possible to completely bypass this step by submitting a frame of positions together with a frame of prices when we create the portfolio object.
+Some may know the positions they want to enter for eternity. 
+Running through a loop is rather non-pythonic waste of time in such a case.
+It is possible to completely bypass this step by submitting 
+a frame of positions together with a frame of prices when creating the portfolio object.
 
 ## Poetry
 
-We assume you share already the love for Poetry. Once you have installed poetry you can perform
+We assume you share already the love for [Poetry](https://python-poetry.org). Once you have installed poetry you can perform
 
 ```bash
 poetry install
@@ -93,8 +97,10 @@ to replicate the virtual environment we have defined in pyproject.toml.
 
 ## Kernel
 
-We install jupyter lab within your new virtual environment. 
+We install [JupyterLab](https://jupyter.org) within your new virtual environment. Executing
 
-Future versions of this package may support such conventions, too.
+```bash
+./create_kernel.sh
+```
 
-
+constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html) for the project.
