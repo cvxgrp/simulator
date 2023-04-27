@@ -76,7 +76,24 @@ portfolio.equity
 ...
 ``` 
 
+## The dirty path
 
+Some may know the positions they want to enter for eternity. Running through a loop is rather non-pythonic waste of time in such a case.
+It is possible to completely bypass this step by submitting a frame of positions together with a frame of prices when we create the portfolio object.
+
+## Poetry
+
+We assume you share already the love for Poetry. Once you have installed poetry you can perform
+
+```bash
+poetry install
+```
+
+to replicate the virtual environment we have defined in pyproject.toml.  
+
+## Kernel
+
+We install jupyter lab within your new virtual environment. 
 
 Future versions of this package may support such conventions, too.
 
