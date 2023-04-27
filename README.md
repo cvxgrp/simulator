@@ -62,10 +62,22 @@ for _, now, snapshot in portfolio:
 ```
 
 Note that we update the position at time 'now' using a series of actual stocks rather than weights or cashpositions.
+Future versions of this package may support such conventions, too.
 
 ### Analyse results
 
-The loop above is filling up the desired positions 
+The loop above is filling up the desired positions. The portfolio object is now ready for further analysis.
+It is possible dive into the data, e.g.
+
+```python
+portfolio.nav
+portfolio.cash
+portfolio.equity
+...
+``` 
+
+
+
 Future versions of this package may support such conventions, too.
 
 
