@@ -23,7 +23,7 @@ We demonstrate those steps with somewhat silly policies. They are never good str
 
 ### Create the portfolio object
 
-The users defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
+The user defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
 
 ```python
 import pandas as pd
@@ -42,25 +42,25 @@ Let's start with a first strategy. Each day we choose two names from the univers
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
-for before, now, snapshot in portfolio:
+for before, now, state in portfolio:
     # pick two assets at random
     pair = np.random.choice(portfolio.assets, 2, replace=False)
     # compute the pair
     stocks = pd.Series(index=portfolio.assets, data=0.0)
-    stocks[pair] = [snapshot.nav, -snapshot.nav] / snapshot.prices[pair].values
+    stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position 
     portfolio[now] = 0.1 * stocks
 ```
 
-A lot of magic is hidden in the snapshot variable. 
-The snapshot gives access to the currently available cash, the current prices and the current valuation of all holdings.
+A lot of magic is hidden in the state variable. 
+The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
 
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
 
 ```python
-for _, now, snapshot in portfolio:
+for _, now, state in portfolio:
     # each day we invest a quarter of the capital in the assets
-    portfolio[now] = 0.25 * snapshot.nav / snapshot.prices
+    portfolio[now] = 0.25 * state.nav / state.prices
 ```
 
 Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.

@@ -26,16 +26,16 @@ if __name__ == '__main__':
     logger.info("Build portfolio")
     portfolio = build_portfolio(prices=prices, initial_cash=1e6, trading_cost_model=linearCostModel)
 
-    for before, now, snapshot in portfolio:
-        assert snapshot.nav > 0, "Game over"
-        logger.info(f"Nav: {snapshot.nav}")
-        logger.info(f"Cash: {snapshot.cash}")
+    for before, now, state in portfolio:
+        assert state.nav > 0, "Game over"
+        logger.info(f"Nav: {state.nav}")
+        logger.info(f"Cash: {state.cash}")
 
         # pick two assets at random
         pair = np.random.choice(portfolio.assets, 2, replace=False)
         # compute the pair
         stocks = pd.Series(index=portfolio.assets, data=0.0)
-        stocks[pair] = [snapshot.nav, -snapshot.nav] / snapshot.prices[pair].values
+        stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
 
         portfolio[now] = 0.1*stocks
 
