@@ -1,18 +1,18 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.portfolio import build_portfolio, _Snapshot
+from cvx.simulator.portfolio import build_portfolio, _State
 
 
-def test_snapshot():
+def test_state():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
-    trade = pd.Series(data=[4.0, 5.0])
     cash = 400
-    snapshot = _Snapshot(cash=cash, prices=prices, position=positions, trade=trade)
-    assert snapshot.value == 1100.0
-    assert snapshot.nav == 1500.0
-    pd.testing.assert_series_equal(snapshot.trade_volume, pd.Series(data=[8.0, 15.0]))
+    state = _State(cash=cash, prices=prices, position=positions)
+    assert state.value == 1100.0
+    assert state.nav == 1500.0
+    pd.testing.assert_series_equal(state.weights, pd.Series(data=[2.0/15.0, 9.0/15.0]))
+    assert state.leverage == 11.0/15.0
 
 
 def test_assets(portfolio):
@@ -175,12 +175,12 @@ def test_add(prices, resource_dir):
 def test_head(prices, resource_dir):
     portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
-    for before, now, snapshot in portfolio:
+    for before, now, state in portfolio:
         # before is t_{i-1} and now is t_{i}
         assert before == portfolio.index[0]
         assert now == portfolio.index[1]
-        assert snapshot.nav == 20000.0
-        assert snapshot.cash == 20000.0
-        assert snapshot.value == 0.0
+        assert state.nav == 20000.0
+        assert state.cash == 20000.0
+        assert state.value == 0.0
 
         #portfolio[now] = portfolio[before]
