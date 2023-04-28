@@ -5,10 +5,9 @@ from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
 
 
 @dataclass
-class _Snapshot:
+class _State:
     prices: pd.Series = None
     position: pd.Series = None
-    trade: pd.Series = None
     cash: float = 1e6
 
     @property
@@ -20,8 +19,22 @@ class _Snapshot:
         return self.value + self.cash
 
     @property
-    def trade_volume(self):
-        return self.trade * self.prices
+    def weights(self):
+        return (self.prices * self.position)/self.nav
+
+    @property
+    def leverage(self):
+        return self.weights.abs().sum()
+
+    def update(self, position, model=None, **kwargs):
+        trades = position - self.position
+        self.position = position
+        self.cash -= (trades * self.prices).sum()
+
+        if model is not None:
+            self.cash -= model.eval(self.prices,  trades=trades, **kwargs).sum()
+
+        return self
 
 
 def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
@@ -46,7 +59,7 @@ class _EquityPortfolio:
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel
     initial_cash: float = 1e6
-    _state: _Snapshot = _Snapshot()
+    _state: _State = _State()
 
     def __post_init__(self):
         self._state.position = self.stocks.loc[self.index[0]]
@@ -71,12 +84,7 @@ class _EquityPortfolio:
     def __setitem__(self, key, position):
         assert isinstance(position, pd.Series)
         self.stocks.loc[key, position.index] = position
-
-        # trade
-        self._state.trade = position - self._state.position
-        self._state.position = position
-        self._state.cash = self._state.cash - self._state.trade_volume.sum() - \
-                           self.trading_cost_model.eval(self._state.prices, self._state.trade).sum()
+        self._state.update(position, model=self.trading_cost_model)
 
     def __getitem__(self, item):
         assert item in self.index
