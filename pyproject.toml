@@ -2,7 +2,7 @@
 name = "cvxsimulator"
 version = "0.0.0"
 description = "Simple simulator for investors"
-authors = ["Thomas Schmelzer, and Stephen Boyd"]
+authors = ["Thomas Schmelzer"]
 readme = "README.md"
 packages = [{include = "cvx"}]
 
