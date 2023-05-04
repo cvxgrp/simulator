@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: cvx.simulator
+title: cvxsimulator
 author: Thomas Schmelzer
 only_build_toc_files: true
 
