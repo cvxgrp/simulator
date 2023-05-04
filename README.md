@@ -1,4 +1,4 @@
-# [cvx.simulator](http://www.cvxgrp.org/simulator/)
+# [cvxsimulator](http://www.cvxgrp.org/simulator/)
 
 [![binder](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/binder.yml)
 [![Book](https://github.com/cvxgrp/simulator/actions/workflows/book.yml/badge.svg)](https://github.com/cvxgrp/simulator/actions/workflows/book.yml)
@@ -93,7 +93,7 @@ We assume you share already the love for [Poetry](https://python-poetry.org). On
 poetry install
 ```
 
-to replicate the virtual environment we have defined in pyproject.toml.  
+to replicate the virtual environment we have defined in pyproject.toml.
 
 ## Kernel
 
