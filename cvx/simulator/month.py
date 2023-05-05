@@ -35,13 +35,14 @@ def monthlytable(returns: pd.Series):
         Returns:
             Series of compounded returns.
         """
-        return (1 + rets).prod() - 1.0
+        return (1.0 + rets).prod() - 1.0
 
     # Works better in the first month
     # Compute all the intramonth-returns, instead of reapplying some monthly resampling of the NAV
     return_monthly = returns.groupby([returns.index.year, returns.index.month]).apply(
         _compound
     )
+    print(return_monthly)
 
     frame = return_monthly.unstack(level=1).rename(
         columns=lambda x: calendar.month_abbr[x]
