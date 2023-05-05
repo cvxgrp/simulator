@@ -36,10 +36,6 @@ class _State:
 
         return self
 
-    def set_weights(self, weights, model=None):
-        position = self.nav * weights / self.prices
-        return self.update(position=position, model=model)
-
 
 def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
     assert isinstance(prices, pd.DataFrame)
