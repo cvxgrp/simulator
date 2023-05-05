@@ -123,9 +123,6 @@ class _EquityPortfolio:
         assert item in self.index
         return self.stocks.loc[item]
 
-
-
-
     @property
     def trading_costs(self) -> pd.DataFrame:
         return self.trading_cost_model.eval(self.prices, self.trades_stocks)
