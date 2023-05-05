@@ -67,7 +67,7 @@ for _, now, state in portfolio:
 ```
 
 Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
-Future versions of this package may support such conventions, too.
+The portfolio class also exposes setters for such conventions.
 
 ### Analyse results
 

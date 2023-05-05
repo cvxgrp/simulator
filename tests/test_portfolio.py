@@ -172,7 +172,7 @@ def test_add(prices, resource_dir):
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
 
-def test_head(prices, resource_dir):
+def test_head(prices):
     portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
     for before, now, state in portfolio:
@@ -182,5 +182,21 @@ def test_head(prices, resource_dir):
         assert state.nav == 20000.0
         assert state.cash == 20000.0
         assert state.value == 0.0
+
+
+def test_set_weights(prices):
+    portfolio = build_portfolio(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for before, now, state in portfolio:
+        portfolio.set_weights(time=now, weights=pd.Series(index=["B","C"], data=0.5))
+
+    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+
+
+def test_set_cashpositions(prices):
+    portfolio = build_portfolio(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for before, now, state in portfolio:
+        portfolio.set_cashposition(time=now, cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
+
+    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
         #portfolio[now] = portfolio[before]

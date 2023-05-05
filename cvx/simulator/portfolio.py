@@ -36,6 +36,10 @@ class _State:
 
         return self
 
+    def set_weights(self, weights, model=None):
+        position = self.nav * weights / self.prices
+        return self.update(position=position, model=model)
+
 
 def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
     assert isinstance(prices, pd.DataFrame)
@@ -74,6 +78,33 @@ class _EquityPortfolio:
     def assets(self):
         return self.prices.columns
 
+    def set_weights(self, time, weights):
+        """
+        Set the position via weights (e.g. fractions of the nav)
+
+        :param time: time
+        :param weights: series of weights
+        """
+        self[time] = (self._state.nav * weights) / self._state.prices
+
+    def set_cashposition(self, time, cashposition):
+        """
+        Set the position via cash positions (e.g. USD invested per asset)
+
+        :param time: time
+        :param cashposition: series of cash positions
+        """
+        self[time] = cashposition / self._state.prices
+
+    def set_position(self, time, position):
+        """
+        Set the position via number of assets (e.g. number of stocks)
+
+        :param time: time
+        :param position: series of number of stocks
+        """
+        self[time] = position
+
     def __iter__(self):
         for before, now in zip(self.index[:-1], self.index[1:]):
             # valuation of the current position
@@ -83,12 +114,17 @@ class _EquityPortfolio:
 
     def __setitem__(self, key, position):
         assert isinstance(position, pd.Series)
+        assert set(position.index).issubset(set(self.assets))
+
         self.stocks.loc[key, position.index] = position
         self._state.update(position, model=self.trading_cost_model)
 
     def __getitem__(self, item):
         assert item in self.index
         return self.stocks.loc[item]
+
+
+
 
     @property
     def trading_costs(self) -> pd.DataFrame:
