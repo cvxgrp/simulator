@@ -42,11 +42,11 @@ def monthlytable(returns: pd.Series):
     return_monthly = returns.groupby([returns.index.year, returns.index.month]).apply(
         _compound
     )
-    print(return_monthly)
 
     frame = return_monthly.unstack(level=1).rename(
         columns=lambda x: calendar.month_abbr[x]
     )
+
     ytd = frame.apply(_compound, axis=1)
     frame["STDev"] = np.sqrt(12) * frame.std(axis=1)
     # make sure that you don't include the column for the STDev in your computation
