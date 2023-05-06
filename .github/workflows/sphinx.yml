@@ -5,50 +5,46 @@ on:
 jobs:
   docs:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Download .venv
+        uses: actions/download-artifact@v2
+        with:
+          name: venv
+
+    #runs-on: ubuntu-latest
+    #steps:
+    #- uses: actions/checkout@v3
 
     ## Install dependencies
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+    #- name: Set up Python 3.10
+    #  uses: actions/setup-python@v4
+    #  with:
+    #    python-version: '3.10'
 
-    - name: Install Poetry
-      uses: snok/install-poetry@v1.3.3
-      with:
-        virtualenvs-create: false
+    #- name: Install Poetry
+    #  uses: snok/install-poetry@v1.3.3
+    #  with:
+    #    virtualenvs-create: false
 
-    - name: Install dependencies
-      run: | 
-            poetry --version
-            poetry install -vv
+    #- name: Install dependencies
+    #  run: |
+    #        poetry --version
+    #        poetry install -vv
 
-    - name: Sphinx installation
-      run: | 
-        pip install --no-cache-dir \
-                    sphinx==5.0.2 \
-                    sphinx-autoapi==1.8.4 \
-                    sphinx-rtd-theme==1.0.0 \
-                    recommonmark==0.7.1
+      - name: Sphinx installation
+        run: | 
+          pip install --no-cache-dir \
+                      sphinx==5.0.2 \
+                      sphinx-autoapi==1.8.4 \
+                      sphinx-rtd-theme==1.0.0 \
+                      recommonmark==0.7.1
           
-    - name: Build sphinx
-      run: |
-        mkdir -p artifacts/docs
-        sphinx-build -b html docs/ artifacts/docs
+      - name: Build sphinx
+        run: |
+            mkdir -p artifacts/docs
+            sphinx-build -b html docs/ artifacts/docs
 
-    #- uses: ammaraskar/sphinx-action@master
-    #  with:
-    #    docs-folder: "docs/"
-
-    # Standard drop-in approach that should work for most people.
-    #- uses: ammaraskar/sphinx-action@master
-    #  with:
-    #    #pre-build-command: python -m pip install -r help/requirements.txt
-    #    docs-folder: "docs/"
-
-    # Example of using a custom build-command.
-    #- uses: ammaraskar/sphinx-action@master
-    #  with:
-    #    build-command: "sphinx-build -b html docs/ _build -w /tmp/sphinx.log "
-    #    docs-folder: "docs/"
