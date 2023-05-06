@@ -61,7 +61,7 @@ jobs:
           path: artifacts/docs
 
   jupyter:
-    needs: [sphinx, counts]
+    needs: [sphinx, count]
 
     runs-on: "ubuntu-latest"
     steps:
