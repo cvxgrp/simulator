@@ -6,8 +6,8 @@
 
 ## Coverage
 
-{{ '[Test coverage]({url}/html-coverage/)'.format(url=book_url) }}
+{{ '[Test coverage]({url}/artifacts/tests/html-coverage/)'.format(url=book_url) }}
 
 ## Test report
 
-{{ '[Report]({url}/html-report/report.html)'.format(url=book_url) }}
+{{ '[Report]({url}/artifacts/tests/html-report/report.html)'.format(url=book_url) }}
