@@ -9,6 +9,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # Install poetry
+    - name: Install Poetry
+      uses: snok/install-poetry@v1.3.3
+      with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
     # Install dependencies
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
@@ -17,11 +24,11 @@ jobs:
         cache: 'poetry'
 
     # Install poetry
-    - name: Install Poetry
-      uses: snok/install-poetry@v1.3.3
-      with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+    #- name: Install Poetry
+    #  uses: snok/install-poetry@v1.3.3
+    #  with:
+    #      virtualenvs-create: true
+    #      virtualenvs-in-project: true
 
     # Install all dependencies
     - name: Install dependencies
