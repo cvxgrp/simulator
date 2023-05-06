@@ -21,7 +21,7 @@ jobs:
           poetry show --only main --tree
           mkdir -p artifacts/build
           poetry show --only main --tree > artifacts/build/show.txt
-          ls -all artifacts/build
+          tree artifacts
           cat artifacts/build/show.txt
 
       - name: Archive dependencies
@@ -47,6 +47,7 @@ jobs:
             pip install pygount==1.5.1
             mkdir -p artifacts/lines
             pygount --format=summary --out=artifacts/lines/lines.txt cvx
+            tree artifacts
 
       - name: Archive counts
         uses: actions/upload-artifact@v3
