@@ -33,7 +33,7 @@ jobs:
                             --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
                             --cov-report term --html=artifacts/tests/html-report/report.html \
                             --junitxml=artifacts/tests/junit/report.xml \
-                        tests
+                            tests
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
