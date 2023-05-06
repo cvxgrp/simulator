@@ -1,0 +1,22 @@
+:py:mod:`simulator.portfolio`
+=============================
+
+.. py:module:: simulator.portfolio
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.portfolio.build_portfolio
+
+
+
+.. py:function:: build_portfolio(prices, stocks=None, initial_cash=1000000.0, trading_cost_model=None)
+
+

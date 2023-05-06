@@ -1,0 +1,58 @@
+:py:mod:`simulator.trading_costs`
+=================================
+
+.. py:module:: simulator.trading_costs
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.trading_costs.TradingCostModel
+   simulator.trading_costs.LinearCostModel
+
+
+
+
+.. py:class:: TradingCostModel
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:attribute:: name
+      :annotation: :str
+
+      
+
+   .. py:method:: eval(self, prices, trades, **kwargs)
+      :abstractmethod:
+
+
+
+.. py:class:: LinearCostModel
+
+   Bases: :py:obj:`TradingCostModel`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:attribute:: factor
+      :annotation: :float = 0.0
+
+      
+
+   .. py:attribute:: bias
+      :annotation: :float = 0.0
+
+      
+
+   .. py:method:: eval(self, prices, trades, **kwargs)
+
+
+

@@ -1,0 +1,18 @@
+:py:mod:`simulator`
+===================
+
+.. py:module:: simulator
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   metrics/index.rst
+   month/index.rst
+   portfolio/index.rst
+   trading_costs/index.rst
+
+

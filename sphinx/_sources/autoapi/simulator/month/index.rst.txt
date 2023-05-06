@@ -1,0 +1,37 @@
+:py:mod:`simulator.month`
+=========================
+
+.. py:module:: simulator.month
+
+.. autoapi-nested-parse::
+
+   Popular year vs month performance table.
+
+   Supports compounded and cumulative (i.e. fixed AUM) returns logic.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.month.monthlytable
+
+
+
+.. py:function:: monthlytable(returns: pandas.Series)
+
+   Get a table of monthly returns.
+
+   :param returns: Series of individual returns.
+   :param fct: Function to use for total return calculation.
+               If not given, compounded logic is used.
+
+   :returns: DataFrame with monthly returns, their STDev and YTD.
+
+
