@@ -4,30 +4,29 @@ on:
 - push
 
 jobs:
-  count:
-    runs-on: "ubuntu-latest"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - uses: ./.github/actions/setup-environment
-        with:
-          os: ${{ runner.os }}
-          python-version: "3.11"
-
-      - name: count
-        run: |
-            pip install pygount==1.5.1
-            mkdir -p artifacts/lines
-            # pygount --format=summary cvx
-            pygount --format=summary --out=artifacts/lines/lines.txt cvx
-
-      - name: Archive counts
-        uses: actions/upload-artifact@v3
-        with:
-          name: count
-          path: artifacts/lines/lines.txt
+#  count:
+#    runs-on: "ubuntu-latest"
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - uses: ./.github/actions/setup-environment
+#        with:
+#          os: ${{ runner.os }}
+#          python-version: "3.11"
+#
+#      - name: count
+#        run: |
+#            pip install pygount==1.5.1
+#            mkdir -p artifacts/lines
+#            pygount --format=summary --out=artifacts/lines/lines.txt cvx
+#
+#      - name: Archive counts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: count
+#          path: artifacts/lines/lines.txt
 
   sphinx:
     runs-on: "ubuntu-latest"
@@ -87,15 +86,6 @@ jobs:
         run: |
           poetry run jupyter-book clean book
           poetry run jupyter-book build book
-
-      # Install pygount
-      #- name: count
-      #  run: |
-      #    ls -all
-      #    pip install pygount==1.5.1
-      #    mkdir -p book/_build/html/lines
-      #    # pygount --format=summary cvx
-      #    pygount --format=summary --out=book/_build/html/lines/lines.txt cvx
 
       # Download the counting
       - name: Download count results
