@@ -1,48 +1,56 @@
 name: "Build Sphinx"
+
 on:
 - push
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/setup-python-environment.yml
+    with:
+      - os: "ubuntu-latest"
+      - python-version: "3.11"
 
   docs:
     needs: [build]
 
-    runs-on: "ubuntu-latest"
+    #runs-on: "ubuntu-latest"
 
     steps:
+      #- jobs:
+      #    poetry-install:
+      #      uses: ./.github/workflows/poetry-install.yml
+
       #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
-      - name: Check out repository
-        uses: actions/checkout@v3
+      #- name: Check out repository
+      #  uses: actions/checkout@v3
 
-      - name: Set up python
-        id: setup-python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+      #- name: Set up python
+      #  id: setup-python
+      #  uses: actions/setup-python@v4
+      #  with:
+      #    python-version: '3.11'
 
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+      #- name: Install Poetry
+      #  uses: snok/install-poetry@v1
+      #  with:
+      #    virtualenvs-create: true
+      #    virtualenvs-in-project: true
+      #    installer-parallel: true
 
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #- name: Load cached venv
+      #  id: cached-poetry-dependencies
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: .venv
+      #    key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       #----------------------------------------------
       # install your root project, if required
@@ -60,9 +68,7 @@ jobs:
                       sphinx-autoapi==1.8.4 \
                       sphinx-rtd-theme==1.0.0 \
                       recommonmark==0.7.1
-        
 
-          
       - name: Build sphinx
         run: |
             mkdir -p artifacts/docs
