@@ -4,24 +4,19 @@ on:
 - push
 
 jobs:
-  build:
+  docs:
+    #needs: [build]
 
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - uses: ./.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
-
-  docs:
-    needs: [build]
-
-    runs-on: "ubuntu-latest"
-
-    steps:
       #- jobs:
       #    poetry-install:
       #      uses: ./.github/workflows/poetry-install.yml
