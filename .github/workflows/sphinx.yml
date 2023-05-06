@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/actions/setup-python-environment.yml
+    uses: ./.github/actions/setup-environment
     with:
       os: "ubuntu-latest"
       python-version: "3.11"
