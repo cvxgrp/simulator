@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10']
+        python-version: ['3.10', '3.11']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,4 +28,10 @@ jobs:
 
       - name: Run tests
         run: |
-              poetry run pytest --cache-clear --cov=cvx tests --cov-report xml
+              poetry run pytest --cov=cvx
+                                --random-order
+                                --verbose --cov-report html:artifacts/html-coverage
+                                --cov-report xml:artifacts/html-coverage-xml/coverage.xml
+                                --cov-report term --html=artifacts/html-report/report.html
+                                --junitxml=artifacts/junit/report.xml
+                            tests/
