@@ -31,7 +31,7 @@ jobs:
           poetry run pytest --cov=cvx --random-order --verbose --html=artifacts/tests/html-report/report.html tests/
           poetry run coverage html -d artifacts/tests/html-coverage
           
-          cat artifacts/test/html-coverage/index.html
+          cat artifacts/tests/html-coverage/index.html
 
       - name: Archive tests results
         uses: actions/upload-artifact@v3
