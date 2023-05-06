@@ -163,6 +163,13 @@ jobs:
           name: dependencies
           path: book/_build/html/artifacts/build
 
+      # Download the test artifact
+      - name: Download the dependencies file
+        uses: actions/download-artifact@v3
+        with:
+          name: tests
+          path: book/_build/html/artifacts/tests
+
       # Check uploads
       - name: Inspect upload
         run : |
