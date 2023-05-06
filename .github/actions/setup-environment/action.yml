@@ -38,16 +38,25 @@ runs:
     - name: Install jupyterbook
       shell: bash
       run: |
-        poetry run pip install jupyter-book
+        poetry run pip install --no-cache-dir jupyter-book
 
     - name: Install sphinx
       shell: bash
       run: | 
-          pip install --no-cache-dir \
+          poetry run pip install --no-cache-dir \
                       sphinx==5.0.2 \
                       sphinx-autoapi==1.8.4 \
                       sphinx-rtd-theme==1.0.0 \
                       recommonmark==0.7.1
+
+    - name: Install pytest
+      shell: bash
+      run: |     
+          poetry run pip install --no-cache-dir \
+                      pytest=="7.1.3" \
+                      pytest-cov=="4.0.0" \
+                      pytest-html=="3.1.1" \
+                      pytest-random-order=="1.0.4"
 
     - name: Load cached venv
       id: cached-poetry-dependencies

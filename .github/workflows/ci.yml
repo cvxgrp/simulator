@@ -4,6 +4,42 @@ on:
 - push
 
 jobs:
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        python-version: [ '3.10' ]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: |
+          mkdir -p artifacts/tests
+          poetry run pytest --cov=cvx \
+                            --random-order \
+                            --verbose --cov-report html:artifacts/tests/html-coverage \
+                            --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
+                            --cov-report term --html=artifacts/tests/html-report/report.html \
+                            --junitxml=artifacts/tests/junit/report.xml \
+                        tests
+
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: tests
+          path: artifacts/tests
+
   dependencies:
     runs-on: "ubuntu-latest"
 
@@ -67,18 +103,10 @@ jobs:
           os: ${{ runner.os }}
           python-version: "3.11"
 
-      #- name: Install sphinx
-      #  run: |
-      #    pip install --no-cache-dir \
-      #                sphinx==5.0.2 \
-      #                sphinx-autoapi==1.8.4 \
-      #                sphinx-rtd-theme==1.0.0 \
-      #                recommonmark==0.7.1
-
       - name: Build sphinx
         run: |
           mkdir -p artifacts/sphinx
-          sphinx-build -b html docs/ artifacts/sphinx
+          poetry run sphinx-build -b html docs/ artifacts/sphinx
           ls -all artifacts/sphinx
 
       - name: Archive sphinx documentation
@@ -88,7 +116,7 @@ jobs:
           path: artifacts/sphinx
 
   jupyter:
-    needs: [sphinx, count, dependencies]
+    needs: [test, sphinx, count, dependencies]
 
     runs-on: "ubuntu-latest"
     steps:
