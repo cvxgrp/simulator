@@ -4,13 +4,11 @@ on:
 - push
 
 jobs:
-  jupyter:
+
+  build:
     runs-on: "ubuntu-latest"
 
     steps:
-      #----------------------------------------------
-      #       check-out repo and set-up python
-      #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v3
 
@@ -18,6 +16,38 @@ jobs:
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
+
+  counting:
+    needs: [build]
+    steps:
+        - name: run pygound
+          run: |
+            pip install pygount==1.5.1
+            mkdir -p artifacts/lines
+            pygount --format=summary cvx
+            pygount --format=summary --out=artifacts/lines/lines.txt cvx
+
+    #artifacts:
+    #  when: always
+    #  paths:
+    #    - artifacts/lines/lines.txt
+
+
+  jupyter:
+    #runs-on: "ubuntu-latest"
+    needs: ["build"]
+
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      #- name: Check out repository
+      #  uses: actions/checkout@v3
+
+      #- uses: ./.github/actions/setup-environment
+      #  with:
+      #    os: ${{ runner.os }}
+      #    python-version: "3.11"
 
       - name: Install jupyterbook
         run: |
