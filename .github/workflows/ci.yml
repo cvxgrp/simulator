@@ -27,15 +27,16 @@ jobs:
         run : |
           mkdir -p artifacts/tests/html-coverage
           mkdir -p artifacts/tests/html-report
+          poetry run pip install coverage
           
-          poetry run pytest --cov=cvx --random-order --verbose \
-                            --cov-report html:artifacts/tests/html-coverage \
-                            --html=artifacts/tests/html-report/report.html \
+          poetry run coverage -m pytest --cov=cvx --random-order --verbose \
+                            #--cov-report html:artifacts/tests/html-coverage \
+                            #--html=artifacts/tests/html-report/report.html \
                             tests/
           
           cat artifacts/tests/html-coverage/index.html
 
-      - name: Archive sphinx documentation
+      - name: Archive tests results
         uses: actions/upload-artifact@v3
         with:
           name: tests
