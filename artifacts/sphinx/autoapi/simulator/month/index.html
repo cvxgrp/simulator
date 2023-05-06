@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simulator.month &mdash; cvxsimulator Documentation</title>
@@ -96,10 +96,6 @@
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.month.monthlytable" title="simulator.month.monthlytable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">monthlytable</span></code></a>(returns: pandas.Series)</p></td>
 <td><p>Get a table of monthly returns.</p></td>
@@ -111,14 +107,14 @@
 <span class="sig-prename descclassname"><span class="pre">simulator.month.</span></span><span class="sig-name descname"><span class="pre">monthlytable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">returns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/month.html#monthlytable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.month.monthlytable" title="Permalink to this definition"></a></dt>
 <dd><p>Get a table of monthly returns.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>returns</strong> – Series of individual returns.</p></li>
 <li><p><strong>fct</strong> – Function to use for total return calculation.
 If not given, compounded logic is used.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with monthly returns, their STDev and YTD.</p>
 </dd>
 </dl>
