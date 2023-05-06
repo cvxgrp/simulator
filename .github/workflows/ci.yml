@@ -40,7 +40,6 @@ jobs:
           name: tests
           path: artifacts/tests
 
-
   dependencies:
     runs-on: "ubuntu-latest"
 
