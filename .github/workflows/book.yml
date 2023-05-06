@@ -43,6 +43,6 @@ jobs:
         run: |
           ls -all
           pip install pygount==1.5.1
-          mkdir -p artifacts/lines
-          pygount --format=summary cvx
+          mkdir -p book/_build/html/lines
+          # pygount --format=summary cvx
           pygount --format=summary --out=book/_build/html/lines/lines.txt cvx
