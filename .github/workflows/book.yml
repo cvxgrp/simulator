@@ -25,15 +25,6 @@ jobs:
           poetry run pip install jupyter-book
           poetry run python -m ipykernel install --user --name="simulator"
 
-      # Install pygount
-      - name: run pygount
-        run: |
-          ls -all
-          pip install pygount==1.5.1
-          mkdir -p artifacts/lines
-          pygount --format=summary cvx
-          pygount --format=summary --out=artifacts/lines/lines.txt cvx
-
       # Build the book
       - name: Build the book
         run: |
@@ -46,3 +37,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: book/_build/html
+
+      # Install pygount
+      - name: run pygount
+        run: |
+          ls -all
+          pip install pygount==1.5.1
+          mkdir -p artifacts/lines
+          pygount --format=summary cvx
+          pygount --format=summary --out=book/_build/html/lines/lines.txt cvx
