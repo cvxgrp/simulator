@@ -6,10 +6,10 @@
 
 
 .. toctree::
-    :maxdepth: 3
+   :maxdepth: 3
 
-    ../README
-    license
+   ../README.md
+   license
 
 API Documentation
 =================
