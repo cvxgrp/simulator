@@ -24,12 +24,15 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run tests
-        run: |
+        run : |
           mkdir -p artifacts/tests
-          poetry run pytest --cov=cvx --random-order --verbose \ 
-                            --cov-report html:artifacts/tests/html-coverage \
+          poetry run pytest --cov=cvx \
+                            --random-order \
+                            --verbose --cov-report html:artifacts/tests/html-coverage \
+                            --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
                             --cov-report term --html=artifacts/tests/html-report/report.html \
-                            tests
+                            --junitxml=artifacts/tests/junit/report.xml \
+                        tests
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
