@@ -7,8 +7,8 @@ jobs:
   build:
     uses: ./.github/workflows/setup-python-environment.yml
     with:
-      - os: "ubuntu-latest"
-      - python-version: "3.11"
+      os: "ubuntu-latest"
+      python-version: "3.11"
 
   docs:
     needs: [build]
