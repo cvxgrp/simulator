@@ -5,8 +5,10 @@ on:
 
 jobs:
 
+  runs-on: "ubuntu-latest"
+
   build:
-    runs-on: "ubuntu-latest"
+    #runs-on: "ubuntu-latest"
 
     steps:
       - name: Check out repository
@@ -19,6 +21,9 @@ jobs:
 
   counting:
     needs: [build]
+
+    #runs-on: "ubuntu-latest"
+
     steps:
         - name: run pygound
           run: |
