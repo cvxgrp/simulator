@@ -76,15 +76,15 @@ jobs:
 
       - name: Build sphinx
         run: |
-          mkdir -p artifacts/docs
-          sphinx-build -b html docs/ artifacts/docs
-          ls -all artifacts/docs
+          mkdir -p artifacts/sphinx
+          sphinx-build -b html docs/ artifacts/sphinx
+          ls -all artifacts/sphinx
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
         with:
           name: sphinx
-          path: artifacts/docs
+          path: artifacts/sphinx
 
   jupyter:
     needs: [sphinx, count, dependencies]
@@ -118,21 +118,21 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: count
-          path: book/_build/html/lines/lines.txt
+          path: book/_build/html/artifacts/lines/lines.txt
 
       # Download the sphinx artifact
       - name: Download Sphinx page
         uses: actions/download-artifact@v3
         with:
           name: sphinx
-          path: book/_build/html/sphinx
+          path: book/_build/html/artifacts/sphinx
 
       # Download the dependencies artifact
       - name: Download the dependencies file
         uses: actions/download-artifact@v3
         with:
           name: dependencies
-          path: book/_build/html/build/show.txt
+          path: book/_build/html/artifacts/build/show.txt
 
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
