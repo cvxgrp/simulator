@@ -125,6 +125,13 @@ jobs:
           name: sphinx
           path: book/_build/html/sphinx
 
+      # Download the dependencies artifact
+      - name: Download Sphinx page
+        uses: actions/download-artifact@v3
+        with:
+          name: dependencies
+          path: book/_build/html/build/show.txt
+
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.6.1
