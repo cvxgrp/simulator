@@ -25,13 +25,21 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest --cov=cvx
-                            --random-order
-                            --verbose --cov-report html:artifacts/html-coverage
-                            --cov-report xml:artifacts/html-coverage-xml/coverage.xml
-                            --cov-report term --html=artifacts/html-report/report.html
-                            --junitxml=artifacts/junit/report.xml
+          mkdir -p artifacts/tests
+          poetry run pytest --cov=cvx \
+                            --random-order \
+                            --verbose --cov-report html:artifacts/tests/html-coverage \
+                            --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
+                            --cov-report term --html=artifacts/tests/html-report/report.html \
+                            --junitxml=artifacts/tests/junit/report.xml \
                         tests
+
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: tests
+          path: artifacts/tests
+
 
   dependencies:
     runs-on: "ubuntu-latest"
@@ -109,7 +117,7 @@ jobs:
           path: artifacts/sphinx
 
   jupyter:
-    needs: [sphinx, count, dependencies]
+    needs: [test, sphinx, count, dependencies]
 
     runs-on: "ubuntu-latest"
     steps:
