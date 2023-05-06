@@ -1,4 +1,4 @@
-name: Book
+name: Build virtual environment
 
 on: [push]
 
@@ -21,11 +21,13 @@ jobs:
       with:
           virtualenvs-create: true
 
-    - name: Install jupyterbook
+    # Install all dependencies
+    - name: Install dependencies
       run: |
         poetry install -vv
 
+    # Upload .venv
     - uses: actions/upload-artifact@v2
       with:
         name: venv
-        path: ./.venv
+        path: .venv
