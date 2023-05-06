@@ -28,10 +28,10 @@ jobs:
 
       - name: Run tests
         run: |
-              poetry run pytest --cov=cvx
-                                --random-order
-                                --verbose --cov-report html:artifacts/html-coverage
-                                --cov-report xml:artifacts/html-coverage-xml/coverage.xml
-                                --cov-report term --html=artifacts/html-report/report.html
-                                --junitxml=artifacts/junit/report.xml
+              poetry run pytest --cov=cvx \
+                                --random-order \
+                                --verbose --cov-report html:artifacts/html-coverage \
+                                --cov-report xml:artifacts/html-coverage-xml/coverage.xml \
+                                --cov-report term --html=artifacts/html-report/report.html \
+                                --junitxml=artifacts/junit/report.xml \
                             tests/
