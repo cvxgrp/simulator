@@ -17,6 +17,7 @@ on:
 
 runs:
   using: "composite"
+  shell: bash
   steps:
     - name: Set up Python
       uses: actions/setup-python@v4
