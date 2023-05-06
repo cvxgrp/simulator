@@ -4,27 +4,54 @@ on: [push]
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
   deploy-book:
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout
+    needs: [ build ]
+
+    runs-on: "ubuntu-latest"
+
+    #----------------------------------------------
+    #       check-out repo and set-up python
+    #----------------------------------------------
+    - name: Check out repository
       uses: actions/checkout@v3
 
-    # Install dependencies
-    - name: Set up Python 3.10
+    - name: Set up python
+      id: setup-python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
-    # Install poetry
+    #----------------------------------------------
+    #  -----  install & configure poetry  -----
+    #----------------------------------------------
     - name: Install Poetry
-      uses: snok/install-poetry@v1.3.3
+      uses: snok/install-poetry@v1
       with:
-          virtualenvs-create: false
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    #----------------------------------------------
+    #       load cached venv if cache exists
+    #----------------------------------------------
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    #----------------------------------------------
+    # install your root project, if required
+    #----------------------------------------------
+    - name: Install project
+      run: poetry install --no-interaction
 
     - name: Install jupyterbook
       run: |
-        poetry install -vv
         poetry run pip install jupyter-book
         poetry run python -m ipykernel install --user --name="simulator"
 
