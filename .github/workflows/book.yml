@@ -40,6 +40,13 @@ jobs:
           # pygount --format=summary cvx
           pygount --format=summary --out=book/_build/html/lines/lines.txt cvx
 
+      # Download the sphinx artifact
+      - name: Download Sphinx page
+        uses: actions/download-artifact@v3
+        with:
+          name: sphinx
+          path: --out=book/_build/html/docs
+
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.6.1

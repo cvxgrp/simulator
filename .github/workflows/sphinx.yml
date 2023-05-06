@@ -29,6 +29,11 @@ jobs:
 
       - name: Build sphinx
         run: |
-            mkdir -p artifacts/docs
-            sphinx-build -b html docs/ artifacts/docs
+          mkdir -p artifacts/docs
+          sphinx-build -b html docs/ artifacts/docs
 
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: sphinx
+          path: artifacts/docs
