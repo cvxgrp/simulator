@@ -53,6 +53,7 @@ jobs:
         run: |
           mkdir -p artifacts/docs
           sphinx-build -b html docs/ artifacts/docs
+          ls -all artifacts/docs
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
