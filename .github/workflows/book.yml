@@ -1,6 +1,7 @@
-name: Book
+name: Compile Jupyter-Book
 
-on: [push]
+on:
+- push
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
@@ -8,7 +9,7 @@ jobs:
     uses: ./.github/workflows/build.yml
 
   deploy-book:
-    needs: [ build ]
+    needs: [build]
 
     runs-on: "ubuntu-latest"
 
