@@ -1,5 +1,7 @@
 name: Setup the Python Environment
 
+description: "Construct a Python environment for ci/cd"
+
 on:
   workflow_call:
     inputs:
@@ -33,6 +35,20 @@ runs:
        virtualenvs-in-project: true
        installer-parallel: true
 
+    - name: Install jupyterbook
+      shell: bash
+      run: |
+        poetry run pip install jupyter-book
+
+    - name: Install sphinx
+      shell: bash
+      run: | 
+          pip install --no-cache-dir \
+                      sphinx==5.0.2 \
+                      sphinx-autoapi==1.8.4 \
+                      sphinx-rtd-theme==1.0.0 \
+                      recommonmark==0.7.1
+
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
@@ -46,3 +62,5 @@ runs:
     - name: Install project
       shell: bash
       run: poetry install --no-interaction
+
+

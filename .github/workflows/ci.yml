@@ -1,9 +1,35 @@
-name: "Build JupyterBook"
+name: "ci"
 
 on:
 - push
 
 jobs:
+  dependencies:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: ${{ runner.os }}
+          python-version: "3.11"
+
+      - name: Export dependencies
+        run: |
+          poetry show --only main --tree
+          mkdir -p artifacts/build
+          poetry show --only main --tree > artifacts/build/show.txt
+          tree artifacts
+          cat artifacts/build/show.txt
+
+      - name: Archive dependencies
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependencies
+          path: artifacts/build
+
   count:
     runs-on: "ubuntu-latest"
 
@@ -21,12 +47,13 @@ jobs:
             pip install pygount==1.5.1
             mkdir -p artifacts/lines
             pygount --format=summary --out=artifacts/lines/lines.txt cvx
+            tree artifacts
 
       - name: Archive counts
         uses: actions/upload-artifact@v3
         with:
           name: count
-          path: artifacts/lines/lines.txt
+          path: artifacts/lines
 
   sphinx:
     runs-on: "ubuntu-latest"
@@ -40,28 +67,28 @@ jobs:
           os: ${{ runner.os }}
           python-version: "3.11"
 
-      - name: Install sphinx
-        run: | 
-          pip install --no-cache-dir \
-                      sphinx==5.0.2 \
-                      sphinx-autoapi==1.8.4 \
-                      sphinx-rtd-theme==1.0.0 \
-                      recommonmark==0.7.1
+      #- name: Install sphinx
+      #  run: |
+      #    pip install --no-cache-dir \
+      #                sphinx==5.0.2 \
+      #                sphinx-autoapi==1.8.4 \
+      #                sphinx-rtd-theme==1.0.0 \
+      #                recommonmark==0.7.1
 
       - name: Build sphinx
         run: |
-          mkdir -p artifacts/docs
-          sphinx-build -b html docs/ artifacts/docs
-          ls -all artifacts/docs
+          mkdir -p artifacts/sphinx
+          sphinx-build -b html docs/ artifacts/sphinx
+          ls -all artifacts/sphinx
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
         with:
           name: sphinx
-          path: artifacts/docs
+          path: artifacts/sphinx
 
   jupyter:
-    needs: [sphinx, count]
+    needs: [sphinx, count, dependencies]
 
     runs-on: "ubuntu-latest"
     steps:
@@ -78,7 +105,7 @@ jobs:
 
       - name: Install jupyterbook
         run: |
-          poetry run pip install jupyter-book
+          # poetry run pip install jupyter-book
           poetry run python -m ipykernel install --user --name="simulator"
 
       # Build the book
@@ -92,14 +119,26 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: count
-          path: book/_build/html/lines/lines.txt
+          path: book/_build/html/artifacts/lines
 
       # Download the sphinx artifact
       - name: Download Sphinx page
         uses: actions/download-artifact@v3
         with:
           name: sphinx
-          path: book/_build/html/sphinx
+          path: book/_build/html/artifacts/sphinx
+
+      # Download the dependencies artifact
+      - name: Download the dependencies file
+        uses: actions/download-artifact@v3
+        with:
+          name: dependencies
+          path: book/_build/html/artifacts/build
+
+      # Check uploads
+      - name: Inspect upload
+        run : |
+          tree book/_build/html/artifacts
 
       # Push the book's HTML to github-pages
       - name: GitHub Pages action

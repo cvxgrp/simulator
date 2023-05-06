@@ -2,7 +2,7 @@
 
 ## LOC
 
-{{ '[Lines of code]({url}/lines/lines.txt)'.format(url=book_url) }}
+{{ '[Lines of code]({url}/artifacts/lines/lines.txt)'.format(url=book_url) }}
 
 ## Coverage
 
