@@ -1,4 +1,4 @@
-name: "Build JupyterBook"
+name: "ci"
 
 on:
 - push
@@ -126,7 +126,7 @@ jobs:
           path: book/_build/html/sphinx
 
       # Download the dependencies artifact
-      - name: Download Sphinx page
+      - name: Download the dependencies file
         uses: actions/download-artifact@v3
         with:
           name: dependencies
