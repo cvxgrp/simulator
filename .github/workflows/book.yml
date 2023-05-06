@@ -1,4 +1,4 @@
-name: "Build Jupyter-Book"
+name: "Build JupyterBook"
 on:
 - push
 
@@ -11,58 +11,59 @@ jobs:
 
     runs-on: "ubuntu-latest"
 
-    #----------------------------------------------
-    #       check-out repo and set-up python
-    #----------------------------------------------
-    - name: Check out repository
-      uses: actions/checkout@v3
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v3
 
-    - name: Set up python
-      id: setup-python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    #----------------------------------------------
-    #  -----  install & configure poetry  -----
-    #----------------------------------------------
-    - name: Install Poetry
-      uses: snok/install-poetry@v1
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-        installer-parallel: true
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
 
-    #----------------------------------------------
-    #       load cached venv if cache exists
-    #----------------------------------------------
-    - name: Load cached venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
-    #----------------------------------------------
-    # install your root project, if required
-    #----------------------------------------------
-    - name: Install project
-      run: poetry install --no-interaction
+      #----------------------------------------------
+      # install your root project, if required
+      #----------------------------------------------
+      - name: Install project
+        run: poetry install --no-interaction
 
-    - name: Install jupyterbook
-      run: |
-        poetry run pip install jupyter-book
-        poetry run python -m ipykernel install --user --name="simulator"
+      - name: Install jupyterbook
+        run: |
+          poetry run pip install jupyter-book
+          poetry run python -m ipykernel install --user --name="simulator"
 
-    # Build the book
-    - name: Build the book
-      run: |
-        poetry run jupyter-book clean book
-        poetry run jupyter-book build book
+      # Build the book
+      - name: Build the book
+        run: |
+          poetry run jupyter-book clean book
+          poetry run jupyter-book build book
 
-    # Push the book's HTML to github-pages
-    - name: GitHub Pages action
-      uses: peaceiris/actions-gh-pages@v3.6.1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: book/_build/html
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: book/_build/html
