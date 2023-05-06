@@ -5,55 +5,9 @@ on:
 
 jobs:
 
-  build:
-    runs-on: "ubuntu-latest"
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - uses: ./.github/actions/setup-environment
-        with:
-          os: ${{ runner.os }}
-          python-version: "3.11"
-
-      - name: Check poetry
-        run :
-          poetry --version
-
-  counting:
-    # XXX: How could I reuse the environment constructed in the build jobs?
-    # needs: [build]
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - uses: ./.github/actions/setup-environment
-        with:
-          os: ${{ runner.os }}
-          python-version: "3.11"
-
-      - name: run pygount
-        run: |
-          ls -all
-          pip install pygount==1.5.1
-          mkdir -p artifacts/lines
-          pygount --format=summary cvx
-          pygount --format=summary --out=artifacts/lines/lines.txt cvx
-
-    #artifacts:
-    #  when: always
-    #  paths:
-    #    - artifacts/lines/lines.txt
-
-
   jupyter:
-    # XXX: How could I reuse the environment constructed in the build jobs?
-    # needs: [build]
 
     runs-on: "ubuntu-latest"
-
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -70,6 +24,15 @@ jobs:
         run: |
           poetry run pip install jupyter-book
           poetry run python -m ipykernel install --user --name="simulator"
+
+      # Install pygount
+      - name: run pygount
+        run: |
+          ls -all
+          pip install pygount==1.5.1
+          mkdir -p artifacts/lines
+          pygount --format=summary cvx
+          pygount --format=summary --out=artifacts/lines/lines.txt cvx
 
       # Build the book
       - name: Build the book
