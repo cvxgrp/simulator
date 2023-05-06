@@ -14,6 +14,9 @@ parse:
     - substitution
     - linkify
     - dollarmath
+  myst_substitutions:
+    book_url: http://www.cvxgrp.org/simulator
+
 
 # needed for plotly
 sphinx:

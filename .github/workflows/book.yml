@@ -4,9 +4,66 @@ on:
 - push
 
 jobs:
-  jupyter:
+  count:
     runs-on: "ubuntu-latest"
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: ${{ runner.os }}
+          python-version: "3.11"
+
+      - name: count
+        run: |
+            pip install pygount==1.5.1
+            mkdir -p artifacts/lines
+            pygount --format=summary --out=artifacts/lines/lines.txt cvx
+
+      - name: Archive counts
+        uses: actions/upload-artifact@v3
+        with:
+          name: count
+          path: artifacts/lines/lines.txt
+
+  sphinx:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: ${{ runner.os }}
+          python-version: "3.11"
+
+      - name: Install sphinx
+        run: | 
+          pip install --no-cache-dir \
+                      sphinx==5.0.2 \
+                      sphinx-autoapi==1.8.4 \
+                      sphinx-rtd-theme==1.0.0 \
+                      recommonmark==0.7.1
+
+      - name: Build sphinx
+        run: |
+          mkdir -p artifacts/docs
+          sphinx-build -b html docs/ artifacts/docs
+          ls -all artifacts/docs
+
+      - name: Archive sphinx documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: sphinx
+          path: artifacts/docs
+
+  jupyter:
+    needs: [sphinx, count]
+
+    runs-on: "ubuntu-latest"
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -29,6 +86,20 @@ jobs:
         run: |
           poetry run jupyter-book clean book
           poetry run jupyter-book build book
+
+      # Download the counting
+      - name: Download count results
+        uses: actions/download-artifact@v3
+        with:
+          name: count
+          path: book/_build/html/lines/lines.txt
+
+      # Download the sphinx artifact
+      - name: Download Sphinx page
+        uses: actions/download-artifact@v3
+        with:
+          name: sphinx
+          path: book/_build/html/sphinx
 
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
