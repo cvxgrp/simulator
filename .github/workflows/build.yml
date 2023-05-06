@@ -1,6 +1,6 @@
 name: Build virtual environment
 
-on: [push]
+on: [workflow_call]
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:

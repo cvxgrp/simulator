@@ -1,10 +1,13 @@
-name: "Pull Request Docs Check"
+name: "Build Sphinx"
 on:
 - push
 
 jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
   docs:
-    needs: build-environments
+    needs: [build]
 
     runs-on: "ubuntu-latest"
 
