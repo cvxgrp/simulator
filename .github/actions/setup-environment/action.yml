@@ -3,6 +3,9 @@ name: Setup the Python Environment
 on:
   workflow_call:
     inputs:
+      cache_version:
+        description: 'Value gets appended to the cache key and will therefore invalidate the cache if it changes'
+        required: true
       os:
         description: 'OS'
         type: string
@@ -12,37 +15,31 @@ on:
         type: string
         required: true
 
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
 
-jobs:
-  setup:
-    name: setup
-    runs-on: ${{ inputs.os }}
-    env:
-      PYTHONIOENCODING: 'utf-8'
+    - name: Setup environment
+      uses: ./.github/actions/setup_environment
+      with:
+        #cache_version: ${{ secrets.GH_ACTIONS_CACHE_KEY }}
+        python-version: ${{ inputs.python-version }}
+        os: ${{ inputs.os }}
 
-    steps:
-      - uses: actions/checkout@v3
+    #----------------------------------------------
+    #  -----  install & configure poetry  -----
+    #----------------------------------------------
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+       virtualenvs-create: true
+       virtualenvs-in-project: true
+       installer-parallel: true
 
-      - name: Setup environment
-        uses: ./.github/actions/setup_environment
-        with:
-          cache_version: ${{ secrets.GH_ACTIONS_CACHE_KEY }}
-          python-version: ${{ inputs.python-version }}
-          os: ${{ inputs.os }}
-
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-         virtualenvs-create: true
-         virtualenvs-in-project: true
-         installer-parallel: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}

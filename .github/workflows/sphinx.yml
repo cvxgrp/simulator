@@ -13,7 +13,7 @@ jobs:
 
       - uses: ./.github/actions/setup-environment
         with:
-          os: "ubuntu-latest"
+          os: ${{ runner.os }}
           python-version: "3.11"
 
   docs:
