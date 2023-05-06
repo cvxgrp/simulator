@@ -17,7 +17,6 @@ on:
 
 runs:
   using: "composite"
-  shell: bash
   steps:
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -45,4 +44,5 @@ runs:
     # install your root project, if required
     #----------------------------------------------
     - name: Install project
+      shell: bash
       run: poetry install --no-interaction
