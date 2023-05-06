@@ -16,9 +16,6 @@ jobs:
           os: ${{ runner.os }}
           python-version: "3.11"
 
-      #----------------------------------------------
-      # install sphinx
-      #----------------------------------------------
       - name: Install sphinx
         run: | 
           pip install --no-cache-dir \
@@ -66,7 +63,7 @@ jobs:
           poetry run jupyter-book build book
 
       # Install pygount
-      - name: run pygount
+      - name: count
         run: |
           ls -all
           pip install pygount==1.5.1
@@ -79,7 +76,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: sphinx
-          path: --out=book/_build/html/docs
+          path: --out=book/_build/html/sphinx
 
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
