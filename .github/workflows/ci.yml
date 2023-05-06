@@ -134,6 +134,11 @@ jobs:
           name: dependencies
           path: book/_build/html/artifacts/build/show.txt
 
+      # Check uploads
+      - name: Inspect upload
+        run : |
+          - tree book/_build/html/artifacts
+
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.6.1
