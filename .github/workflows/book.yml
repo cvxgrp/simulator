@@ -31,13 +31,6 @@ jobs:
           poetry run jupyter-book clean book
           poetry run jupyter-book build book
 
-      # Push the book's HTML to github-pages
-      - name: GitHub Pages action
-        uses: peaceiris/actions-gh-pages@v3.6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: book/_build/html
-
       # Install pygount
       - name: run pygount
         run: |
@@ -46,3 +39,10 @@ jobs:
           mkdir -p book/_build/html/lines
           # pygount --format=summary cvx
           pygount --format=summary --out=book/_build/html/lines/lines.txt cvx
+
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: book/_build/html
