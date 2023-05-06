@@ -21,6 +21,8 @@ jobs:
           poetry show --only main --tree
           mkdir -p artifacts/build
           poetry show --only main --tree > artifacts/build/show.txt
+          ls -all artifacts/build
+          cat artifacts/build/show.txt
 
       - name: Archive dependencies
         uses: actions/upload-artifact@v3
