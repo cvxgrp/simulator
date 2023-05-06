@@ -2,8 +2,8 @@
 
 ## Sphinx
 
-{{ '[API]({url}/sphinx/)'.format(url=book_url) }}
+{{ '[API]({url}/artifacts/sphinx/)'.format(url=book_url) }}
 
 ## Dependencies
 
-{{ '[Dependencies]({url}/build/show.txt)'.format(url=book_url) }}
+{{ '[Dependencies]({url}/artifacts/build/show.txt)'.format(url=book_url) }}
