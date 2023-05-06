@@ -18,9 +18,9 @@ jobs:
 
       - name: Export dependencies
         run: |
-          - poetry show --only main --tree
-          - mkdir -p artifacts/build
-          - poetry show --only main --tree > artifacts/build/show.txt
+          poetry show --only main --tree
+          mkdir -p artifacts/build
+          poetry show --only main --tree > artifacts/build/show.txt
 
       - name: Archive dependencies
         uses: actions/upload-artifact@v3
