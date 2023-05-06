@@ -6,6 +6,7 @@ on:
 jobs:
 
   jupyter:
+    needs: [sphinx]
 
     runs-on: "ubuntu-latest"
     steps:

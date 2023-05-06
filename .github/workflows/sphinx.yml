@@ -4,7 +4,7 @@ on:
 - push
 
 jobs:
-  docs:
+  sphinx:
     runs-on: "ubuntu-latest"
 
     steps:
