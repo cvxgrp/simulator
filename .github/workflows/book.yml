@@ -5,10 +5,8 @@ on:
 
 jobs:
 
-  runs-on: "ubuntu-latest"
-
   build:
-    #runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-latest"
 
     steps:
       - name: Check out repository
@@ -21,8 +19,7 @@ jobs:
 
   counting:
     needs: [build]
-
-    #runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-latest"
 
     steps:
         - name: run pygound
@@ -39,8 +36,8 @@ jobs:
 
 
   jupyter:
-    #runs-on: "ubuntu-latest"
-    needs: ["build"]
+    needs: [build]
+    runs-on: "ubuntu-latest"
 
     steps:
       #----------------------------------------------
