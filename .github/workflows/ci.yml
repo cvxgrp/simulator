@@ -26,9 +26,9 @@ jobs:
       - name: Run tests
         run : |
           mkdir -p artifacts/tests
-          poetry run pytest --cov=cvx --random-order 
-                            --verbose --cov-report html:artifacts/tests/html-coverage 
-                            --cov-report term --html=artifacts/tests/html-report/report.html 
+          poetry run pytest --cov=cvx --random-order \
+                            --verbose --cov-report html:artifacts/tests/html-coverage \
+                            --cov-report term --html=artifacts/tests/html-report/report.html \
                         tests
           cat artifacts/tests/html-coverage/index.html
 
