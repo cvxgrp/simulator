@@ -26,13 +26,9 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p artifacts/tests
-          poetry run pytest --cov=cvx \
-                            --random-order \
-                            --verbose \ 
+          poetry run pytest --cov=cvx --random-order --verbose \ 
                             --cov-report html:artifacts/tests/html-coverage \
-                            --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
                             --cov-report term --html=artifacts/tests/html-report/report.html \
-                            --junitxml=artifacts/tests/junit/report.xml \
                             tests
 
       - name: Archive sphinx documentation
