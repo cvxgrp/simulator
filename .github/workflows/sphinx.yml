@@ -5,12 +5,13 @@ on:
 
 jobs:
   build:
-    - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-    - uses: ./.github/actions/setup-environment
-      with:
-        os: "ubuntu-latest"
-        python-version: "3.11"
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: "ubuntu-latest"
+          python-version: "3.11"
 
   docs:
     needs: [build]
