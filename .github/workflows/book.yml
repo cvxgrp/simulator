@@ -4,6 +4,30 @@ on:
 - push
 
 jobs:
+  dependencies:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-environment
+        with:
+          os: ${{ runner.os }}
+          python-version: "3.11"
+
+      - name: Export dependencies
+        run: |
+          - poetry show --only main --tree
+          - mkdir -p artifacts/build
+          - poetry show --only main --tree > artifacts/build/show.txt
+
+      - name: Archive dependencies
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependencies
+          path: artifacts/build/show.txt
+
   count:
     runs-on: "ubuntu-latest"
 
@@ -61,7 +85,7 @@ jobs:
           path: artifacts/docs
 
   jupyter:
-    needs: [sphinx, count]
+    needs: [sphinx, count, dependencies]
 
     runs-on: "ubuntu-latest"
     steps:
