@@ -17,13 +17,18 @@ jobs:
           os: ${{ runner.os }}
           python-version: "3.11"
 
+      - name: Check poetry
+        run :
+          poetry --version
+
   counting:
     needs: [build]
     runs-on: "ubuntu-latest"
 
     steps:
-        - name: run pygound
+        - name: run pygount
           run: |
+            ls -all
             pip install pygount==1.5.1
             mkdir -p artifacts/lines
             pygount --format=summary cvx
