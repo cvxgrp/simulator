@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for simulator.portfolio</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">LinearCostModel</span><span class="p">,</span> <span class="n">TradingCostModel</span>
@@ -132,7 +132,7 @@
     <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
     <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
-    <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">_State</span><span class="p">()</span>
+    <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_State</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
