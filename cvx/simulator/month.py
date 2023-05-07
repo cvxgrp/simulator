@@ -18,8 +18,6 @@ def monthlytable(returns: pd.Series):
 
     Args:
         returns: Series of individual returns.
-        fct: Function to use for total return calculation.
-            If not given, compounded logic is used.
 
     Returns:
         DataFrame with monthly returns, their STDev and YTD.
