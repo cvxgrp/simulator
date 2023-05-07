@@ -4,6 +4,10 @@
 
 {{ '[Lines of code]({url}/artifacts/lines/lines.txt)'.format(url=book_url) }}
 
+## Coverage
+
+{{ '[Test coverage]({url}/artifacts/tests/html-coverage/index.html)'.format(url=book_url) }}
+
 ## Test report
 
 {{ '[Report]({url}/artifacts/tests/html-report/report.html)'.format(url=book_url) }}
