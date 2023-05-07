@@ -24,17 +24,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run tests
-        run: |
-          mkdir -p artifacts/tests
-          poetry run pytest --cov=cvx \
-                            --random-order \
-                            --verbose --cov-report html:artifacts/tests/html-coverage \
-                            --cov-report xml:artifacts/tests/html-coverage-xml/coverage.xml \
-                            --cov-report term --html=artifacts/tests/html-report/report.html \
-                            --junitxml=artifacts/tests/junit/report.xml \
-                        tests
+        run : |
+          mkdir -p artifacts/tests/coverage
+          mkdir -p artifacts/tests/html-coverage
+          mkdir -p artifacts/tests/html-report
+          
+          poetry run pytest --cov=cvx --random-order --verbose \
+                            --html=artifacts/tests/html-report/report.html \
+                            --cov-report xml:artifacts/tests/coverage/coverage.xml \
+                            --cov-report html:artifacts/tests/html-coverage \
+                            tests/
 
-      - name: Archive sphinx documentation
+      - name: Archive tests results
         uses: actions/upload-artifact@v3
         with:
           name: tests
@@ -162,6 +163,13 @@ jobs:
         with:
           name: dependencies
           path: book/_build/html/artifacts/build
+
+      # Download the test artifact
+      - name: Download the test files
+        uses: actions/download-artifact@v3
+        with:
+          name: tests
+          path: book/_build/html/artifacts/tests
 
       # Check uploads
       - name: Inspect upload
