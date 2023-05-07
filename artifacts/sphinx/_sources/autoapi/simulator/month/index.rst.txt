@@ -29,8 +29,6 @@ Functions
    Get a table of monthly returns.
 
    :param returns: Series of individual returns.
-   :param fct: Function to use for total return calculation.
-               If not given, compounded logic is used.
 
    :returns: DataFrame with monthly returns, their STDev and YTD.
 
