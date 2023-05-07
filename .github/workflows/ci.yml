@@ -31,7 +31,7 @@ jobs:
           
           poetry run pytest --cov=cvx --random-order --verbose \
                             --html=artifacts/tests/html-report/report.html \
-                            --cov-report xml:artifacts/tests/coverage \
+                            --cov-report xml:artifacts/tests/coverage/coverage.xml \
                             --cov-report html:artifacts/tests/html-coverage \
                             tests/
 
