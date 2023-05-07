@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import pandas as pd
 
 from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
@@ -59,7 +59,7 @@ class _EquityPortfolio:
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel
     initial_cash: float = 1e6
-    _state: _State = _State()
+    _state: _State = field(default_factory=_State)
 
     def __post_init__(self):
         self._state.position = self.stocks.loc[self.index[0]]
