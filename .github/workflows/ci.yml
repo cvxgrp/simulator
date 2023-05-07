@@ -25,14 +25,15 @@ jobs:
 
       - name: Run tests
         run : |
-          #mkdir -p artifacts/tests/coverage
+          mkdir -p artifacts/tests/coverage
+          mkdir -p artifacts/tests/html-coverage
           mkdir -p artifacts/tests/html-report
           
-          poetry run pytest --cov=cvx --random-order --verbose --html=artifacts/tests/html-report/report.html --cov-report xml:artifacts/tests/coverage tests/
-          
-          #poetry run coverage html -d artifacts/tests/html-coverage
-          
-          #cat artifacts/tests/html-coverage/index.html
+          poetry run pytest --cov=cvx --random-order --verbose \
+                            --html=artifacts/tests/html-report/report.html \
+                            --cov-report xml:artifacts/tests/coverage \
+                            --cov-report html:artifacts/tests/html-coverage \
+                            tests/
 
       - name: Archive tests results
         uses: actions/upload-artifact@v3
