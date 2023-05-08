@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>With quantstats &#8212; cvxsimulator</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/quantstats';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API" href="../api.html" />
+    <link rel="prev" title="Almost pairs trading" href="pairs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cvxsimulator</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Simulator
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../nb.html">Notebooks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="demo.html">Long only 1/n portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monkey.html">Monkey portfolios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pairs.html">Almost pairs trading</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">With quantstats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reports.html">ci/cd reports</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/cvxgrp/simulator/main?urlpath=tree/book/docs/notebooks/quantstats.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cvxgrp/simulator" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cvxgrp/simulator/issues/new?title=Issue%20on%20page%20%2Fdocs/notebooks/quantstats.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/docs/notebooks/quantstats.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>With quantstats</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="with-quantstats">
+<h1>With quantstats<a class="headerlink" href="#with-quantstats" title="Permalink to this heading">#</a></h1>
+<p>We support and recommend <a class="reference external" href="https://github.com/ranaroussi/quantstats">quantstats</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;plotly&quot;</span>
+
+<span class="kn">import</span> <span class="nn">quantstats</span> <span class="k">as</span> <span class="nn">qs</span>
+
+<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">build_portfolio</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator.metrics</span> <span class="kn">import</span> <span class="n">Metrics</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.font_manager</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prices</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/stock_prices.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+<span class="n">prices</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GOOG</th>
+      <th>AAPL</th>
+      <th>FB</th>
+      <th>BABA</th>
+      <th>AMZN</th>
+      <th>GE</th>
+      <th>AMD</th>
+      <th>WMT</th>
+      <th>BAC</th>
+      <th>GM</th>
+      <th>T</th>
+      <th>UAA</th>
+      <th>SHLD</th>
+      <th>XOM</th>
+      <th>RRC</th>
+      <th>BBY</th>
+      <th>MA</th>
+      <th>PFE</th>
+      <th>JPM</th>
+      <th>SBUX</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-01-03</th>
+      <td>786.140015</td>
+      <td>113.847588</td>
+      <td>116.860001</td>
+      <td>88.599998</td>
+      <td>753.669983</td>
+      <td>30.404533</td>
+      <td>11.43</td>
+      <td>66.533134</td>
+      <td>22.096642</td>
+      <td>33.415901</td>
+      <td>39.866150</td>
+      <td>29.870001</td>
+      <td>9.72</td>
+      <td>86.670731</td>
+      <td>32.429317</td>
+      <td>41.446667</td>
+      <td>104.299248</td>
+      <td>31.459467</td>
+      <td>84.413986</td>
+      <td>54.048016</td>
+    </tr>
+    <tr>
+      <th>2017-01-04</th>
+      <td>786.900024</td>
+      <td>113.720169</td>
+      <td>118.690002</td>
+      <td>90.510002</td>
+      <td>757.179993</td>
+      <td>30.414125</td>
+      <td>11.43</td>
+      <td>66.920738</td>
+      <td>22.508562</td>
+      <td>35.260189</td>
+      <td>39.634476</td>
+      <td>30.540001</td>
+      <td>10.36</td>
+      <td>85.717155</td>
+      <td>33.374344</td>
+      <td>42.425648</td>
+      <td>105.288902</td>
+      <td>31.735929</td>
+      <td>84.569679</td>
+      <td>54.672962</td>
+    </tr>
+    <tr>
+      <th>2017-01-05</th>
+      <td>794.020020</td>
+      <td>114.298470</td>
+      <td>120.669998</td>
+      <td>94.370003</td>
+      <td>780.450012</td>
+      <td>30.241426</td>
+      <td>11.24</td>
+      <td>67.066093</td>
+      <td>22.243753</td>
+      <td>34.594723</td>
+      <td>39.523277</td>
+      <td>30.290001</td>
+      <td>10.39</td>
+      <td>84.439362</td>
+      <td>34.020943</td>
+      <td>41.330357</td>
+      <td>106.102089</td>
+      <td>32.040993</td>
+      <td>83.791222</td>
+      <td>55.131905</td>
+    </tr>
+    <tr>
+      <th>2017-01-06</th>
+      <td>806.150024</td>
+      <td>115.572701</td>
+      <td>123.410004</td>
+      <td>93.889999</td>
+      <td>795.989990</td>
+      <td>30.327776</td>
+      <td>11.32</td>
+      <td>66.145531</td>
+      <td>22.243753</td>
+      <td>34.214458</td>
+      <td>38.735809</td>
+      <td>30.469999</td>
+      <td>9.56</td>
+      <td>84.391678</td>
+      <td>34.050785</td>
+      <td>41.456364</td>
+      <td>106.865707</td>
+      <td>31.917057</td>
+      <td>83.800941</td>
+      <td>55.786144</td>
+    </tr>
+    <tr>
+      <th>2017-01-09</th>
+      <td>806.650024</td>
+      <td>116.631287</td>
+      <td>124.900002</td>
+      <td>94.720001</td>
+      <td>796.919983</td>
+      <td>30.183859</td>
+      <td>11.49</td>
+      <td>66.581581</td>
+      <td>22.116253</td>
+      <td>34.233471</td>
+      <td>38.248329</td>
+      <td>30.469999</td>
+      <td>9.10</td>
+      <td>82.999451</td>
+      <td>32.588478</td>
+      <td>42.008858</td>
+      <td>106.657455</td>
+      <td>31.907528</td>
+      <td>83.859329</td>
+      <td>56.830975</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2018-04-05</th>
+      <td>1027.810059</td>
+      <td>172.800003</td>
+      <td>159.339996</td>
+      <td>172.570007</td>
+      <td>1451.750000</td>
+      <td>13.430000</td>
+      <td>10.02</td>
+      <td>87.809998</td>
+      <td>30.320000</td>
+      <td>38.000000</td>
+      <td>35.632843</td>
+      <td>17.469999</td>
+      <td>2.97</td>
+      <td>76.019997</td>
+      <td>14.520000</td>
+      <td>72.120003</td>
+      <td>175.550003</td>
+      <td>35.730000</td>
+      <td>111.879997</td>
+      <td>59.139999</td>
+    </tr>
+    <tr>
+      <th>2018-04-06</th>
+      <td>1007.039978</td>
+      <td>168.380005</td>
+      <td>157.199997</td>
+      <td>167.520004</td>
+      <td>1405.229980</td>
+      <td>13.060000</td>
+      <td>9.61</td>
+      <td>86.690002</td>
+      <td>29.629999</td>
+      <td>37.680000</td>
+      <td>35.130001</td>
+      <td>16.980000</td>
+      <td>2.88</td>
+      <td>74.870003</td>
+      <td>13.970000</td>
+      <td>70.489998</td>
+      <td>169.699997</td>
+      <td>35.169998</td>
+      <td>109.089996</td>
+      <td>58.340000</td>
+    </tr>
+    <tr>
+      <th>2018-04-09</th>
+      <td>1015.450012</td>
+      <td>170.050003</td>
+      <td>157.929993</td>
+      <td>169.869995</td>
+      <td>1406.079956</td>
+      <td>12.830000</td>
+      <td>9.53</td>
+      <td>86.279999</td>
+      <td>29.870001</td>
+      <td>37.830002</td>
+      <td>35.169998</td>
+      <td>16.639999</td>
+      <td>2.82</td>
+      <td>74.870003</td>
+      <td>13.930000</td>
+      <td>69.820000</td>
+      <td>170.339996</td>
+      <td>35.459999</td>
+      <td>110.400002</td>
+      <td>58.700001</td>
+    </tr>
+    <tr>
+      <th>2018-04-10</th>
+      <td>1031.640015</td>
+      <td>173.250000</td>
+      <td>165.039993</td>
+      <td>177.100006</td>
+      <td>1436.219971</td>
+      <td>13.050000</td>
+      <td>9.98</td>
+      <td>86.449997</td>
+      <td>30.480000</td>
+      <td>39.070000</td>
+      <td>35.810001</td>
+      <td>16.820000</td>
+      <td>3.07</td>
+      <td>77.070000</td>
+      <td>14.780000</td>
+      <td>71.720001</td>
+      <td>174.720001</td>
+      <td>35.950001</td>
+      <td>112.510002</td>
+      <td>59.410000</td>
+    </tr>
+    <tr>
+      <th>2018-04-11</th>
+      <td>1019.969971</td>
+      <td>172.440002</td>
+      <td>166.320007</td>
+      <td>175.360001</td>
+      <td>1427.050049</td>
+      <td>12.970000</td>
+      <td>9.82</td>
+      <td>85.910004</td>
+      <td>29.900000</td>
+      <td>39.000000</td>
+      <td>35.250000</td>
+      <td>16.740000</td>
+      <td>3.30</td>
+      <td>77.430000</td>
+      <td>14.990000</td>
+      <td>70.910004</td>
+      <td>172.360001</td>
+      <td>35.790001</td>
+      <td>110.620003</td>
+      <td>59.419998</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 20 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">capital</span> <span class="o">=</span> <span class="mf">1e6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="n">capital</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">before</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+    <span class="c1"># each day we invest a quarter of the capital in the assets</span>
+    <span class="n">portfolio</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;1/n portfolio&quot;</span><span class="p">)</span>
+
+<span class="c1"># show sharpe ratio</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sharpe</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sharpe</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sharpe</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family &#39;Arial&#39; not found.
+</pre></div>
+</div>
+<img alt="../../_images/e67e6fa3bbd9ffa4e63deafd01bd8c9bbf5aa617ddef1abaa6cd04ee48510b3a.png" src="../../_images/e67e6fa3bbd9ffa4e63deafd01bd8c9bbf5aa617ddef1abaa6cd04ee48510b3a.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5646278826409189
+0.5655105330739049
+0.5646278826409189
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "simulator"
+        },
+        kernelOptions: {
+            name: "simulator",
+            path: "./docs/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'simulator'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pairs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Almost pairs trading</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Thomas Schmelzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
