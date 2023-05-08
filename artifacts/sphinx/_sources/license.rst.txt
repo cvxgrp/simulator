@@ -1,4 +1,4 @@
 License
 =======
 
-Copyright (c) 2023 Abu Dhabi Investment Authority
+Copyright (c) 2023 Stanford University Convex Optimization Group

@@ -8,7 +8,7 @@
 .. toctree::
    :maxdepth: 3
 
-   ../README.md
+   ../../README.md
    license
 
 API Documentation
