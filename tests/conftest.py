@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import pandas as pd
 
-from cvx.simulator.portfolio import build_portfolio
+from cvx.simulator.portfolio import EquityPortfolio
 
 
 @pytest.fixture(scope="session", name="resource_dir")
@@ -22,7 +22,7 @@ def prices(resource_dir):
 @pytest.fixture()
 def portfolio(prices):
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    return build_portfolio(prices, stocks=positions, initial_cash=1e6)
+    return EquityPortfolio(prices, stocks=positions, initial_cash=1e6)
 
 
 @pytest.fixture()

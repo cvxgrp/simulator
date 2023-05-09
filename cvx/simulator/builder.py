@@ -103,8 +103,8 @@ class _Builder:
             # valuation of the current position
             self._state.prices = self.prices.loc[now]
 
-            #this is probably very slow...
-            #EquityPortfolio(prices=self.prices.truncate(after=now), stocks=self.stocks.truncate(after=now), initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
+            # this is probably very slow...
+            # portfolio = EquityPortfolio(prices=self.prices.truncate(after=now), stocks=self.stocks.truncate(after=now), initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
 
             yield before, now, self._state
 

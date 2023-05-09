@@ -1,33 +1,24 @@
 from dataclasses import dataclass
 import pandas as pd
 
-from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
-
-
-def build_portfolio(prices, stocks, initial_cash=1e6, trading_cost_model=None):
-    assert isinstance(prices, pd.DataFrame)
-    assert prices.index.is_monotonic_increasing
-    assert prices.index.is_unique
-    assert stocks.index.is_monotonic_increasing
-    assert stocks.index.is_unique
-
-    assert set(stocks.index).issubset(set(prices.index))
-    assert set(stocks.columns).issubset(set(prices.columns))
-
-    prices = prices[stocks.columns].loc[stocks.index]
-
-    trading_cost_model = trading_cost_model or LinearCostModel(name="LinearCostModel cost model")
-    return EquityPortfolio(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
-                            trading_cost_model=trading_cost_model)
+from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass(frozen=True)
 class EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel
+    trading_cost_model: TradingCostModel = None
     initial_cash: float = 1e6
 
+    def __post_init__(self):
+        assert self.prices.index.is_monotonic_increasing
+        assert self.prices.index.is_unique
+        assert self.stocks.index.is_monotonic_increasing
+        assert self.stocks.index.is_unique
+
+        assert set(self.stocks.index).issubset(set(self.prices.index))
+        assert set(self.stocks.columns).issubset(set(self.prices.columns))
 
     @property
     def index(self):
@@ -37,12 +28,17 @@ class EquityPortfolio:
     def assets(self):
         return self.prices.columns
 
+    @property
+    def weights(self):
+        return self.equity / self.nav
+
     def __getitem__(self, item):
         assert item in self.index
         return self.stocks.loc[item]
 
     @property
     def trading_costs(self):
+        # return a frame of all zeros
         if self.trading_cost_model is None:
             return 0.0 * self.prices
 
@@ -114,6 +110,6 @@ class EquityPortfolio:
 
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
-        return build_portfolio(prices=prices_right, stocks=positions,
+        return EquityPortfolio(prices=prices_right, stocks=positions,
                                initial_cash=self.initial_cash + port_new.initial_cash,
                                trading_cost_model=self.trading_cost_model)

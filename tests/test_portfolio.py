@@ -1,9 +1,10 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.portfolio import build_portfolio
 from cvx.simulator.builder import _State
 from cvx.simulator.builder import builder
+from cvx.simulator.portfolio import EquityPortfolio
+
 
 def test_state():
     prices = pd.Series(data=[2.0, 3.0])
@@ -26,7 +27,7 @@ def test_index(portfolio):
 
 
 def test_prices(portfolio, prices):
-    pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
+    pd.testing.assert_frame_equal(portfolio.prices, prices)
 
 
 def test_stocks(portfolio):
@@ -167,8 +168,8 @@ def test_add(prices, resource_dir):
     pos_left = pd.DataFrame(data={"A": [0, 1], "C": [3, 3]}, index=index_left)
     pos_right = pd.DataFrame(data={"A": [1, 1, 2], "B": [2, 3, 4]}, index=index_right)
 
-    port_left = build_portfolio(prices, stocks=pos_left)
-    port_right = build_portfolio(prices, stocks=pos_right)
+    port_left = EquityPortfolio(prices.loc[pos_left.index][pos_left.columns], stocks=pos_left)
+    port_right = EquityPortfolio(prices.loc[pos_right.index][pos_right.columns], stocks=pos_right)
 
     pd.testing.assert_frame_equal(pos_left, port_left.stocks)
     pd.testing.assert_frame_equal(pos_right, port_right.stocks)
@@ -221,7 +222,7 @@ def test_duplicates():
     position = pd.DataFrame(index=[1, 1], columns=["A"])
 
     with pytest.raises(AssertionError):
-        build_portfolio(prices=prices, stocks=position)
+        EquityPortfolio(prices=prices, stocks=position)
 
 
 def test_monotonic():
