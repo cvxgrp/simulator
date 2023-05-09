@@ -10,6 +10,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   builder/index.rst
    metrics/index.rst
    month/index.rst
    portfolio/index.rst

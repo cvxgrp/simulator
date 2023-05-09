@@ -49,6 +49,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../builder/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.metrics</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../month/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.month</span></code></a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.portfolio</span></code></a></li>
@@ -91,6 +92,20 @@
 <span id="simulator-portfolio"></span><h1><a class="reference internal" href="#module-simulator.portfolio" title="simulator.portfolio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.portfolio</span></code></a><a class="headerlink" href="#module-simulator.portfolio" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.portfolio.EquityPortfolio" title="simulator.portfolio.EquityPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EquityPortfolio</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -99,15 +114,108 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.portfolio.build_portfolio" title="simulator.portfolio.build_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_portfolio</span></code></a>(prices, stocks=None, initial_cash=1000000.0, trading_cost_model=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.portfolio.build_portfolio" title="simulator.portfolio.build_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_portfolio</span></code></a>(prices, stocks, initial_cash=1000000.0, trading_cost_model=None)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="simulator.portfolio.build_portfolio">
-<span class="sig-prename descclassname"><span class="pre">simulator.portfolio.</span></span><span class="sig-name descname"><span class="pre">build_portfolio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_cash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trading_cost_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#build_portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.build_portfolio" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">simulator.portfolio.</span></span><span class="sig-name descname"><span class="pre">build_portfolio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_cash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trading_cost_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#build_portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.build_portfolio" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.portfolio.</span></span><span class="sig-name descname"><span class="pre">EquityPortfolio</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.prices">
+<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.prices" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.stocks">
+<span class="sig-name descname"><span class="pre">stocks</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.stocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trading_cost_model">
+<span class="sig-name descname"><span class="pre">trading_cost_model</span></span><em class="property"><span class="w"> </span><span class="pre">:cvx.simulator.trading_costs.TradingCostModel</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_cost_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trading_cost_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.initial_cash">
+<span class="sig-name descname"><span class="pre">initial_cash</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">1000000.0</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.initial_cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.initial_cash" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.index" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.assets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.assets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__getitem__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trading_costs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trading_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trading_costs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.equity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">equity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.equity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.equity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trades_stocks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_stocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trades_stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trades_stocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trades_currency">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_currency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trades_currency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trades_currency" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.cash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.cash" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.nav">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.nav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.nav" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.profit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.profit" title="Permalink to this definition"></a></dt>
+<dd><p>Profit</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__mul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__mul__" title="Permalink to this definition"></a></dt>
+<dd><p>Multiplies positions by a scalar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__rmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__rmul__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__add__" title="Permalink to this definition"></a></dt>
+<dd><p>Adds two portfolios together</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 </section>

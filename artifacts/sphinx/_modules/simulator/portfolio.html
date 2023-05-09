@@ -71,55 +71,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for simulator.portfolio</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">LinearCostModel</span><span class="p">,</span> <span class="n">TradingCostModel</span>
 
 
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">_State</span><span class="p">:</span>
-    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">leverage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">trades</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="p">(</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>  <span class="n">trades</span><span class="o">=</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">self</span>
-
-
-<div class="viewcode-block" id="build_portfolio"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.build_portfolio">[docs]</a><span class="k">def</span> <span class="nf">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="build_portfolio"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.build_portfolio">[docs]</a><span class="k">def</span> <span class="nf">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
     <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
-
-    <span class="k">if</span> <span class="n">stocks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
-        <span class="k">assert</span> <span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
+    <span class="k">assert</span> <span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
+    <span class="k">assert</span> <span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
 
     <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
     <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">stocks</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
@@ -127,126 +90,83 @@
     <span class="n">prices</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="n">stocks</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 
     <span class="n">trading_cost_model</span> <span class="o">=</span> <span class="n">trading_cost_model</span> <span class="ow">or</span> <span class="n">LinearCostModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;LinearCostModel cost model&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_EquityPortfolio</span><span class="p">(</span><span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span> <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
+    <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span> <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
                             <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">_EquityPortfolio</span><span class="p">:</span>
-    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
-    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
-    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span>
-    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
-    <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_State</span><span class="p">)</span>
+<div class="viewcode-block" id="EquityPortfolio"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio">[docs]</a><span class="k">class</span> <span class="nc">EquityPortfolio</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="EquityPortfolio.stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.stocks">[docs]</a>    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="EquityPortfolio.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span></div>
+<div class="viewcode-block" id="EquityPortfolio.initial_cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.initial_cash">[docs]</a>    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span>
+<div class="viewcode-block" id="EquityPortfolio.index"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span>
+<div class="viewcode-block" id="EquityPortfolio.assets"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
 
-    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the position via weights (e.g. fractions of the nav)</span>
-
-<span class="sd">        :param time: time</span>
-<span class="sd">        :param weights: series of weights</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-
-    <span class="k">def</span> <span class="nf">set_cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the position via cash positions (e.g. USD invested per asset)</span>
-
-<span class="sd">        :param time: time</span>
-<span class="sd">        :param cashposition: series of cash positions</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-
-    <span class="k">def</span> <span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the position via number of assets (e.g. number of stocks)</span>
-
-<span class="sd">        :param time: time</span>
-<span class="sd">        :param position: series of number of stocks</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">before</span><span class="p">,</span> <span class="n">now</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-            <span class="c1"># valuation of the current position</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">now</span><span class="p">]</span>
-
-            <span class="k">yield</span> <span class="n">before</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
-
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span><span class="p">)</span>
+<div class="viewcode-block" id="EquityPortfolio.trading_costs"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.equity"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.equity">[docs]</a>    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
         <span class="c1"># same as a cash position</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_stocks">[docs]</a>    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
         <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_currency"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_currency">[docs]</a>    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+<div class="viewcode-block" id="EquityPortfolio.cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cash">[docs]</a>    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span>
+<div class="viewcode-block" id="EquityPortfolio.nav"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.profit"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.profit">[docs]</a>    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Profit</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">price_changes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
         <span class="n">previous_stocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">previous_stocks</span> <span class="o">*</span> <span class="n">price_changes</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">previous_stocks</span> <span class="o">*</span> <span class="n">price_changes</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+<div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Multiplies positions by a scalar</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
+<div class="viewcode-block" id="EquityPortfolio.__rmul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">):</span>
+<div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds two portfolios together</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">_EquityPortfolio</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>
 
         <span class="n">assets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
@@ -269,7 +189,7 @@
 
         <span class="k">return</span> <span class="n">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_right</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span>
                                <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">+</span> <span class="n">port_new</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
-                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span>
+                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

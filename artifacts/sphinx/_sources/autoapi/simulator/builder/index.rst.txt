@@ -1,0 +1,22 @@
+:py:mod:`simulator.builder`
+===========================
+
+.. py:module:: simulator.builder
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.builder.builder
+
+
+
+.. py:function:: builder(prices, initial_cash=1000000.0, trading_cost_model=None)
+
+

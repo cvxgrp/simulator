@@ -7,6 +7,14 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.portfolio.EquityPortfolio
+
+
 
 Functions
 ~~~~~~~~~
@@ -17,6 +25,83 @@ Functions
 
 
 
-.. py:function:: build_portfolio(prices, stocks=None, initial_cash=1000000.0, trading_cost_model=None)
+.. py:function:: build_portfolio(prices, stocks, initial_cash=1000000.0, trading_cost_model=None)
+
+
+.. py:class:: EquityPortfolio
+
+   .. py:attribute:: prices
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: stocks
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: trading_cost_model
+      :annotation: :cvx.simulator.trading_costs.TradingCostModel
+
+      
+
+   .. py:attribute:: initial_cash
+      :annotation: :float = 1000000.0
+
+      
+
+   .. py:method:: index(self)
+      :property:
+
+
+   .. py:method:: assets(self)
+      :property:
+
+
+   .. py:method:: __getitem__(self, item)
+
+
+   .. py:method:: trading_costs(self)
+      :property:
+
+
+   .. py:method:: equity(self) -> pandas.DataFrame
+      :property:
+
+
+   .. py:method:: trades_stocks(self) -> pandas.DataFrame
+      :property:
+
+
+   .. py:method:: trades_currency(self) -> pandas.DataFrame
+      :property:
+
+
+   .. py:method:: cash(self) -> pandas.Series
+      :property:
+
+
+   .. py:method:: nav(self) -> pandas.Series
+      :property:
+
+
+   .. py:method:: profit(self) -> pandas.Series
+      :property:
+
+      Profit
+
+
+   .. py:method:: __mul__(self, scalar)
+
+      Multiplies positions by a scalar
+
+
+   .. py:method:: __rmul__(self, scalar)
+
+
+   .. py:method:: __add__(self, port_new)
+
+      Adds two portfolios together
+
 
 

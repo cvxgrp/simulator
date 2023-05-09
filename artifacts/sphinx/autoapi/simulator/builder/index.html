@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>simulator.month &mdash; cvxsimulator Documentation</title>
+  <title>simulator.builder &mdash; cvxsimulator Documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -22,8 +22,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="simulator.portfolio" href="../portfolio/index.html" />
-    <link rel="prev" title="simulator.metrics" href="../metrics/index.html" /> 
+    <link rel="next" title="simulator.metrics" href="../metrics/index.html" />
+    <link rel="prev" title="simulator" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,9 +49,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../builder/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.metrics</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.month</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../month/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.month</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../portfolio/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.portfolio</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../trading_costs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.trading_costs</span></code></a></li>
 </ul>
@@ -78,9 +78,9 @@
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../index.html">API Reference</a> &raquo;</li>
           <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.month</span></code></li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/autoapi/simulator/month/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/autoapi/simulator/builder/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,9 +88,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-simulator.month">
-<span id="simulator-month"></span><h1><a class="reference internal" href="#module-simulator.month" title="simulator.month"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.month</span></code></a><a class="headerlink" href="#module-simulator.month" title="Permalink to this heading"></a></h1>
-<p>Popular year vs month performance table.</p>
+  <section id="module-simulator.builder">
+<span id="simulator-builder"></span><h1><a class="reference internal" href="#module-simulator.builder" title="simulator.builder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a><a class="headerlink" href="#module-simulator.builder" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="functions">
@@ -101,24 +100,15 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.month.monthlytable" title="simulator.month.monthlytable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">monthlytable</span></code></a>(returns: pandas.Series)</p></td>
-<td><p>Get a table of monthly returns.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.builder.builder" title="simulator.builder.builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">builder</span></code></a>(prices, initial_cash=1000000.0, trading_cost_model=None)</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt class="sig sig-object py" id="simulator.month.monthlytable">
-<span class="sig-prename descclassname"><span class="pre">simulator.month.</span></span><span class="sig-name descname"><span class="pre">monthlytable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">returns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/month.html#monthlytable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.month.monthlytable" title="Permalink to this definition"></a></dt>
-<dd><p>Get a table of monthly returns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>returns</strong> – Series of individual returns.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>DataFrame with monthly returns, their STDev and YTD.</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="simulator.builder.builder">
+<span class="sig-prename descclassname"><span class="pre">simulator.builder.</span></span><span class="sig-name descname"><span class="pre">builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_cash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trading_cost_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.builder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -128,8 +118,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../metrics/index.html" class="btn btn-neutral float-left" title="simulator.metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../portfolio/index.html" class="btn btn-neutral float-right" title="simulator.portfolio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../metrics/index.html" class="btn btn-neutral float-right" title="simulator.metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
