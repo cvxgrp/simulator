@@ -42,7 +42,10 @@ class EquityPortfolio:
         return self.stocks.loc[item]
 
     @property
-    def trading_costs(self) -> pd.DataFrame:
+    def trading_costs(self):
+        if self.trading_cost_model is None:
+            return 0.0 * self.prices
+
         return self.trading_cost_model.eval(self.prices, self.trades_stocks)
 
     @property
