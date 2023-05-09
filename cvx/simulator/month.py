@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Popular year vs month performance table.
-
-Supports compounded and cumulative (i.e. fixed AUM) returns logic.
 """
 from __future__ import annotations
 
