@@ -2,7 +2,7 @@ import pandas as pd
 from cvx.simulator.trading_costs import LinearCostModel
 
 
-def test_lifnear_model():
+def test_linear_model():
     trades = pd.Series(index=["A", "B"], data=[20.0, -10.0])
     prices = pd.Series(index=["A", "B"], data=[100.0, 300.0])
 
