@@ -99,14 +99,14 @@ class _Builder:
         self[time] = position
 
     def __iter__(self):
-        for before, now in zip(self.index[:-1], self.index[1:]):
+        for t in self.index[1:]:
             # valuation of the current position
-            self._state.prices = self.prices.loc[now]
+            self._state.prices = self.prices.loc[t]
 
             # this is probably very slow...
             # portfolio = EquityPortfolio(prices=self.prices.truncate(after=now), stocks=self.stocks.truncate(after=now), initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
 
-            yield before, now, self._state
+            yield self.index[self.index <= t], self._state
 
     def __setitem__(self, key, position):
         assert isinstance(position, pd.Series)

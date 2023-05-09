@@ -44,8 +44,8 @@ def test_iter(prices):
     b.stocks["A"].loc[b.index[0]] = 1.0
 
     # don't change the position at all and loop through the entire history
-    for before, now, _ in b:
-        b[now] = b[before]
+    for times, _ in b:
+        b[times[-1]] = b[times[-2]]
 
     portfolio = b.build()
 
@@ -74,9 +74,9 @@ def test_long_only(prices, resource_dir):
     b.stocks.loc[b.index[0], "B"] = 4.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, _ in b:
+    for times, _ in b:
         # before is t_{i-1} and now is t_{i}
-        b[now] = b[before]
+        b[times[-1]] = b[times[-2]]
 
     portfolio = b.build()
     # Our assets have hopefully increased in value
@@ -122,9 +122,9 @@ def test_long_short(prices, resource_dir):
     b.stocks.loc[b.index[0], "C"] = -1.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, _ in b:
+    for times, _ in b:
         # before is t_{i-1} and now is t_{i}
-        b[now] = b[before]
+        b[times[-1]] = b[times[-2]]
 
     portfolio = b.build()
 
@@ -182,10 +182,10 @@ def test_add(prices, resource_dir):
 def test_head(prices):
     b = builder(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
-    for before, now, state in b:
+    for times, state in b:
         # before is t_{i-1} and now is t_{i}
-        assert before == b.index[0]
-        assert now == b.index[1]
+        assert times[-2] == b.index[0]
+        assert times[-1] == b.index[1]
         assert state.nav == 20000.0
         assert state.cash == 20000.0
         assert state.value == 0.0
@@ -193,8 +193,8 @@ def test_head(prices):
 
 def test_set_weights(prices):
     b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for before, now, state in b:
-        b.set_weights(time=now, weights=pd.Series(index=["B","C"], data=0.5))
+    for times, state in b:
+        b.set_weights(time=times[-1], weights=pd.Series(index=["B","C"], data=0.5))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -202,8 +202,8 @@ def test_set_weights(prices):
 
 def test_set_cashpositions(prices):
     b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for before, now, state in b:
-        b.set_cashposition(time=now, cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
+    for times, state in b:
+        b.set_cashposition(time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
