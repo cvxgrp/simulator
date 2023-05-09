@@ -164,7 +164,10 @@ class _EquityPortfolio:
         """
         Multiplies positions by a scalar
         """
-        return _EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, model=self.trading_cost_model)
+        return _EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
+
+    def __rmul__(self, scalar):
+        return self.__mul__(scalar)
 
     def __add__(self, port_new):
         """

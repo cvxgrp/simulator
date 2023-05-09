@@ -239,3 +239,13 @@ def test_portfolio(prices):
         portfolio.stocks,
         pd.DataFrame(index=prices.index, columns=prices.keys(), data=1000.0),
     )
+
+
+def test_multiply(portfolio):
+    double = portfolio*2.0
+    pd.testing.assert_frame_equal(2.0*portfolio.stocks, double.stocks)
+
+
+def test_multiply_r(portfolio):
+    double = 2.0*portfolio
+    pd.testing.assert_frame_equal(2.0*portfolio.stocks, double.stocks)
