@@ -39,9 +39,14 @@ class _State:
 
 def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
     assert isinstance(prices, pd.DataFrame)
+    assert prices.index.is_monotonic_increasing
+    assert prices.index.is_unique
 
     if stocks is None:
         stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
+    else:
+        assert stocks.index.is_monotonic_increasing
+        assert stocks.index.is_unique
 
     assert set(stocks.index).issubset(set(prices.index))
     assert set(stocks.columns).issubset(set(prices.columns))
@@ -159,7 +164,7 @@ class _EquityPortfolio:
         """
         Multiplies positions by a scalar
         """
-        return _EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar)
+        return _EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, model=self.trading_cost_model)
 
     def __add__(self, port_new):
         """
@@ -187,4 +192,5 @@ class _EquityPortfolio:
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
         return build_portfolio(prices=prices_right, stocks=positions,
-                               initial_cash=self.initial_cash + port_new.initial_cash)
+                               initial_cash=self.initial_cash + port_new.initial_cash,
+                               trading_cost_model=self.trading_cost_model)
