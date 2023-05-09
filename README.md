@@ -15,15 +15,16 @@ This tool shall help to simplify the accounting. It keeps track of the available
 The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
-* [Create the portfolio object](#create-the-portfolio-object)
+* [Create the builder object](#create-the-builder-object)
 * [Loop through time](#loop-through-time)
 * [Analyse results](#analyse-results)
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
 
-### Create the portfolio object
+### Create the builder object
 
-The user defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
+The user defines a builder object by loading a frame of prices 
+and initialize the initial amount of cash used in our experiment:
 
 ```python
 from pathlib import Path
@@ -32,7 +33,7 @@ import pandas as pd
 from cvx.simulator.portfolio import build_portfolio
 
 prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
-portfolio = build_portfolio(prices=prices, initial_cash=1e6)
+b = builder(prices=prices, initial_cash=1e6)
 ```
 
 It is also possible to specify a model for trading costs.
@@ -44,14 +45,14 @@ Let's start with a first strategy. Each day we choose two names from the univers
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
-for before, now, state in portfolio:
+for before, now, state in b:
     # pick two assets at random
-    pair = np.random.choice(portfolio.assets, 2, replace=False)
+    pair = np.random.choice(b.assets, 2, replace=False)
     # compute the pair
-    stocks = pd.Series(index=portfolio.assets, data=0.0)
+    stocks = pd.Series(index=b.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position 
-    portfolio[now] = 0.1 * stocks
+    b[now] = 0.1 * stocks
 ```
 
 A lot of magic is hidden in the state variable. 
@@ -60,18 +61,24 @@ The state gives access to the currently available cash, the current prices and t
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
 
 ```python
-for _, now, state in portfolio:
+for _, now, state in b:
     # each day we invest a quarter of the capital in the assets
-    portfolio[now] = 0.25 * state.nav / state.prices
+    b[now] = 0.25 * state.nav / state.prices
 ```
 
 Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
-The portfolio class also exposes setters for such conventions.
+The builder class also exposes setters for such conventions.
 
 ```python
-for _, now, state in portfolio:
+for _, now, state in b:
     # each day we invest a quarter of the capital in the assets
-    portfolio.set_weights(now, pd.Series(index=portfolio.assets, data = 0.25))
+    b.set_weights(now, pd.Series(index=b.assets, data = 0.25))
+```
+
+Once finished it is possible to build the portfolio object
+
+```python
+portfolio = b.build()
 ```
 
 ### Analyse results

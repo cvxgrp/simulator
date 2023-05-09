@@ -1,8 +1,9 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.portfolio import build_portfolio, _State
-
+from cvx.simulator.portfolio import build_portfolio
+from cvx.simulator.builder import _State
+from cvx.simulator.builder import builder
 
 def test_state():
     prices = pd.Series(data=[2.0, 3.0])
@@ -35,15 +36,17 @@ def test_stocks(portfolio):
 
 def test_iter(prices):
     # construct a portfolio with only one asset
-    portfolio = build_portfolio(prices[["A"]])
-    assert set(portfolio.assets) == {"A"}
+    b = builder(prices[["A"]])
+    assert set(b.assets) == {"A"}
 
     # initialize the position of the asset
-    portfolio.stocks["A"].loc[portfolio.index[0]] = 1.0
+    b.stocks["A"].loc[b.index[0]] = 1.0
 
     # don't change the position at all and loop through the entire history
-    for before, now, _ in portfolio:
-        portfolio[now] = portfolio[before]
+    for before, now, _ in b:
+        b[now] = b[before]
+
+    portfolio = b.build()
 
     # given our position is exactly one stock in A the price of A and the equity match
     pd.testing.assert_series_equal(portfolio.equity["A"], portfolio.prices["A"], check_names=False)
@@ -59,21 +62,22 @@ def test_iter(prices):
 
 def test_long_only(prices, resource_dir):
     # Let's setup a portfolio with two assets: A and B
-    portfolio = build_portfolio(prices=prices[["A", "B"]], initial_cash=100000)
-    assert set(portfolio.assets) == {"A", "B"}
-    assert len(portfolio.index) == 602
+    b = builder(prices=prices[["A", "B"]], initial_cash=100000)
+    assert set(b.assets) == {"A", "B"}
+    assert len(b.index) == 602
 
-    pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
+    pd.testing.assert_index_equal(b.index, b.prices.index)
 
     # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
-    portfolio.stocks.loc[portfolio.index[0], "A"] = 2.0
-    portfolio.stocks.loc[portfolio.index[0], "B"] = 4.0
+    b.stocks.loc[b.index[0], "A"] = 2.0
+    b.stocks.loc[b.index[0], "B"] = 4.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, _ in portfolio:
+    for before, now, _ in b:
         # before is t_{i-1} and now is t_{i}
-        portfolio[now] = portfolio[before]
+        b[now] = b[before]
 
+    portfolio = b.build()
     # Our assets have hopefully increased in value
     # portfolio.equity.to_csv(resource_dir / "equity.csv")
     assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(96595.48)
@@ -106,20 +110,22 @@ def test_long_only(prices, resource_dir):
 
 def test_long_short(prices, resource_dir):
     # Let's setup a portfolio with two assets: B and C
-    portfolio = build_portfolio(prices=prices[["B", "C"]], initial_cash=20000)
-    assert set(portfolio.assets) == {"B", "C"}
-    assert len(portfolio.index) == 602
+    b = builder(prices=prices[["B", "C"]], initial_cash=20000)
+    assert set(b.assets) == {"B", "C"}
+    assert len(b.index) == 602
 
-    pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
+    pd.testing.assert_index_equal(b.index, b.prices.index)
 
     # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
-    portfolio.stocks.loc[portfolio.index[0], "B"] =  3.0
-    portfolio.stocks.loc[portfolio.index[0], "C"] = -1.0
+    b.stocks.loc[b.index[0], "B"] =  3.0
+    b.stocks.loc[b.index[0], "C"] = -1.0
 
     # We now iterate through the underlying timestamps of the portfolio
-    for before, now, _ in portfolio:
+    for before, now, _ in b:
         # before is t_{i-1} and now is t_{i}
-        portfolio[now] = portfolio[before]
+        b[now] = b[before]
+
+    portfolio = b.build()
 
     # Our assets have hopefully increased in value
     #portfolio.equity.to_csv(resource_dir / "equity_ls.csv")
@@ -173,30 +179,32 @@ def test_add(prices, resource_dir):
 
 
 def test_head(prices):
-    portfolio = build_portfolio(prices=prices[["B", "C"]].head(2), initial_cash=20000)
+    b = builder(prices=prices[["B", "C"]].head(2), initial_cash=20000)
 
-    for before, now, state in portfolio:
+    for before, now, state in b:
         # before is t_{i-1} and now is t_{i}
-        assert before == portfolio.index[0]
-        assert now == portfolio.index[1]
+        assert before == b.index[0]
+        assert now == b.index[1]
         assert state.nav == 20000.0
         assert state.cash == 20000.0
         assert state.value == 0.0
 
 
 def test_set_weights(prices):
-    portfolio = build_portfolio(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for before, now, state in portfolio:
-        portfolio.set_weights(time=now, weights=pd.Series(index=["B","C"], data=0.5))
+    b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for before, now, state in b:
+        b.set_weights(time=now, weights=pd.Series(index=["B","C"], data=0.5))
 
+    portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
 
 def test_set_cashpositions(prices):
-    portfolio = build_portfolio(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for before, now, state in portfolio:
-        portfolio.set_cashposition(time=now, cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
+    b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for before, now, state in b:
+        b.set_cashposition(time=now, cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
 
+    portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
         #portfolio[now] = portfolio[before]
@@ -207,7 +215,7 @@ def test_duplicates():
     """
     prices = pd.DataFrame(index=[1, 1], columns=["A"])
     with pytest.raises(AssertionError):
-        build_portfolio(prices=prices)
+        builder(prices=prices)
 
     prices = pd.DataFrame(index=[1], columns=["A"])
     position = pd.DataFrame(index=[1, 1], columns=["A"])
@@ -222,18 +230,20 @@ def test_monotonic():
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
-        build_portfolio(prices=prices)
+        builder(prices=prices)
 
 def test_portfolio(prices):
     """
     build portfolio from price
     """
-    portfolio = build_portfolio(prices=prices)
-    pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
+    b = builder(prices=prices)
+    pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
-    for t in portfolio.index:
+    for t in b.index:
         # set the position
-        portfolio[t] = pd.Series(index=prices.keys(), data=1000.0)
+        b[t] = pd.Series(index=prices.keys(), data=1000.0)
+
+    portfolio = b.build()
 
     pd.testing.assert_frame_equal(
         portfolio.stocks,
