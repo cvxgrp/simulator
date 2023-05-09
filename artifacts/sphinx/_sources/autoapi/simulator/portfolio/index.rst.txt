@@ -16,17 +16,6 @@ Classes
 
 
 
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   simulator.portfolio.build_portfolio
-
-
-
-.. py:function:: build_portfolio(prices, stocks, initial_cash=1000000.0, trading_cost_model=None)
-
 
 .. py:class:: EquityPortfolio
 
@@ -50,11 +39,18 @@ Functions
 
       
 
+   .. py:method:: __post_init__(self)
+
+
    .. py:method:: index(self)
       :property:
 
 
    .. py:method:: assets(self)
+      :property:
+
+
+   .. py:method:: weights(self)
       :property:
 
 
