@@ -45,14 +45,14 @@ Let's start with a first strategy. Each day we choose two names from the univers
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
-for before, now, state in b:
+for t, state in b:
     # pick two assets at random
     pair = np.random.choice(b.assets, 2, replace=False)
     # compute the pair
     stocks = pd.Series(index=b.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position 
-    b[now] = 0.1 * stocks
+    b[t[-1]] = 0.1 * stocks
 ```
 
 A lot of magic is hidden in the state variable. 
@@ -61,18 +61,18 @@ The state gives access to the currently available cash, the current prices and t
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
 
 ```python
-for _, now, state in b:
+for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b[now] = 0.25 * state.nav / state.prices
+    b[t[-1]] = 0.25 * state.nav / state.prices
 ```
 
 Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
 The builder class also exposes setters for such conventions.
 
 ```python
-for _, now, state in b:
+for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b.set_weights(now, pd.Series(index=b.assets, data = 0.25))
+    b.set_weights(t[-1], pd.Series(index=b.assets, data = 0.25))
 ```
 
 Once finished it is possible to build the portfolio object
