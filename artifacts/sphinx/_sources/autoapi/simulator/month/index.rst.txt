@@ -7,8 +7,6 @@
 
    Popular year vs month performance table.
 
-   Supports compounded and cumulative (i.e. fixed AUM) returns logic.
-
 
 
 Module Contents
