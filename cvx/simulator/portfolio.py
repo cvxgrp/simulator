@@ -1,75 +1,24 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import pandas as pd
 
-from cvx.simulator.trading_costs import LinearCostModel, TradingCostModel
-
-
-@dataclass
-class _State:
-    prices: pd.Series = None
-    position: pd.Series = None
-    cash: float = 1e6
-
-    @property
-    def value(self):
-        return (self.prices * self.position).sum()
-
-    @property
-    def nav(self):
-        return self.value + self.cash
-
-    @property
-    def weights(self):
-        return (self.prices * self.position)/self.nav
-
-    @property
-    def leverage(self):
-        return self.weights.abs().sum()
-
-    def update(self, position, model=None, **kwargs):
-        trades = position - self.position
-        self.position = position
-        self.cash -= (trades * self.prices).sum()
-
-        if model is not None:
-            self.cash -= model.eval(self.prices,  trades=trades, **kwargs).sum()
-
-        return self
-
-
-def build_portfolio(prices, stocks=None, initial_cash=1e6, trading_cost_model=None):
-    assert isinstance(prices, pd.DataFrame)
-    assert prices.index.is_monotonic_increasing
-    assert prices.index.is_unique
-
-    if stocks is None:
-        stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
-    else:
-        assert stocks.index.is_monotonic_increasing
-        assert stocks.index.is_unique
-
-    assert set(stocks.index).issubset(set(prices.index))
-    assert set(stocks.columns).issubset(set(prices.columns))
-
-    prices = prices[stocks.columns].loc[stocks.index]
-
-    trading_cost_model = trading_cost_model or LinearCostModel(name="LinearCostModel cost model")
-    return _EquityPortfolio(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
-                            trading_cost_model=trading_cost_model)
+from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass(frozen=True)
-class _EquityPortfolio:
+class EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel
+    trading_cost_model: TradingCostModel = None
     initial_cash: float = 1e6
-    _state: _State = field(default_factory=_State)
 
     def __post_init__(self):
-        self._state.position = self.stocks.loc[self.index[0]]
-        self._state.prices = self.prices.loc[self.index[0]]
-        self._state.cash = self.initial_cash - self._state.value
+        assert self.prices.index.is_monotonic_increasing
+        assert self.prices.index.is_unique
+        assert self.stocks.index.is_monotonic_increasing
+        assert self.stocks.index.is_unique
+
+        assert set(self.stocks.index).issubset(set(self.prices.index))
+        assert set(self.stocks.columns).issubset(set(self.prices.columns))
 
     @property
     def index(self):
@@ -79,53 +28,20 @@ class _EquityPortfolio:
     def assets(self):
         return self.prices.columns
 
-    def set_weights(self, time, weights):
-        """
-        Set the position via weights (e.g. fractions of the nav)
-
-        :param time: time
-        :param weights: series of weights
-        """
-        self[time] = (self._state.nav * weights) / self._state.prices
-
-    def set_cashposition(self, time, cashposition):
-        """
-        Set the position via cash positions (e.g. USD invested per asset)
-
-        :param time: time
-        :param cashposition: series of cash positions
-        """
-        self[time] = cashposition / self._state.prices
-
-    def set_position(self, time, position):
-        """
-        Set the position via number of assets (e.g. number of stocks)
-
-        :param time: time
-        :param position: series of number of stocks
-        """
-        self[time] = position
-
-    def __iter__(self):
-        for before, now in zip(self.index[:-1], self.index[1:]):
-            # valuation of the current position
-            self._state.prices = self.prices.loc[now]
-
-            yield before, now, self._state
-
-    def __setitem__(self, key, position):
-        assert isinstance(position, pd.Series)
-        assert set(position.index).issubset(set(self.assets))
-
-        self.stocks.loc[key, position.index] = position
-        self._state.update(position, model=self.trading_cost_model)
+    @property
+    def weights(self):
+        return self.equity / self.nav
 
     def __getitem__(self, item):
         assert item in self.index
         return self.stocks.loc[item]
 
     @property
-    def trading_costs(self) -> pd.DataFrame:
+    def trading_costs(self):
+        # return a frame of all zeros
+        if self.trading_cost_model is None:
+            return 0.0 * self.prices
+
         return self.trading_cost_model.eval(self.prices, self.trades_stocks)
 
     @property
@@ -164,7 +80,7 @@ class _EquityPortfolio:
         """
         Multiplies positions by a scalar
         """
-        return _EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
+        return EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
 
     def __rmul__(self, scalar):
         return self.__mul__(scalar)
@@ -173,7 +89,7 @@ class _EquityPortfolio:
         """
         Adds two portfolios together
         """
-        assert isinstance(port_new, _EquityPortfolio)
+        assert isinstance(port_new, EquityPortfolio)
 
         assets = self.assets.union(port_new.assets)
         index = self.index.union(port_new.index)
@@ -194,6 +110,6 @@ class _EquityPortfolio:
 
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
-        return build_portfolio(prices=prices_right, stocks=positions,
+        return EquityPortfolio(prices=prices_right, stocks=positions,
                                initial_cash=self.initial_cash + port_new.initial_cash,
                                trading_cost_model=self.trading_cost_model)
