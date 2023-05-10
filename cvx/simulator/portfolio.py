@@ -77,7 +77,7 @@ class EquityPortfolio:
         return (previous_stocks * price_changes).dropna(axis=0, how="all").sum(axis=1)
 
     @property
-    def highwatermark(self) -> pd.Series:
+    def highwater(self) -> pd.Series:
         """
         Highwater mark.
 
@@ -94,7 +94,7 @@ class EquityPortfolio:
         Returns:
             Relative drawdown series.
         """
-        return 1.0 - self.nav / self.highwatermark
+        return 1.0 - self.nav / self.highwater
 
     def __mul__(self, scalar):
         """
