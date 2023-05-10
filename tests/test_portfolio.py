@@ -208,7 +208,6 @@ def test_set_cashpositions(prices):
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
-        #portfolio[now] = portfolio[before]
 
 def test_duplicates():
     """

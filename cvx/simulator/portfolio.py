@@ -76,6 +76,26 @@ class EquityPortfolio:
         previous_stocks = self.stocks.shift(1).fillna(0.0)
         return (previous_stocks * price_changes).dropna(axis=0, how="all").sum(axis=1)
 
+    @property
+    def highwatermark(self) -> pd.Series:
+        """
+        Highwater mark.
+
+        Returns:
+            The High-Water Mark, e.g. a moving max.
+        """
+        return self.nav.expanding(min_periods=1).max()
+
+    @property
+    def drawdown(self) -> pd.Series:
+        """
+        The drawdown relative to HWM.
+
+        Returns:
+            Relative drawdown series.
+        """
+        return 1.0 - self.nav / self.highwatermark
+
     def __mul__(self, scalar):
         """
         Multiplies positions by a scalar
