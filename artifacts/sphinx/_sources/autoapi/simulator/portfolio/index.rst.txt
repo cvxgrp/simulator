@@ -87,6 +87,22 @@ Classes
       Profit
 
 
+   .. py:method:: highwatermark(self) -> pandas.Series
+      :property:
+
+      Highwater mark.
+
+      :returns: The High-Water Mark, e.g. a moving max.
+
+
+   .. py:method:: drawdown(self) -> pandas.Series
+      :property:
+
+      The drawdown relative to HWM.
+
+      :returns: Relative drawdown series.
+
+
    .. py:method:: __mul__(self, scalar)
 
       Multiplies positions by a scalar
