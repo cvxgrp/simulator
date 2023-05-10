@@ -356,12 +356,12 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modus-operandi">Modus operandi</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-portfolio-object">Create the portfolio object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse results</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dirty-path">The dirty path</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
 </ul>
@@ -377,6 +377,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="simulator">
 <h1>Simulator<a class="headerlink" href="#simulator" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://badge.fury.io/py/cvxsimulator"><img alt="PyPI version" src="https://badge.fury.io/py/cvxsimulator.svg" /></a>
+<a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/cvxsimulator/"><img alt="PyPI download month" src="https://img.shields.io/pypi/dm/cvxsimulator.svg" /></a></p>
 <p>Given a universe of <span class="math notranslate nohighlight">\(m\)</span> assets we are given prices for each of them at time <span class="math notranslate nohighlight">\(t_1, t_2, \ldots t_n\)</span>,
 e.g. we operate using an <span class="math notranslate nohighlight">\(n \times m\)</span> matrix where each column corresponds to a particular asset.</p>
 <p>In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
@@ -386,52 +389,71 @@ This tool shall help to simplify the accounting. It keeps track of the available
 <p>The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:</p>
 <ul class="simple">
-<li><p><span class="xref myst">Create the portfolio object</span></p></li>
+<li><p><span class="xref myst">Create the builder object</span></p></li>
 <li><p><span class="xref myst">Loop through time</span></p></li>
 <li><p><span class="xref myst">Analyse results</span></p></li>
 </ul>
 <p>We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.</p>
-<section id="create-the-portfolio-object">
-<h3>Create the portfolio object<a class="headerlink" href="#create-the-portfolio-object" title="Permalink to this heading">#</a></h3>
-<p>The user defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">build_portfolio</span>
+<section id="create-the-builder-object">
+<h3>Create the builder object<a class="headerlink" href="#create-the-builder-object" title="Permalink to this heading">#</a></h3>
+<p>The user defines a builder object by loading a frame of prices
+and initialize the amount of cash used in our experiment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;price.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">(</span>
-<span class="n">portfolio</span> <span class="o">=</span> <span class="n">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator.builder</span> <span class="kn">import</span> <span class="n">builder</span>
+
+<span class="n">prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;price.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">builder</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It is also possible to specify a model for trading costs.</p>
+<p>It is also possible to specify a model for trading costs.
+The builder helps to fill up the frame of positions. Only once done
+we construct the actual portfolio.</p>
 </section>
 <section id="loop-through-time">
 <h3>Loop through time<a class="headerlink" href="#loop-through-time" title="Permalink to this heading">#</a></h3>
 <p>We have overloaded the <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> methods to create a custom loop.
 Let’s start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">before</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># pick two assets at random</span>
-    <span class="n">pair</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">pair</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># compute the pair</span>
-    <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">portfolio</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
     <span class="n">stocks</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">,</span> <span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">]</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="c1"># update the position </span>
-    <span class="n">portfolio</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stocks</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stocks</span>
 </pre></div>
 </div>
+<p>Here t is the growing list of timestamps, e.g. in the first iteration
+t is <span class="math notranslate nohighlight">\(t1, t2\)</span>, in the second iteration it will be <span class="math notranslate nohighlight">\(t1, t2, t3\)</span> etc.</p>
 <p>A lot of magic is hidden in the state variable.
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.</p>
 <p>Here’s a slightly more realistic loop. Given a set of <span class="math notranslate nohighlight">\(4\)</span> assets we want to implmenent the popular <span class="math notranslate nohighlight">\(1/n\)</span> strategy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># each day we invest a quarter of the capital in the assets</span>
-    <span class="n">portfolio</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
 </pre></div>
 </div>
-<p>Note that we update the position at time <code class="docutils literal notranslate"><span class="pre">now</span></code> using a series of actual stocks rather than weights or cashpositions.
-Future versions of this package may support such conventions, too.</p>
+<p>Note that we update the position at the last element in the t list
+using a series of actual stocks rather than weights or cashpositions.
+The builder class also exposes setters for such conventions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+    <span class="c1"># each day we invest a quarter of the capital in the assets</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Once finished it is possible to build the portfolio object</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 <section id="analyse-results">
 <h3>Analyse results<a class="headerlink" href="#analyse-results" title="Permalink to this heading">#</a></h3>
-<p>The loop above is filling up the desired positions. The portfolio object is now ready for further analysis.
+<p>The loop above is filling up the desired positions.
+After triggering the <code class="docutils literal notranslate"><span class="pre">build()</span></code> the resulting portfolio
+is ready for further analysis.
 It is possible dive into the data, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>
 <span class="n">portfolio</span><span class="o">.</span><span class="n">cash</span>
@@ -441,12 +463,22 @@ It is possible dive into the data, e.g.</p>
 </div>
 </section>
 </section>
-<section id="the-dirty-path">
-<h2>The dirty path<a class="headerlink" href="#the-dirty-path" title="Permalink to this heading">#</a></h2>
-<p>Some may know the positions they want to enter for eternity.
+<section id="bypassing-the-builder">
+<h2>Bypassing the builder<a class="headerlink" href="#bypassing-the-builder" title="Permalink to this heading">#</a></h2>
+<p>Some may know the positions the portfolio shall enter for eternity.
 Running through a loop is rather non-pythonic waste of time in such a case.
 It is possible to completely bypass this step by submitting
 a frame of positions together with a frame of prices when creating the portfolio object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
+
+<span class="n">prices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;price.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+<span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;stock.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">portfolio</span> <span class="o">=</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="poetry">
 <h2>Poetry<a class="headerlink" href="#poetry" title="Permalink to this heading">#</a></h2>
@@ -527,12 +559,12 @@ a frame of positions together with a frame of prices when creating the portfolio
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modus-operandi">Modus operandi</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-portfolio-object">Create the portfolio object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse results</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dirty-path">The dirty path</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
 </ul>

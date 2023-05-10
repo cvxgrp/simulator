@@ -1,6 +1,10 @@
 # Simulator
 
-Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$,
+[![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
+[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
+[![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
+
+Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$, 
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
 
 In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
@@ -11,60 +15,83 @@ This tool shall help to simplify the accounting. It keeps track of the available
 The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
-* [Create the portfolio object](#create-the-portfolio-object)
+* [Create the builder object](#create-the-builder-object)
 * [Loop through time](#loop-through-time)
 * [Analyse results](#analyse-results)
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
 
-### Create the portfolio object
+### Create the builder object
 
-The user defines a portfolio object by loading a frame of prices and initialize the initial amount of cash used in our experiment:
+The user defines a builder object by loading a frame of prices 
+and initialize the amount of cash used in our experiment:
 
 ```python
-import pandas as pd
-from cvx.simulator.portfolio import build_portfolio
+from pathlib import Path
 
-prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill(
-portfolio = build_portfolio(prices=prices, initial_cash=1e6)
+import pandas as pd
+from cvx.simulator.builder import builder
+
+prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
+b = builder(prices=prices, initial_cash=1e6)
 ```
 
-It is also possible to specify a model for trading costs.
+It is also possible to specify a model for trading costs. 
+The builder helps to fill up the frame of positions. Only once done
+we construct the actual portfolio.
 
 ### Loop through time
 
-We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop.
+We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop. 
 Let's start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
-for before, now, state in portfolio:
+for t, state in b:
     # pick two assets at random
-    pair = np.random.choice(portfolio.assets, 2, replace=False)
+    pair = np.random.choice(b.assets, 2, replace=False)
     # compute the pair
-    stocks = pd.Series(index=portfolio.assets, data=0.0)
+    stocks = pd.Series(index=b.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position 
-    portfolio[now] = 0.1 * stocks
+    b[t[-1]] = 0.1 * stocks
 ```
 
-A lot of magic is hidden in the state variable.
+Here t is the growing list of timestamps, e.g. in the first iteration
+t is $t1, t2$, in the second iteration it will be $t1, t2, t3$ etc.
+
+A lot of magic is hidden in the state variable. 
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
 
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
 
 ```python
-for _, now, state in portfolio:
+for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    portfolio[now] = 0.25 * state.nav / state.prices
+    b[t[-1]] = 0.25 * state.nav / state.prices
 ```
 
-Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
-Future versions of this package may support such conventions, too.
+Note that we update the position at the last element in the t list 
+using a series of actual stocks rather than weights or cashpositions.
+The builder class also exposes setters for such conventions.
+
+```python
+for t, state in b:
+    # each day we invest a quarter of the capital in the assets
+    b.set_weights(t[-1], pd.Series(index=b.assets, data = 0.25))
+```
+
+Once finished it is possible to build the portfolio object
+
+```python
+portfolio = b.build()
+```
 
 ### Analyse results
 
-The loop above is filling up the desired positions. The portfolio object is now ready for further analysis.
+The loop above is filling up the desired positions. 
+After triggering the `build()` the resulting portfolio 
+is ready for further analysis.
 It is possible dive into the data, e.g.
 
 ```python
@@ -74,12 +101,24 @@ portfolio.equity
 ...
 ``` 
 
-## The dirty path
+## Bypassing the builder
 
-Some may know the positions they want to enter for eternity. 
+Some may know the positions the portfolio shall enter for eternity. 
 Running through a loop is rather non-pythonic waste of time in such a case.
 It is possible to completely bypass this step by submitting 
 a frame of positions together with a frame of prices when creating the portfolio object.
+
+```python
+from pathlib import Path
+
+import pandas as pd
+from cvx.simulator.portfolio import EquityPortfolio
+
+prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
+stocks = pd.read_csv(Path("resources") / "stock.csv", index_col=0, parse_dates=True, header=0)
+portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
+```
+
 
 ## Poetry
 
