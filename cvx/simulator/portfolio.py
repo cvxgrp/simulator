@@ -22,19 +22,33 @@ class EquityPortfolio:
 
     @property
     def index(self):
+        """
+        The timestamps in the portfolio (index in prices frame)
+
+        Returns:
+             Index of timestamps
+        """
         return self.prices.index
 
     @property
     def assets(self):
+        """
+        The assets in the portfolio (columns in prices frame)
+
+        Returns:
+            Index of assets.
+        """
         return self.prices.columns
 
     @property
     def weights(self):
+        """
+        Frame of relative weights (e.g. value / nav)
+        """
         return self.equity / self.nav
 
-    def __getitem__(self, item):
-        assert item in self.index
-        return self.stocks.loc[item]
+    def __getitem__(self, time):
+        return self.stocks.loc[time]
 
     @property
     def trading_costs(self):
@@ -75,6 +89,26 @@ class EquityPortfolio:
         price_changes = self.prices.ffill().diff()
         previous_stocks = self.stocks.shift(1).fillna(0.0)
         return (previous_stocks * price_changes).dropna(axis=0, how="all").sum(axis=1)
+
+    @property
+    def highwater(self) -> pd.Series:
+        """
+        Highwater mark.
+
+        Returns:
+            The High-Water Mark, e.g. a moving max.
+        """
+        return self.nav.expanding(min_periods=1).max()
+
+    @property
+    def drawdown(self) -> pd.Series:
+        """
+        The drawdown relative to HWM.
+
+        Returns:
+            Relative drawdown series.
+        """
+        return 1.0 - self.nav / self.highwater
 
     def __mul__(self, scalar):
         """
