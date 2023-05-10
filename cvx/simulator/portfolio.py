@@ -22,19 +22,33 @@ class EquityPortfolio:
 
     @property
     def index(self):
+        """
+        The timestamps in the portfolio (index in prices frame)
+
+        Returns:
+             Index of timestamps
+        """
         return self.prices.index
 
     @property
     def assets(self):
+        """
+        The assets in the portfolio (columns in prices frame)
+
+        Returns:
+            Index of assets.
+        """
         return self.prices.columns
 
     @property
     def weights(self):
+        """
+        Frame of relative weights (e.g. value / nav)
+        """
         return self.equity / self.nav
 
-    def __getitem__(self, item):
-        assert item in self.index
-        return self.stocks.loc[item]
+    def __getitem__(self, time):
+        return self.stocks.loc[time]
 
     @property
     def trading_costs(self):
