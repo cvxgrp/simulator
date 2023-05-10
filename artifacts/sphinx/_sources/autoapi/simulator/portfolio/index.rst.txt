@@ -45,16 +45,26 @@ Classes
    .. py:method:: index(self)
       :property:
 
+      The timestamps in the portfolio (index in prices frame)
+
+      :returns: Index of timestamps
+
 
    .. py:method:: assets(self)
       :property:
+
+      The assets in the portfolio (columns in prices frame)
+
+      :returns: Index of assets.
 
 
    .. py:method:: weights(self)
       :property:
 
+      Frame of relative weights (e.g. value / nav)
 
-   .. py:method:: __getitem__(self, item)
+
+   .. py:method:: __getitem__(self, time)
 
 
    .. py:method:: trading_costs(self)

@@ -95,19 +95,33 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.index"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The timestamps in the portfolio (index in prices frame)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             Index of timestamps</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.assets"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The assets in the portfolio (columns in prices frame)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Index of assets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.weights"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.weights">[docs]</a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Frame of relative weights (e.g. value / nav)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
+<div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.trading_costs"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
