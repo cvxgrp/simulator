@@ -24,19 +24,21 @@ We demonstrate those steps with somewhat silly policies. They are never good str
 ### Create the builder object
 
 The user defines a builder object by loading a frame of prices 
-and initialize the initial amount of cash used in our experiment:
+and initialize the amount of cash used in our experiment:
 
 ```python
 from pathlib import Path
 
 import pandas as pd
-from cvx.simulator.portfolio import build_portfolio
+from cvx.simulator.builder import builder
 
 prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
 b = builder(prices=prices, initial_cash=1e6)
 ```
 
-It is also possible to specify a model for trading costs.
+It is also possible to specify a model for trading costs. 
+The builder helps to fill up the frame of positions. Only once done
+we construct the actual portfolio.
 
 ### Loop through time
 
@@ -55,6 +57,9 @@ for t, state in b:
     b[t[-1]] = 0.1 * stocks
 ```
 
+Here t is the growing list of timestamps, e.g. in the first iteration
+t is $t1, t2$, in the second iteration it will be $t1, t2, t3$ etc.
+
 A lot of magic is hidden in the state variable. 
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
 
@@ -66,7 +71,8 @@ for t, state in b:
     b[t[-1]] = 0.25 * state.nav / state.prices
 ```
 
-Note that we update the position at time `now` using a series of actual stocks rather than weights or cashpositions.
+Note that we update the position at the last element in the t list 
+using a series of actual stocks rather than weights or cashpositions.
 The builder class also exposes setters for such conventions.
 
 ```python
@@ -83,7 +89,9 @@ portfolio = b.build()
 
 ### Analyse results
 
-The loop above is filling up the desired positions. The portfolio object is now ready for further analysis.
+The loop above is filling up the desired positions. 
+After triggering the `build()` the resulting portfolio 
+is ready for further analysis.
 It is possible dive into the data, e.g.
 
 ```python
@@ -93,12 +101,24 @@ portfolio.equity
 ...
 ``` 
 
-## The dirty path
+## Bypassing the builder
 
-Some may know the positions they want to enter for eternity. 
+Some may know the positions the portfolio shall enter for eternity. 
 Running through a loop is rather non-pythonic waste of time in such a case.
 It is possible to completely bypass this step by submitting 
 a frame of positions together with a frame of prices when creating the portfolio object.
+
+```python
+from pathlib import Path
+
+import pandas as pd
+from cvx.simulator.portfolio import EquityPortfolio
+
+prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
+stocks = pd.read_csv(Path("resources") / "stock.csv", index_col=0, parse_dates=True, header=0)
+portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
+```
+
 
 ## Poetry
 
