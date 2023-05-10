@@ -87,7 +87,7 @@ Classes
       Profit
 
 
-   .. py:method:: highwatermark(self) -> pandas.Series
+   .. py:method:: highwater(self) -> pandas.Series
       :property:
 
       Highwater mark.
