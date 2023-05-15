@@ -18,7 +18,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
@@ -82,7 +82,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
@@ -107,7 +107,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
@@ -143,7 +143,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"

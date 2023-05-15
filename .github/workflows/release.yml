@@ -17,20 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/release
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
-
-      - name: Update version (kept at 0.0.0) in pyproject.toml and build
-        run: |
-          poetry version ${{ github.ref_name }}
-          poetry build
-
-      - name: Mint token
-        id: mint
-        uses: tschm/token-mint-action@v1.0.2
-
-      - name: Publish the package with poetry
-        run: |
-          poetry publish -u __token__ -p '${{ steps.mint.outputs.api-token }}'
