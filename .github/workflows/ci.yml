@@ -36,5 +36,4 @@ jobs:
           python-version: "3.11"
           sphinx-folder: "book/sphinx/"
           source-folder: "cvx"
-        secrets: inherit
-          #token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
