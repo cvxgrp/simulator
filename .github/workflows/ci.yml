@@ -30,34 +30,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: cvxgrp/.github/actions/setup-environment@main
+      - uses: cvxgrp/.github/actions/dependencies@main
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
-
-      - name: Export dependencies
-        run: |
-          poetry show --only main --tree
-          mkdir -p artifacts/build
-          poetry show --only main --tree > artifacts/build/show.txt
-
-      - name: Archive dependencies
-        uses: actions/upload-artifact@v3
-        with:
-          name: dependencies
-          path: artifacts/build
-
-      - name: count
-        run: |
-            pip install pygount==1.5.1
-            mkdir -p artifacts/lines
-            pygount --format=summary --out=artifacts/lines/lines.txt cvx
-
-      - name: Archive counts
-        uses: actions/upload-artifact@v3
-        with:
-          name: count
-          path: artifacts/lines
+          source-folder: "cvx"
 
   sphinx:
     runs-on: "ubuntu-latest"
@@ -66,29 +43,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: cvxgrp/.github/actions/setup-environment@main
+      - uses: cvxgrp/.github/actions/sphinx@main
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
-
-      - name: Install sphinx
-        run: |
-          poetry run pip install --no-cache-dir \
-                     sphinx==5.0.2 \
-                     sphinx-autoapi==1.8.4 \
-                     sphinx-rtd-theme==1.0.0 \
-                     recommonmark==0.7.1
-
-      - name: Build sphinx
-        run: |
-          mkdir -p artifacts/sphinx
-          poetry run sphinx-build -b html book/sphinx/ artifacts/sphinx
-
-      - name: Archive sphinx documentation
-        uses: actions/upload-artifact@v3
-        with:
-          name: sphinx
-          path: artifacts/sphinx
+          sphinx-folder: "book/sphinx/"
 
   jupyter:
     needs: [test, sphinx, dependencies]
