@@ -18,7 +18,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
@@ -66,8 +66,6 @@ jobs:
           poetry show --only main --tree
           mkdir -p artifacts/build
           poetry show --only main --tree > artifacts/build/show.txt
-          tree artifacts
-          cat artifacts/build/show.txt
 
       - name: Archive dependencies
         uses: actions/upload-artifact@v3
@@ -75,30 +73,41 @@ jobs:
           name: dependencies
           path: artifacts/build
 
-  count:
-    runs-on: "ubuntu-latest"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - uses: ./.github/actions/setup-environment
-        with:
-          os: ${{ runner.os }}
-          python-version: "3.11"
-
       - name: count
         run: |
             pip install pygount==1.5.1
             mkdir -p artifacts/lines
             pygount --format=summary --out=artifacts/lines/lines.txt cvx
-            tree artifacts
 
       - name: Archive counts
         uses: actions/upload-artifact@v3
         with:
           name: count
           path: artifacts/lines
+
+#  count:
+#    runs-on: "ubuntu-latest"
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - uses: cvxgrp/.github/actions/setup-environment
+#        with:
+#          os: ${{ runner.os }}
+#          python-version: "3.11"
+#
+#      - name: count
+#        run: |
+#            pip install pygount==1.5.1
+#            mkdir -p artifacts/lines
+#            pygount --format=summary --out=artifacts/lines/lines.txt cvx
+#
+#      - name: Archive counts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: count
+#          path: artifacts/lines
 
   sphinx:
     runs-on: "ubuntu-latest"
@@ -107,7 +116,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
@@ -124,7 +133,6 @@ jobs:
         run: |
           mkdir -p artifacts/sphinx
           poetry run sphinx-build -b html book/sphinx/ artifacts/sphinx
-          ls -all artifacts/sphinx
 
       - name: Archive sphinx documentation
         uses: actions/upload-artifact@v3
@@ -133,7 +141,7 @@ jobs:
           path: artifacts/sphinx
 
   jupyter:
-    needs: [test, sphinx, count, dependencies]
+    needs: [test, sphinx, dependencies]
 
     runs-on: "ubuntu-latest"
     steps:
@@ -143,7 +151,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-environment
+      - uses: cvxgrp/.github/actions/setup-environment
         with:
           os: ${{ runner.os }}
           python-version: "3.11"
