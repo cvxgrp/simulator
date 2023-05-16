@@ -19,23 +19,4 @@ Functions
 
 .. py:function:: builder(prices, initial_cash=1000000.0, trading_cost_model=None)
 
-   A function that creates a new instance of the
-   Portfolio builder class based on the given input parameters.
-
-   Args: prices: A pandas dataframe representing the prices of various assets held by the portfolio over time.
-   initial_cash: A scalar float value representing the initial cash available for the portfolio.
-   trading_cost_model: An optional trading cost model to use when trading assets in the portfolio.
-
-   Returns: _Builder: A new instance of the Portfolio builder class with the specified input parameters.
-
-   Raises: AssertionError: If input validation fails (e.g., if the input dataframe is not
-   in the expected format or contains NaN values).
-
-   Notes: The function performs some basic input validation to ensure that the input dataframe
-   is in the expected format and that the timestamps follow a
-   monotonic increasing order without any duplicates.
-   It also initializes a new dataframe with zero values for all assets
-   to represent the initial stock holdings of the portfolio.
-   The function returns a new instance of the Portfolio builder class with the given input parameters.
-
 
