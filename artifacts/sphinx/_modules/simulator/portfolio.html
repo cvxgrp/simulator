@@ -133,7 +133,20 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.equity"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.equity">[docs]</a>    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="c1"># same as a cash position</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas dataframe</span>
+<span class="sd">        representing the equity positions of the portfolio,</span>
+<span class="sd">        which is the value of each asset held by the portfolio.</span>
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing</span>
+<span class="sd">        the equity positions of the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the equity of the portfolio</span>
+<span class="sd">        by multiplying the current prices of each asset</span>
+<span class="sd">        by the number of shares held by the portfolio.</span>
+<span class="sd">        The resulting values are filled forward to account</span>
+<span class="sd">        for any missing data or NaN values.</span>
+<span class="sd">        The equity dataframe will have the same dimensions</span>
+<span class="sd">        as the prices and stocks dataframes. &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
@@ -152,35 +165,62 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.nav"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Returns a pandas series representing the total value</span>
+<span class="sd">        of the portfolio&#39;s investments and cash.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">                            total value of the portfolio&#39;s investments and cash.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.profit"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.profit">[docs]</a>    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Profit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas series representing the</span>
+<span class="sd">        profit gained or lost in the portfolio based on changes in asset prices.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the profit</span>
+<span class="sd">        gained or lost in the portfolio based on changes in asset prices.</span>
+
+<span class="sd">        Notes: The calculation is based on the difference between</span>
+<span class="sd">        the previous and current prices of the assets in the portfolio,</span>
+<span class="sd">        multiplied by the number of stocks in each asset previously held.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">price_changes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
         <span class="n">previous_stocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">previous_stocks</span> <span class="o">*</span> <span class="n">price_changes</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.highwater"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.highwater">[docs]</a>    <span class="k">def</span> <span class="nf">highwater</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Highwater mark.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A function that returns a pandas series representing</span>
+<span class="sd">        the high-water mark of the portfolio, which is the highest point</span>
+<span class="sd">        the portfolio value has reached over time.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            The High-Water Mark, e.g. a moving max.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">        high-water mark of the portfolio.</span>
+
+<span class="sd">        Notes: The function performs a rolling computation based on</span>
+<span class="sd">        the cumulative maximum of the portfolio&#39;s value over time,</span>
+<span class="sd">        starting from the beginning of the time period being considered.</span>
+<span class="sd">        Min_periods argument is set to 1 to include the minimum period of one day.</span>
+<span class="sd">        The resulting series will show the highest value the portfolio has reached at each point in time. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">expanding</span><span class="p">(</span><span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.drawdown"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.drawdown">[docs]</a>    <span class="k">def</span> <span class="nf">drawdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The drawdown relative to HWM.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas series representing the</span>
+<span class="sd">        drawdown of the portfolio, which measures the decline</span>
+<span class="sd">        in the portfolio&#39;s value from its (previously) highest</span>
+<span class="sd">        point to its current point.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            Relative drawdown series.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">        drawdown of the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the ratio of the portfolio&#39;s current value</span>
+<span class="sd">        vs. its current high-water-mark and then subtracting the result from 1.</span>
+<span class="sd">        A positive drawdown means the portfolio is currently worth</span>
+<span class="sd">        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
