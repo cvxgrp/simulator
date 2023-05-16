@@ -60,7 +60,20 @@ class EquityPortfolio:
 
     @property
     def equity(self) -> pd.DataFrame:
-        # same as a cash position
+        """ A property that returns a pandas dataframe
+        representing the equity positions of the portfolio,
+        which is the value of each asset held by the portfolio.
+        Returns: pd.DataFrame: A pandas dataframe representing
+        the equity positions of the portfolio.
+
+        Notes: The function calculates the equity of the portfolio
+        by multiplying the current prices of each asset
+        by the number of shares held by the portfolio.
+        The resulting values are filled forward to account
+        for any missing data or NaN values.
+        The equity dataframe will have the same dimensions
+        as the prices and stocks dataframes. """
+
         return (self.prices * self.stocks).ffill()
 
     @property
@@ -79,35 +92,62 @@ class EquityPortfolio:
 
     @property
     def nav(self) -> pd.Series:
+        """ Returns a pandas series representing the total value
+        of the portfolio's investments and cash.
+
+        Returns: pd.Series: A pandas series representing the
+                            total value of the portfolio's investments and cash.
+        """
+
         return self.equity.sum(axis=1) + self.cash
 
     @property
     def profit(self) -> pd.Series:
+        """ A property that returns a pandas series representing the
+        profit gained or lost in the portfolio based on changes in asset prices.
+
+        Returns: pd.Series: A pandas series representing the profit
+        gained or lost in the portfolio based on changes in asset prices.
+
+        Notes: The calculation is based on the difference between
+        the previous and current prices of the assets in the portfolio,
+        multiplied by the number of stocks in each asset previously held.
         """
-        Profit
-        """
+
         price_changes = self.prices.ffill().diff()
         previous_stocks = self.stocks.shift(1).fillna(0.0)
         return (previous_stocks * price_changes).dropna(axis=0, how="all").sum(axis=1)
 
     @property
     def highwater(self) -> pd.Series:
-        """
-        Highwater mark.
+        """ A function that returns a pandas series representing
+        the high-water mark of the portfolio, which is the highest point
+        the portfolio value has reached over time.
 
-        Returns:
-            The High-Water Mark, e.g. a moving max.
-        """
+        Returns: pd.Series: A pandas series representing the
+        high-water mark of the portfolio.
+
+        Notes: The function performs a rolling computation based on
+        the cumulative maximum of the portfolio's value over time,
+        starting from the beginning of the time period being considered.
+        Min_periods argument is set to 1 to include the minimum period of one day.
+        The resulting series will show the highest value the portfolio has reached at each point in time. """
         return self.nav.expanding(min_periods=1).max()
 
     @property
     def drawdown(self) -> pd.Series:
-        """
-        The drawdown relative to HWM.
+        """ A property that returns a pandas series representing the
+        drawdown of the portfolio, which measures the decline
+        in the portfolio's value from its (previously) highest
+        point to its current point.
 
-        Returns:
-            Relative drawdown series.
-        """
+        Returns: pd.Series: A pandas series representing the
+        drawdown of the portfolio.
+
+        Notes: The function calculates the ratio of the portfolio's current value
+        vs. its current high-water-mark and then subtracting the result from 1.
+        A positive drawdown means the portfolio is currently worth
+        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark """
         return 1.0 - self.nav / self.highwater
 
     def __mul__(self, scalar):
