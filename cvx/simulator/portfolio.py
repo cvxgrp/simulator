@@ -6,12 +6,49 @@ from cvx.simulator.trading_costs import TradingCostModel
 
 @dataclass(frozen=True)
 class EquityPortfolio:
+    """ A class that represents an equity portfolio
+    and contains dataframes for prices and stock holdings,
+    as well as optional parameters for trading cost models
+    and initial cash values.
+
+    Attributes:
+        prices (pd.DataFrame): A pandas dataframe representing
+        the prices of various assets held by the portfolio over time.
+        stocks (pd.DataFrame): A pandas dataframe representing the number of shares
+        held for each asset in the portfolio over time.
+        trading_cost_model (TradingCostModel): An optional trading cost model
+        to use when trading assets in the portfolio.
+        initial_cash (float): An optional scalar float representing the initial
+        cash value available for the portfolio.
+
+    Notes: The EquityPortfolio class is designed to represent
+    a portfolio of assets where only equity positions are held.
+    The prices and stocks dataframes are assumed to have the same
+    index object representing the available time periods for which data is available.
+    If no trading cost model is provided, the trading_cost_model attribute
+    will be set to None by default.
+    If no initial cash value is provided, the initial_cash attribute
+    will be set to a default value of 1,000,000."""
+
     prices: pd.DataFrame
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel = None
     initial_cash: float = 1e6
 
     def __post_init__(self):
+        """ A class method that performs input validation after object initialization.
+        Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
+        and performs a series of input validation checks to ensure that the prices
+        and stocks dataframes are in the expected format
+        with no duplicates or missing data,
+        and that the stocks dataframe represents valid equity positions
+        for the assets held in the portfolio.
+        Specifically, the method checks that both the prices and stocks dataframes
+        have a monotonic increasing and unique index,
+        and that the index and columns of the stocks dataframe are subsets
+        of the index and columns of the prices dataframe, respectively.
+        If any of these checks fail, an assertion error will be raised. """
+
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
         assert self.stocks.index.is_monotonic_increasing
@@ -22,29 +59,44 @@ class EquityPortfolio:
 
     @property
     def index(self):
-        """
-        The timestamps in the portfolio (index in prices frame)
+        """ A property that returns the index of the EquityPortfolio instance,
+        which is the time period for which the portfolio data is available.
 
-        Returns:
-             Index of timestamps
-        """
+        Returns: pd.Index: A pandas index representing the time period for which the
+        portfolio data is available.
+
+        Notes: The function extracts the index of the prices dataframe,
+        which represents the time periods for which data is available for the portfolio.
+        The resulting index will be a pandas index object with the same length
+        as the number of rows in the prices dataframe."""
         return self.prices.index
 
     @property
     def assets(self):
-        """
-        The assets in the portfolio (columns in prices frame)
+        """ A property that returns a list of the assets held by the EquityPortfolio object.
 
-        Returns:
-            Index of assets.
-        """
+        Returns: list: A list of the assets held by the EquityPortfolio object.
+
+        Notes: The function extracts the column names of the prices dataframe,
+        which correspond to the assets held by the EquityPortfolio object.
+        The resulting list will contain the names of all assets held by the portfolio, without any duplicates. """
         return self.prices.columns
 
     @property
     def weights(self):
-        """
-        Frame of relative weights (e.g. value / nav)
-        """
+        """ A property that returns a pandas dataframe representing
+        the weights of various assets in the portfolio.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the weights
+        of various assets in the portfolio.
+
+        Notes: The function calculates the weights of various assets
+        in the portfolio by dividing the equity positions
+        for each asset (as represented in the equity dataframe)
+        by the total portfolio value (as represented in the nav dataframe).
+        Both dataframes are assumed to have the same dimensions.
+        The resulting dataframe will show the relative weight
+        of each asset in the portfolio at each point in time. """
         return self.equity / self.nav
 
     def __getitem__(self, time):
@@ -194,18 +246,37 @@ class EquityPortfolio:
         return 1.0 - self.nav / self.highwater
 
     def __mul__(self, scalar):
-        """
-        Multiplies positions by a scalar
-        """
+        """ A method that allows multiplication of the EquityPortfolio object with a scalar constant.
+
+        Args: scalar: A scalar constant that multiplies the number of shares
+        of each asset held in the EquityPortfolio object.
+
+        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
+
+        Notes: The mul method allows multiplication of an EquityPortfolio object
+        with a scalar constant to increase or decrease
+        the number of shares held for each asset in the portfolio accordingly.
+        The method returns a new EquityPortfolio object with the same prices
+        and trading cost model as the original object,
+        and with the number of shares for each asset multiplied by the scalar constant
+        (as represented in the stocks dataframe).
+        Additionally, the initial cash value is multiplied
+        by the scalar to maintain the same cash-to-equity ratio as the original portfolio. """
+
         return EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
 
     def __rmul__(self, scalar):
+        """ A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
+
+        Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.
+
+        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
+
+        Notes: The rmul method allows multiplication of a scalar
+        constant with an EquityPortfolio object in a reversed order"""
         return self.__mul__(scalar)
 
     def __add__(self, port_new):
-        """
-        Adds two portfolios together
-        """
         assert isinstance(port_new, EquityPortfolio)
 
         assets = self.assets.union(port_new.assets)
