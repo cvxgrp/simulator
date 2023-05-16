@@ -101,64 +101,163 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.portfolio.EquityPortfolio" title="simulator.portfolio.EquityPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EquityPortfolio</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class that represents an equity portfolio</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.portfolio.</span></span><span class="sig-name descname"><span class="pre">EquityPortfolio</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio" title="Permalink to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class that represents an equity portfolio
+and contains dataframes for prices and stock holdings,
+as well as optional parameters for trading cost models
+and initial cash values.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.prices">
-<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.prices" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">prices</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.prices" title="Permalink to this definition"></a></dt>
+<dd><p>A pandas dataframe representing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">the</span> <span class="pre">prices</span> <span class="pre">of</span> <span class="pre">various</span> <span class="pre">assets</span> <span class="pre">held</span> <span class="pre">by</span> <span class="pre">the</span> <span class="pre">portfolio</span> <span class="pre">over</span> <span class="pre">time.</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.stocks">
-<span class="sig-name descname"><span class="pre">stocks</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.stocks" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">stocks</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.stocks" title="Permalink to this definition"></a></dt>
+<dd><p>A pandas dataframe representing the number of shares</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">held</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">asset</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">portfolio</span> <span class="pre">over</span> <span class="pre">time.</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trading_cost_model">
-<span class="sig-name descname"><span class="pre">trading_cost_model</span></span><em class="property"><span class="w"> </span><span class="pre">:cvx.simulator.trading_costs.TradingCostModel</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_cost_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trading_cost_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">trading_cost_model</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_cost_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trading_cost_model" title="Permalink to this definition"></a></dt>
+<dd><p>An optional trading cost model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../trading_costs/index.html#simulator.trading_costs.TradingCostModel" title="simulator.trading_costs.TradingCostModel">TradingCostModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span> <span class="pre">use</span> <span class="pre">when</span> <span class="pre">trading</span> <span class="pre">assets</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">portfolio.</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.initial_cash">
-<span class="sig-name descname"><span class="pre">initial_cash</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">1000000.0</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.initial_cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.initial_cash" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">initial_cash</span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.initial_cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.initial_cash" title="Permalink to this definition"></a></dt>
+<dd><p>An optional scalar float representing the initial</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">cash</span> <span class="pre">value</span> <span class="pre">available</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">portfolio.</span></span></dt>
+<dd></dd></dl>
+
+<p>Notes: The EquityPortfolio class is designed to represent
+a portfolio of assets where only equity positions are held.
+The prices and stocks dataframes are assumed to have the same
+index object representing the available time periods for which data is available.
+If no trading cost model is provided, the trading_cost_model attribute
+will be set to None by default.
+If no initial cash value is provided, the initial_cash attribute
+will be set to a default value of 1,000,000.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">stocks</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">trading_cost_model</span></span><em class="property"><span class="w"> </span><span class="pre">:cvx.simulator.trading_costs.TradingCostModel</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_cost_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">initial_cash</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">1000000.0</span></em><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.initial_cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__post_init__">
 <span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__post_init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A class method that performs input validation after object initialization.
+Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
+and performs a series of input validation checks to ensure that the prices
+and stocks dataframes are in the expected format
+with no duplicates or missing data,
+and that the stocks dataframe represents valid equity positions
+for the assets held in the portfolio.
+Specifically, the method checks that both the prices and stocks dataframes
+have a monotonic increasing and unique index,
+and that the index and columns of the stocks dataframe are subsets
+of the index and columns of the prices dataframe, respectively.
+If any of these checks fail, an assertion error will be raised.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.index">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.index" title="Permalink to this definition"></a></dt>
-<dd><p>The timestamps in the portfolio (index in prices frame)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Index of timestamps</p>
-</dd>
-</dl>
+<dd><p>A property that returns the index of the EquityPortfolio instance,
+which is the time period for which the portfolio data is available.</p>
+<p>Returns: pd.Index: A pandas index representing the time period for which the
+portfolio data is available.</p>
+<p>Notes: The function extracts the index of the prices dataframe,
+which represents the time periods for which data is available for the portfolio.
+The resulting index will be a pandas index object with the same length
+as the number of rows in the prices dataframe.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.assets">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.assets" title="Permalink to this definition"></a></dt>
-<dd><p>The assets in the portfolio (columns in prices frame)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Index of assets.</p>
-</dd>
-</dl>
+<dd><p>A property that returns a list of the assets held by the EquityPortfolio object.</p>
+<p>Returns: list: A list of the assets held by the EquityPortfolio object.</p>
+<p>Notes: The function extracts the column names of the prices dataframe,
+which correspond to the assets held by the EquityPortfolio object.
+The resulting list will contain the names of all assets held by the portfolio, without any duplicates.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.weights">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.weights" title="Permalink to this definition"></a></dt>
-<dd><p>Frame of relative weights (e.g. value / nav)</p>
+<dd><p>A property that returns a pandas dataframe representing
+the weights of various assets in the portfolio.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the weights
+of various assets in the portfolio.</p>
+<p>Notes: The function calculates the weights of various assets
+in the portfolio by dividing the equity positions
+for each asset (as represented in the equity dataframe)
+by the total portfolio value (as represented in the nav dataframe).
+Both dataframes are assumed to have the same dimensions.
+The resulting dataframe will show the relative weight
+of each asset in the portfolio at each point in time.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -169,77 +268,160 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trading_costs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trading_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trading_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trading_costs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property that returns a pandas dataframe
+representing the trading costs incurred by the portfolio due to trades made.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the trading
+costs incurred by the portfolio due to trades made.</p>
+<p>Notes: The function calculates the trading costs using the specified
+trading cost model (if available) and the prices and trading
+data represented by the prices and trades_stocks
+dataframes, respectively. If no trading cost model is provided,
+a dataframe with all zeros will be returned.
+The resulting dataframe will have the same dimensions as
+the prices and trades_stocks dataframes,
+showing the trading costs incurred at each point in time for each asset traded.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.equity">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">equity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.equity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.equity" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property that returns a pandas dataframe
+representing the equity positions of the portfolio,
+which is the value of each asset held by the portfolio.
+Returns: pd.DataFrame: A pandas dataframe representing
+the equity positions of the portfolio.</p>
+<p>Notes: The function calculates the equity of the portfolio
+by multiplying the current prices of each asset
+by the number of shares held by the portfolio.
+The resulting values are filled forward to account
+for any missing data or NaN values.
+The equity dataframe will have the same dimensions
+as the prices and stocks dataframes.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trades_stocks">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_stocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trades_stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trades_stocks" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.</p>
+<p>Notes: The function calculates the trades made by the portfolio by taking
+the difference between the current and previous values of the stocks dataframe.
+The resulting values will represent the number of shares of each asset
+bought or sold by the portfolio at each point in time.
+The resulting dataframe will have the same dimensions
+as the stocks dataframe, with NaN values filled with zeros.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trades_currency">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_currency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.trades_currency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.trades_currency" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.</p>
+<p>Notes: The function calculates the trades made in currency by multiplying
+the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
+with the current prices of each asset (as represented in the prices dataframe).
+Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
+The resulting dataframe will have the same dimensions as the stocks and prices dataframes.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.cash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.cash" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property that returns a pandas series representing the cash on hand in the portfolio.</p>
+<p>Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.</p>
+<p>Notes: The function calculates the cash available in the portfolio by subtracting
+the sum of trades currency and cumulative trading costs from the initial cash value specified
+when constructing the object. Uses pandas cumsum() method
+to calculate the cumulative sum of trading costs and
+trades currency along the time axis.
+The resulting series will show how much money is available for further trades at each point in time.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.nav">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.nav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.nav" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns a pandas series representing the total value
+of the portfolio’s investments and cash.</p>
+<dl class="simple">
+<dt>Returns: pd.Series: A pandas series representing the</dt><dd><p>total value of the portfolio’s investments and cash.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.profit">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.profit" title="Permalink to this definition"></a></dt>
-<dd><p>Profit</p>
+<dd><p>A property that returns a pandas series representing the
+profit gained or lost in the portfolio based on changes in asset prices.</p>
+<p>Returns: pd.Series: A pandas series representing the profit
+gained or lost in the portfolio based on changes in asset prices.</p>
+<p>Notes: The calculation is based on the difference between
+the previous and current prices of the assets in the portfolio,
+multiplied by the number of stocks in each asset previously held.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.highwater">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">highwater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.highwater"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.highwater" title="Permalink to this definition"></a></dt>
-<dd><p>Highwater mark.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The High-Water Mark, e.g. a moving max.</p>
-</dd>
-</dl>
+<dd><p>A function that returns a pandas series representing
+the high-water mark of the portfolio, which is the highest point
+the portfolio value has reached over time.</p>
+<p>Returns: pd.Series: A pandas series representing the
+high-water mark of the portfolio.</p>
+<p>Notes: The function performs a rolling computation based on
+the cumulative maximum of the portfolio’s value over time,
+starting from the beginning of the time period being considered.
+Min_periods argument is set to 1 to include the minimum period of one day.
+The resulting series will show the highest value the portfolio has reached at each point in time.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.drawdown">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">drawdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.drawdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.drawdown" title="Permalink to this definition"></a></dt>
-<dd><p>The drawdown relative to HWM.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Relative drawdown series.</p>
-</dd>
-</dl>
+<dd><p>A property that returns a pandas series representing the
+drawdown of the portfolio, which measures the decline
+in the portfolio’s value from its (previously) highest
+point to its current point.</p>
+<p>Returns: pd.Series: A pandas series representing the
+drawdown of the portfolio.</p>
+<p>Notes: The function calculates the ratio of the portfolio’s current value
+vs. its current high-water-mark and then subtracting the result from 1.
+A positive drawdown means the portfolio is currently worth
+less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__mul__">
 <span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__mul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__mul__" title="Permalink to this definition"></a></dt>
-<dd><p>Multiplies positions by a scalar</p>
+<dd><p>A method that allows multiplication of the EquityPortfolio object with a scalar constant.</p>
+<p>Args: scalar: A scalar constant that multiplies the number of shares
+of each asset held in the EquityPortfolio object.</p>
+<p>Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.</p>
+<p>Notes: The mul method allows multiplication of an EquityPortfolio object
+with a scalar constant to increase or decrease
+the number of shares held for each asset in the portfolio accordingly.
+The method returns a new EquityPortfolio object with the same prices
+and trading cost model as the original object,
+and with the number of shares for each asset multiplied by the scalar constant
+(as represented in the stocks dataframe).
+Additionally, the initial cash value is multiplied
+by the scalar to maintain the same cash-to-equity ratio as the original portfolio.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__rmul__">
 <span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__rmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__rmul__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.</p>
+<p>Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.</p>
+<p>Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.</p>
+<p>Notes: The rmul method allows multiplication of a scalar
+constant with an EquityPortfolio object in a reversed order</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__add__">
 <span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__add__" title="Permalink to this definition"></a></dt>
-<dd><p>Adds two portfolios together</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
