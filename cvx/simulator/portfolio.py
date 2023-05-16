@@ -52,7 +52,20 @@ class EquityPortfolio:
 
     @property
     def trading_costs(self):
-        # return a frame of all zeros
+        """ A property that returns a pandas dataframe
+        representing the trading costs incurred by the portfolio due to trades made.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the trading
+        costs incurred by the portfolio due to trades made.
+
+        Notes: The function calculates the trading costs using the specified
+        trading cost model (if available) and the prices and trading
+        data represented by the prices and trades_stocks
+        dataframes, respectively. If no trading cost model is provided,
+        a dataframe with all zeros will be returned.
+        The resulting dataframe will have the same dimensions as
+        the prices and trades_stocks dataframes,
+        showing the trading costs incurred at each point in time for each asset traded. """
         if self.trading_cost_model is None:
             return 0.0 * self.prices
 
@@ -78,16 +91,46 @@ class EquityPortfolio:
 
     @property
     def trades_stocks(self) -> pd.DataFrame:
+        """ A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.
+
+        Notes: The function calculates the trades made by the portfolio by taking
+        the difference between the current and previous values of the stocks dataframe.
+        The resulting values will represent the number of shares of each asset
+        bought or sold by the portfolio at each point in time.
+        The resulting dataframe will have the same dimensions
+        as the stocks dataframe, with NaN values filled with zeros. """
         t = self.stocks.diff()
         t.loc[self.index[0]] = self.stocks.loc[self.index[0]]
         return t.fillna(0.0)
 
     @property
     def trades_currency(self) -> pd.DataFrame:
+        """ A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
+
+        Notes: The function calculates the trades made in currency by multiplying
+        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
+        with the current prices of each asset (as represented in the prices dataframe).
+        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
+        The resulting dataframe will have the same dimensions as the stocks and prices dataframes. """
         return self.trades_stocks * self.prices.ffill()
 
     @property
     def cash(self) -> pd.Series:
+        """ A property that returns a pandas series representing the cash on hand in the portfolio.
+
+        Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.
+
+        Notes: The function calculates the cash available in the portfolio by subtracting
+        the sum of trades currency and cumulative trading costs from the initial cash value specified
+        when constructing the object. Uses pandas cumsum() method
+        to calculate the cumulative sum of trading costs and
+        trades currency along the time axis.
+        The resulting series will show how much money is available for further trades at each point in time. """
+
         return self.initial_cash - self.trades_currency.sum(axis=1).cumsum() - self.trading_costs.sum(axis=1).cumsum()
 
     @property
