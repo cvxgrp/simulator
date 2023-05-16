@@ -125,7 +125,20 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.trading_costs"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># return a frame of all zeros</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas dataframe</span>
+<span class="sd">        representing the trading costs incurred by the portfolio due to trades made.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trading</span>
+<span class="sd">        costs incurred by the portfolio due to trades made.</span>
+
+<span class="sd">        Notes: The function calculates the trading costs using the specified</span>
+<span class="sd">        trading cost model (if available) and the prices and trading</span>
+<span class="sd">        data represented by the prices and trades_stocks</span>
+<span class="sd">        dataframes, respectively. If no trading cost model is provided,</span>
+<span class="sd">        a dataframe with all zeros will be returned.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions as</span>
+<span class="sd">        the prices and trades_stocks dataframes,</span>
+<span class="sd">        showing the trading costs incurred at each point in time for each asset traded. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span>
 
@@ -151,16 +164,46 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.trades_stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_stocks">[docs]</a>    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
+
+<span class="sd">        Notes: The function calculates the trades made by the portfolio by taking</span>
+<span class="sd">        the difference between the current and previous values of the stocks dataframe.</span>
+<span class="sd">        The resulting values will represent the number of shares of each asset</span>
+<span class="sd">        bought or sold by the portfolio at each point in time.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions</span>
+<span class="sd">        as the stocks dataframe, with NaN values filled with zeros. &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
         <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.trades_currency"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_currency">[docs]</a>    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.</span>
+
+<span class="sd">        Notes: The function calculates the trades made in currency by multiplying</span>
+<span class="sd">        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)</span>
+<span class="sd">        with the current prices of each asset (as represented in the prices dataframe).</span>
+<span class="sd">        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions as the stocks and prices dataframes. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cash">[docs]</a>    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a pandas series representing the cash on hand in the portfolio.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the cash available in the portfolio by subtracting</span>
+<span class="sd">        the sum of trades currency and cumulative trading costs from the initial cash value specified</span>
+<span class="sd">        when constructing the object. Uses pandas cumsum() method</span>
+<span class="sd">        to calculate the cumulative sum of trading costs and</span>
+<span class="sd">        trades currency along the time axis.</span>
+<span class="sd">        The resulting series will show how much money is available for further trades at each point in time. &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
