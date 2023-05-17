@@ -169,11 +169,48 @@ Functions
 
    .. py:method:: __iter__(self)
 
+      The __iter__ method allows the object to be iterated over in a for loop,
+      yielding time and the current state of the portfolio.
+      The method yields a list of dates seen so far
+      (excluding the first date) and returns a tuple
+      containing the list of dates and the current portfolio state.
 
-   .. py:method:: __setitem__(self, key, position)
+      Yield:
+
+      interval: a pandas DatetimeIndex object containing the dates seen so far.
+
+      state: the current state of the portfolio,
+      taking into account the stock prices at each interval.
 
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __setitem__(self, time, position)
+
+      The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.
+      The method takes two input parameters:
+
+      time: time index for which to update the stock data
+      position: pandas series object containing the updated stock data
+
+      Returns: None
+
+      Updates:
+      the stock data of the dataframe at the given time index with the input position
+      the internal state of the portfolio with the updated position, taking into account the trading cost model
+
+      Raises:
+      AssertionError: if the input position is not a pandas Series object
+      or its index is not a subset of the assets of the dataframe.
+
+
+   .. py:method:: __getitem__(self, time)
+
+      The __getitem__ method retrieves the stock data for a specific time in the dataframe.
+      It returns the stock data for that time. The method takes one input parameter:
+
+      time: the time index for which to retrieve the stock data
+      Returns: stock data for the input time
+
+      Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
 
 
    .. py:method:: build(self)
