@@ -173,6 +173,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The `__getitem__` method retrieves the stock data for a specific time in the dataframe.</span>
+<span class="sd">        It returns the stock data for that time.</span>
+
+<span class="sd">        The method takes one input parameter:</span>
+<span class="sd">        - `time`: the time index for which to retrieve the stock data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        - stock data for the input time</span>
+
+<span class="sd">        Note that the input time must be in the index of the dataframe,</span>
+<span class="sd">        otherwise a KeyError will be raised.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>

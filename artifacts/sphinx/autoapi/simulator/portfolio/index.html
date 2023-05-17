@@ -263,7 +263,15 @@ of each asset in the portfolio at each point in time.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.__getitem__">
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__getitem__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The <cite>__getitem__</cite> method retrieves the stock data for a specific time in the dataframe.
+It returns the stock data for that time.</p>
+<p>The method takes one input parameter:
+- <cite>time</cite>: the time index for which to retrieve the stock data</p>
+<p>Returns:
+- stock data for the input time</p>
+<p>Note that the input time must be in the index of the dataframe,
+otherwise a KeyError will be raised.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.trading_costs">
