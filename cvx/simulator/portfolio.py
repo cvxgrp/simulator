@@ -100,6 +100,17 @@ class EquityPortfolio:
         return self.equity / self.nav
 
     def __getitem__(self, time):
+        """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
+        It returns the stock data for that time.
+
+        The method takes one input parameter:
+        - `time`: the time index for which to retrieve the stock data
+
+        Returns:
+        - stock data for the input time
+
+        Note that the input time must be in the index of the dataframe,
+        otherwise a KeyError will be raised."""
         return self.stocks.loc[time]
 
     @property
