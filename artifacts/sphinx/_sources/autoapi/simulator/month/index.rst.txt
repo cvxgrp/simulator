@@ -18,8 +18,14 @@ Functions
 
 .. autoapisummary::
 
+   simulator.month._compound
    simulator.month.monthlytable
 
+
+
+.. py:function:: _compound(rets)
+
+   Helper function for compounded return calculation.
 
 
 .. py:function:: monthlytable(returns: pandas.Series)

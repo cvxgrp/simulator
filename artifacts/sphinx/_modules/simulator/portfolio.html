@@ -254,8 +254,8 @@
 <span class="sd">        when constructing the object. Uses pandas cumsum() method</span>
 <span class="sd">        to calculate the cumulative sum of trading costs and</span>
 <span class="sd">        trades currency along the time axis.</span>
-<span class="sd">        The resulting series will show how much money is available for further trades at each point in time. &quot;&quot;&quot;</span>
-
+<span class="sd">        The resulting series will show how much money is available for further trades at each point in time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
@@ -266,7 +266,6 @@
 <span class="sd">        Returns: pd.Series: A pandas series representing the</span>
 <span class="sd">                            total value of the portfolio&#39;s investments and cash.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 
     <span class="nd">@property</span>
@@ -335,7 +334,6 @@
 <span class="sd">        (as represented in the stocks dataframe).</span>
 <span class="sd">        Additionally, the initial cash value is multiplied</span>
 <span class="sd">        by the scalar to maintain the same cash-to-equity ratio as the original portfolio. &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__rmul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>

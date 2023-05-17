@@ -7,6 +7,15 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.builder._State
+   simulator.builder._Builder
+
+
 
 Functions
 ~~~~~~~~~
@@ -14,6 +23,43 @@ Functions
 .. autoapisummary::
 
    simulator.builder.builder
+
+
+
+.. py:class:: _State
+
+   .. py:attribute:: prices
+      :annotation: :pandas.Series
+
+      
+
+   .. py:attribute:: position
+      :annotation: :pandas.Series
+
+      
+
+   .. py:attribute:: cash
+      :annotation: :float = 1000000.0
+
+      
+
+   .. py:method:: value(self)
+      :property:
+
+
+   .. py:method:: nav(self)
+      :property:
+
+
+   .. py:method:: weights(self)
+      :property:
+
+
+   .. py:method:: leverage(self)
+      :property:
+
+
+   .. py:method:: update(self, position, model=None, **kwargs)
 
 
 
@@ -37,5 +83,111 @@ Functions
    It also initializes a new dataframe with zero values for all assets
    to represent the initial stock holdings of the portfolio.
    The function returns a new instance of the Portfolio builder class with the given input parameters.
+
+
+.. py:class:: _Builder
+
+   .. py:attribute:: prices
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: stocks
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: trading_cost_model
+      :annotation: :cvx.simulator.trading_costs.TradingCostModel
+
+      
+
+   .. py:attribute:: initial_cash
+      :annotation: :float = 1000000.0
+
+      
+
+   .. py:attribute:: _state
+      :annotation: :_State
+
+      
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: index(self)
+      :property:
+
+      A property that returns the index of the portfolio,
+      which is the time period for which the portfolio data is available.
+
+      Returns: pd.Index: A pandas index representing the
+      time period for which the portfolio data is available.
+
+      Notes: The function extracts the index of the prices dataframe,
+      which represents the time periods for which data is available for the portfolio.
+      The resulting index will be a pandas index object
+      with the same length as the number of rows in the prices dataframe.
+
+
+   .. py:method:: assets(self)
+      :property:
+
+      A property that returns a list of the assets held by the portfolio.
+
+      Returns: list: A list of the assets held by the portfolio.
+
+      Notes: The function extracts the column names of the prices dataframe,
+      which correspond to the assets held by the portfolio.
+      The resulting list will contain the names of all assets
+      held by the portfolio, without any duplicates.
+
+
+   .. py:method:: set_weights(self, time, weights)
+
+      Set the position via weights (e.g. fractions of the nav)
+
+      :param time: time
+      :param weights: series of weights
+
+
+   .. py:method:: set_cashposition(self, time, cashposition)
+
+      Set the position via cash positions (e.g. USD invested per asset)
+
+      :param time: time
+      :param cashposition: series of cash positions
+
+
+   .. py:method:: set_position(self, time, position)
+
+      Set the position via number of assets (e.g. number of stocks)
+
+      :param time: time
+      :param position: series of number of stocks
+
+
+   .. py:method:: __iter__(self)
+
+
+   .. py:method:: __setitem__(self, key, position)
+
+
+   .. py:method:: __getitem__(self, item)
+
+
+   .. py:method:: build(self)
+
+      A function that creates a new instance of the EquityPortfolio
+      class based on the internal state of the Portfolio builder object.
+
+      Returns: EquityPortfolio: A new instance of the EquityPortfolio class
+      with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+
+      Notes: The function simply creates a new instance of the EquityPortfolio
+      class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+      to the corresponding attributes in the Portfolio builder object.
+      The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
+
 
 
