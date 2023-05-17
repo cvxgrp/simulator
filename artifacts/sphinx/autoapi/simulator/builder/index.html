@@ -101,7 +101,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.builder._State" title="simulator.builder._State"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_State</span></code></a></p></td>
-<td><p></p></td>
+<td><p>The _State class defines a state object used to keep track of the current state of the portfolio.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#simulator.builder._Builder" title="simulator.builder._Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_Builder</span></code></a></p></td>
 <td><p></p></td>
@@ -125,7 +125,14 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="simulator.builder._State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.builder.</span></span><span class="sig-name descname"><span class="pre">_State</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State" title="Permalink to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>The _State class defines a state object used to keep track of the current state of the portfolio.
+Attributes:</p>
+<p>prices: a pandas Series object containing the stock prices of the current portfolio state
+position: a pandas Series object containing the current holdings of the portfolio
+cash: the amount of cash available in the portfolio.</p>
+<p>By default, prices and position are set to None, while cash is set to 1 million.
+These attributes can be updated and accessed through setter and getter methods</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._State.prices">
 <span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="w"> </span><span class="pre">:pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.prices" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -143,27 +150,87 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.value">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.value" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The value method computes the value of the portfolio at the current time,
+taking into account the current holdings and current stock prices.</p>
+<p>Returns:</p>
+<p>the value of the portfolio as a float. If the value cannot be computed due to missing position
+(they might be still None), zero is returned instead.</p>
+<p>The method is a decorator-based getter method, using the &#64;property decorator to access
+the value attribute as if it were a method. The value of the portfolio is computed as the
+product of the current stock prices and the current holdings, summed together.
+Note that if the current position is missing, the multiplication will raise a TypeError.
+In this case, zero is returned as the value of the portfolio.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.nav">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.nav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.nav" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The nav method computes the net asset value (NAV) of the portfolio,
+which is the sum of the current value of the
+portfolio as determined by the value method,
+and the current amount of cash available in the portfolio.</p>
+<p>Returns:</p>
+<p>The net asset value of the portfolio as a float, computed as the sum of the current
+value of the portfolio and the cash available in the portfolio.
+The method is a decorator-based getter method using the &#64;property decorator
+to access the NAV attribute as if it were a method.
+The NAV is computed as the sum of the current value (as computed by the value method)
+and the amount of cash available.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.weights">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.weights" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The weights method computes the weighting of each asset in the current portfolio
+as a fraction of the total portfolio value.</p>
+<p>Returns:</p>
+<p>a pandas series object containing the weighting of each asset as a fraction
+of the total portfolio value. If the positions are still missing, then a series of zeroes is returned.
+The method is a decorator-based getter method using the &#64;property decorator to access
+the weights attribute as if it were a method. The weighting for each asset is computed
+as the product of the current position and the current stock prices,
+divided by the net asset value of the portfolio (as computed by the nav method).
+Note that this weighting represents the fraction of the portfolio value allocated to a particular asset.
+If the portfolio weighting cannot be computed due to missing positions,
+then a series of zeroes with the same size as the prices attribute is returned instead.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.leverage">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.leverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.leverage" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The <cite>leverage</cite> method computes the leverage of the portfolio,
+which is the sum of the absolute values of the portfolio weights.</p>
+<p>Returns:
+- the portfolio leverage as a float, computed as the sum of the
+absolute values of the portfolio weights.</p>
+<p>The method is a decorator-based getter method using the
+<cite>&#64;property</cite> decorator to access the leverage attribute
+as if it were a method. The portfolio leverage is computed as
+the sum of the absolute values of the portfolio weights,
+which represents the total exposure of the portfolio to multiple assets.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.update" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The update method updates the current state of the portfolio with the new input position.
+It calculates the trades made based on the new and the previous position,
+updates the internal position and cash attributes,
+and applies any applicable trading costs according to model parameter.</p>
+<p>The method takes three input parameters:</p>
+<p>position: a pandas series object representing the new position of the portfolio.
+model: an optional trading cost model (e.g. slippage, fees) to be incorporated into the update.
+If None, no trading costs will be applied.
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: additional keyword arguments to pass into the trading cost model.</p>
+<p>Returns:
+self: the _State instance with the updated position and cash.</p>
+<p>Updates:</p>
+<p>trades: the difference between positions in the old and new portfolio.
+position: the new position of the portfolio.
+cash: the new amount of cash in the portfolio after any trades and trading costs are applied.</p>
+<p>Note that the method does not return any value: instead,
+it updates the internal state of the _State instance.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -217,7 +284,15 @@ The function returns a new instance of the Portfolio builder class with the give
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._Builder.__post_init__">
 <span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.__post_init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The __post_init__ method is a special method of initialized instances
+of the _Builder class and is called after initialization.
+It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.</p>
+<p>The method takes no input parameter. It initializes the cash attribute in the internal
+_State object with the initial amount of cash in the portfolio, self.initial_cash.</p>
+<p>Note that this method is often used in Python classes for additional initialization routines
+that can only be performed after the object is fully initialized. __post_init__
+is called automatically after the object initialization.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._Builder.index">
