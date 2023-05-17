@@ -13,7 +13,11 @@ class _State:
 
     @property
     def value(self):
-        return (self.prices * self.position).sum()
+        # Note that the first position may not exist yet.
+        try:
+            return (self.prices * self.position).sum()
+        except TypeError:
+            return 0.0
 
     @property
     def nav(self):
@@ -21,14 +25,21 @@ class _State:
 
     @property
     def weights(self):
-        return (self.prices * self.position)/self.nav
+        try:
+            return (self.prices * self.position)/self.nav
+        except TypeError:
+            return 0 * self.prices
 
     @property
     def leverage(self):
         return self.weights.abs().sum()
 
     def update(self, position, model=None, **kwargs):
-        trades = position - self.position
+        if self.position is None:
+            trades = position
+        else:
+            trades = position - self.position
+
         self.position = position
         self.cash -= (trades * self.prices).sum()
 
@@ -78,9 +89,7 @@ class _Builder:
     _state: _State = field(default_factory=_State)
 
     def __post_init__(self):
-        self._state.position = self.stocks.loc[self.index[0]]
-        self._state.prices = self.prices.loc[self.index[0]]
-        self._state.cash = self.initial_cash - self._state.value
+        self._state.cash = self.initial_cash
 
     @property
     def index(self):
@@ -137,25 +146,59 @@ class _Builder:
         self[time] = position
 
     def __iter__(self):
-        for t in self.index[1:]:
+        """
+        The __iter__ method allows the object to be iterated over in a for loop,
+        yielding time and the current state of the portfolio.
+        The method yields a list of dates seen so far
+        (excluding the first date) and returns a tuple
+        containing the list of dates and the current portfolio state.
+
+        Yield:
+
+        interval: a pandas DatetimeIndex object containing the dates seen so far.
+
+        state: the current state of the portfolio,
+        taking into account the stock prices at each interval.
+        """
+        for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
-
-            # this is probably very slow...
-            # portfolio = EquityPortfolio(prices=self.prices.truncate(after=now), stocks=self.stocks.truncate(after=now), initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
-
             yield self.index[self.index <= t], self._state
 
-    def __setitem__(self, key, position):
+    def __setitem__(self, time, position):
+        """
+        The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.
+        The method takes two input parameters:
+
+        time: time index for which to update the stock data
+        position: pandas series object containing the updated stock data
+
+        Returns: None
+
+        Updates:
+        the stock data of the dataframe at the given time index with the input position
+        the internal state of the portfolio with the updated position, taking into account the trading cost model
+
+        Raises:
+        AssertionError: if the input position is not a pandas Series object
+        or its index is not a subset of the assets of the dataframe.
+        """
         assert isinstance(position, pd.Series)
         assert set(position.index).issubset(set(self.assets))
 
-        self.stocks.loc[key, position.index] = position
+        self.stocks.loc[time, position.index] = position
         self._state.update(position, model=self.trading_cost_model)
 
-    def __getitem__(self, item):
-        assert item in self.index
-        return self.stocks.loc[item]
+    def __getitem__(self, time):
+        """ The __getitem__ method retrieves the stock data for a specific time in the dataframe.
+        It returns the stock data for that time. The method takes one input parameter:
+
+        time: the time index for which to retrieve the stock data
+        Returns: stock data for the input time
+
+        Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
+        """
+        return self.stocks.loc[time]
 
     def build(self):
         """ A function that creates a new instance of the EquityPortfolio

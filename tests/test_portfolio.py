@@ -40,12 +40,9 @@ def test_iter(prices):
     b = builder(prices[["A"]])
     assert set(b.assets) == {"A"}
 
-    # initialize the position of the asset
-    b.stocks["A"].loc[b.index[0]] = 1.0
-
     # don't change the position at all and loop through the entire history
     for times, _ in b:
-        b[times[-1]] = b[times[-2]]
+        b[times[-1]] = pd.Series({"A": 1.0})
 
     portfolio = b.build()
 
@@ -69,14 +66,9 @@ def test_long_only(prices, resource_dir):
 
     pd.testing.assert_index_equal(b.index, b.prices.index)
 
-    # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
-    b.stocks.loc[b.index[0], "A"] = 2.0
-    b.stocks.loc[b.index[0], "B"] = 4.0
-
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
-        # before is t_{i-1} and now is t_{i}
-        b[times[-1]] = b[times[-2]]
+        b[times[-1]] = pd.Series({"A": 2.0, "B": 4.0})
 
     portfolio = b.build()
     # Our assets have hopefully increased in value
@@ -117,14 +109,9 @@ def test_long_short(prices, resource_dir):
 
     pd.testing.assert_index_equal(b.index, b.prices.index)
 
-    # We initialize the position (but not the cash) with 2 stocks in A and 4 stocks in B
-    b.stocks.loc[b.index[0], "B"] =  3.0
-    b.stocks.loc[b.index[0], "C"] = -1.0
-
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
-        # before is t_{i-1} and now is t_{i}
-        b[times[-1]] = b[times[-2]]
+        b[times[-1]] = pd.Series({"B": 3.0, "C": -1.0})
 
     portfolio = b.build()
 
@@ -180,12 +167,12 @@ def test_add(prices, resource_dir):
 
 
 def test_head(prices):
-    b = builder(prices=prices[["B", "C"]].head(2), initial_cash=20000)
+    b = builder(prices=prices[["B", "C"]].head(1), initial_cash=20000)
 
     for times, state in b:
         # before is t_{i-1} and now is t_{i}
-        assert times[-2] == b.index[0]
-        assert times[-1] == b.index[1]
+        assert times[-1] == b.index[0]
+        #assert times[-1] == b.index[1]
         assert state.nav == 20000.0
         assert state.cash == 20000.0
         assert state.value == 0.0
@@ -239,9 +226,9 @@ def test_portfolio(prices):
     b = builder(prices=prices)
     pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
-    for t in b.index:
+    for t,_ in b:
         # set the position
-        b[t] = pd.Series(index=prices.keys(), data=1000.0)
+        b[t[-1]] = pd.Series(index=prices.keys(), data=1000.0)
 
     portfolio = b.build()
 
