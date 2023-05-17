@@ -9,6 +9,12 @@ import calendar
 import numpy as np
 import pandas as pd
 
+def _compound(rets):
+    """
+    Helper function for compounded return calculation.
+    """
+    return (1.0 + rets).prod() - 1.0
+
 
 def monthlytable(returns: pd.Series):
     """
@@ -21,27 +27,19 @@ def monthlytable(returns: pd.Series):
         DataFrame with monthly returns, their STDev and YTD.
     """
 
-    def _compound(rets):
-        """
-        Helper function for compounded return calculation.
-
-        Args:
-            rets: Series of individual returns.
-
-        Returns:
-            Series of compounded returns.
-        """
-        return (1.0 + rets).prod() - 1.0
-
     # Works better in the first month
     # Compute all the intramonth-returns, instead of reapplying some monthly resampling of the NAV
+    returns = returns.dropna()
+
     return_monthly = returns.groupby([returns.index.year, returns.index.month]).apply(
         _compound
-    )
+    ).unstack(level=1)
 
-    frame = return_monthly.unstack(level=1).rename(
-        columns=lambda x: calendar.month_abbr[x]
-    )
+    # make sure all months are in the table!
+    frame = pd.DataFrame(index=return_monthly.index, columns=range(1, 13), data=np.NaN)
+    frame[return_monthly.columns] = return_monthly
+
+    frame = frame.rename(columns={month: calendar.month_abbr[month] for month in frame.columns})
 
     ytd = frame.apply(_compound, axis=1)
     frame["STDev"] = np.sqrt(12) * frame.std(axis=1)

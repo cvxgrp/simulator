@@ -25,6 +25,7 @@ autoapi_options = [
     "members",
     "undoc-members",
     "show-inheritance",
+    "private-members",
     "show-module-summary",
     "special-members",
     "imported-members",

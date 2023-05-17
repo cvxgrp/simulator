@@ -181,8 +181,8 @@ class EquityPortfolio:
         when constructing the object. Uses pandas cumsum() method
         to calculate the cumulative sum of trading costs and
         trades currency along the time axis.
-        The resulting series will show how much money is available for further trades at each point in time. """
-
+        The resulting series will show how much money is available for further trades at each point in time.
+        """
         return self.initial_cash - self.trades_currency.sum(axis=1).cumsum() - self.trading_costs.sum(axis=1).cumsum()
 
     @property
@@ -193,7 +193,6 @@ class EquityPortfolio:
         Returns: pd.Series: A pandas series representing the
                             total value of the portfolio's investments and cash.
         """
-
         return self.equity.sum(axis=1) + self.cash
 
     @property
@@ -262,7 +261,6 @@ class EquityPortfolio:
         (as represented in the stocks dataframe).
         Additionally, the initial cash value is multiplied
         by the scalar to maintain the same cash-to-equity ratio as the original portfolio. """
-
         return EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
 
     def __rmul__(self, scalar):
