@@ -453,6 +453,32 @@ but rather returns a new object.
 :return:</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.start">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.start" title="Permalink to this definition"></a></dt>
+<dd><p>first index with a profit that is not zero</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.resample">
+<span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.resample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.resample" title="Permalink to this definition"></a></dt>
+<dd><p>The resample method resamples an EquityPortfolio object to a new frequency
+specified by the rule argument.
+The method returns a new EquityPortfolio object with the resampled stocks, but prices stay the same.</p>
+<p>If the truncate parameter is set to True, the method first trims the original data
+to start from the beginning of the EquityPortfolio object’s timeline using the truncate method.
+Otherwise, the original EquityPortfolio timescale is used. The start of trading may be missed
+as the first point may not be in the resampled grid.</p>
+<p>The function uses a utility function resample_index to create a new DatetimeIndex
+with the specified resampled rule. The new index is used in the project_frame_to_grid
+function to translate the stocks DataFrame onto the new grid.</p>
+<p>Finally, a new EquityPortfolio object is created with the original prices
+DataFrame and the resampled stocks DataFrame. The objects trading cost model and initial cash value
+are also copied into the new object.</p>
+<p>Note that the resample method does not modify the original EquityPortfolio object,
+but rather returns a new object.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
