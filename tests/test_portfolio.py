@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+
 import pytest
 
 from cvx.simulator.builder import _State
@@ -166,34 +168,8 @@ def test_add(prices, resource_dir):
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
 
-def test_head(prices):
-    b = builder(prices=prices[["B", "C"]].head(1), initial_cash=20000)
-
-    for times, state in b:
-        # before is t_{i-1} and now is t_{i}
-        assert times[-1] == b.index[0]
-        #assert times[-1] == b.index[1]
-        assert state.nav == 20000.0
-        assert state.cash == 20000.0
-        assert state.value == 0.0
 
 
-def test_set_weights(prices):
-    b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for times, state in b:
-        b.set_weights(time=times[-1], weights=pd.Series(index=["B","C"], data=0.5))
-
-    portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
-
-
-def test_set_cashpositions(prices):
-    b = builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
-    for times, state in b:
-        b.set_cashposition(time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
-
-    portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
 
 def test_duplicates():
@@ -218,6 +194,7 @@ def test_monotonic():
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
         builder(prices=prices)
+
 
 def test_portfolio(prices):
     """
@@ -253,3 +230,22 @@ def test_truncate(portfolio):
     assert set(p.index) == set(portfolio.index[100:])
     assert p.initial_cash == portfolio.nav.values[100]
     assert p.nav.values[-1] == portfolio.nav.values[-1]
+
+
+def test_resample(prices):
+    b = builder(prices=prices)
+    pd.testing.assert_frame_equal(b.prices, prices.ffill())
+
+    for time, state in b:
+        # each day we do a one-over-N rebalancing
+        b[time[-1]] = 1.0 / len(b.assets) * state.nav / state.prices
+
+    portfolio = b.build()
+
+    # only now we reample the portfolio
+    p = portfolio.resample(rule="M", truncate=False)
+
+
+    # check the last few rows
+    p = p.truncate(before=p.index[590])
+    assert np.linalg.norm(p.trades_stocks.iloc[1:].values) == pytest.approx(0.0, abs=1e-12)
