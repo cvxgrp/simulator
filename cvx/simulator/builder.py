@@ -145,25 +145,19 @@ class _State:
         return self
 
 
-def builder(prices, initial_cash=1e6, trading_cost_model=None):
-    """ A function that creates a new instance of the
-    Portfolio builder class based on the given input parameters.
-
-    Args: prices: A pandas dataframe representing the prices of various assets held by the portfolio over time.
-    initial_cash: A scalar float value representing the initial cash available for the portfolio.
-    trading_cost_model: An optional trading cost model to use when trading assets in the portfolio.
-
-    Returns: _Builder: A new instance of the Portfolio builder class with the specified input parameters.
-
-    Raises: AssertionError: If input validation fails (e.g., if the input dataframe is not
-    in the expected format or contains NaN values).
-
-    Notes: The function performs some basic input validation to ensure that the input dataframe
-    is in the expected format and that the timestamps follow a
-    monotonic increasing order without any duplicates.
-    It also initializes a new dataframe with zero values for all assets
-    to represent the initial stock holdings of the portfolio.
-    The function returns a new instance of the Portfolio builder class with the given input parameters. """
+def builder(prices, weights=None, initial_cash=1e6, trading_cost_model=None):
+    """The builder function creates an instance of the _Builder class, which
+    is used to construct a portfolio of assets. The function takes in a pandas
+    DataFrame of historical prices for the assets in the portfolio, optional
+    weights for each asset, an initial cash value, and a trading cost model.
+    The function first asserts that the prices DataFrame has a monotonic
+    increasing and unique index. It then creates a DataFrame of zeros to hold
+    the number of shares of each asset owned at each time step. The function
+    initializes a _Builder object with the stocks DataFrame, the prices
+    DataFrame (forward-filled), the initial cash value, and the trading cost
+    model. If weights are provided, they are set for each time step using
+    set_weights method of the _Builder object. The final output is the
+    constructed _Builder object."""
 
     assert isinstance(prices, pd.DataFrame)
     assert prices.index.is_monotonic_increasing
@@ -172,8 +166,14 @@ def builder(prices, initial_cash=1e6, trading_cost_model=None):
     stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
 
     trading_cost_model = trading_cost_model
-    return _Builder(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
+    builder = _Builder(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
                     trading_cost_model=trading_cost_model)
+
+    if weights is not None:
+        for t, state in builder:
+            builder.set_weights(time=t[-1], weights=weights.loc[t[-1]])
+
+    return builder
 
 
 @dataclass(frozen=True)
