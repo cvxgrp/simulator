@@ -18,6 +18,7 @@ pytest-cov = "4.0.0"
 yfinance = "*"
 quantstats = "*"
 plotly = "*"
+cvxpy = "*"
 jupyterlab = "*"
 loguru = "*"
 
