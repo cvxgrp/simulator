@@ -246,3 +246,10 @@ def test_multiply(portfolio):
 def test_multiply_r(portfolio):
     double = 2.0*portfolio
     pd.testing.assert_frame_equal(2.0*portfolio.stocks, double.stocks)
+
+
+def test_truncate(portfolio):
+    p = portfolio.truncate(before=portfolio.index[100])
+    assert set(p.index) == set(portfolio.index[100:])
+    assert p.initial_cash == portfolio.nav.values[100]
+    assert p.nav.values[-1] == portfolio.nav.values[-1]
