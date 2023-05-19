@@ -16,6 +16,17 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.portfolio.diff
+
+
+
+.. py:function:: diff(portfolio1, portfolio2, initial_cash=1000000.0, trading_cost_model=None)
+
 
 .. py:class:: EquityPortfolio
 
@@ -342,6 +353,9 @@ Classes
 
       Notes: The rmul method allows multiplication of a scalar
       constant with an EquityPortfolio object in a reversed order
+
+
+   .. py:method:: __sub__(self, other)
 
 
    .. py:method:: __add__(self, port_new)

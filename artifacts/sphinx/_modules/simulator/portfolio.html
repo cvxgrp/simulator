@@ -73,11 +73,22 @@
   <h1>Source code for simulator.portfolio</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">cvx.simulator.grid</span> <span class="kn">import</span> <span class="n">resample_index</span><span class="p">,</span> <span class="n">project_frame_to_grid</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
+
+
+<div class="viewcode-block" id="diff"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.diff">[docs]</a><span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="n">portfolio1</span><span class="p">,</span> <span class="n">portfolio2</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># check both portfolios are on the same price grid</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">portfolio1</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">portfolio2</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
+
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">portfolio1</span><span class="o">.</span><span class="n">stocks</span> <span class="o">-</span> <span class="n">portfolio2</span><span class="o">.</span><span class="n">stocks</span>
+
+    <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">portfolio1</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="n">initial_cash</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
+
+
+
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -352,6 +363,7 @@
 <span class="sd">        (as represented in the stocks dataframe).</span>
 <span class="sd">        Additionally, the initial cash value is multiplied</span>
 <span class="sd">        by the scalar to maintain the same cash-to-equity ratio as the original portfolio. &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">scalar</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__rmul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
@@ -364,6 +376,9 @@
 <span class="sd">        Notes: The rmul method allows multiplication of a scalar</span>
 <span class="sd">        constant with an EquityPortfolio object in a reversed order&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__sub__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__sub__">[docs]</a>    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>
