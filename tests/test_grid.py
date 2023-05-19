@@ -24,9 +24,6 @@ def test_project_frame_to_grid(prices):
     a = frame.diff().sum(axis=1)
     assert a.tail(5).sum() == 0.0
 
-    #assert False
-
-
 
 
 def test_portfolio_resampling(prices):

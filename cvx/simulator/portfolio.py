@@ -185,6 +185,10 @@ class EquityPortfolio:
         return self.trades_stocks * self.prices.ffill()
 
     @property
+    def turnover(self) -> pd.DataFrame:
+        return self.trades_currency.abs()
+
+    @property
     def cash(self) -> pd.Series:
         """ A property that returns a pandas series representing the cash on hand in the portfolio.
 
