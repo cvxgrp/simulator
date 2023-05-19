@@ -1,10 +1,21 @@
 from dataclasses import dataclass
 
-import numpy as np
 import pandas as pd
 
 from cvx.simulator.grid import resample_index, project_frame_to_grid
 from cvx.simulator.trading_costs import TradingCostModel
+
+
+def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
+    # check both portfolios are on the same price grid
+    pd.testing.assert_frame_equal(portfolio1.prices, portfolio2.prices)
+
+    stocks = portfolio1.stocks - portfolio2.stocks
+
+    return EquityPortfolio(prices=portfolio1.prices, stocks=stocks, initial_cash=initial_cash, trading_cost_model=trading_cost_model)
+
+
+
 
 
 @dataclass(frozen=True)
@@ -279,6 +290,7 @@ class EquityPortfolio:
         (as represented in the stocks dataframe).
         Additionally, the initial cash value is multiplied
         by the scalar to maintain the same cash-to-equity ratio as the original portfolio. """
+        assert scalar > 0
         return EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
 
     def __rmul__(self, scalar):
@@ -291,6 +303,9 @@ class EquityPortfolio:
         Notes: The rmul method allows multiplication of a scalar
         constant with an EquityPortfolio object in a reversed order"""
         return self.__mul__(scalar)
+
+    def __sub__(self, other):
+        return self.__add__(-1 * other)
 
     def __add__(self, port_new):
         assert isinstance(port_new, EquityPortfolio)
