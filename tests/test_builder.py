@@ -59,6 +59,7 @@ def test_iteration_state(builder):
         pd.testing.assert_series_equal(state.weights, pd.Series(index=builder.assets, data=0.0), check_names=False)
         pd.testing.assert_series_equal(builder[t[-1]], pd.Series(index=builder.assets, data=0.0), check_names=False)
 
+
 def test_build(builder_weights, prices):
     # build the portfolio directly
     portfolio = builder_weights.build()
@@ -72,3 +73,21 @@ def test_build(builder_weights, prices):
 
     # verify both methods give the same result
     pd.testing.assert_series_equal(portfolio.nav, portfolio2.nav)
+
+
+def test_set_weights(prices):
+    b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for times, state in b:
+        b.set_weights(time=times[-1], weights=pd.Series(index=["B","C"], data=0.5))
+
+    portfolio = b.build()
+    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+
+
+def test_set_cashpositions(prices):
+    b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for times, state in b:
+        b.set_cashposition(time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
+
+    portfolio = b.build()
+    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)

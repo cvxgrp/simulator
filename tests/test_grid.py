@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from cvx.simulator.builder import builder
-from cvx.simulator.grid import resample_index
+from cvx.simulator.grid import resample_index, project_frame_to_grid
 
 
 def test_resample_index(prices):
@@ -11,6 +11,22 @@ def test_resample_index(prices):
         assert t in prices.index
 
     assert len(x) == 28
+
+    # first day in the middle of a month
+    x = resample_index(prices.index[4:], rule="M")
+    assert len(x) == 28
+    assert x[0] == prices.index[4]
+
+
+def test_project_frame_to_grid(prices):
+    grid = resample_index(prices.index[4:], rule="M")
+    frame = project_frame_to_grid(prices, grid=grid)
+    a = frame.diff().sum(axis=1)
+    assert a.tail(5).sum() == 0.0
+
+    #assert False
+
+
 
 
 def test_portfolio_resampling(prices):
@@ -33,4 +49,5 @@ def test_portfolio_resampling(prices):
 
     portfolio = b.build()
     print(portfolio.stocks)
-    assert False
+
+    assert portfolio.stocks["A"].tail(10).std() == 0
