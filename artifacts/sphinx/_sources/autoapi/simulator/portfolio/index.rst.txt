@@ -235,6 +235,10 @@ Classes
       The resulting dataframe will have the same dimensions as the stocks and prices dataframes.
 
 
+   .. py:method:: turnover(self) -> pandas.DataFrame
+      :property:
+
+
    .. py:method:: cash(self) -> pandas.Series
       :property:
 
