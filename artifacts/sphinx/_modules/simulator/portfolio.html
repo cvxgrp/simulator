@@ -382,7 +382,33 @@
 
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_right</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span>
                                <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">+</span> <span class="n">port_new</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
-                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div></div>
+                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.truncate"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The truncate method truncates the prices DataFrame, stocks DataFrame</span>
+<span class="sd">        and the cash series of an EquityPortfolio object.</span>
+<span class="sd">        The method also optionally accepts a before and/or after argument</span>
+<span class="sd">        to specify a date range for truncation.</span>
+
+<span class="sd">        The method returns a new EquityPortfolio object which is a truncated version</span>
+<span class="sd">        of the original object, with the same trading cost model</span>
+<span class="sd">        and initial cash value. The stocks DataFrame is truncated</span>
+<span class="sd">        using the same before and after arguments and the prices DataFrame</span>
+<span class="sd">        is truncated similarly. The cash value is truncated</span>
+<span class="sd">        to match the new date range and the first value of the</span>
+<span class="sd">        truncated cash series is used as the initial cash value for the new object.</span>
+
+<span class="sd">        Note that this method does not modify the original EquityPortfolio object,</span>
+<span class="sd">        but rather returns a new object.</span>
+<span class="sd">        :param before:</span>
+<span class="sd">        :param after:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">),</span>
+                               <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">),</span>
+                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+                               <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
 </pre></div>
 
            </div>

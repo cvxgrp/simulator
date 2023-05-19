@@ -431,6 +431,27 @@ constant with an EquityPortfolio object in a reversed order</p>
 <span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.__add__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.portfolio.EquityPortfolio.truncate">
+<span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/portfolio.html#EquityPortfolio.truncate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.portfolio.EquityPortfolio.truncate" title="Permalink to this definition"></a></dt>
+<dd><p>The truncate method truncates the prices DataFrame, stocks DataFrame
+and the cash series of an EquityPortfolio object.
+The method also optionally accepts a before and/or after argument
+to specify a date range for truncation.</p>
+<p>The method returns a new EquityPortfolio object which is a truncated version
+of the original object, with the same trading cost model
+and initial cash value. The stocks DataFrame is truncated
+using the same before and after arguments and the prices DataFrame
+is truncated similarly. The cash value is truncated
+to match the new date range and the first value of the
+truncated cash series is used as the initial cash value for the new object.</p>
+<p>Note that this method does not modify the original EquityPortfolio object,
+but rather returns a new object.
+:param before:
+:param after:
+:return:</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
