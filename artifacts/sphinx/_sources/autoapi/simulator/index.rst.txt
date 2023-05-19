@@ -11,6 +11,7 @@ Submodules
    :maxdepth: 1
 
    builder/index.rst
+   grid/index.rst
    metrics/index.rst
    month/index.rst
    portfolio/index.rst

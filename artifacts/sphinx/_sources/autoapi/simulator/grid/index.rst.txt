@@ -1,0 +1,22 @@
+:py:mod:`simulator.grid`
+========================
+
+.. py:module:: simulator.grid
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.grid.resample_index
+
+
+
+.. py:function:: resample_index(index, rule)
+
+
