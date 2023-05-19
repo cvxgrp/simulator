@@ -248,4 +248,4 @@ def test_resample(prices):
 
     # check the last few rows
     p = p.truncate(before=p.index[590])
-    assert np.linalg.norm(p.trades_stocks.iloc[1:].values) == 0
+    assert np.linalg.norm(p.trades_stocks.iloc[1:].values) == pytest.approx(0.0, abs=1e-12)

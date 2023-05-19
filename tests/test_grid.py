@@ -1,3 +1,4 @@
+import pytest
 import pandas as pd
 import numpy as np
 
@@ -47,4 +48,4 @@ def test_portfolio_resampling(prices):
     portfolio = b.build()
     print(portfolio.stocks)
 
-    assert portfolio.stocks["A"].tail(10).std() == 0
+    assert portfolio.stocks["A"].tail(10).std() == pytest.approx(0.0, abs=1e-12)
