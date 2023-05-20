@@ -58,7 +58,7 @@ for t, state in b:
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
-t is $t1, t2$, in the second iteration it will be $t1, t2, t3$ etc.
+t is $t1$, in the second iteration it will be $t1, t2$ etc.
 
 A lot of magic is hidden in the state variable. 
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
@@ -73,7 +73,7 @@ for t, state in b:
 
 Note that we update the position at the last element in the t list 
 using a series of actual stocks rather than weights or cashpositions.
-The builder class also exposes setters for such conventions.
+The builder class also exposes setters for such alternative conventions.
 
 ```python
 for t, state in b:
