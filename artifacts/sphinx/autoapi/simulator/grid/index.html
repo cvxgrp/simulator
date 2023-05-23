@@ -105,7 +105,7 @@
 <td><p>The resample_index function resamples a pandas DatetimeIndex object</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#simulator.grid.project_frame_to_grid" title="simulator.grid.project_frame_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_frame_to_grid</span></code></a>(frame, grid)</p></td>
-<td><p>The project_frame_to_grid function projects a pandas</p></td>
+<td><p>The project_frame_to_grid function projects a pandas DataFrame</p></td>
 </tr>
 </tbody>
 </table>
@@ -121,11 +121,24 @@ but rather returns a pandas DatetimeIndex</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="simulator.grid.project_frame_to_grid">
 <span class="sig-prename descclassname"><span class="pre">simulator.grid.</span></span><span class="sig-name descname"><span class="pre">project_frame_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/grid.html#project_frame_to_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.grid.project_frame_to_grid" title="Permalink to this definition"></a></dt>
-<dd><p>The project_frame_to_grid function projects a pandas
-DataFrame object onto a given index grid.</p>
-<p>The function returns a new DataFrame that is only updated for times in the grid,
-otherwise the previous values carry over.</p>
-<p>Note that the function does not modify the input frame object, but rather returns a new object.</p>
+<dd><p>The project_frame_to_grid function projects a pandas DataFrame
+to a coarser grid while still sharing the same index.
+It does that by taking over values of the frame from the coarser
+grid that are then forward filled.
+An application would be monthly rebalancing of a portfolio.
+E.g. on days in a particular grid we adjust the position and keep
+it constant for the rest of the month.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> – the frame (existing on a finer grid)</p></li>
+<li><p><strong>grid</strong> – the coarse grid</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a frame changing only values on days in the grid</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

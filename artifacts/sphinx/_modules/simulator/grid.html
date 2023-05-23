@@ -90,15 +90,20 @@
 
 
 <div class="viewcode-block" id="project_frame_to_grid"><a class="viewcode-back" href="../../autoapi/simulator/grid/index.html#simulator.grid.project_frame_to_grid">[docs]</a><span class="k">def</span> <span class="nf">project_frame_to_grid</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">grid</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The project_frame_to_grid function projects a pandas</span>
-<span class="sd">    DataFrame object onto a given index grid.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The project_frame_to_grid function projects a pandas DataFrame</span>
+<span class="sd">    to a coarser grid while still sharing the same index.</span>
+<span class="sd">    It does that by taking over values of the frame from the coarser</span>
+<span class="sd">    grid that are then forward filled.</span>
+<span class="sd">    An application would be monthly rebalancing of a portfolio.</span>
+<span class="sd">    E.g. on days in a particular grid we adjust the position and keep</span>
+<span class="sd">    it constant for the rest of the month.</span>
 
-<span class="sd">    The function returns a new DataFrame that is only updated for times in the grid,</span>
-<span class="sd">    otherwise the previous values carry over.</span>
-
-<span class="sd">    Note that the function does not modify the input frame object, but rather returns a new object.</span>
+<span class="sd">    :param frame: the frame (existing on a finer grid)</span>
+<span class="sd">    :param grid: the coarse grid</span>
+<span class="sd">    :return: a frame changing only values on days in the grid</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sample</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">frame</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span> <span class="o">*</span> <span class="n">frame</span>
     <span class="n">sample</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">grid</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">grid</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">sample</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 </pre></div>
