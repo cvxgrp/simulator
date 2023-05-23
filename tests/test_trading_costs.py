@@ -3,6 +3,9 @@ from cvx.simulator.trading_costs import LinearCostModel
 
 
 def test_linear_model():
+    """
+    Test the linear cost model
+    """
     trades = pd.Series(index=["A", "B"], data=[20.0, -10.0])
     prices = pd.Series(index=["A", "B"], data=[100.0, 300.0])
 

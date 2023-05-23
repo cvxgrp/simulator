@@ -37,10 +37,9 @@ def test_table_compounded(resource_dir, returns):
 
 
 def test_monthlytable():
-    # Test case with simple returns that are all the same
-    # We create a pd.Series of 12 monthly returns
-    # that are all the same, and we expect the function to return a pd.DataFrame
-    # with one row representing the year 2020, with all values in the table being equal to 0.01.
+    """
+    Test case with monthly returns of 1%.
+    """
     returns = pd.Series([0.01] * 12, index=pd.date_range(start=datetime(2020, 1, 1), periods=12, freq='M'))
     expected_output = pd.DataFrame({'Jan': [0.01], 'Feb': [0.01], 'Mar': [0.01], 'Apr': [0.01], 'May': [0.01], 'Jun': [0.01],
                                      'Jul': [0.01], 'Aug': [0.01], 'Sep': [0.01], 'Oct': [0.01], 'Nov': [0.01], 'Dec': [0.01],
@@ -50,10 +49,9 @@ def test_monthlytable():
 
 
 def test_missing():
-    # We create a pd.Series of 12 monthly returns with
-    # some negative returns and missing data, and we expect the function to return
-    # a pd.DataFrame with one row representing the year 2020,
-    # with the values in the table being the correct calculated values for each month.
+    """
+    Test case with missing value for April
+    """
     returns = pd.Series([-0.01, 0.02, 0.03, np.nan, -0.01, 0.02, 0.03, -0.01, 0.02, 0.03, -0.01, 0.02],
                         index=pd.date_range(start=datetime(2020, 1, 1), periods=12, freq='M'))
     expected_output = pd.DataFrame({'Jan': [-0.01], 'Feb': [0.02], 'Mar': [0.03], 'Apr': [np.nan], 'May': [-0.01], 'Jun': [0.02],
@@ -65,14 +63,14 @@ def test_missing():
 
 
 def test_not_a_complete_year():
-    # We create a pd.Series of 12 monthly returns with
-    # some negative returns and missing data, and we expect the function to return
-    # a pd.DataFrame with one row representing the year 2020,
-    # with the values in the table being the correct calculated values for each month.
+    """
+    Test case with an incomplete year and a missing April
+    """
+    # We create a pd.Series with only 10 monthly returns and a missing April return
     returns = pd.Series([-0.01, 0.02, 0.03, np.nan, -0.01, 0.02, 0.03, -0.01, 0.02, 0.03],
                         index=pd.date_range(start=datetime(2020, 1, 1), periods=10, freq='M'))
-    print(monthlytable(returns))
 
+    # define the expected output
     expected_output = pd.DataFrame({'Jan': [-0.01], 'Feb': [0.02], 'Mar': [0.03], 'Apr': [np.nan], 'May': [-0.01], 'Jun': [0.02],
                                      'Jul': [0.03], 'Aug': [-0.01], 'Sep': [0.02], 'Oct': [0.03], 'Nov': [np.nan], 'Dec': [np.nan],
                                      'STDev': [0.062449979983984036], 'YTD': [0.12516903876915064]},

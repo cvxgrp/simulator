@@ -17,14 +17,19 @@ def resample_index(index, rule):
 
 
 def project_frame_to_grid(frame, grid):
-    """The project_frame_to_grid function projects a pandas
-    DataFrame object onto a given index grid.
-
-    The function returns a new DataFrame that is only updated for times in the grid,
-    otherwise the previous values carry over.
-
-    Note that the function does not modify the input frame object, but rather returns a new object.
     """
-    sample = pd.DataFrame(index=frame.index, columns=frame.columns, data=np.NaN)
+    The project_frame_to_grid function projects a pandas DataFrame
+    to a coarser grid while still sharing the same index.
+    It does that by taking over values of the frame from the coarser
+    grid that are then forward filled.
+    An application would be monthly rebalancing of a portfolio.
+    E.g. on days in a particular grid we adjust the position and keep
+    it constant for the rest of the month.
+
+    :param frame: the frame (existing on a finer grid)
+    :param grid: the coarse grid
+    :return: a frame changing only values on days in the grid
+    """
+    sample = np.NaN * frame
     sample.loc[grid] = frame.loc[grid]
     return sample.ffill()

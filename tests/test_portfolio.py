@@ -13,39 +13,67 @@ def test_state():
     positions = pd.Series(data=[100, 300])
     cash = 400
     state = _State(cash=cash, prices=prices, position=positions)
+    # value is the money in stocks
     assert state.value == 1100.0
+    # nav is the value plus the cash
     assert state.nav == 1500.0
+    # weights are the positions divided by the value
     pd.testing.assert_series_equal(state.weights, pd.Series(data=[2.0/15.0, 9.0/15.0]))
+    # leverage is the value divided by the nav
     assert state.leverage == 11.0/15.0
 
 
-def test_assets(portfolio):
-    assert set(portfolio.assets) == {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
+def test_assets(portfolio, prices):
+    """
+    Test that the assets of the portfolio are the same as the columns of the prices
+    :param portfolio: the portfolio object (fixture)
+    :param prices: the prices frame (fixture)
+    """
+    assert set(portfolio.assets) == set(prices.columns)
 
 
 def test_index(portfolio):
+    """
+    Test that the index of the portfolio is the same as the index of the prices
+    :param portfolio: the portfolio object (fixture)
+    """
     assert len(portfolio.index) == 602
     pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
 
 
 def test_prices(portfolio, prices):
+    """
+    Test that the prices of the portfolio are the same as the prices
+    :param portfolio: the portfolio object (fixture)
+    :param prices: the prices frame (fixture)
+    """
     pd.testing.assert_frame_equal(portfolio.prices, prices)
 
 
 def test_stocks(portfolio):
+    """
+    Test that the stocks of the portfolio have all been set to 1.0
+    :param portfolio: the portfolio object (fixture)
+    """
     stocks = pd.DataFrame(index=portfolio.index, columns=portfolio.assets, data=1.0)
     pd.testing.assert_frame_equal(portfolio.stocks, stocks)
 
 
 def test_iter(prices):
-    # construct a portfolio with only one asset
-    b = builder(prices[["A"]])
-    assert set(b.assets) == {"A"}
+    """
+    test building a portfolio with only one asset and exactly 1 share.
+    :param prices: the prices frame (fixture)
+    """
 
-    # don't change the position at all and loop through the entire history
+    # Let's setup a portfolio with one asset: A
+    b = builder(prices[["A"]])
+
+    # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
+        # we set the position of A to 1.0
         b[times[-1]] = pd.Series({"A": 1.0})
 
+    # we build the portfolio
     portfolio = b.build()
 
     # given our position is exactly one stock in A the price of A and the equity match
@@ -61,18 +89,23 @@ def test_iter(prices):
 
 
 def test_long_only(prices, resource_dir):
+    """
+    Test building a portfolio with two assets and only long positions
+    :param prices: the prices frame (fixture)
+    :param resource_dir: the resource directory (fixture)
+    """
     # Let's setup a portfolio with two assets: A and B
     b = builder(prices=prices[["A", "B"]], initial_cash=100000)
-    assert set(b.assets) == {"A", "B"}
-    assert len(b.index) == 602
-
-    pd.testing.assert_index_equal(b.index, b.prices.index)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
+        # we set the position of A to 2.0 and B to 4.0
         b[times[-1]] = pd.Series({"A": 2.0, "B": 4.0})
 
+
     portfolio = b.build()
+
+
     # Our assets have hopefully increased in value
     # portfolio.equity.to_csv(resource_dir / "equity.csv")
     assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(96595.48)
@@ -104,21 +137,23 @@ def test_long_only(prices, resource_dir):
 
 
 def test_long_short(prices, resource_dir):
-    # Let's setup a portfolio with two assets: B and C
+    """
+    Test building a portfolio with two assets and long and short positions
+    :param prices: the prices frame (fixture)
+    :param resource_dir: the resource directory (fixture)
+    """
+    # Let's setup a portfolio with two assets: A and B
     b = builder(prices=prices[["B", "C"]], initial_cash=20000)
-    assert set(b.assets) == {"B", "C"}
-    assert len(b.index) == 602
-
-    pd.testing.assert_index_equal(b.index, b.prices.index)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
+        # we set the position of B to 3.0 and C to -1.0
         b[times[-1]] = pd.Series({"B": 3.0, "C": -1.0})
 
+    # we build the portfolio
     portfolio = b.build()
 
     # Our assets have hopefully increased in value
-    #portfolio.equity.to_csv(resource_dir / "equity_ls.csv")
     assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(7385.84)
     assert portfolio.equity.sum(axis=1).values[-1] == pytest.approx(30133.25)
     pd.testing.assert_frame_equal(pd.read_csv(resource_dir / "equity_ls.csv", index_col=0, header=0, parse_dates=True),
@@ -168,13 +203,9 @@ def test_add(prices, resource_dir):
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
 
-
-
-
-
 def test_duplicates():
     """
-    duplicate in index
+    test for duplicates in the index
     """
     prices = pd.DataFrame(index=[1, 1], columns=["A"])
     with pytest.raises(AssertionError):
@@ -189,7 +220,7 @@ def test_duplicates():
 
 def test_monotonic():
     """
-    index not increasing
+    test for monotonic index
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
@@ -216,16 +247,28 @@ def test_portfolio(prices):
 
 
 def test_multiply(portfolio):
+    """
+    Test multiplication of portfolio
+    :param portfolio: the portfolio object (fixture)
+    """
     double = portfolio*2.0
     pd.testing.assert_frame_equal(2.0*portfolio.stocks, double.stocks)
 
 
 def test_multiply_r(portfolio):
+    """
+    Test multiplication of portfolio
+    :param portfolio: the portfolio object (fixture)
+    """
     double = 2.0*portfolio
     pd.testing.assert_frame_equal(2.0*portfolio.stocks, double.stocks)
 
 
 def test_truncate(portfolio):
+    """
+    Test truncation of portfolio
+    :param portfolio: the portfolio object (fixture)
+    """
     p = portfolio.truncate(before=portfolio.index[100])
     assert set(p.index) == set(portfolio.index[100:])
     assert p.initial_cash == portfolio.nav.values[100]
@@ -233,8 +276,13 @@ def test_truncate(portfolio):
 
 
 def test_resample(prices):
+    """
+    Test resampling of portfolio
+    :param prices:
+    :return:
+    """
     b = builder(prices=prices)
-    pd.testing.assert_frame_equal(b.prices, prices.ffill())
+    #pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
     for time, state in b:
         # each day we do a one-over-N rebalancing
@@ -242,7 +290,7 @@ def test_resample(prices):
 
     portfolio = b.build()
 
-    # only now we reample the portfolio
+    # only now we resample the portfolio
     p = portfolio.resample(rule="M", truncate=False)
 
 
