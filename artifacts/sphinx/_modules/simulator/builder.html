@@ -238,7 +238,6 @@
 
     <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-    <span class="n">trading_cost_model</span> <span class="o">=</span> <span class="n">trading_cost_model</span>
     <span class="n">builder</span> <span class="o">=</span> <span class="n">_Builder</span><span class="p">(</span><span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span> <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
                     <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">)</span>
 
