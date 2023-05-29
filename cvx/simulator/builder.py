@@ -165,7 +165,6 @@ def builder(prices, weights=None, initial_cash=1e6, trading_cost_model=None):
 
     stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
 
-    trading_cost_model = trading_cost_model
     builder = _Builder(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
                     trading_cost_model=trading_cost_model)
 
