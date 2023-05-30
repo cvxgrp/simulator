@@ -8,7 +8,7 @@ class TradingCostModel(abc.ABC):
 
     @abc.abstractmethod
     def eval(self, prices, trades, **kwargs):
-        ...
+        """ Evaluates the cost of a trade given the prices and the trades """
 
 
 @dataclass(frozen=True)
