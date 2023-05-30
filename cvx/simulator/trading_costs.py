@@ -8,7 +8,7 @@ class TradingCostModel(abc.ABC):
 
     @abc.abstractmethod
     def eval(self, prices, trades, **kwargs):
-        pass
+        ...
 
 
 @dataclass(frozen=True)
