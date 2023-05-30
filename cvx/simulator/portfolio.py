@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from cvx.simulator.grid import resample_index, project_frame_to_grid
+from cvx.simulator.grid import iron_frame
 from cvx.simulator.trading_costs import TradingCostModel
 
 
@@ -356,42 +356,25 @@ class EquityPortfolio:
                                trading_cost_model=self.trading_cost_model,
                                initial_cash=self.nav.truncate(before=before, after=after).values[0])
 
-    @property
-    def start(self):
-        """first index with a profit that is not zero"""
-        return self.profit.ne(0).idxmax()
+    # @property
+    # def start(self):
+    #     """first index with a profit that is not zero"""
+    #     return self.profit.ne(0).idxmax()
 
-    def resample(self, rule, truncate=False):
+    def resample(self, rule):
         """The resample method resamples an EquityPortfolio object to a new frequency
         specified by the rule argument.
-        The method returns a new EquityPortfolio object with the resampled stocks, but prices stay the same.
-
-        If the truncate parameter is set to True, the method first trims the original data
-        to start from the beginning of the EquityPortfolio object's timeline using the truncate method.
-        Otherwise, the original EquityPortfolio timescale is used. The start of trading may be missed
-        as the first point may not be in the resampled grid.
-
-        The function uses a utility function resample_index to create a new DatetimeIndex
-        with the specified resampled rule. The new index is used in the project_frame_to_grid
-        function to translate the stocks DataFrame onto the new grid.
-
-        Finally, a new EquityPortfolio object is created with the original prices
+        A new EquityPortfolio object is created with the original prices
         DataFrame and the resampled stocks DataFrame. The objects trading cost model and initial cash value
         are also copied into the new object.
 
         Note that the resample method does not modify the original EquityPortfolio object,
         but rather returns a new object.
         """
-        if truncate:
-            portfolio = self.truncate(before=self.start)
-        else:
-            portfolio = self
+        # iron out the stocks index
+        stocks = iron_frame(self.stocks, rule=rule)
 
-        grid = resample_index(portfolio.index, rule=rule)
-
-        stocks = project_frame_to_grid(portfolio.stocks, grid=grid)
-
-        return EquityPortfolio(prices=portfolio.prices,
+        return EquityPortfolio(prices=self.prices,
                                stocks=stocks,
                                trading_cost_model=self.trading_cost_model,
                                initial_cash=self.initial_cash)

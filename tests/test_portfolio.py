@@ -322,7 +322,7 @@ def test_resample(prices):
     portfolio = b.build()
 
     # only now we resample the portfolio
-    p = portfolio.resample(rule="M", truncate=False)
+    p = portfolio.resample(rule="M")
 
 
     # check the last few rows

@@ -1,8 +1,19 @@
 import pandas as pd
 import numpy as np
 
+def iron_frame(frame, rule):
+    """
+    The iron_frame function takes a pandas DataFrame
+    and keeps it constant on a coarser grid.
 
-def resample_index(index, rule):
+    :param frame: The frame to be ironed
+    :param rule: The rule to be used for the construction of the grid
+    :return: the ironed frame
+    """
+    s_index = _resample_index(frame.index, rule)
+    return _project_frame_to_grid(frame, s_index)
+
+def _resample_index(index, rule):
     """
     The resample_index function resamples a pandas DatetimeIndex object
     to a lower frequency using a specified rule.
@@ -16,7 +27,7 @@ def resample_index(index, rule):
     return pd.DatetimeIndex(a.values)
 
 
-def project_frame_to_grid(frame, grid):
+def _project_frame_to_grid(frame, grid):
     """
     The project_frame_to_grid function projects a pandas DataFrame
     to a coarser grid while still sharing the same index.
