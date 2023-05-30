@@ -25,11 +25,6 @@ Classes
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:attribute:: name
-      :annotation: :str
-
-      
-
    .. py:method:: eval(self, prices, trades, **kwargs)
       :abstractmethod:
 
