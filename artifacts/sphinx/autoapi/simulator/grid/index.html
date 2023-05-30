@@ -104,7 +104,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.grid.iron_frame" title="simulator.grid.iron_frame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iron_frame</span></code></a>(frame, rule)</p></td>
 <td><p>The iron_frame function takes a pandas DataFrame</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#simulator.grid._resample_index" title="simulator.grid._resample_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resample_index</span></code></a>(index, rule)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulator.grid.resample_index" title="simulator.grid.resample_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resample_index</span></code></a>(index, rule)</p></td>
 <td><p>The resample_index function resamples a pandas DatetimeIndex object</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.grid._project_frame_to_grid" title="simulator.grid._project_frame_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_project_frame_to_grid</span></code></a>(frame, grid)</p></td>
@@ -131,8 +131,8 @@ and keeps it constant on a coarser grid.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="simulator.grid._resample_index">
-<span class="sig-prename descclassname"><span class="pre">simulator.grid.</span></span><span class="sig-name descname"><span class="pre">_resample_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/grid.html#_resample_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.grid._resample_index" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="simulator.grid.resample_index">
+<span class="sig-prename descclassname"><span class="pre">simulator.grid.</span></span><span class="sig-name descname"><span class="pre">resample_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/grid.html#resample_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.grid.resample_index" title="Permalink to this definition"></a></dt>
 <dd><p>The resample_index function resamples a pandas DatetimeIndex object
 to a lower frequency using a specified rule.</p>
 <p>Note that the function does not modify the input index object,
