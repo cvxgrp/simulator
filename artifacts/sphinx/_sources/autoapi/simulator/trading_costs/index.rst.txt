@@ -33,6 +33,8 @@ Classes
    .. py:method:: eval(self, prices, trades, **kwargs)
       :abstractmethod:
 
+      Evaluates the cost of a trade given the prices and the trades
+
 
 
 .. py:class:: LinearCostModel
@@ -53,6 +55,8 @@ Classes
       
 
    .. py:method:: eval(self, prices, trades, **kwargs)
+
+      Evaluates the cost of a trade given the prices and the trades
 
 
 
