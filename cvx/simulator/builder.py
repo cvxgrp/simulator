@@ -132,9 +132,10 @@ class _State:
         it updates the internal state of the _State instance.
         """
         if self.position is None:
-            trades = position
-        else:
-            trades = position - self.position
+            self.position = 0.0 * position
+            #trades = position
+        #else:
+        trades = position - self.position
 
         self.position = position
         self.cash -= (trades * self.prices).sum()
