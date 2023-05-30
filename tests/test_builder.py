@@ -155,3 +155,11 @@ def test_set_cashpositions(prices):
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+
+
+def test_set_position(prices):
+    b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    for times, state in b:
+        b.set_position(time=times[-1], position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)))
+    portfolio = b.build()
+    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
