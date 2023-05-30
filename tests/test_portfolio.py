@@ -5,7 +5,7 @@ import pytest
 
 from cvx.simulator.builder import _State
 from cvx.simulator.builder import builder
-from cvx.simulator.portfolio import EquityPortfolio
+from cvx.simulator.portfolio import EquityPortfolio, diff
 
 
 def test_state():
@@ -304,6 +304,21 @@ def test_truncate(portfolio):
     assert set(p.index) == set(portfolio.index[100:])
     assert p.initial_cash == portfolio.nav.values[100]
     assert p.nav.values[-1] == portfolio.nav.values[-1]
+
+
+def test_diff(portfolio):
+    """
+    Test diff of portfolio
+    :param portfolio: the portfolio object (fixture)
+    """
+    p = diff(portfolio, portfolio)
+    assert p.initial_cash == 1e6
+    assert p.trading_cost_model is None
+
+    pd.testing.assert_frame_equal(p.stocks, 0.0*portfolio.stocks)
+
+
+
 
 
 def test_resample(prices):
