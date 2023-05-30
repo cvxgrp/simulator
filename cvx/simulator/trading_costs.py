@@ -4,8 +4,6 @@ import abc
 
 @dataclass(frozen=True)
 class TradingCostModel(abc.ABC):
-    name: str
-
     @abc.abstractmethod
     def eval(self, prices, trades, **kwargs):
         """ Evaluates the cost of a trade given the prices and the trades """

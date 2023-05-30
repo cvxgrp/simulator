@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.builder import builder as _builder
-
+from cvx.simulator.trading_costs import LinearCostModel
 
 @pytest.fixture()
 def builder(prices):
@@ -163,3 +163,13 @@ def test_set_position(prices):
         b.set_position(time=times[-1], position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)))
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+
+
+def test_with_costmodel(prices):
+    b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000, trading_cost_model=LinearCostModel(factor=0.0010))
+
+    for times, state in b:
+        b.set_position(time=times[-1], position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)))
+
+    portfolio = b.build()
+    assert portfolio.nav.values[-1] == pytest.approx(49722.58492364325)
