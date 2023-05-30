@@ -108,7 +108,7 @@ class EquityPortfolio:
         Both dataframes are assumed to have the same dimensions.
         The resulting dataframe will show the relative weight
         of each asset in the portfolio at each point in time. """
-        return self.equity / self.nav
+        return self.equity.apply(lambda x: x / self.nav)
 
     def __getitem__(self, time):
         """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.

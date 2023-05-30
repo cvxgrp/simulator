@@ -71,6 +71,12 @@ def test_stocks(portfolio):
     pd.testing.assert_frame_equal(portfolio.stocks, stocks)
 
 
+def test_weights(portfolio):
+    # in the portfolio we hold exactly one stock of each asset
+    x1 = portfolio.weights.apply(lambda x: x*portfolio.nav)
+    x2 = portfolio.prices.ffill()
+    pd.testing.assert_frame_equal(x1, x2)
+
 def test_iter(prices):
     """
     test building a portfolio with only one asset and exactly 1 share.
