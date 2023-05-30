@@ -50,6 +50,18 @@ def test_prices(portfolio, prices):
     pd.testing.assert_frame_equal(portfolio.prices, prices)
 
 
+def test_turnover(portfolio):
+    v = portfolio.trades_stocks * portfolio.prices.ffill()
+    pd.testing.assert_frame_equal(v, portfolio.trades_currency)
+    pd.testing.assert_frame_equal(v.abs(), portfolio.turnover)
+
+
+def test_get(portfolio):
+    for time in portfolio.index:
+        w = portfolio[time]
+        assert isinstance(w, pd.Series)
+
+
 def test_stocks(portfolio):
     """
     Test that the stocks of the portfolio have all been set to 1.0

@@ -15,9 +15,6 @@ def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
     return EquityPortfolio(prices=portfolio1.prices, stocks=stocks, initial_cash=initial_cash, trading_cost_model=trading_cost_model)
 
 
-
-
-
 @dataclass(frozen=True)
 class EquityPortfolio:
     """ A class that represents an equity portfolio
