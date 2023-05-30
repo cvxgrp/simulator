@@ -10,10 +10,10 @@ def iron_frame(frame, rule):
     :param rule: The rule to be used for the construction of the grid
     :return: the ironed frame
     """
-    s_index = _resample_index(frame.index, rule)
+    s_index = resample_index(frame.index, rule)
     return _project_frame_to_grid(frame, s_index)
 
-def _resample_index(index, rule):
+def resample_index(index, rule):
     """
     The resample_index function resamples a pandas DatetimeIndex object
     to a lower frequency using a specified rule.
