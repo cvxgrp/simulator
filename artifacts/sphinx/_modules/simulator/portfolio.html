@@ -374,8 +374,8 @@
 <span class="sd">        constant with an EquityPortfolio object in a reversed order&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__sub__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__sub__">[docs]</a>    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">other</span><span class="p">)</span></div>
+    <span class="c1"># def __sub__(self, other):</span>
+    <span class="c1">#     return self.__add__(-1 * other)</span>
 
 <div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>

@@ -355,9 +355,6 @@ Functions
       constant with an EquityPortfolio object in a reversed order
 
 
-   .. py:method:: __sub__(self, other)
-
-
    .. py:method:: __add__(self, port_new)
 
 
