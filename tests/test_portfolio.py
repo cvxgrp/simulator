@@ -77,6 +77,19 @@ def test_weights(portfolio):
     x2 = portfolio.prices.ffill()
     pd.testing.assert_frame_equal(x1, x2)
 
+
+def test_drawdown(portfolio):
+    """
+    Test that the drawdown of the portfolio is zero
+    :param portfolio: the portfolio object (fixture)
+    """
+    pd.testing.assert_series_equal(portfolio.highwater,
+                                   portfolio.nav.expanding(min_periods=1).max())
+
+    drawdown = 1.0 - portfolio.nav / portfolio.highwater
+    pd.testing.assert_series_equal(portfolio.drawdown, drawdown)
+
+
 def test_iter(prices):
     """
     test building a portfolio with only one asset and exactly 1 share.
