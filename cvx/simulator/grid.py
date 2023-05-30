@@ -13,6 +13,7 @@ def iron_frame(frame, rule):
     s_index = resample_index(frame.index, rule)
     return _project_frame_to_grid(frame, s_index)
 
+
 def resample_index(index, rule):
     """
     The resample_index function resamples a pandas DatetimeIndex object
