@@ -81,6 +81,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Metrics class for a portfolio</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Metrics.daily_profit"><a class="viewcode-back" href="../../autoapi/simulator/metrics/index.html#simulator.metrics.Metrics.daily_profit">[docs]</a>    <span class="n">daily_profit</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span></div>
 <div class="viewcode-block" id="Metrics.days_per_year"><a class="viewcode-back" href="../../autoapi/simulator/metrics/index.html#simulator.metrics.Metrics.days_per_year">[docs]</a>    <span class="n">days_per_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">252</span></div>
 
@@ -117,8 +118,7 @@
 <span class="sd">        Computes the Sharpe ratio of daily profits</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(self.mean_profit)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_profit</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">days_per_year</span><span class="p">)</span> \
-               <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_profit</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_profit</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">days_per_year</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_profit</span></div></div>
 </pre></div>
 
            </div>

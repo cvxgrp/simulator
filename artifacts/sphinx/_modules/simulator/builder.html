@@ -90,6 +90,7 @@
 <span class="sd">    By default, prices and position are set to None, while cash is set to 1 million.</span>
 <span class="sd">    These attributes can be updated and accessed through setter and getter methods</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="_State.prices"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
 <div class="viewcode-block" id="_State.position"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.position">[docs]</a>    <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
 <div class="viewcode-block" id="_State.cash"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.cash">[docs]</a>    <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
@@ -156,7 +157,7 @@
 <span class="sd">        then a series of zeroes with the same size as the prices attribute is returned instead.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
 
@@ -206,15 +207,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="n">position</span>
-            <span class="c1">#trades = position</span>
-        <span class="c1">#else:</span>
+            <span class="c1"># trades = position</span>
+        <span class="c1"># else:</span>
         <span class="n">trades</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="p">(</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>  <span class="n">trades</span><span class="o">=</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">trades</span><span class="o">=</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
@@ -237,10 +238,16 @@
     <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
     <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
 
-    <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+    <span class="p">)</span>
 
-    <span class="n">builder</span> <span class="o">=</span> <span class="n">_Builder</span><span class="p">(</span><span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span> <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
-                    <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">)</span>
+    <span class="n">builder</span> <span class="o">=</span> <span class="n">_Builder</span><span class="p">(</span>
+        <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+        <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span>
+        <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
+        <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
@@ -274,7 +281,7 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="_Builder.index"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns the index of the portfolio,</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
 <span class="sd">        which is the time period for which the portfolio data is available.</span>
 
 <span class="sd">        Returns: pd.Index: A pandas index representing the</span>
@@ -283,20 +290,20 @@
 <span class="sd">        Notes: The function extracts the index of the prices dataframe,</span>
 <span class="sd">        which represents the time periods for which data is available for the portfolio.</span>
 <span class="sd">        The resulting index will be a pandas index object</span>
-<span class="sd">        with the same length as the number of rows in the prices dataframe. &quot;&quot;&quot;</span>
+<span class="sd">        with the same length as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="_Builder.assets"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; A property that returns a list of the assets held by the portfolio.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a list of the assets held by the portfolio.</span>
 
 <span class="sd">        Returns: list: A list of the assets held by the portfolio.</span>
 
 <span class="sd">        Notes: The function extracts the column names of the prices dataframe,</span>
 <span class="sd">        which correspond to the assets held by the portfolio.</span>
 <span class="sd">        The resulting list will contain the names of all assets</span>
-<span class="sd">        held by the portfolio, without any duplicates. &quot;&quot;&quot;</span>
+<span class="sd">        held by the portfolio, without any duplicates.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
 
 <div class="viewcode-block" id="_Builder.set_weights"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
@@ -371,7 +378,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="_Builder.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; The __getitem__ method retrieves the stock data for a specific time in the dataframe.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The __getitem__ method retrieves the stock data for a specific time in the dataframe.</span>
 <span class="sd">        It returns the stock data for that time. The method takes one input parameter:</span>
 
 <span class="sd">        time: the time index for which to retrieve the stock data</span>
@@ -382,7 +389,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="_Builder.build"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; A function that creates a new instance of the EquityPortfolio</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
 <span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 
 <span class="sd">        Returns: EquityPortfolio: A new instance of the EquityPortfolio class</span>
@@ -391,13 +398,15 @@
 <span class="sd">        Notes: The function simply creates a new instance of the EquityPortfolio</span>
 <span class="sd">        class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal</span>
 <span class="sd">        to the corresponding attributes in the Portfolio builder object.</span>
-<span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built. &quot;&quot;&quot;</span>
+<span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
-                               <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
-                               <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
-                               <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div></div>
-
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>
