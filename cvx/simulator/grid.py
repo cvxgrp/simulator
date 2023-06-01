@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 def iron_frame(frame, rule):
     """
     The iron_frame function takes a pandas DataFrame

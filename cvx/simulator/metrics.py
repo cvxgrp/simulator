@@ -8,6 +8,7 @@ class Metrics:
     """
     Metrics class for a portfolio
     """
+
     daily_profit: pd.Series
     days_per_year: int = 252
 
@@ -44,5 +45,4 @@ class Metrics:
         Computes the Sharpe ratio of daily profits
         """
         # print(self.mean_profit)
-        return self.mean_profit * np.sqrt(self.days_per_year) \
-               / self.std_profit
+        return self.mean_profit * np.sqrt(self.days_per_year) / self.std_profit

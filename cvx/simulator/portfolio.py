@@ -12,12 +12,17 @@ def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
 
     stocks = portfolio1.stocks - portfolio2.stocks
 
-    return EquityPortfolio(prices=portfolio1.prices, stocks=stocks, initial_cash=initial_cash, trading_cost_model=trading_cost_model)
+    return EquityPortfolio(
+        prices=portfolio1.prices,
+        stocks=stocks,
+        initial_cash=initial_cash,
+        trading_cost_model=trading_cost_model,
+    )
 
 
 @dataclass(frozen=True)
 class EquityPortfolio:
-    """ A class that represents an equity portfolio
+    """A class that represents an equity portfolio
     and contains dataframes for prices and stock holdings,
     as well as optional parameters for trading cost models
     and initial cash values.
@@ -47,7 +52,7 @@ class EquityPortfolio:
     initial_cash: float = 1e6
 
     def __post_init__(self):
-        """ A class method that performs input validation after object initialization.
+        """A class method that performs input validation after object initialization.
         Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
         and performs a series of input validation checks to ensure that the prices
         and stocks dataframes are in the expected format
@@ -58,7 +63,7 @@ class EquityPortfolio:
         have a monotonic increasing and unique index,
         and that the index and columns of the stocks dataframe are subsets
         of the index and columns of the prices dataframe, respectively.
-        If any of these checks fail, an assertion error will be raised. """
+        If any of these checks fail, an assertion error will be raised."""
 
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
@@ -70,7 +75,7 @@ class EquityPortfolio:
 
     @property
     def index(self):
-        """ A property that returns the index of the EquityPortfolio instance,
+        """A property that returns the index of the EquityPortfolio instance,
         which is the time period for which the portfolio data is available.
 
         Returns: pd.Index: A pandas index representing the time period for which the
@@ -84,18 +89,19 @@ class EquityPortfolio:
 
     @property
     def assets(self):
-        """ A property that returns a list of the assets held by the EquityPortfolio object.
+        """A property that returns a list of the assets held by the EquityPortfolio object.
 
         Returns: list: A list of the assets held by the EquityPortfolio object.
 
         Notes: The function extracts the column names of the prices dataframe,
         which correspond to the assets held by the EquityPortfolio object.
-        The resulting list will contain the names of all assets held by the portfolio, without any duplicates. """
+        The resulting list will contain the names of all assets held by the portfolio, without any duplicates.
+        """
         return self.prices.columns
 
     @property
     def weights(self):
-        """ A property that returns a pandas dataframe representing
+        """A property that returns a pandas dataframe representing
         the weights of various assets in the portfolio.
 
         Returns: pd.DataFrame: A pandas dataframe representing the weights
@@ -107,7 +113,7 @@ class EquityPortfolio:
         by the total portfolio value (as represented in the nav dataframe).
         Both dataframes are assumed to have the same dimensions.
         The resulting dataframe will show the relative weight
-        of each asset in the portfolio at each point in time. """
+        of each asset in the portfolio at each point in time."""
         return self.equity.apply(lambda x: x / self.nav)
 
     def __getitem__(self, time):
@@ -126,7 +132,7 @@ class EquityPortfolio:
 
     @property
     def trading_costs(self):
-        """ A property that returns a pandas dataframe
+        """A property that returns a pandas dataframe
         representing the trading costs incurred by the portfolio due to trades made.
 
         Returns: pd.DataFrame: A pandas dataframe representing the trading
@@ -139,7 +145,8 @@ class EquityPortfolio:
         a dataframe with all zeros will be returned.
         The resulting dataframe will have the same dimensions as
         the prices and trades_stocks dataframes,
-        showing the trading costs incurred at each point in time for each asset traded. """
+        showing the trading costs incurred at each point in time for each asset traded.
+        """
         if self.trading_cost_model is None:
             return 0.0 * self.prices
 
@@ -147,7 +154,7 @@ class EquityPortfolio:
 
     @property
     def equity(self) -> pd.DataFrame:
-        """ A property that returns a pandas dataframe
+        """A property that returns a pandas dataframe
         representing the equity positions of the portfolio,
         which is the value of each asset held by the portfolio.
         Returns: pd.DataFrame: A pandas dataframe representing
@@ -159,13 +166,13 @@ class EquityPortfolio:
         The resulting values are filled forward to account
         for any missing data or NaN values.
         The equity dataframe will have the same dimensions
-        as the prices and stocks dataframes. """
+        as the prices and stocks dataframes."""
 
         return (self.prices * self.stocks).ffill()
 
     @property
     def trades_stocks(self) -> pd.DataFrame:
-        """ A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.
+        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.
 
         Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.
 
@@ -174,14 +181,14 @@ class EquityPortfolio:
         The resulting values will represent the number of shares of each asset
         bought or sold by the portfolio at each point in time.
         The resulting dataframe will have the same dimensions
-        as the stocks dataframe, with NaN values filled with zeros. """
+        as the stocks dataframe, with NaN values filled with zeros."""
         t = self.stocks.diff()
         t.loc[self.index[0]] = self.stocks.loc[self.index[0]]
         return t.fillna(0.0)
 
     @property
     def trades_currency(self) -> pd.DataFrame:
-        """ A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.
+        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.
 
         Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
 
@@ -189,7 +196,8 @@ class EquityPortfolio:
         the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
         with the current prices of each asset (as represented in the prices dataframe).
         Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
-        The resulting dataframe will have the same dimensions as the stocks and prices dataframes. """
+        The resulting dataframe will have the same dimensions as the stocks and prices dataframes.
+        """
         return self.trades_stocks * self.prices.ffill()
 
     @property
@@ -198,7 +206,7 @@ class EquityPortfolio:
 
     @property
     def cash(self) -> pd.Series:
-        """ A property that returns a pandas series representing the cash on hand in the portfolio.
+        """A property that returns a pandas series representing the cash on hand in the portfolio.
 
         Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.
 
@@ -209,11 +217,15 @@ class EquityPortfolio:
         trades currency along the time axis.
         The resulting series will show how much money is available for further trades at each point in time.
         """
-        return self.initial_cash - self.trades_currency.sum(axis=1).cumsum() - self.trading_costs.sum(axis=1).cumsum()
+        return (
+            self.initial_cash
+            - self.trades_currency.sum(axis=1).cumsum()
+            - self.trading_costs.sum(axis=1).cumsum()
+        )
 
     @property
     def nav(self) -> pd.Series:
-        """ Returns a pandas series representing the total value
+        """Returns a pandas series representing the total value
         of the portfolio's investments and cash.
 
         Returns: pd.Series: A pandas series representing the
@@ -223,7 +235,7 @@ class EquityPortfolio:
 
     @property
     def profit(self) -> pd.Series:
-        """ A property that returns a pandas series representing the
+        """A property that returns a pandas series representing the
         profit gained or lost in the portfolio based on changes in asset prices.
 
         Returns: pd.Series: A pandas series representing the profit
@@ -240,7 +252,7 @@ class EquityPortfolio:
 
     @property
     def highwater(self) -> pd.Series:
-        """ A function that returns a pandas series representing
+        """A function that returns a pandas series representing
         the high-water mark of the portfolio, which is the highest point
         the portfolio value has reached over time.
 
@@ -251,12 +263,13 @@ class EquityPortfolio:
         the cumulative maximum of the portfolio's value over time,
         starting from the beginning of the time period being considered.
         Min_periods argument is set to 1 to include the minimum period of one day.
-        The resulting series will show the highest value the portfolio has reached at each point in time. """
+        The resulting series will show the highest value the portfolio has reached at each point in time.
+        """
         return self.nav.expanding(min_periods=1).max()
 
     @property
     def drawdown(self) -> pd.Series:
-        """ A property that returns a pandas series representing the
+        """A property that returns a pandas series representing the
         drawdown of the portfolio, which measures the decline
         in the portfolio's value from its (previously) highest
         point to its current point.
@@ -267,11 +280,12 @@ class EquityPortfolio:
         Notes: The function calculates the ratio of the portfolio's current value
         vs. its current high-water-mark and then subtracting the result from 1.
         A positive drawdown means the portfolio is currently worth
-        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark """
+        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
+        """
         return 1.0 - self.nav / self.highwater
 
     def __mul__(self, scalar):
-        """ A method that allows multiplication of the EquityPortfolio object with a scalar constant.
+        """A method that allows multiplication of the EquityPortfolio object with a scalar constant.
 
         Args: scalar: A scalar constant that multiplies the number of shares
         of each asset held in the EquityPortfolio object.
@@ -286,12 +300,18 @@ class EquityPortfolio:
         and with the number of shares for each asset multiplied by the scalar constant
         (as represented in the stocks dataframe).
         Additionally, the initial cash value is multiplied
-        by the scalar to maintain the same cash-to-equity ratio as the original portfolio. """
+        by the scalar to maintain the same cash-to-equity ratio as the original portfolio.
+        """
         assert scalar > 0
-        return EquityPortfolio(prices=self.prices, stocks=self.stocks * scalar, initial_cash=self.initial_cash * scalar, trading_cost_model=self.trading_cost_model)
+        return EquityPortfolio(
+            prices=self.prices,
+            stocks=self.stocks * scalar,
+            initial_cash=self.initial_cash * scalar,
+            trading_cost_model=self.trading_cost_model,
+        )
 
     def __rmul__(self, scalar):
-        """ A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
+        """A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
 
         Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.
 
@@ -324,10 +344,12 @@ class EquityPortfolio:
         positions = left.stocks.add(right.stocks, fill_value=0.0)
 
         # make sure the trading cost models are the same
-        return EquityPortfolio(prices=prices_right, stocks=positions,
-                               initial_cash=self.initial_cash + port_new.initial_cash,
-                               trading_cost_model=self.trading_cost_model)
-
+        return EquityPortfolio(
+            prices=prices_right,
+            stocks=positions,
+            initial_cash=self.initial_cash + port_new.initial_cash,
+            trading_cost_model=self.trading_cost_model,
+        )
 
     def reset_prices(self, prices):
         """
@@ -347,13 +369,16 @@ class EquityPortfolio:
         sub.update(self.stocks)
         sub = sub.ffill()
 
+        # outside the original index, the stocks are zero
         stocks.update(sub)
         stocks = stocks.fillna(0.0)
 
-        return EquityPortfolio(prices=p, stocks=stocks, initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
-
-
-
+        return EquityPortfolio(
+            prices=p,
+            stocks=stocks,
+            initial_cash=self.initial_cash,
+            trading_cost_model=self.trading_cost_model,
+        )
 
     def truncate(self, before=None, after=None):
         """
@@ -376,10 +401,12 @@ class EquityPortfolio:
         :param after:
         :return:
         """
-        return EquityPortfolio(prices=self.prices.truncate(before=before, after=after),
-                               stocks=self.stocks.truncate(before=before, after=after),
-                               trading_cost_model=self.trading_cost_model,
-                               initial_cash=self.nav.truncate(before=before, after=after).values[0])
+        return EquityPortfolio(
+            prices=self.prices.truncate(before=before, after=after),
+            stocks=self.stocks.truncate(before=before, after=after),
+            trading_cost_model=self.trading_cost_model,
+            initial_cash=self.nav.truncate(before=before, after=after).values[0],
+        )
 
     # @property
     # def start(self):
@@ -399,7 +426,9 @@ class EquityPortfolio:
         # iron out the stocks index
         stocks = iron_frame(self.stocks, rule=rule)
 
-        return EquityPortfolio(prices=self.prices,
-                               stocks=stocks,
-                               trading_cost_model=self.trading_cost_model,
-                               initial_cash=self.initial_cash)
+        return EquityPortfolio(
+            prices=self.prices,
+            stocks=stocks,
+            trading_cost_model=self.trading_cost_model,
+            initial_cash=self.initial_cash,
+        )
