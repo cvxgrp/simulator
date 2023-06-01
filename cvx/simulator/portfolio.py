@@ -301,9 +301,6 @@ class EquityPortfolio:
         constant with an EquityPortfolio object in a reversed order"""
         return self.__mul__(scalar)
 
-    # def __sub__(self, other):
-    #     return self.__add__(-1 * other)
-
     def __add__(self, port_new):
         """
         A method that allows addition of two EquityPortfolio objects.
