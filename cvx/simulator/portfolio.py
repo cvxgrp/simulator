@@ -305,30 +305,69 @@ class EquityPortfolio:
     #     return self.__add__(-1 * other)
 
     def __add__(self, port_new):
+        """
+        A method that allows addition of two EquityPortfolio objects.
+        """
+        # check if the other object is an EquityPortfolio object
         assert isinstance(port_new, EquityPortfolio)
 
-        assets = self.assets.union(port_new.assets)
-        index = self.index.union(port_new.index)
+        # compute index and columns of the sum
+        #assets = self.assets.union(port_new.assets)
+        #index = self.index.union(port_new.index)
 
-        left = pd.DataFrame(index=index, columns=assets)
-        left.update(self.stocks)
-        # this is a problem...
-        left = left.fillna(0.0)
+        #def _forward(portfolio):
+        #    """Forward fill stocks on the overlapping grid of sum and a portfolio"""
+        #    x = pd.DataFrame(index=index, columns=assets)
+        #    sub = x.truncate(before=portfolio.index[0], after=portfolio.index[-1])
+        #    sub.update(portfolio.stocks)
+        #    sub = sub.ffill()
+        #
+        #    x.update(sub)
+        #    return x.fillna(0.0)
 
-        right = pd.DataFrame(index=index, columns=assets)
-        right.update(port_new.stocks)
-        right = right.fillna(0.0)
+        #positions = _forward(self) + _forward(port_new)
 
-        positions = left + right
-
+        # make sure the prices are aligned for overlapping points
         prices_left = self.prices.combine_first(port_new.prices)
         prices_right = port_new.prices.combine_first(self.prices)
-
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
+        left = self.reset_prices(prices=prices_left)
+        right = port_new.reset_prices(prices=prices_left)
+
+        positions = left.stocks + right.stocks
+
+        # make sure the trading cost models are the same
         return EquityPortfolio(prices=prices_right, stocks=positions,
                                initial_cash=self.initial_cash + port_new.initial_cash,
                                trading_cost_model=self.trading_cost_model)
+
+
+    def reset_prices(self, prices):
+        """
+        A method that constructs an EquityPortfolio object using finer prices.
+        """
+        # extract the relevant columns from prices
+        p = prices[self.assets]
+
+        # the prices need to contain the original index
+        assert set(self.index).issubset(set(prices.index))
+
+        # build a frame for the stocks
+        stocks = pd.DataFrame(index=prices.index, columns=self.assets)
+
+        # only forward fill stocks on the subgrid induced by the original index
+        sub = stocks.truncate(before=self.index[0], after=self.index[-1])
+        sub.update(self.stocks)
+        sub = sub.ffill()
+
+        stocks.update(sub)
+        stocks = stocks.fillna(0.0)
+
+        return EquityPortfolio(prices=p, stocks=stocks, initial_cash=self.initial_cash, trading_cost_model=self.trading_cost_model)
+
+
+
 
     def truncate(self, before=None, after=None):
         """
