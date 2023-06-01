@@ -384,22 +384,6 @@
         <span class="c1"># check if the other object is an EquityPortfolio object</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>
 
-        <span class="c1"># compute index and columns of the sum</span>
-        <span class="c1">#assets = self.assets.union(port_new.assets)</span>
-        <span class="c1">#index = self.index.union(port_new.index)</span>
-
-        <span class="c1">#def _forward(portfolio):</span>
-        <span class="c1">#    &quot;&quot;&quot;Forward fill stocks on the overlapping grid of sum and a portfolio&quot;&quot;&quot;</span>
-        <span class="c1">#    x = pd.DataFrame(index=index, columns=assets)</span>
-        <span class="c1">#    sub = x.truncate(before=portfolio.index[0], after=portfolio.index[-1])</span>
-        <span class="c1">#    sub.update(portfolio.stocks)</span>
-        <span class="c1">#    sub = sub.ffill()</span>
-        <span class="c1">#</span>
-        <span class="c1">#    x.update(sub)</span>
-        <span class="c1">#    return x.fillna(0.0)</span>
-
-        <span class="c1">#positions = _forward(self) + _forward(port_new)</span>
-
         <span class="c1"># make sure the prices are aligned for overlapping points</span>
         <span class="n">prices_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
         <span class="n">prices_right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
@@ -408,7 +392,11 @@
         <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
         <span class="n">right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
 
-        <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">stocks</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="n">stocks</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_index_equal</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
         <span class="c1"># make sure the trading cost models are the same</span>
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_right</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span>
