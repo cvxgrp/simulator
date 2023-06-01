@@ -319,8 +319,6 @@ class EquityPortfolio:
         left = self.reset_prices(prices=prices_left)
         right = port_new.reset_prices(prices=prices_left)
 
-        print(left.stocks)
-        print(right.stocks)
         pd.testing.assert_index_equal(left.index, right.index)
 
         positions = left.stocks.add(right.stocks, fill_value=0.0)
