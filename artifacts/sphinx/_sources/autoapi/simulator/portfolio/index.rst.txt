@@ -357,6 +357,13 @@ Functions
 
    .. py:method:: __add__(self, port_new)
 
+      A method that allows addition of two EquityPortfolio objects.
+
+
+   .. py:method:: reset_prices(self, prices)
+
+      A method that constructs an EquityPortfolio object using finer prices.
+
 
    .. py:method:: truncate(self, before=None, after=None)
 

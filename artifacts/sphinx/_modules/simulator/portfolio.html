@@ -378,30 +378,69 @@
     <span class="c1">#     return self.__add__(-1 * other)</span>
 
 <div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method that allows addition of two EquityPortfolio objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the other object is an EquityPortfolio object</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>
 
-        <span class="n">assets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="c1"># compute index and columns of the sum</span>
+        <span class="c1">#assets = self.assets.union(port_new.assets)</span>
+        <span class="c1">#index = self.index.union(port_new.index)</span>
 
-        <span class="n">left</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">assets</span><span class="p">)</span>
-        <span class="n">left</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
-        <span class="c1"># this is a problem...</span>
-        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="c1">#def _forward(portfolio):</span>
+        <span class="c1">#    &quot;&quot;&quot;Forward fill stocks on the overlapping grid of sum and a portfolio&quot;&quot;&quot;</span>
+        <span class="c1">#    x = pd.DataFrame(index=index, columns=assets)</span>
+        <span class="c1">#    sub = x.truncate(before=portfolio.index[0], after=portfolio.index[-1])</span>
+        <span class="c1">#    sub.update(portfolio.stocks)</span>
+        <span class="c1">#    sub = sub.ffill()</span>
+        <span class="c1">#</span>
+        <span class="c1">#    x.update(sub)</span>
+        <span class="c1">#    return x.fillna(0.0)</span>
 
-        <span class="n">right</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">assets</span><span class="p">)</span>
-        <span class="n">right</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
-        <span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="c1">#positions = _forward(self) + _forward(port_new)</span>
 
-        <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">right</span>
-
+        <span class="c1"># make sure the prices are aligned for overlapping points</span>
         <span class="n">prices_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
         <span class="n">prices_right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
-
         <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">prices_left</span><span class="p">,</span> <span class="n">prices_right</span><span class="p">)</span>
 
+        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
+
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">stocks</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="n">stocks</span>
+
+        <span class="c1"># make sure the trading cost models are the same</span>
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_right</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span>
                                <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">+</span> <span class="n">port_new</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
                                <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EquityPortfolio.reset_prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.reset_prices">[docs]</a>    <span class="k">def</span> <span class="nf">reset_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method that constructs an EquityPortfolio object using finer prices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># extract the relevant columns from prices</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span>
+
+        <span class="c1"># the prices need to contain the original index</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># build a frame for the stocks</span>
+        <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
+
+        <span class="c1"># only forward fill stocks on the subgrid induced by the original index</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">stocks</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">after</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+
+        <span class="n">stocks</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="n">stocks</span> <span class="o">=</span> <span class="n">stocks</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
+
+
+
 
 <div class="viewcode-block" id="EquityPortfolio.truncate"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
