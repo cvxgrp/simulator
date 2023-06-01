@@ -386,11 +386,14 @@
         <span class="n">prices_right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">prices_left</span><span class="p">,</span> <span class="n">prices_right</span><span class="p">)</span>
 
+        <span class="c1"># bring both portfolios to the finer grid</span>
         <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
         <span class="n">right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
 
+        <span class="c1"># just make sure the left and right portfolio are now on exactly the same grid</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_index_equal</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
+        <span class="c1"># add the stocks</span>
         <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
         <span class="c1"># make sure the trading cost models are the same</span>
