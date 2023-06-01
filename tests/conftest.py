@@ -17,7 +17,9 @@ def resource_fixture():
 @pytest.fixture()
 def prices(resource_dir):
     """prices fixture"""
-    return pd.read_csv(resource_dir / "price.csv", index_col=0, parse_dates=True, header=0)
+    return pd.read_csv(
+        resource_dir / "price.csv", index_col=0, parse_dates=True, header=0
+    )
 
 
 @pytest.fixture()
@@ -30,4 +32,8 @@ def portfolio(prices):
 @pytest.fixture()
 def returns(resource_dir):
     """returns fixture"""
-    return pd.read_csv(resource_dir / "ts.csv", index_col=0, header=None, parse_dates=True).squeeze().pct_change()
+    return (
+        pd.read_csv(resource_dir / "ts.csv", index_col=0, header=None, parse_dates=True)
+        .squeeze()
+        .pct_change()
+    )

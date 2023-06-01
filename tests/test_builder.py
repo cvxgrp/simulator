@@ -7,6 +7,7 @@ import pytest
 from cvx.simulator.builder import builder as _builder
 from cvx.simulator.trading_costs import LinearCostModel
 
+
 @pytest.fixture()
 def builder(prices):
     """
@@ -22,7 +23,7 @@ def builder_weights(prices):
     Fixture for the builder with 1/n weights
     :param prices: the prices frame (fixture)
     """
-    weights = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0/7)
+    weights = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0 / 7)
     return _builder(prices, weights=weights)
 
 
@@ -75,7 +76,7 @@ def test_stocks(builder):
     :param builder: the builder object (fixture)
     :param prices: the prices frame (fixture)
     """
-    pd.testing.assert_frame_equal(builder.stocks, 0.0*builder.prices)
+    pd.testing.assert_frame_equal(builder.stocks, 0.0 * builder.prices)
 
 
 def test_build_empty(builder, prices):
@@ -86,9 +87,13 @@ def test_build_empty(builder, prices):
     """
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
-    pd.testing.assert_frame_equal(portfolio.stocks, 0.0*prices.ffill())
-    pd.testing.assert_series_equal(portfolio.profit, pd.Series(index=prices.index[1:], data=0.0))
-    pd.testing.assert_series_equal(portfolio.nav, pd.Series(index=prices.index, data=1e6))
+    pd.testing.assert_frame_equal(portfolio.stocks, 0.0 * prices.ffill())
+    pd.testing.assert_series_equal(
+        portfolio.profit, pd.Series(index=prices.index[1:], data=0.0)
+    )
+    pd.testing.assert_series_equal(
+        portfolio.nav, pd.Series(index=prices.index, data=1e6)
+    )
 
 
 def test_iteration(builder):
@@ -108,8 +113,12 @@ def test_iteration_state(builder):
         assert state.leverage == 0
         assert state.nav == 1e6
         assert state.value == 0.0
-        pd.testing.assert_series_equal(state.weights, pd.Series(index=builder.assets, data=0.0), check_names=False)
-        pd.testing.assert_series_equal(builder[t[-1]], pd.Series(index=builder.assets, data=0.0), check_names=False)
+        pd.testing.assert_series_equal(
+            state.weights, pd.Series(index=builder.assets, data=0.0), check_names=False
+        )
+        pd.testing.assert_series_equal(
+            builder[t[-1]], pd.Series(index=builder.assets, data=0.0), check_names=False
+        )
 
 
 def test_build(builder_weights):
@@ -122,7 +131,9 @@ def test_build(builder_weights):
 
     # loop and set the weights explicitly
     for t, state in builder_weights:
-        builder_weights.set_weights(time=t[-1], weights=pd.Series(index=builder_weights.assets, data=1.0/7.0))
+        builder_weights.set_weights(
+            time=t[-1], weights=pd.Series(index=builder_weights.assets, data=1.0 / 7.0)
+        )
 
     # build again
     portfolio2 = builder_weights.build()
@@ -138,7 +149,7 @@ def test_set_weights(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_weights(time=times[-1], weights=pd.Series(index=["B","C"], data=0.5))
+        b.set_weights(time=times[-1], weights=pd.Series(index=["B", "C"], data=0.5))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -151,7 +162,9 @@ def test_set_cashpositions(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_cashposition(time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2))
+        b.set_cashposition(
+            time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2)
+        )
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -160,16 +173,26 @@ def test_set_cashpositions(prices):
 def test_set_position(prices):
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_position(time=times[-1], position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)))
+        b.set_position(
+            time=times[-1],
+            position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)),
+        )
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
 
 def test_with_costmodel(prices):
-    b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000, trading_cost_model=LinearCostModel(factor=0.0010))
+    b = _builder(
+        prices=prices[["B", "C"]].head(5),
+        initial_cash=50000,
+        trading_cost_model=LinearCostModel(factor=0.0010),
+    )
 
     for times, state in b:
-        b.set_position(time=times[-1], position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)))
+        b.set_position(
+            time=times[-1],
+            position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)),
+        )
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49722.58492364325)

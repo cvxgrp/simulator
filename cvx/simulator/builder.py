@@ -17,6 +17,7 @@ class _State:
     By default, prices and position are set to None, while cash is set to 1 million.
     These attributes can be updated and accessed through setter and getter methods
     """
+
     prices: pd.Series = None
     position: pd.Series = None
     cash: float = 1e6
@@ -83,7 +84,7 @@ class _State:
         then a series of zeroes with the same size as the prices attribute is returned instead.
         """
         try:
-            return (self.prices * self.position)/self.nav
+            return (self.prices * self.position) / self.nav
         except TypeError:
             return 0 * self.prices
 
@@ -133,15 +134,15 @@ class _State:
         """
         if self.position is None:
             self.position = 0.0 * position
-            #trades = position
-        #else:
+            # trades = position
+        # else:
         trades = position - self.position
 
         self.position = position
         self.cash -= (trades * self.prices).sum()
 
         if model is not None:
-            self.cash -= model.eval(self.prices,  trades=trades, **kwargs).sum()
+            self.cash -= model.eval(self.prices, trades=trades, **kwargs).sum()
 
         return self
 
@@ -164,10 +165,16 @@ def builder(prices, weights=None, initial_cash=1e6, trading_cost_model=None):
     assert prices.index.is_monotonic_increasing
     assert prices.index.is_unique
 
-    stocks = pd.DataFrame(index=prices.index, columns=prices.columns, data=0.0, dtype=float)
+    stocks = pd.DataFrame(
+        index=prices.index, columns=prices.columns, data=0.0, dtype=float
+    )
 
-    builder = _Builder(stocks=stocks, prices=prices.ffill(), initial_cash=float(initial_cash),
-                    trading_cost_model=trading_cost_model)
+    builder = _Builder(
+        stocks=stocks,
+        prices=prices.ffill(),
+        initial_cash=float(initial_cash),
+        trading_cost_model=trading_cost_model,
+    )
 
     if weights is not None:
         for t, state in builder:
@@ -201,7 +208,7 @@ class _Builder:
 
     @property
     def index(self):
-        """ A property that returns the index of the portfolio,
+        """A property that returns the index of the portfolio,
         which is the time period for which the portfolio data is available.
 
         Returns: pd.Index: A pandas index representing the
@@ -210,20 +217,20 @@ class _Builder:
         Notes: The function extracts the index of the prices dataframe,
         which represents the time periods for which data is available for the portfolio.
         The resulting index will be a pandas index object
-        with the same length as the number of rows in the prices dataframe. """
+        with the same length as the number of rows in the prices dataframe."""
 
         return self.prices.index
 
     @property
     def assets(self):
-        """ A property that returns a list of the assets held by the portfolio.
+        """A property that returns a list of the assets held by the portfolio.
 
         Returns: list: A list of the assets held by the portfolio.
 
         Notes: The function extracts the column names of the prices dataframe,
         which correspond to the assets held by the portfolio.
         The resulting list will contain the names of all assets
-        held by the portfolio, without any duplicates. """
+        held by the portfolio, without any duplicates."""
         return self.prices.columns
 
     def set_weights(self, time, weights):
@@ -298,7 +305,7 @@ class _Builder:
         self._state.update(position, model=self.trading_cost_model)
 
     def __getitem__(self, time):
-        """ The __getitem__ method retrieves the stock data for a specific time in the dataframe.
+        """The __getitem__ method retrieves the stock data for a specific time in the dataframe.
         It returns the stock data for that time. The method takes one input parameter:
 
         time: the time index for which to retrieve the stock data
@@ -309,7 +316,7 @@ class _Builder:
         return self.stocks.loc[time]
 
     def build(self):
-        """ A function that creates a new instance of the EquityPortfolio
+        """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 
         Returns: EquityPortfolio: A new instance of the EquityPortfolio class
@@ -318,10 +325,12 @@ class _Builder:
         Notes: The function simply creates a new instance of the EquityPortfolio
         class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
         to the corresponding attributes in the Portfolio builder object.
-        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built. """
+        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
+        """
 
-        return EquityPortfolio(prices=self.prices,
-                               stocks=self.stocks,
-                               initial_cash=self.initial_cash,
-                               trading_cost_model=self.trading_cost_model)
-
+        return EquityPortfolio(
+            prices=self.prices,
+            stocks=self.stocks,
+            initial_cash=self.initial_cash,
+            trading_cost_model=self.trading_cost_model,
+        )

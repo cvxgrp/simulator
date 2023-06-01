@@ -20,7 +20,7 @@ def test_index_wrong_order():
     """
     Test that the index is in the correct order
     """
-    profit = pd.Series(index=[5,4], data=[2.0, 3.0])
+    profit = pd.Series(index=[5, 4], data=[2.0, 3.0])
     with pytest.raises(AssertionError):
         Metrics(profit)
 
