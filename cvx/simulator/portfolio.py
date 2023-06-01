@@ -311,22 +311,6 @@ class EquityPortfolio:
         # check if the other object is an EquityPortfolio object
         assert isinstance(port_new, EquityPortfolio)
 
-        # compute index and columns of the sum
-        #assets = self.assets.union(port_new.assets)
-        #index = self.index.union(port_new.index)
-
-        #def _forward(portfolio):
-        #    """Forward fill stocks on the overlapping grid of sum and a portfolio"""
-        #    x = pd.DataFrame(index=index, columns=assets)
-        #    sub = x.truncate(before=portfolio.index[0], after=portfolio.index[-1])
-        #    sub.update(portfolio.stocks)
-        #    sub = sub.ffill()
-        #
-        #    x.update(sub)
-        #    return x.fillna(0.0)
-
-        #positions = _forward(self) + _forward(port_new)
-
         # make sure the prices are aligned for overlapping points
         prices_left = self.prices.combine_first(port_new.prices)
         prices_right = port_new.prices.combine_first(self.prices)
@@ -335,7 +319,11 @@ class EquityPortfolio:
         left = self.reset_prices(prices=prices_left)
         right = port_new.reset_prices(prices=prices_left)
 
-        positions = left.stocks + right.stocks
+        print(left.stocks)
+        print(right.stocks)
+        pd.testing.assert_index_equal(left.index, right.index)
+
+        positions = left.stocks.add(right.stocks, fill_value=0.0)
 
         # make sure the trading cost models are the same
         return EquityPortfolio(prices=prices_right, stocks=positions,

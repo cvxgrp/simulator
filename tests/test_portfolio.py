@@ -230,6 +230,10 @@ def test_add(prices, resource_dir):
     pd.testing.assert_frame_equal(pos_right, port_right.stocks)
 
     port_add = port_left + port_right
+    print(port_add.stocks)
+    print(port_add.prices)
+
+
     www = pd.read_csv(resource_dir / "positions.csv", index_col=0, parse_dates=[0])
     pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
 
