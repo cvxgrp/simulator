@@ -313,11 +313,14 @@ class EquityPortfolio:
         prices_right = port_new.prices.combine_first(self.prices)
         pd.testing.assert_frame_equal(prices_left, prices_right)
 
+        # bring both portfolios to the finer grid
         left = self.reset_prices(prices=prices_left)
         right = port_new.reset_prices(prices=prices_left)
 
+        # just make sure the left and right portfolio are now on exactly the same grid
         pd.testing.assert_index_equal(left.index, right.index)
 
+        # add the stocks
         positions = left.stocks.add(right.stocks, fill_value=0.0)
 
         # make sure the trading cost models are the same
