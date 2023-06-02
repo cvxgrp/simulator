@@ -5,7 +5,7 @@
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
 [![Coverage Status](https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main)](https://coveralls.io/github/cvxgrp/simulator?branch=main)
 
-Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$, 
+Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$,
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
 
 In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
@@ -24,7 +24,7 @@ We demonstrate those steps with somewhat silly policies. They are never good str
 
 ### Create the builder object
 
-The user defines a builder object by loading a frame of prices 
+The user defines a builder object by loading a frame of prices
 and initialize the amount of cash used in our experiment:
 
 ```python
@@ -37,13 +37,13 @@ prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=T
 b = builder(prices=prices, initial_cash=1e6)
 ```
 
-It is also possible to specify a model for trading costs. 
+It is also possible to specify a model for trading costs.
 The builder helps to fill up the frame of positions. Only once done
 we construct the actual portfolio.
 
 ### Loop through time
 
-We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop. 
+We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop.
 Let's start with a first strategy. Each day we choose two names from the universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
@@ -54,14 +54,14 @@ for t, state in b:
     # compute the pair
     stocks = pd.Series(index=b.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
-    # update the position 
+    # update the position
     b[t[-1]] = 0.1 * stocks
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
 t is $t1$, in the second iteration it will be $t1, t2$ etc.
 
-A lot of magic is hidden in the state variable. 
+A lot of magic is hidden in the state variable.
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
 
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to implmenent the popular $1/n$ strategy.
@@ -72,7 +72,7 @@ for t, state in b:
     b[t[-1]] = 0.25 * state.nav / state.prices
 ```
 
-Note that we update the position at the last element in the t list 
+Note that we update the position at the last element in the t list
 using a series of actual stocks rather than weights or cashpositions.
 The builder class also exposes setters for such alternative conventions.
 
@@ -90,8 +90,8 @@ portfolio = b.build()
 
 ### Analyse results
 
-The loop above is filling up the desired positions. 
-After triggering the `build()` the resulting portfolio 
+The loop above is filling up the desired positions.
+After triggering the `build()` the resulting portfolio
 is ready for further analysis.
 It is possible dive into the data, e.g.
 
@@ -100,13 +100,13 @@ portfolio.nav
 portfolio.cash
 portfolio.equity
 ...
-``` 
+```
 
 ## Bypassing the builder
 
-Some may know the positions the portfolio shall enter for eternity. 
+Some may know the positions the portfolio shall enter for eternity.
 Running through a loop is rather non-pythonic waste of time in such a case.
-It is possible to completely bypass this step by submitting 
+It is possible to completely bypass this step by submitting
 a frame of positions together with a frame of prices when creating the portfolio object.
 
 ```python

@@ -1,11 +1,14 @@
-import pandas as pd
-import numpy as np
+# -*- coding: utf-8 -*-
+from __future__ import annotations
 
+import numpy as np
+import pandas as pd
 import pytest
 
 from cvx.simulator.builder import _State
 from cvx.simulator.builder import builder
-from cvx.simulator.portfolio import EquityPortfolio, diff
+from cvx.simulator.portfolio import diff
+from cvx.simulator.portfolio import EquityPortfolio
 
 
 def test_state():

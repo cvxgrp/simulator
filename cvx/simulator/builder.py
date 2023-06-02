@@ -1,4 +1,9 @@
-from dataclasses import dataclass, field
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from dataclasses import dataclass
+from dataclasses import field
+
 import pandas as pd
 
 from cvx.simulator.portfolio import EquityPortfolio
