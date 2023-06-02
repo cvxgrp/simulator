@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 """
 testing the builder
 """
+from __future__ import annotations
+
 import pandas as pd
 import pytest
 

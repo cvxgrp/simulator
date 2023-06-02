@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from cvx.simulator.grid import iron_frame
 
 

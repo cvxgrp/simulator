@@ -4,16 +4,17 @@ Test monthlytable.
 """
 from __future__ import annotations
 
-import pytest
+import calendar
+from datetime import datetime
+
+import numpy as np
 import pandas as pd
+import pytest
+
+from cvx.simulator.month import monthlytable
 
 # todo: quantstats can not work with pandas >= 2.0
 # import quantstats as qs
-from datetime import datetime
-import numpy as np
-import calendar
-
-from cvx.simulator.month import monthlytable
 
 
 @pytest.mark.skip(reason="quantstats can not work with pandas >= 2.0")
