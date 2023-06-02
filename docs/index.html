@@ -423,7 +423,7 @@ Buy one (say 0.1 of your portfolio wealth) and short one the same amount.</p>
     <span class="c1"># compute the pair</span>
     <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
     <span class="n">stocks</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">,</span> <span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">]</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="c1"># update the position </span>
+    <span class="c1"># update the position</span>
     <span class="n">b</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stocks</span>
 </pre></div>
 </div>
