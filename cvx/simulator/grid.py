@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 
 
+
 def iron_frame(frame, rule):
     """
     The iron_frame function takes a pandas DataFrame

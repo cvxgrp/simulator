@@ -2,9 +2,12 @@
 """
 Test monthlytable.
 """
-from __future__ import annotations
 
 import calendar
+
+# todo: quantstats can not work with pandas >= 2.0
+# import quantstats as qs
+
 from datetime import datetime
 
 import numpy as np
