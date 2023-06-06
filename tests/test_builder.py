@@ -205,7 +205,6 @@ def test_box(resource_dir):
     prices = pd.read_csv(
         resource_dir / "prices.csv", index_col=0, header=0, parse_dates=True
     )
-    # returns = prices.pct_change().fillna(0.0)
 
     market_cap = pd.read_csv(
         resource_dir / "market_cap.csv", index_col=0, header=0, parse_dates=True
