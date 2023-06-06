@@ -30,6 +30,11 @@ Classes
 
       Evaluates the cost of a trade given the prices and the trades
 
+      Arguments
+          prices: the price per asset
+          trades: the trade per asset, e.g. number of stocks traded
+          **kwargs: additional arguments, e.g. volatility, liquidity, spread, etc.
+
 
 
 .. py:class:: LinearCostModel
@@ -52,6 +57,11 @@ Classes
    .. py:method:: eval(self, prices, trades, **kwargs)
 
       Evaluates the cost of a trade given the prices and the trades
+
+      Arguments
+          prices: the price per asset
+          trades: the trade per asset, e.g. number of stocks traded
+          **kwargs: additional arguments, e.g. volatility, liquidity, spread, etc.
 
 
 
