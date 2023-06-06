@@ -199,3 +199,43 @@ def test_with_costmodel(prices):
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49722.58492364325)
+
+
+def test_box(resource_dir):
+    prices = pd.read_csv(
+        resource_dir / "prices.csv", index_col=0, header=0, parse_dates=True
+    )
+    # returns = prices.pct_change().fillna(0.0)
+
+    market_cap = pd.read_csv(
+        resource_dir / "market_cap.csv", index_col=0, header=0, parse_dates=True
+    )
+    volume = pd.read_csv(
+        resource_dir / "volume.csv", index_col=0, header=0, parse_dates=True
+    )
+    weights = pd.read_csv(
+        resource_dir / "target_weights.csv", index_col=0, header=0, parse_dates=True
+    )
+
+    builder = _builder(
+        prices=prices,
+        initial_cash=1e6,
+        market_cap=market_cap,
+        trade_volume=volume,
+        weights=weights,
+        max_cap_fraction=0.06,
+        min_cap_fraction=-0.03,
+        max_trade_fraction=0.2,
+        min_trade_fraction=-0.2,
+    )
+
+    portfolio = builder.build()
+
+    pd.testing.assert_frame_equal(
+        portfolio.weights,
+        pd.DataFrame(
+            index=prices.index,
+            columns=prices.columns,
+            data=[[0.2, 0.4], [0.4, 0.8], [0.6, 1.2], [0.6, 1.2]],
+        ),
+    )

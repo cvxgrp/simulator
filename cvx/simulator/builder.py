@@ -111,6 +111,13 @@ class _State:
         """
         return self.weights.abs().sum()
 
+    @property
+    def position_robust(self):
+        if self.position is None:
+            self.position = 0.0 * self.prices
+
+        return self.position
+
     def update(self, position, model=None, **kwargs):
         """
         The update method updates the current state of the portfolio with the new input position.
@@ -137,11 +144,11 @@ class _State:
         Note that the method does not return any value: instead,
         it updates the internal state of the _State instance.
         """
-        if self.position is None:
-            self.position = 0.0 * position
-            # trades = position
+        # if self.position is None:
+        #    self.position = 0.0 * position
+        # trades = position
         # else:
-        trades = position - self.position
+        trades = position - self.position_robust
 
         self.position = position
         self.cash -= (trades * self.prices).sum()
@@ -214,9 +221,9 @@ class _Builder:
     _state: _State = field(default_factory=_State)
     market_cap: pd.DataFrame = None
     trade_volume: pd.DataFrame = None
-    max_cap_fraction: float = (None,)
-    min_cap_fraction: float = (None,)
-    max_trade_fraction: float = (None,)
+    max_cap_fraction: float = None
+    min_cap_fraction: float = None
+    max_trade_fraction: float = None
     min_trade_fraction: float = None
 
     def __post_init__(self):
@@ -344,8 +351,8 @@ class _Builder:
             position = cap / self._state.prices
 
         if self.trade_volume is not None:
-            # compute trade volume of desired position
-            trade = position - self._state.position
+            trade = position - self._state.position_robust
+
             # move to trade in USD
             trade = trade * self._state.prices
             # compute relative trade volume
@@ -361,7 +368,7 @@ class _Builder:
             # move back to trade in number of stocks
             trade = trade / self._state.prices
             # compute position
-            position = self._state.position + trade
+            position = self._state.position_robust + trade
 
         self.stocks.loc[time, position.index] = position
         self._state.update(position, model=self.trading_cost_model)
