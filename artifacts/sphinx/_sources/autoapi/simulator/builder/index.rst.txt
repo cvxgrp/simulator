@@ -126,6 +126,10 @@ Functions
       which represents the total exposure of the portfolio to multiple assets.
 
 
+   .. py:method:: position_robust(self)
+      :property:
+
+
    .. py:method:: update(self, position, model=None, **kwargs)
 
       The update method updates the current state of the portfolio with the new input position.
@@ -208,17 +212,17 @@ Functions
       
 
    .. py:attribute:: max_cap_fraction
-      :annotation: :float = [None]
+      :annotation: :float
 
       
 
    .. py:attribute:: min_cap_fraction
-      :annotation: :float = [None]
+      :annotation: :float
 
       
 
    .. py:attribute:: max_trade_fraction
-      :annotation: :float = [None]
+      :annotation: :float
 
       
 

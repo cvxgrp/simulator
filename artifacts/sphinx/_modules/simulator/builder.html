@@ -184,6 +184,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.position_robust"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.position_robust">[docs]</a>    <span class="k">def</span> <span class="nf">position_robust</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span></div>
+
 <div class="viewcode-block" id="_State.update"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The update method updates the current state of the portfolio with the new input position.</span>
@@ -210,11 +217,11 @@
 <span class="sd">        Note that the method does not return any value: instead,</span>
 <span class="sd">        it updates the internal state of the _State instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="n">position</span>
-            <span class="c1"># trades = position</span>
+        <span class="c1"># if self.position is None:</span>
+        <span class="c1">#    self.position = 0.0 * position</span>
+        <span class="c1"># trades = position</span>
         <span class="c1"># else:</span>
-        <span class="n">trades</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">trades</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_robust</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="p">(</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -287,9 +294,9 @@
 <div class="viewcode-block" id="_Builder._state"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder._state">[docs]</a>    <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_State</span><span class="p">)</span></div>
 <div class="viewcode-block" id="_Builder.market_cap"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.market_cap">[docs]</a>    <span class="n">market_cap</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
 <div class="viewcode-block" id="_Builder.trade_volume"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.trade_volume">[docs]</a>    <span class="n">trade_volume</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
-<div class="viewcode-block" id="_Builder.max_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_cap_fraction">[docs]</a>    <span class="n">max_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span></div>
-<div class="viewcode-block" id="_Builder.min_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_cap_fraction">[docs]</a>    <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span></div>
-<div class="viewcode-block" id="_Builder.max_trade_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_trade_fraction">[docs]</a>    <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span></div>
+<div class="viewcode-block" id="_Builder.max_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_cap_fraction">[docs]</a>    <span class="n">max_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.min_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_cap_fraction">[docs]</a>    <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.max_trade_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_trade_fraction">[docs]</a>    <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
 <div class="viewcode-block" id="_Builder.min_trade_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_trade_fraction">[docs]</a>    <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="_Builder.__post_init__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -417,8 +424,8 @@
             <span class="n">position</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># compute trade volume of desired position</span>
-            <span class="n">trade</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">trade</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position_robust</span>
+
             <span class="c1"># move to trade in USD</span>
             <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
             <span class="c1"># compute relative trade volume</span>
@@ -434,7 +441,7 @@
             <span class="c1"># move back to trade in number of stocks</span>
             <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
             <span class="c1"># compute position</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">trade</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position_robust</span> <span class="o">+</span> <span class="n">trade</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
