@@ -202,20 +202,32 @@ def test_with_costmodel(prices):
 
 
 def test_box(resource_dir):
+    """
+    Test that the box constraints are working
+    """
+    # load the price data
     prices = pd.read_csv(
         resource_dir / "prices.csv", index_col=0, header=0, parse_dates=True
     )
 
+    # load the market capitalization
     market_cap = pd.read_csv(
         resource_dir / "market_cap.csv", index_col=0, header=0, parse_dates=True
     )
+
+    # load the trade volume
     volume = pd.read_csv(
         resource_dir / "volume.csv", index_col=0, header=0, parse_dates=True
     )
+
+    # load the target weights
     weights = pd.read_csv(
         resource_dir / "target_weights.csv", index_col=0, header=0, parse_dates=True
     )
 
+    # define the builder
+    # we can hold max 6% of the market cap of a stock
+    # we can trade max 20% of the volume of a stock
     builder = _builder(
         prices=prices,
         initial_cash=1e6,
@@ -228,8 +240,10 @@ def test_box(resource_dir):
         min_trade_fraction=-0.2,
     )
 
+    # build the portfolio
     portfolio = builder.build()
 
+    # the weights of the portfolio should match my manual offline calculation
     pd.testing.assert_frame_equal(
         portfolio.weights,
         pd.DataFrame(
