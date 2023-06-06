@@ -152,7 +152,18 @@ class _State:
         return self
 
 
-def builder(prices, weights=None, initial_cash=1e6, trading_cost_model=None):
+def builder(
+    prices,
+    weights=None,
+    market_cap=None,
+    trade_volume=None,
+    initial_cash=1e6,
+    trading_cost_model=None,
+    max_cap_fraction=None,
+    min_cap_fraction=None,
+    max_trade_fraction=None,
+    min_trade_fraction=None,
+):
     """The builder function creates an instance of the _Builder class, which
     is used to construct a portfolio of assets. The function takes in a pandas
     DataFrame of historical prices for the assets in the portfolio, optional
@@ -179,6 +190,12 @@ def builder(prices, weights=None, initial_cash=1e6, trading_cost_model=None):
         prices=prices.ffill(),
         initial_cash=float(initial_cash),
         trading_cost_model=trading_cost_model,
+        market_cap=market_cap,
+        trade_volume=trade_volume,
+        max_cap_fraction=max_cap_fraction,
+        min_cap_fraction=min_cap_fraction,
+        max_trade_fraction=max_trade_fraction,
+        min_trade_fraction=min_trade_fraction,
     )
 
     if weights is not None:
@@ -195,6 +212,12 @@ class _Builder:
     trading_cost_model: TradingCostModel
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
+    market_cap: pd.DataFrame = None
+    trade_volume: pd.DataFrame = None
+    max_cap_fraction: float = (None,)
+    min_cap_fraction: float = (None,)
+    max_trade_fraction: float = (None,)
+    min_trade_fraction: float = None
 
     def __post_init__(self):
         """
@@ -305,6 +328,40 @@ class _Builder:
         """
         assert isinstance(position, pd.Series)
         assert set(position.index).issubset(set(self.assets))
+
+        if self.market_cap is not None:
+            # compute capitalization of desired position
+            cap = position * self._state.prices
+            # compute relative capitalization
+            rel_cap = cap / self.market_cap.loc[time]
+            # clip relative capitalization
+            rel_cap.clip(
+                lower=self.min_cap_fraction, upper=self.max_cap_fraction, inplace=True
+            )
+            # move back to capitalization
+            cap = rel_cap * self.market_cap.loc[time]
+            # compute position
+            position = cap / self._state.prices
+
+        if self.trade_volume is not None:
+            # compute trade volume of desired position
+            trade = position - self._state.position
+            # move to trade in USD
+            trade = trade * self._state.prices
+            # compute relative trade volume
+            rel_trade = trade / self.trade_volume.loc[time]
+            # clip relative trade volume
+            rel_trade.clip(
+                lower=self.min_trade_fraction,
+                upper=self.max_trade_fraction,
+                inplace=True,
+            )
+            # move back to trade
+            trade = rel_trade * self.trade_volume.loc[time]
+            # move back to trade in number of stocks
+            trade = trade / self._state.prices
+            # compute position
+            position = self._state.position + trade
 
         self.stocks.loc[time, position.index] = position
         self._state.update(position, model=self.trading_cost_model)
