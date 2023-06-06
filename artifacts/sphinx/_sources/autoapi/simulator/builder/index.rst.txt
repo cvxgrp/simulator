@@ -154,7 +154,7 @@ Functions
 
 
 
-.. py:function:: builder(prices, weights=None, initial_cash=1000000.0, trading_cost_model=None)
+.. py:function:: builder(prices, weights=None, market_cap=None, trade_volume=None, initial_cash=1000000.0, trading_cost_model=None, max_cap_fraction=None, min_cap_fraction=None, max_trade_fraction=None, min_trade_fraction=None)
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -194,6 +194,36 @@ Functions
 
    .. py:attribute:: _state
       :annotation: :_State
+
+      
+
+   .. py:attribute:: market_cap
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: trade_volume
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: max_cap_fraction
+      :annotation: :float = [None]
+
+      
+
+   .. py:attribute:: min_cap_fraction
+      :annotation: :float = [None]
+
+      
+
+   .. py:attribute:: max_trade_fraction
+      :annotation: :float = [None]
+
+      
+
+   .. py:attribute:: min_trade_fraction
+      :annotation: :float
 
       
 
