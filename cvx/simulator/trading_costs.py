@@ -9,7 +9,13 @@ from dataclasses import dataclass
 class TradingCostModel(abc.ABC):
     @abc.abstractmethod
     def eval(self, prices, trades, **kwargs):
-        """Evaluates the cost of a trade given the prices and the trades"""
+        """Evaluates the cost of a trade given the prices and the trades
+
+        Arguments
+            prices: the price per asset
+            trades: the trade per asset, e.g. number of stocks traded
+            **kwargs: additional arguments, e.g. volatility, liquidity, spread, etc.
+        """
 
 
 @dataclass(frozen=True)
