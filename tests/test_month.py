@@ -10,11 +10,9 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 import pytest
+import quantstats as qs
 
 from cvx.simulator.month import monthlytable
-
-# todo: quantstats can not work with pandas >= 2.0
-# import quantstats as qs
 
 
 @pytest.mark.skip(reason="quantstats can not work with pandas >= 2.0")
