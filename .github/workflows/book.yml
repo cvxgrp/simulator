@@ -60,12 +60,6 @@ jobs:
           name: tests
           path: book/artifacts/tests
 
-      # Check uploads
-      - name: Inspect upload
-        shell: bash
-        run : |
-          tree book/artifacts
-
       - name: GitHub Pages action
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
