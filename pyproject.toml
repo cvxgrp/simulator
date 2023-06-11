@@ -8,18 +8,19 @@ repository = "https://github.com/cvxgrp/simulator"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.8,<4.0"
 numpy = "*"
 pandas = "*"   # unfortunately crash with quantstats for pandas >= 2.0.0
 
 [tool.poetry.dev-dependencies]
 pytest = "7.2.0"
-pytest-cov = "4.0.0"
+pytest-cov = "*"
 yfinance = "*"
 quantstats = "*"
 plotly = "*"
 cvxpy = "*"
 jupyterlab = "*"
+jupyter-book = "0.15.1"
 loguru = "*"
 
 [build-system]
