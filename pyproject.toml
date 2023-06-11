@@ -14,7 +14,7 @@ pandas = "*"   # unfortunately crash with quantstats for pandas >= 2.0.0
 
 [tool.poetry.dev-dependencies]
 pytest = "7.2.0"
-pytest-cov = "4.0.0"
+pytest-cov = "*"
 yfinance = "*"
 quantstats = "*"
 plotly = "*"
