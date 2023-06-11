@@ -1,0 +1,67 @@
+:py:mod:`simulator.trading_costs`
+=================================
+
+.. py:module:: simulator.trading_costs
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.trading_costs.TradingCostModel
+   simulator.trading_costs.LinearCostModel
+
+
+
+
+.. py:class:: TradingCostModel
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: eval(self, prices, trades, **kwargs)
+      :abstractmethod:
+
+      Evaluates the cost of a trade given the prices and the trades
+
+      Arguments
+          prices: the price per asset
+          trades: the trade per asset, e.g. number of stocks traded
+          **kwargs: additional arguments, e.g. volatility, liquidity, spread, etc.
+
+
+
+.. py:class:: LinearCostModel
+
+   Bases: :py:obj:`TradingCostModel`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:attribute:: factor
+      :annotation: :float = 0.0
+
+      
+
+   .. py:attribute:: bias
+      :annotation: :float = 0.0
+
+      
+
+   .. py:method:: eval(self, prices, trades, **kwargs)
+
+      Evaluates the cost of a trade given the prices and the trades
+
+      Arguments
+          prices: the price per asset
+          trades: the trade per asset, e.g. number of stocks traded
+          **kwargs: additional arguments, e.g. volatility, liquidity, spread, etc.
+
+
+

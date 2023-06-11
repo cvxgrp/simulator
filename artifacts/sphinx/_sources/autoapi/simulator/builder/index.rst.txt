@@ -1,0 +1,360 @@
+:py:mod:`simulator.builder`
+===========================
+
+.. py:module:: simulator.builder
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.builder._State
+   simulator.builder._Builder
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.builder.builder
+
+
+
+.. py:class:: _State
+
+   The _State class defines a state object used to keep track of the current state of the portfolio.
+   Attributes:
+
+   prices: a pandas Series object containing the stock prices of the current portfolio state
+   position: a pandas Series object containing the current holdings of the portfolio
+   cash: the amount of cash available in the portfolio.
+
+   By default, prices and position are set to None, while cash is set to 1 million.
+   These attributes can be updated and accessed through setter and getter methods
+
+   .. py:attribute:: prices
+      :annotation: :pandas.Series
+
+      
+
+   .. py:attribute:: position
+      :annotation: :pandas.Series
+
+      
+
+   .. py:attribute:: cash
+      :annotation: :float = 1000000.0
+
+      
+
+   .. py:method:: value(self)
+      :property:
+
+      The value method computes the value of the portfolio at the current time,
+      taking into account the current holdings and current stock prices.
+
+
+      Returns:
+
+      the value of the portfolio as a float. If the value cannot be computed due to missing position
+      (they might be still None), zero is returned instead.
+
+      The method is a decorator-based getter method, using the @property decorator to access
+      the value attribute as if it were a method. The value of the portfolio is computed as the
+      product of the current stock prices and the current holdings, summed together.
+      Note that if the current position is missing, the multiplication will raise a TypeError.
+      In this case, zero is returned as the value of the portfolio.
+
+
+   .. py:method:: nav(self)
+      :property:
+
+      The nav method computes the net asset value (NAV) of the portfolio,
+      which is the sum of the current value of the
+      portfolio as determined by the value method,
+      and the current amount of cash available in the portfolio.
+
+      Returns:
+
+      The net asset value of the portfolio as a float, computed as the sum of the current
+      value of the portfolio and the cash available in the portfolio.
+      The method is a decorator-based getter method using the @property decorator
+      to access the NAV attribute as if it were a method.
+      The NAV is computed as the sum of the current value (as computed by the value method)
+      and the amount of cash available.
+
+
+   .. py:method:: weights(self)
+      :property:
+
+      The weights method computes the weighting of each asset in the current portfolio
+      as a fraction of the total portfolio value.
+
+      Returns:
+
+      a pandas series object containing the weighting of each asset as a fraction
+      of the total portfolio value. If the positions are still missing, then a series of zeroes is returned.
+      The method is a decorator-based getter method using the @property decorator to access
+      the weights attribute as if it were a method. The weighting for each asset is computed
+      as the product of the current position and the current stock prices,
+      divided by the net asset value of the portfolio (as computed by the nav method).
+      Note that this weighting represents the fraction of the portfolio value allocated to a particular asset.
+      If the portfolio weighting cannot be computed due to missing positions,
+      then a series of zeroes with the same size as the prices attribute is returned instead.
+
+
+   .. py:method:: leverage(self)
+      :property:
+
+      The `leverage` method computes the leverage of the portfolio,
+      which is the sum of the absolute values of the portfolio weights.
+
+      Returns:
+      - the portfolio leverage as a float, computed as the sum of the
+      absolute values of the portfolio weights.
+
+      The method is a decorator-based getter method using the
+      `@property` decorator to access the leverage attribute
+      as if it were a method. The portfolio leverage is computed as
+      the sum of the absolute values of the portfolio weights,
+      which represents the total exposure of the portfolio to multiple assets.
+
+
+   .. py:method:: position_robust(self)
+      :property:
+
+
+   .. py:method:: update(self, position, model=None, **kwargs)
+
+      The update method updates the current state of the portfolio with the new input position.
+      It calculates the trades made based on the new and the previous position,
+      updates the internal position and cash attributes,
+      and applies any applicable trading costs according to model parameter.
+
+      The method takes three input parameters:
+
+      position: a pandas series object representing the new position of the portfolio.
+      model: an optional trading cost model (e.g. slippage, fees) to be incorporated into the update.
+      If None, no trading costs will be applied.
+      **kwargs: additional keyword arguments to pass into the trading cost model.
+
+      Returns:
+      self: the _State instance with the updated position and cash.
+
+      Updates:
+
+      trades: the difference between positions in the old and new portfolio.
+      position: the new position of the portfolio.
+      cash: the new amount of cash in the portfolio after any trades and trading costs are applied.
+
+      Note that the method does not return any value: instead,
+      it updates the internal state of the _State instance.
+
+
+
+.. py:function:: builder(prices, weights=None, market_cap=None, trade_volume=None, initial_cash=1000000.0, trading_cost_model=None, max_cap_fraction=None, min_cap_fraction=None, max_trade_fraction=None, min_trade_fraction=None)
+
+   The builder function creates an instance of the _Builder class, which
+   is used to construct a portfolio of assets. The function takes in a pandas
+   DataFrame of historical prices for the assets in the portfolio, optional
+   weights for each asset, an initial cash value, and a trading cost model.
+   The function first asserts that the prices DataFrame has a monotonic
+   increasing and unique index. It then creates a DataFrame of zeros to hold
+   the number of shares of each asset owned at each time step. The function
+   initializes a _Builder object with the stocks DataFrame, the prices
+   DataFrame (forward-filled), the initial cash value, and the trading cost
+   model. If weights are provided, they are set for each time step using
+   set_weights method of the _Builder object. The final output is the
+   constructed _Builder object.
+
+
+.. py:class:: _Builder
+
+   .. py:attribute:: prices
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: stocks
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: trading_cost_model
+      :annotation: :cvx.simulator.trading_costs.TradingCostModel
+
+      
+
+   .. py:attribute:: initial_cash
+      :annotation: :float = 1000000.0
+
+      
+
+   .. py:attribute:: _state
+      :annotation: :_State
+
+      
+
+   .. py:attribute:: market_cap
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: trade_volume
+      :annotation: :pandas.DataFrame
+
+      
+
+   .. py:attribute:: max_cap_fraction
+      :annotation: :float
+
+      
+
+   .. py:attribute:: min_cap_fraction
+      :annotation: :float
+
+      
+
+   .. py:attribute:: max_trade_fraction
+      :annotation: :float
+
+      
+
+   .. py:attribute:: min_trade_fraction
+      :annotation: :float
+
+      
+
+   .. py:method:: __post_init__(self)
+
+      The __post_init__ method is a special method of initialized instances
+      of the _Builder class and is called after initialization.
+      It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.
+
+      The method takes no input parameter. It initializes the cash attribute in the internal
+      _State object with the initial amount of cash in the portfolio, self.initial_cash.
+
+      Note that this method is often used in Python classes for additional initialization routines
+      that can only be performed after the object is fully initialized. __post_init__
+      is called automatically after the object initialization.
+
+
+   .. py:method:: index(self)
+      :property:
+
+      A property that returns the index of the portfolio,
+      which is the time period for which the portfolio data is available.
+
+      Returns: pd.Index: A pandas index representing the
+      time period for which the portfolio data is available.
+
+      Notes: The function extracts the index of the prices dataframe,
+      which represents the time periods for which data is available for the portfolio.
+      The resulting index will be a pandas index object
+      with the same length as the number of rows in the prices dataframe.
+
+
+   .. py:method:: assets(self)
+      :property:
+
+      A property that returns a list of the assets held by the portfolio.
+
+      Returns: list: A list of the assets held by the portfolio.
+
+      Notes: The function extracts the column names of the prices dataframe,
+      which correspond to the assets held by the portfolio.
+      The resulting list will contain the names of all assets
+      held by the portfolio, without any duplicates.
+
+
+   .. py:method:: set_weights(self, time, weights)
+
+      Set the position via weights (e.g. fractions of the nav)
+
+      :param time: time
+      :param weights: series of weights
+
+
+   .. py:method:: set_cashposition(self, time, cashposition)
+
+      Set the position via cash positions (e.g. USD invested per asset)
+
+      :param time: time
+      :param cashposition: series of cash positions
+
+
+   .. py:method:: set_position(self, time, position)
+
+      Set the position via number of assets (e.g. number of stocks)
+
+      :param time: time
+      :param position: series of number of stocks
+
+
+   .. py:method:: __iter__(self)
+
+      The __iter__ method allows the object to be iterated over in a for loop,
+      yielding time and the current state of the portfolio.
+      The method yields a list of dates seen so far
+      (excluding the first date) and returns a tuple
+      containing the list of dates and the current portfolio state.
+
+      Yield:
+
+      interval: a pandas DatetimeIndex object containing the dates seen so far.
+
+      state: the current state of the portfolio,
+      taking into account the stock prices at each interval.
+
+
+   .. py:method:: __setitem__(self, time, position)
+
+      The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.
+      The method takes two input parameters:
+
+      time: time index for which to update the stock data
+      position: pandas series object containing the updated stock data
+
+      Returns: None
+
+      Updates:
+      the stock data of the dataframe at the given time index with the input position
+      the internal state of the portfolio with the updated position, taking into account the trading cost model
+
+      Raises:
+      AssertionError: if the input position is not a pandas Series object
+      or its index is not a subset of the assets of the dataframe.
+
+
+   .. py:method:: __getitem__(self, time)
+
+      The __getitem__ method retrieves the stock data for a specific time in the dataframe.
+      It returns the stock data for that time. The method takes one input parameter:
+
+      time: the time index for which to retrieve the stock data
+      Returns: stock data for the input time
+
+      Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
+
+
+   .. py:method:: build(self)
+
+      A function that creates a new instance of the EquityPortfolio
+      class based on the internal state of the Portfolio builder object.
+
+      Returns: EquityPortfolio: A new instance of the EquityPortfolio class
+      with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+
+      Notes: The function simply creates a new instance of the EquityPortfolio
+      class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+      to the corresponding attributes in the Portfolio builder object.
+      The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
+
+
+

@@ -1,0 +1,61 @@
+:py:mod:`simulator.metrics`
+===========================
+
+.. py:module:: simulator.metrics
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.metrics.Metrics
+
+
+
+
+.. py:class:: Metrics
+
+   Metrics class for a portfolio
+
+   .. py:attribute:: daily_profit
+      :annotation: :pandas.Series
+
+      
+
+   .. py:attribute:: days_per_year
+      :annotation: :int = 252
+
+      
+
+   .. py:method:: __post_init__(self)
+
+
+   .. py:method:: total_profit(self)
+      :property:
+
+      Computes total profit of the portfolio
+
+
+   .. py:method:: mean_profit(self)
+      :property:
+
+      Computes mean daily profits
+
+
+   .. py:method:: std_profit(self)
+      :property:
+
+      Computes standard deviation of daily profits
+
+
+   .. py:method:: sr_profit(self)
+      :property:
+
+      Computes the Sharpe ratio of daily profits
+
+
+

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulator.builder &mdash; cvxsimulator Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/logo.jpeg"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> cvxsimulator
+            <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cvxsimulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>simulator.builder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for simulator.builder</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
+
+
+<span class="nd">@dataclass</span>
+<div class="viewcode-block" id="_State"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State">[docs]</a><span class="k">class</span> <span class="nc">_State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The _State class defines a state object used to keep track of the current state of the portfolio.</span>
+<span class="sd">    Attributes:</span>
+
+<span class="sd">    prices: a pandas Series object containing the stock prices of the current portfolio state</span>
+<span class="sd">    position: a pandas Series object containing the current holdings of the portfolio</span>
+<span class="sd">    cash: the amount of cash available in the portfolio.</span>
+
+<span class="sd">    By default, prices and position are set to None, while cash is set to 1 million.</span>
+<span class="sd">    These attributes can be updated and accessed through setter and getter methods</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_State.prices"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_State.position"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.position">[docs]</a>    <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_State.cash"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.cash">[docs]</a>    <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.value"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The value method computes the value of the portfolio at the current time,</span>
+<span class="sd">        taking into account the current holdings and current stock prices.</span>
+
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        the value of the portfolio as a float. If the value cannot be computed due to missing position</span>
+<span class="sd">        (they might be still None), zero is returned instead.</span>
+
+<span class="sd">        The method is a decorator-based getter method, using the @property decorator to access</span>
+<span class="sd">        the value attribute as if it were a method. The value of the portfolio is computed as the</span>
+<span class="sd">        product of the current stock prices and the current holdings, summed together.</span>
+<span class="sd">        Note that if the current position is missing, the multiplication will raise a TypeError.</span>
+<span class="sd">        In this case, zero is returned as the value of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note that the first position may not exist yet.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.nav"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The nav method computes the net asset value (NAV) of the portfolio,</span>
+<span class="sd">        which is the sum of the current value of the</span>
+<span class="sd">        portfolio as determined by the value method,</span>
+<span class="sd">        and the current amount of cash available in the portfolio.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        The net asset value of the portfolio as a float, computed as the sum of the current</span>
+<span class="sd">        value of the portfolio and the cash available in the portfolio.</span>
+<span class="sd">        The method is a decorator-based getter method using the @property decorator</span>
+<span class="sd">        to access the NAV attribute as if it were a method.</span>
+<span class="sd">        The NAV is computed as the sum of the current value (as computed by the value method)</span>
+<span class="sd">        and the amount of cash available.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.weights"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.weights">[docs]</a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The weights method computes the weighting of each asset in the current portfolio</span>
+<span class="sd">        as a fraction of the total portfolio value.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        a pandas series object containing the weighting of each asset as a fraction</span>
+<span class="sd">        of the total portfolio value. If the positions are still missing, then a series of zeroes is returned.</span>
+<span class="sd">        The method is a decorator-based getter method using the @property decorator to access</span>
+<span class="sd">        the weights attribute as if it were a method. The weighting for each asset is computed</span>
+<span class="sd">        as the product of the current position and the current stock prices,</span>
+<span class="sd">        divided by the net asset value of the portfolio (as computed by the nav method).</span>
+<span class="sd">        Note that this weighting represents the fraction of the portfolio value allocated to a particular asset.</span>
+<span class="sd">        If the portfolio weighting cannot be computed due to missing positions,</span>
+<span class="sd">        then a series of zeroes with the same size as the prices attribute is returned instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.leverage"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.leverage">[docs]</a>    <span class="k">def</span> <span class="nf">leverage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The `leverage` method computes the leverage of the portfolio,</span>
+<span class="sd">        which is the sum of the absolute values of the portfolio weights.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        - the portfolio leverage as a float, computed as the sum of the</span>
+<span class="sd">        absolute values of the portfolio weights.</span>
+
+<span class="sd">        The method is a decorator-based getter method using the</span>
+<span class="sd">        `@property` decorator to access the leverage attribute</span>
+<span class="sd">        as if it were a method. The portfolio leverage is computed as</span>
+<span class="sd">        the sum of the absolute values of the portfolio weights,</span>
+<span class="sd">        which represents the total exposure of the portfolio to multiple assets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_State.position_robust"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.position_robust">[docs]</a>    <span class="k">def</span> <span class="nf">position_robust</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span></div>
+
+<div class="viewcode-block" id="_State.update"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The update method updates the current state of the portfolio with the new input position.</span>
+<span class="sd">        It calculates the trades made based on the new and the previous position,</span>
+<span class="sd">        updates the internal position and cash attributes,</span>
+<span class="sd">        and applies any applicable trading costs according to model parameter.</span>
+
+<span class="sd">        The method takes three input parameters:</span>
+
+<span class="sd">        position: a pandas series object representing the new position of the portfolio.</span>
+<span class="sd">        model: an optional trading cost model (e.g. slippage, fees) to be incorporated into the update.</span>
+<span class="sd">        If None, no trading costs will be applied.</span>
+<span class="sd">        **kwargs: additional keyword arguments to pass into the trading cost model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        self: the _State instance with the updated position and cash.</span>
+
+<span class="sd">        Updates:</span>
+
+<span class="sd">        trades: the difference between positions in the old and new portfolio.</span>
+<span class="sd">        position: the new position of the portfolio.</span>
+<span class="sd">        cash: the new amount of cash in the portfolio after any trades and trading costs are applied.</span>
+
+<span class="sd">        Note that the method does not return any value: instead,</span>
+<span class="sd">        it updates the internal state of the _State instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if self.position is None:</span>
+        <span class="c1">#    self.position = 0.0 * position</span>
+        <span class="c1"># trades = position</span>
+        <span class="c1"># else:</span>
+        <span class="n">trades</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_robust</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="p">(</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">trades</span><span class="o">=</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+
+<div class="viewcode-block" id="builder"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.builder">[docs]</a><span class="k">def</span> <span class="nf">builder</span><span class="p">(</span>
+    <span class="n">prices</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">market_cap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">trade_volume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span>
+    <span class="n">trading_cost_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_cap_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_cap_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_trade_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_trade_fraction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The builder function creates an instance of the _Builder class, which</span>
+<span class="sd">    is used to construct a portfolio of assets. The function takes in a pandas</span>
+<span class="sd">    DataFrame of historical prices for the assets in the portfolio, optional</span>
+<span class="sd">    weights for each asset, an initial cash value, and a trading cost model.</span>
+<span class="sd">    The function first asserts that the prices DataFrame has a monotonic</span>
+<span class="sd">    increasing and unique index. It then creates a DataFrame of zeros to hold</span>
+<span class="sd">    the number of shares of each asset owned at each time step. The function</span>
+<span class="sd">    initializes a _Builder object with the stocks DataFrame, the prices</span>
+<span class="sd">    DataFrame (forward-filled), the initial cash value, and the trading cost</span>
+<span class="sd">    model. If weights are provided, they are set for each time step using</span>
+<span class="sd">    set_weights method of the _Builder object. The final output is the</span>
+<span class="sd">    constructed _Builder object.&quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
+    <span class="k">assert</span> <span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
+
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+    <span class="p">)</span>
+
+    <span class="n">builder</span> <span class="o">=</span> <span class="n">_Builder</span><span class="p">(</span>
+        <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+        <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">(),</span>
+        <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
+        <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="n">market_cap</span><span class="o">=</span><span class="n">market_cap</span><span class="p">,</span>
+        <span class="n">trade_volume</span><span class="o">=</span><span class="n">trade_volume</span><span class="p">,</span>
+        <span class="n">max_cap_fraction</span><span class="o">=</span><span class="n">max_cap_fraction</span><span class="p">,</span>
+        <span class="n">min_cap_fraction</span><span class="o">=</span><span class="n">min_cap_fraction</span><span class="p">,</span>
+        <span class="n">max_trade_fraction</span><span class="o">=</span><span class="n">max_trade_fraction</span><span class="p">,</span>
+        <span class="n">min_trade_fraction</span><span class="o">=</span><span class="n">min_trade_fraction</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
+            <span class="n">builder</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">return</span> <span class="n">builder</span></div>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="_Builder"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder">[docs]</a><span class="k">class</span> <span class="nc">_Builder</span><span class="p">:</span>
+<div class="viewcode-block" id="_Builder.prices"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="_Builder.stocks"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.stocks">[docs]</a>    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="_Builder.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span></div>
+<div class="viewcode-block" id="_Builder.initial_cash"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.initial_cash">[docs]</a>    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+<div class="viewcode-block" id="_Builder._state"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder._state">[docs]</a>    <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_State</span><span class="p">)</span></div>
+<div class="viewcode-block" id="_Builder.market_cap"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.market_cap">[docs]</a>    <span class="n">market_cap</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.trade_volume"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.trade_volume">[docs]</a>    <span class="n">trade_volume</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.max_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_cap_fraction">[docs]</a>    <span class="n">max_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.min_cap_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_cap_fraction">[docs]</a>    <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.max_trade_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_trade_fraction">[docs]</a>    <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="_Builder.min_trade_fraction"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_trade_fraction">[docs]</a>    <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="_Builder.__post_init__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The __post_init__ method is a special method of initialized instances</span>
+<span class="sd">        of the _Builder class and is called after initialization.</span>
+<span class="sd">        It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.</span>
+
+<span class="sd">        The method takes no input parameter. It initializes the cash attribute in the internal</span>
+<span class="sd">        _State object with the initial amount of cash in the portfolio, self.initial_cash.</span>
+
+<span class="sd">        Note that this method is often used in Python classes for additional initialization routines</span>
+<span class="sd">        that can only be performed after the object is fully initialized. __post_init__</span>
+<span class="sd">        is called automatically after the object initialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_Builder.index"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
+<span class="sd">        which is the time period for which the portfolio data is available.</span>
+
+<span class="sd">        Returns: pd.Index: A pandas index representing the</span>
+<span class="sd">        time period for which the portfolio data is available.</span>
+
+<span class="sd">        Notes: The function extracts the index of the prices dataframe,</span>
+<span class="sd">        which represents the time periods for which data is available for the portfolio.</span>
+<span class="sd">        The resulting index will be a pandas index object</span>
+<span class="sd">        with the same length as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_Builder.assets"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a list of the assets held by the portfolio.</span>
+
+<span class="sd">        Returns: list: A list of the assets held by the portfolio.</span>
+
+<span class="sd">        Notes: The function extracts the column names of the prices dataframe,</span>
+<span class="sd">        which correspond to the assets held by the portfolio.</span>
+<span class="sd">        The resulting list will contain the names of all assets</span>
+<span class="sd">        held by the portfolio, without any duplicates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
+
+<div class="viewcode-block" id="_Builder.set_weights"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the position via weights (e.g. fractions of the nav)</span>
+
+<span class="sd">        :param time: time</span>
+<span class="sd">        :param weights: series of weights</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span></div>
+
+<div class="viewcode-block" id="_Builder.set_cashposition"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.set_cashposition">[docs]</a>    <span class="k">def</span> <span class="nf">set_cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the position via cash positions (e.g. USD invested per asset)</span>
+
+<span class="sd">        :param time: time</span>
+<span class="sd">        :param cashposition: series of cash positions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span></div>
+
+<div class="viewcode-block" id="_Builder.set_position"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.set_position">[docs]</a>    <span class="k">def</span> <span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the position via number of assets (e.g. number of stocks)</span>
+
+<span class="sd">        :param time: time</span>
+<span class="sd">        :param position: series of number of stocks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span></div>
+
+<div class="viewcode-block" id="_Builder.__iter__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The __iter__ method allows the object to be iterated over in a for loop,</span>
+<span class="sd">        yielding time and the current state of the portfolio.</span>
+<span class="sd">        The method yields a list of dates seen so far</span>
+<span class="sd">        (excluding the first date) and returns a tuple</span>
+<span class="sd">        containing the list of dates and the current portfolio state.</span>
+
+<span class="sd">        Yield:</span>
+
+<span class="sd">        interval: a pandas DatetimeIndex object containing the dates seen so far.</span>
+
+<span class="sd">        state: the current state of the portfolio,</span>
+<span class="sd">        taking into account the stock prices at each interval.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="c1"># valuation of the current position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span></div>
+
+<div class="viewcode-block" id="_Builder.__setitem__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__setitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.</span>
+<span class="sd">        The method takes two input parameters:</span>
+
+<span class="sd">        time: time index for which to update the stock data</span>
+<span class="sd">        position: pandas series object containing the updated stock data</span>
+
+<span class="sd">        Returns: None</span>
+
+<span class="sd">        Updates:</span>
+<span class="sd">        the stock data of the dataframe at the given time index with the input position</span>
+<span class="sd">        the internal state of the portfolio with the updated position, taking into account the trading cost model</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        AssertionError: if the input position is not a pandas Series object</span>
+<span class="sd">        or its index is not a subset of the assets of the dataframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># compute capitalization of desired position</span>
+            <span class="n">cap</span> <span class="o">=</span> <span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
+            <span class="c1"># compute relative capitalization</span>
+            <span class="n">rel_cap</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
+            <span class="c1"># clip relative capitalization</span>
+            <span class="n">rel_cap</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+                <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_cap_fraction</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_cap_fraction</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="c1"># move back to capitalization</span>
+            <span class="n">cap</span> <span class="o">=</span> <span class="n">rel_cap</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
+            <span class="c1"># compute position</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">trade</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position_robust</span>
+
+            <span class="c1"># move to trade in USD</span>
+            <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
+            <span class="c1"># compute relative trade volume</span>
+            <span class="n">rel_trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
+            <span class="c1"># clip relative trade volume</span>
+            <span class="n">rel_trade</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+                <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_trade_fraction</span><span class="p">,</span>
+                <span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_trade_fraction</span><span class="p">,</span>
+                <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># move back to trade</span>
+            <span class="n">trade</span> <span class="o">=</span> <span class="n">rel_trade</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
+            <span class="c1"># move back to trade in number of stocks</span>
+            <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
+            <span class="c1"># compute position</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position_robust</span> <span class="o">+</span> <span class="n">trade</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_Builder.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The __getitem__ method retrieves the stock data for a specific time in the dataframe.</span>
+<span class="sd">        It returns the stock data for that time. The method takes one input parameter:</span>
+
+<span class="sd">        time: the time index for which to retrieve the stock data</span>
+<span class="sd">        Returns: stock data for the input time</span>
+
+<span class="sd">        Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="_Builder.build"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
+<span class="sd">        class based on the internal state of the Portfolio builder object.</span>
+
+<span class="sd">        Returns: EquityPortfolio: A new instance of the EquityPortfolio class</span>
+<span class="sd">        with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.</span>
+
+<span class="sd">        Notes: The function simply creates a new instance of the EquityPortfolio</span>
+<span class="sd">        class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal</span>
+<span class="sd">        to the corresponding attributes in the Portfolio builder object.</span>
+<span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
