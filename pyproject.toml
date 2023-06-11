@@ -20,6 +20,7 @@ quantstats = "*"
 plotly = "*"
 cvxpy = "*"
 jupyterlab = "*"
+jupyter-book = "*"
 loguru = "*"
 
 [build-system]
