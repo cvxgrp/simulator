@@ -3,8 +3,8 @@ name: "book"
 on:
 - push
 
-defaults:
-  runs-on: "ubuntu-latest"
+#defaults:
+#  runs-on: "ubuntu-latest"
 
 #  run:
 #    working-directory: .book
@@ -16,7 +16,7 @@ jobs:
   #    - uses: actions/checkout@v3
 
   sphinx:
-    #runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
       - uses: cvxgrp/.github/actions/sphinx@main
