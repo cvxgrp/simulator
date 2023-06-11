@@ -23,7 +23,6 @@ jupyterlab = "*"
 jupyter-book = "0.15.1"
 loguru = "*"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
