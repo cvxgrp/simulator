@@ -3,7 +3,16 @@ name: "book"
 on:
 - push
 
+#defaults:
+#  run:
+#    working-directory: .book
+
 jobs:
+  default:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v3
+
   sphinx:
     runs-on: "ubuntu-latest"
     steps:
