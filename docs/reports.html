@@ -162,6 +162,7 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Test report</a></li>
+
 </ul>
 
     </div>
@@ -332,7 +333,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -348,6 +351,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Test report</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-coverage">Test coverage</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -360,6 +373,10 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="test-report">
 <h1>Test report<a class="headerlink" href="#test-report" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://www.cvxgrp.org/simulator/artifacts/tests/html-report/report.html">Report</a></p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="test-coverage">
+<h1>Test coverage<a class="headerlink" href="#test-coverage" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://www.cvxgrp.org/simulator/artifacts/tests/html-coverage/index.html">Coverage</a></p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -411,6 +428,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Test report</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-coverage">Test coverage</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
