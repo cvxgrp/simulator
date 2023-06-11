@@ -120,7 +120,6 @@ stocks = pd.read_csv(Path("resources") / "stock.csv", index_col=0, parse_dates=T
 portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
 ```
 
-
 ## Poetry
 
 We assume you share already the love for [Poetry](https://python-poetry.org). Once you have installed poetry you can perform
