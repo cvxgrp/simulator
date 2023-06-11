@@ -1,7 +1,9 @@
-# Test report
+# Test Reports
+
+## Timing
 
 {{ '[Report]({url}/artifacts/tests/html-report/report.html)'.format(url=book_url) }}
 
-# Test coverage
+## Coverage
 
 {{ '[Coverage]({url}/artifacts/tests/html-coverage/index.html)'.format(url=book_url) }}
