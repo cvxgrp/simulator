@@ -58,10 +58,6 @@ jobs:
           name: tests
           path: .book/artifacts/tests
 
-      # We downloaded the book twice :-)
-      #- name: Remove the book in artifacts
-      #  run: rm -rf .book/artifacts/book
-
       - name: GitHub Pages action
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
