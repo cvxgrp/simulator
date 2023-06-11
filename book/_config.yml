@@ -15,7 +15,7 @@ parse:
     - linkify
     - dollarmath
   myst_substitutions:
-    book_url: http://www.cvxgrp.org/simulator
+    book_url: https://www.cvxgrp.org/simulator
 
 
 # needed for plotly
