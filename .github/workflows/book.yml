@@ -44,7 +44,7 @@ jobs:
       - name: Download Book
         uses: actions/download-artifact@v3
         with:
-          name: Book
+          name: book
           path: book
           
       - name: Download Sphinx page
