@@ -40,12 +40,36 @@ jobs:
 
       - name: Check out repository
         uses: actions/checkout@v3
-
-      - uses: cvxgrp/.github/actions/book@main
+      
+      - name: Download Book
+        uses: actions/download-artifact@v3
         with:
-          os: ${{ runner.os }}
-          python-version: "3.11"
-          # sphinx-folder: "book/sphinx/"
-          source-folder: "cvx"
-          kernel: "simulator"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: Book
+          path: book
+          
+      - name: Download Sphinx page
+        uses: actions/download-artifact@v3
+        with:
+          name: sphinx
+          path: book/artifacts/sphinx
+          
+      # Check uploads
+      - name: Inspect upload
+        shell: bash
+        run : |
+          tree book/artifacts
+
+      - name: GitHub Pages action
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages           # The branch the action should deploy to.
+          folder: book              # The folder the action should deploy.
+          
+      #- uses: cvxgrp/.github/actions/book@main
+      #  with:
+      #    os: ${{ runner.os }}
+      #    python-version: "3.11"
+      #    # sphinx-folder: "book/sphinx/"
+      #    source-folder: "cvx"
+      #    kernel: "simulator"
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
