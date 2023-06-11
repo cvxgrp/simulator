@@ -65,9 +65,6 @@ jobs:
         shell: bash
         run : |
           tree book/artifacts
-          cat book/artifacts/tests/html-coverage/index.html
-          cat book/artifacts/tests/html-report/report.html
-          rm book/artifacts/tests/html-coverage/.gitignore
 
       - name: GitHub Pages action
         uses: JamesIves/github-pages-deploy-action@v4.2.2
