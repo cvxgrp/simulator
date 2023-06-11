@@ -40,19 +40,19 @@ jobs:
 
       - name: Check out repository
         uses: actions/checkout@v3
-      
+
       - name: Download Book
         uses: actions/download-artifact@v3
         with:
           name: book
           path: book
-          
+
       - name: Download Sphinx page
         uses: actions/download-artifact@v3
         with:
           name: sphinx
           path: book/artifacts/sphinx
-          
+
       # Check uploads
       - name: Inspect upload
         shell: bash
@@ -64,7 +64,7 @@ jobs:
         with:
           branch: gh-pages           # The branch the action should deploy to.
           folder: book              # The folder the action should deploy.
-          
+
       #- uses: cvxgrp/.github/actions/book@main
       #  with:
       #    os: ${{ runner.os }}
