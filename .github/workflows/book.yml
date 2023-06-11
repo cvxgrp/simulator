@@ -53,6 +53,12 @@ jobs:
           name: sphinx
           path: book/artifacts/sphinx
 
+      - name: Download test artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: tests
+          path: book/artifacts/tests
+          
       # Check uploads
       - name: Inspect upload
         shell: bash
@@ -62,14 +68,5 @@ jobs:
       - name: GitHub Pages action
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
-          branch: gh-pages           # The branch the action should deploy to.
+          branch: gh-pages          # The branch the action should deploy to.
           folder: book              # The folder the action should deploy.
-
-      #- uses: cvxgrp/.github/actions/book@main
-      #  with:
-      #    os: ${{ runner.os }}
-      #    python-version: "3.11"
-      #    # sphinx-folder: "book/sphinx/"
-      #    source-folder: "cvx"
-      #    kernel: "simulator"
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
