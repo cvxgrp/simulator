@@ -58,7 +58,7 @@ jobs:
         with:
           name: tests
           path: book/artifacts/tests
-          
+
       # Check uploads
       - name: Inspect upload
         shell: bash
