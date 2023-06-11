@@ -48,11 +48,15 @@ jobs:
           name: book
           path: .book
 
-      # Download all artifacts
       - uses: actions/download-artifact@v3
         with:
-          name: [sphinx, test]
-          path: .book/artifacts
+          name: sphinx
+          path: .book/artifacts/sphinx
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: tests
+          path: .book/artifacts/tests
 
       # We downloaded the book twice :-)
       #- name: Remove the book in artifacts
