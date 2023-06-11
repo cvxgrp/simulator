@@ -25,14 +25,14 @@ jobs:
 
   jupyter:
     runs-on: "ubuntu-latest"
-    steps:      
-      - uses: actions/checkout@v3      
-      - uses: cvxgrp/.github/actions/jupyter@main        
-        with:          
-          os: ${{ runner.os }}          
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cvxgrp/.github/actions/jupyter@main
+        with:
+          os: ${{ runner.os }}
           python-version: '3.10'
           kernel: "simulator"
-        
+
   book:
     runs-on: "ubuntu-latest"
     needs: [test, sphinx, jupyter]
