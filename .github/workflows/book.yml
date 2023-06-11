@@ -51,11 +51,12 @@ jobs:
       # Download all artifacts
       - uses: actions/download-artifact@v3
         with:
+          name: [sphinx, test]
           path: .book/artifacts
 
       # We downloaded the book twice :-)
-      - name: Remove the book in artifacts
-        run: rm -rf .book/artifacts/book
+      #- name: Remove the book in artifacts
+      #  run: rm -rf .book/artifacts/book
 
       - name: GitHub Pages action
         uses: JamesIves/github-pages-deploy-action@v4.2.2
