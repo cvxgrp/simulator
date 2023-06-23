@@ -18,9 +18,9 @@ extensions = [
 ]
 
 
-source_dirs = "cvx"
+source_dir = "cvx"
 autoapi_type = "python"
-autoapi_dirs = ["../../%s" % d for d in source_dirs.split()]
+autoapi_dirs = [f"../../{source_dir}"]
 autoapi_options = [
     "members",
     "undoc-members",
