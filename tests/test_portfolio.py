@@ -5,10 +5,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import _State
-from cvx.simulator.builder import builder
-from cvx.simulator.portfolio import diff
-from cvx.simulator.portfolio import EquityPortfolio
+from cvx.simulator.builder import _State, builder
+from cvx.simulator.portfolio import EquityPortfolio, diff
 
 
 def test_state():

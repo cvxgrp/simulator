@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 
 import pandas as pd
 
@@ -317,7 +316,9 @@ class _Builder:
 
     def __setitem__(self, time, position):
         """
-        The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.
+        The method __setitem__ updates the stock data in the dataframe for a specific time index
+        with the input position. It first checks that position is a valid input,
+        meaning it is a pandas Series object and has its index within the assets of the dataframe.
         The method takes two input parameters:
 
         time: time index for which to update the stock data

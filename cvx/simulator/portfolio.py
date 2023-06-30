@@ -191,7 +191,8 @@ class EquityPortfolio:
 
     @property
     def trades_currency(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.
+        """A property that returns a pandas dataframe representing
+        the trades made in the portfolio in terms of currency.
 
         Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
 
