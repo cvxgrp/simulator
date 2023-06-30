@@ -411,7 +411,9 @@ taking into account the stock prices at each interval.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._Builder.__setitem__">
 <span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.__setitem__" title="Permalink to this definition"></a></dt>
-<dd><p>The method __setitem__ updates the stock data in the dataframe for a specific time index with the input position. It first checks that position is a valid input, meaning it is a pandas Series object and has its index within the assets of the dataframe.
+<dd><p>The method __setitem__ updates the stock data in the dataframe for a specific time index
+with the input position. It first checks that position is a valid input,
+meaning it is a pandas Series object and has its index within the assets of the dataframe.
 The method takes two input parameters:</p>
 <p>time: time index for which to update the stock data
 position: pandas series object containing the updated stock data</p>

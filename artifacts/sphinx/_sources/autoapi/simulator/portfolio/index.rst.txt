@@ -235,7 +235,8 @@ Functions
    .. py:method:: trades_currency(self) -> pandas.DataFrame
       :property:
 
-      A property that returns a pandas dataframe representing the trades made in the portfolio in terms of currency.
+      A property that returns a pandas dataframe representing
+      the trades made in the portfolio in terms of currency.
 
       Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
 
