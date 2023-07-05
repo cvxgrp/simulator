@@ -5,6 +5,8 @@
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
 [![Coverage Status](https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main)](https://coveralls.io/github/cvxgrp/simulator?branch=main)
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/cvxgrp/simulator)
+
 Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$,
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
 

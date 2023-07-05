@@ -24,8 +24,7 @@ jupyter-book = "0.15.1"
 loguru = "*"
 ruff = "*"
 black = "*"
-mypy = "*"
-
+pre-commit = "*"
 
 [build-system]
 requires = ["poetry-core"]
