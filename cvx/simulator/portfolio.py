@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Callable
 
 import pandas as pd
 import quantstats as qs
@@ -468,7 +469,7 @@ class EquityPortfolio:
     def plots(self, **kwargs):
         return qs.reports.plots(self.nav.pct_change().dropna(), **kwargs)
 
-    def plot(self, kind: Plot, **kwargs):
+    def plot(self, kind: Callable, **kwargs):
         return kind(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def html(self, **kwargs):
