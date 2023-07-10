@@ -474,3 +474,6 @@ class EquityPortfolio:
 
     def html(self, **kwargs):
         return qs.reports.html(self.nav.pct_change().dropna(), **kwargs)
+
+    def snapshot(self, **kwargs):
+        return qs.plots.snapshot(self.nav.pct_change().dropna(), **kwargs)

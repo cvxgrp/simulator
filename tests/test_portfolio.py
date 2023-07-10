@@ -418,3 +418,7 @@ def test_html(portfolio, tmp_path):
 
 def test_enum(portfolio):
     Plot.DRAWDOWN(portfolio.nav.pct_change().dropna())
+
+
+def test_snapshot(portfolio):
+    portfolio.snapshot()
