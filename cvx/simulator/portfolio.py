@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable
 
 import pandas as pd
 import quantstats as qs
@@ -15,24 +14,32 @@ qs.extend_pandas()
 
 
 class Plot(Enum):
-    DAILY_RETURNS = qs.plots.daily_returns
-    DISTRIBUTION = qs.plots.distribution
-    DRAWDOWN = qs.plots.drawdown
-    DRAWDOWNS_PERIODS = qs.plots.drawdowns_periods
-    EARNINGS = qs.plots.earnings
-    HISTOGRAM = qs.plots.histogram
-    LOG_RETURNS = qs.plots.log_returns
-    MONTHLY_HEATMAP = qs.plots.monthly_heatmap
-    MONTHLY_RETURNS = qs.plots.monthly_returns
-    RETURNS = qs.plots.returns
-    ROLLING_BETA = qs.plots.rolling_beta
-    ROLLING_SHARPE = qs.plots.rolling_sharpe
-    ROLLING_SORTINO = qs.plots.rolling_sortino
-    ROLLING_VOLATILITY = qs.plots.rolling_volatility
-    YEARLY_RETURNS = qs.plots.yearly_returns
+    DAILY_RETURNS = 1
+    DISTRIBUTION = 2
+    DRAWDOWN = 3
+    DRAWDOWNS_PERIODS = 4
+    EARNINGS = 5
+    HISTOGRAM = 6
+    LOG_RETURNS = 7
+    MONTHLY_HEATMAP = 8
+    # see issue: https://github.com/ranaroussi/quantstats/issues/276
+    # MONTHLY_RETURNS = 9
+    RETURNS = 10
+    ROLLING_BETA = 11
+    ROLLING_SHARPE = 12
+    ROLLING_SORTINO = 13
+    ROLLING_VOLATILITY = 14
+    YEARLY_RETURNS = 15
 
     # def __call__(self, *args, **kwargs):
-    #    return self.value(*args, **kwargs)
+    #    return self.func(*args, **kwargs)
+
+    @property
+    def func(self):
+        return getattr(qs.plots, self.name.lower())
+
+    def plot(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
 
 
 def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
@@ -469,8 +476,8 @@ class EquityPortfolio:
     def plots(self, **kwargs):
         return qs.reports.plots(self.nav.pct_change().dropna(), **kwargs)
 
-    def plot(self, kind: Callable, **kwargs):
-        return kind(returns=self.nav.pct_change().dropna(), **kwargs)
+    def plot(self, kind: Plot, **kwargs):
+        return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def html(self, **kwargs):
         return qs.reports.html(self.nav.pct_change().dropna(), **kwargs)
