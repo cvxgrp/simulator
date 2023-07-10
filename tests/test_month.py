@@ -9,13 +9,11 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
-import pytest
 import quantstats as qs
 
 from cvx.simulator.month import monthlytable
 
 
-@pytest.mark.skip(reason="quantstats can not work with pandas >= 2.0")
 def test_table_compounded(resource_dir, returns):
     """
     Test year/month performance table correct.
@@ -36,7 +34,7 @@ def test_table_compounded(resource_dir, returns):
     # use cvxsimulaor
     ts2 = monthlytable(series)["YTD"]
 
-    pd.testing.assert_series_equal(ts1, ts2, check_names=False)
+    pd.testing.assert_series_equal(ts1, ts2, check_names=False, check_index_type=False)
 
 
 def test_monthlytable():
