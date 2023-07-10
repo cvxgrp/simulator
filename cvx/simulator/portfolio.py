@@ -2,11 +2,37 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
+from typing import Callable
 
 import pandas as pd
+import quantstats as qs
 
 from cvx.simulator.grid import iron_frame
 from cvx.simulator.trading_costs import TradingCostModel
+
+qs.extend_pandas()
+
+
+class Plot(Enum):
+    DAILY_RETURNS = qs.plots.daily_returns
+    DISTRIBUTION = qs.plots.distribution
+    DRAWDOWN = qs.plots.drawdown
+    DRAWDOWNS_PERIODS = qs.plots.drawdowns_periods
+    EARNINGS = qs.plots.earnings
+    HISTOGRAM = qs.plots.histogram
+    LOG_RETURNS = qs.plots.log_returns
+    MONTHLY_HEATMAP = qs.plots.monthly_heatmap
+    MONTHLY_RETURNS = qs.plots.monthly_returns
+    RETURNS = qs.plots.returns
+    ROLLING_BETA = qs.plots.rolling_beta
+    ROLLING_SHARPE = qs.plots.rolling_sharpe
+    ROLLING_SORTINO = qs.plots.rolling_sortino
+    ROLLING_VOLATILITY = qs.plots.rolling_volatility
+    YEARLY_RETURNS = qs.plots.yearly_returns
+
+    # def __call__(self, *args, **kwargs):
+    #    return self.value(*args, **kwargs)
 
 
 def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
@@ -436,3 +462,15 @@ class EquityPortfolio:
             trading_cost_model=self.trading_cost_model,
             initial_cash=self.initial_cash,
         )
+
+    def metrics(self, **kwargs):
+        return qs.reports.metrics(self.nav.pct_change().dropna(), **kwargs)
+
+    def plots(self, **kwargs):
+        return qs.reports.plots(self.nav.pct_change().dropna(), **kwargs)
+
+    def plot(self, kind: Callable, **kwargs):
+        return kind(returns=self.nav.pct_change().dropna(), **kwargs)
+
+    def html(self, **kwargs):
+        return qs.reports.html(self.nav.pct_change().dropna(), **kwargs)

@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import os
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from cvx.simulator.builder import _State, builder
-from cvx.simulator.portfolio import EquityPortfolio, diff
+from cvx.simulator.portfolio import EquityPortfolio, Plot, diff
 
 
 def test_state():
@@ -387,3 +389,32 @@ def test_resample(prices):
     assert np.linalg.norm(p.trades_stocks.iloc[1:].values) == pytest.approx(
         0.0, abs=1e-12
     )
+
+
+def test_quantstats(portfolio):
+    """
+    Test quantstats
+    :param portfolio: the portfolio object (fixture)
+    """
+
+    print(portfolio.nav.sharpe())
+
+    print(portfolio.metrics(mode="full"))
+
+
+def test_plots(portfolio):
+    print(portfolio.plots(mode="full"))
+
+
+def test_plot(portfolio):
+    print(portfolio.plot(kind=Plot.DRAWDOWN))
+    print(portfolio.plot(kind=Plot.MONTHLY_HEATMAP, benchmark=None))
+
+
+def test_html(portfolio, tmp_path):
+    portfolio.html(output=tmp_path / "test.html")
+    assert os.path.exists(tmp_path / "test.html")
+
+
+def test_enum(portfolio):
+    Plot.DRAWDOWN(portfolio.nav.pct_change().dropna())
