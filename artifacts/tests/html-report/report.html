@@ -253,10 +253,10 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 06-Jul-2023 at 19:11:37 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 10-Jul-2023 at 21:03:10 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Summary</h2>
-    <p>45 tests ran in 12.11 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">45 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>48 tests ran in 18.38 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">48 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -267,15 +267,6 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="skipped results-table-row">
-        <tr>
-          <td class="col-result">Skipped</td>
-          <td class="col-name">tests/test_month.py::test_table_compounded</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">(&#x27;/home/runner/work/simulator/simulator/tests/test_month.py&#x27;, 18, &#x27;Skipped: quantstats can not work with pandas &gt;= 2.0&#x27;)<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -288,7 +279,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_index</td>
+          <td class="col-name">tests/test_trading_costs.py::test_linear_model</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -297,16 +288,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_portfolio</td>
-          <td class="col-duration">0.90</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_multiply</td>
+          <td class="col-name">tests/test_month.py::test_monthlytable</td>
           <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -315,8 +297,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_duplicates</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-name">tests/test_month.py::test_missing</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -324,8 +306,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_monotonic</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-name">tests/test_month.py::test_table_compounded</td>
+          <td class="col-duration">0.24</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -333,26 +315,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_assets</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_get</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_long_short</td>
-          <td class="col-duration">1.05</td>
+          <td class="col-name">tests/test_month.py::test_not_a_complete_year</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -369,6 +333,15 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_diff</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">tests/test_portfolio.py::test_truncate</td>
           <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
@@ -378,8 +351,98 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_long_only</td>
-          <td class="col-duration">1.04</td>
+          <td class="col-name">tests/test_portfolio.py::test_html</td>
+          <td class="col-duration">4.97</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_assets</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -387,17 +450,28 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_weights</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-name">tests/test_portfolio.py::test_plot</td>
+          <td class="col-duration">0.40</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>None
+None
+<br/> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_iter</td>
-          <td class="col-duration">1.00</td>
+          <td class="col-name">tests/test_portfolio.py::test_get</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -406,7 +480,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_portfolio.py::test_resample</td>
-          <td class="col-duration">1.10</td>
+          <td class="col-duration">1.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -414,25 +488,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_turnover</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_drawdown</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_stocks</td>
+          <td class="col-name">tests/test_portfolio.py::test_prices</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -460,8 +516,179 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_prices</td>
+          <td class="col-name">tests/test_portfolio.py::test_weights</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_duplicates</td>
           <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_turnover</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_iter</td>
+          <td class="col-duration">1.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_stocks</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_enum</td>
+          <td class="col-duration">0.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_quantstats</td>
+          <td class="col-duration">0.49</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>-0.10202488508373252
+                           Strategy
+-------------------------  ----------
+Start Period               2013-01-02
+End Period                 2015-04-22
+Risk-Free Rate             0.0%
+Time in Market             100.0%
+
+Cumulative Return          -0.35%
+CAGR﹪                     -0.1%
+
+Sharpe                     -0.1
+Prob. Sharpe Ratio         43.74%
+Smart Sharpe               -0.1
+Sortino                    -0.14
+Smart Sortino              -0.14
+Sortino/√2                 -0.1
+Smart Sortino/√2           -0.1
+Omega                      0.98
+
+Max Drawdown               -2.21%
+Longest DD Days            602
+Volatility (ann.)          1.35%
+Calmar                     -0.05
+Skew                       0.0
+Kurtosis                   0.91
+
+Expected Daily %           -0.0%
+Expected Monthly %         -0.01%
+Expected Yearly %          -0.12%
+Kelly Criterion            -0.84%
+Risk of Ruin               0.0%
+Daily Value-at-Risk        -0.14%
+Expected Shortfall (cVaR)  -0.14%
+
+Max Consecutive Wins       9
+Max Consecutive Losses     7
+Gain/Pain Ratio            -0.02
+Gain/Pain (1M)             -0.07
+
+Payoff Ratio               1.03
+Profit Factor              0.98
+Common Sense Ratio         1.01
+CPC Index                  0.49
+Tail Ratio                 1.02
+Outlier Win Ratio          3.38
+Outlier Loss Ratio         3.28
+
+MTD                        0.59%
+3M                         0.86%
+6M                         0.68%
+YTD                        0.88%
+1Y                         0.69%
+3Y (ann.)                  -0.1%
+5Y (ann.)                  -0.1%
+10Y (ann.)                 -0.1%
+All-time (ann.)            -0.1%
+
+Best Day                   0.29%
+Worst Day                  -0.31%
+Best Month                 0.59%
+Worst Month                -0.95%
+Best Year                  0.88%
+Worst Year                 -1.1%
+
+Avg. Drawdown              -1.35%
+Avg. Drawdown Days         278
+Recovery Factor            -0.16
+Ulcer Index                0.01
+Serenity Index             -0.01
+
+Avg. Up Month              0.25%
+Avg. Down Month            -0.37%
+Win Days %                 48.92%
+Win Month %                57.14%
+Win Quarter %              50.0%
+Win Year %                 33.33%
+None
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_long_short</td>
+          <td class="col-duration">1.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_monotonic</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_drawdown</td>
+          <td class="col-duration">0.03</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_long_only</td>
+          <td class="col-duration">1.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -470,6 +697,61 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_portfolio.py::test_multiply_r</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_multiply</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_plots</td>
+          <td class="col-duration">2.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>None
+<br/> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.
+WARNING  matplotlib.font_manager:font_manager.py:1338 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_portfolio.py::test_index</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -478,125 +760,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_diff</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_monthlytable</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_missing</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_not_a_complete_year</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_metrics.py::test_index_wrong_order</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_metrics.py::test_nan_value</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_metrics.py::test_profit</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_metrics.py::test_length_one</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_build_empty</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_set_position</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_iteration_state</td>
-          <td class="col-duration">0.97</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_prices</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_set_cashpositions</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_with_costmodel</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-name">tests/test_portfolio.py::test_portfolio</td>
+          <td class="col-duration">0.90</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -622,8 +787,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_box</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-name">tests/test_builder.py::test_set_position</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -631,7 +796,52 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_initial_cash</td>
+          <td class="col-name">tests/test_builder.py::test_build_empty</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_with_costmodel</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_set_cashpositions</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_prices</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_iteration_state</td>
+          <td class="col-duration">1.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_assets</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -649,8 +859,26 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_iteration</td>
-          <td class="col-duration">0.15</td>
+          <td class="col-name">tests/test_builder.py::test_build</td>
+          <td class="col-duration">2.53</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_initial_cash</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_builder.py::test_box</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -667,8 +895,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_assets</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-name">tests/test_builder.py::test_iteration</td>
+          <td class="col-duration">0.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -676,17 +904,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_build</td>
-          <td class="col-duration">2.46</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_trading_costs.py::test_linear_model</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-name">tests/test_metrics.py::test_profit</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
