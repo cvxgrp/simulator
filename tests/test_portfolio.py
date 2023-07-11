@@ -425,8 +425,6 @@ def test_snapshot(portfolio):
 
 
 def test_plot_enum(portfolio):
-    print(dir(Plot))
-    print()
     for plot in Plot:
         print("********************************************************************")
         print(plot)
@@ -435,8 +433,6 @@ def test_plot_enum(portfolio):
         except Exception as e:
             print(e)
             pass
-
-    assert False
 
 
 def test_rolling_betas(portfolio):

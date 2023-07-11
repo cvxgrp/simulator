@@ -23,7 +23,7 @@ class Plot(Enum):
     LOG_RETURNS = 7
     MONTHLY_HEATMAP = 8
     # see issue: https://github.com/ranaroussi/quantstats/issues/276
-    # MONTHLY_RETURNS = 9
+    MONTHLY_RETURNS = 9
     RETURNS = 10
     ROLLING_BETA = 11
     ROLLING_SHARPE = 12
