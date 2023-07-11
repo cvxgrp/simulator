@@ -340,6 +340,19 @@
 <span class="sd">        held by the portfolio, without any duplicates.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
 
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_Builder.returns"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.returns">[docs]</a>    <span class="k">def</span> <span class="nf">returns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_Builder.cov"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.cov">[docs]</a>    <span class="k">def</span> <span class="nf">cov</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># You can do much better using volatility adjusted returns rather than returns</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">ewm</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cov</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">t</span><span class="p">,</span> <span class="n">cov</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span></div>
+
+        <span class="c1"># {t: cov.loc[t, :, :] for t in cov.index.get_level_values(&#39;date&#39;).unique()}</span>
+
 <div class="viewcode-block" id="_Builder.set_weights"><a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the position via weights (e.g. fractions of the nav)</span>

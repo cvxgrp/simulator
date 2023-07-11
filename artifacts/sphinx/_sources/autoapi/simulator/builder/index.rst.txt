@@ -273,6 +273,13 @@ Functions
       held by the portfolio, without any duplicates.
 
 
+   .. py:method:: returns(self)
+      :property:
+
+
+   .. py:method:: cov(self, **kwargs)
+
+
    .. py:method:: set_weights(self, time, weights)
 
       Set the position via weights (e.g. fractions of the nav)
