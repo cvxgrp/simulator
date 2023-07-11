@@ -24,6 +24,11 @@ Our approach follows a rather common pattern:
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
 
+Of course, some users may know prices and weights in advance. In that case, the building procedure can be bypassed.
+We discuss this in
+
+* [Bypassing the builder](#bypassing-the-builder)
+
 ### Create the builder object
 
 The user defines a builder object by loading a frame of prices
@@ -134,12 +139,14 @@ portfolio.html()
 
 We also added an enum
 
+
 ```python
 portfolio.plot(kind=Plot.DRAWDOWN)
 ```
 
 supporting all plots defined in quantstats.
 
+![quantstats snapshot](portfolio.png)
 
 
 

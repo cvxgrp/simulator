@@ -1,8 +1,10 @@
 # Simulator
-
 [![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
+[![Coverage Status](https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main)](https://coveralls.io/github/cvxgrp/simulator?branch=main)
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/cvxgrp/simulator)
 
 Given a universe of $m$ assets we are given prices for each of them at time $t_1, t_2, \ldots t_n$,
 e.g. we operate using an $n \times m$ matrix where each column corresponds to a particular asset.
@@ -10,16 +12,21 @@ e.g. we operate using an $n \times m$ matrix where each column corresponds to a 
 In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
 This tool shall help to simplify the accounting. It keeps track of the available cash, the profits achieved, etc.
 
-## Modus operandi
+## Creating portfolios
 
 The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
 * [Create the builder object](#create-the-builder-object)
 * [Loop through time](#loop-through-time)
-* [Analyse results](#analyse-results)
+* [Build the portfolio](#build-the-portfolio)
 
 We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.
+
+Of course, some users may know prices and weights in advance. In that case, the building procedure can be bypassed.
+We discuss this in
+
+* [Bypassing the builder](#bypassing-the-builder)
 
 ### Create the builder object
 
@@ -58,7 +65,7 @@ for t, state in b:
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
-t is $t1, t2$, in the second iteration it will be $t1, t2, t3$ etc.
+t is $t1$, in the second iteration it will be $t1, t2$ etc.
 
 A lot of magic is hidden in the state variable.
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.
@@ -73,7 +80,7 @@ for t, state in b:
 
 Note that we update the position at the last element in the t list
 using a series of actual stocks rather than weights or cashpositions.
-The builder class also exposes setters for such conventions.
+The builder class also exposes setters for such alternative conventions.
 
 ```python
 for t, state in b:
@@ -81,27 +88,15 @@ for t, state in b:
     b.set_weights(t[-1], pd.Series(index=b.assets, data = 0.25))
 ```
 
+### Build the portfolio
+
 Once finished it is possible to build the portfolio object
 
 ```python
 portfolio = b.build()
 ```
 
-### Analyse results
-
-The loop above is filling up the desired positions.
-After triggering the `build()` the resulting portfolio
-is ready for further analysis.
-It is possible dive into the data, e.g.
-
-```python
-portfolio.nav
-portfolio.cash
-portfolio.equity
-...
-```
-
-## Bypassing the builder
+### Bypassing the builder
 
 Some may know the positions the portfolio shall enter for eternity.
 Running through a loop is rather non-pythonic waste of time in such a case.
@@ -118,6 +113,39 @@ prices = pd.read_csv(Path("resources") / "price.csv", index_col=0, parse_dates=T
 stocks = pd.read_csv(Path("resources") / "stock.csv", index_col=0, parse_dates=True, header=0)
 portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
 ```
+
+
+## Analytics
+
+The portfolio object supports further analysis and exposes
+a number of properties, e.g.
+
+```python
+portfolio.nav
+portfolio.cash
+portfolio.equity
+```
+
+We have also integrated the [quantstats](https://github.com/ranaroussi/quantstats) package for further analysis.
+Hence it is possible to perform
+
+```python
+portfolio.snapshot()
+portfolio.metrics()
+portfolio.plots()
+portfolio.html()
+```
+
+We also added an enum
+
+```python
+portfolio.plot(kind=Plot.DRAWDOWN)
+```
+
+supporting all plots defined in quantstats.
+
+![quantstats snapshot](portfolio.png)
+
 
 
 ## Poetry
