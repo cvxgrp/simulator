@@ -4,6 +4,7 @@ testing the builder
 """
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -252,3 +253,20 @@ def test_box(resource_dir):
             data=[[0.2, 0.4], [0.4, 0.8], [0.6, 1.2], [0.6, 1.2]],
         ),
     )
+
+
+def test_returns(prices):
+    """
+    Test that the returns are calculated correctly
+    :param prices: the prices frame (fixture)
+    """
+    b = _builder(prices=prices, initial_cash=50000)
+    pd.testing.assert_frame_equal(b.returns, prices.pct_change().dropna())
+
+
+def test_cov(prices):
+    b = _builder(prices=prices, initial_cash=50000)
+    for time, mat in b.cov(min_periods=50, com=50):
+        # print(time)
+        # print(mat)
+        assert np.all(np.isfinite(mat))
