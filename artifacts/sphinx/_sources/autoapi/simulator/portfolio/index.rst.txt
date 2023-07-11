@@ -109,11 +109,11 @@ Functions
 
       
 
-   .. py:method:: func(self)
+   .. py:method:: _func(self)
       :property:
 
 
-   .. py:method:: plot(self, *args, **kwargs)
+   .. py:method:: plot(self, returns, **kwargs)
 
 
 
