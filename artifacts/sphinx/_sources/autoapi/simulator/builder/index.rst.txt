@@ -280,7 +280,7 @@ Functions
    .. py:method:: cov(self, **kwargs)
 
 
-   .. py:method:: set_weights(self, time, weights)
+   .. py:method:: set_weights(self, time, weights: pandas.Series)
 
       Set the position via weights (e.g. fractions of the nav)
 
@@ -288,7 +288,7 @@ Functions
       :param weights: series of weights
 
 
-   .. py:method:: set_cashposition(self, time, cashposition)
+   .. py:method:: set_cashposition(self, time, cashposition: pandas.Series)
 
       Set the position via cash positions (e.g. USD invested per asset)
 
