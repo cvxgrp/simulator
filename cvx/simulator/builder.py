@@ -267,6 +267,19 @@ class _Builder:
         held by the portfolio, without any duplicates."""
         return self.prices.columns
 
+    @property
+    def returns(self):
+        return self.prices.pct_change().dropna(axis=0, how="all")
+
+    def cov(self, **kwargs):
+        # You can do much better using volatility adjusted returns rather than returns
+        cov = self.returns.ewm(**kwargs).cov()
+        cov = cov.dropna(how="all", axis=0)
+        for t in cov.index.get_level_values(level=0).unique():
+            yield t, cov.loc[t, :, :]
+
+        # {t: cov.loc[t, :, :] for t in cov.index.get_level_values('date').unique()}
+
     def set_weights(self, time, weights):
         """
         Set the position via weights (e.g. fractions of the nav)
