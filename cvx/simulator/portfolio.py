@@ -31,15 +31,16 @@ class Plot(Enum):
     ROLLING_VOLATILITY = 14
     YEARLY_RETURNS = 15
 
-    # def __call__(self, *args, **kwargs):
-    #    return self.func(*args, **kwargs)
+    #
+    # def __call__(self, returns, **kwargs):
+    #     return self._func(returns=returns, **kwargs)
 
     @property
-    def func(self):
+    def _func(self):
         return getattr(qs.plots, self.name.lower())
 
-    def plot(self, *args, **kwargs):
-        return self.func(*args, **kwargs)
+    def plot(self, returns, **kwargs):
+        return self._func(returns=returns, **kwargs)
 
 
 def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):

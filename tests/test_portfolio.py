@@ -408,7 +408,7 @@ def test_plots(portfolio):
 
 def test_plot(portfolio):
     print(portfolio.plot(kind=Plot.DRAWDOWN))
-    print(portfolio.plot(kind=Plot.MONTHLY_HEATMAP, benchmark=None))
+    print(portfolio.plot(kind=Plot.MONTHLY_HEATMAP))
 
 
 def test_html(portfolio, tmp_path):
