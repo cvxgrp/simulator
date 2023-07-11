@@ -35,79 +35,86 @@ Functions
    Derive from this class to define new enumerations.
 
    .. py:attribute:: DAILY_RETURNS
-      
+      :annotation: = 1
 
       
 
    .. py:attribute:: DISTRIBUTION
-      
+      :annotation: = 2
 
       
 
    .. py:attribute:: DRAWDOWN
-      
+      :annotation: = 3
 
       
 
    .. py:attribute:: DRAWDOWNS_PERIODS
-      
+      :annotation: = 4
 
       
 
    .. py:attribute:: EARNINGS
-      
+      :annotation: = 5
 
       
 
    .. py:attribute:: HISTOGRAM
-      
+      :annotation: = 6
 
       
 
    .. py:attribute:: LOG_RETURNS
-      
+      :annotation: = 7
 
       
 
    .. py:attribute:: MONTHLY_HEATMAP
-      
+      :annotation: = 8
 
       
 
    .. py:attribute:: MONTHLY_RETURNS
-      
+      :annotation: = 9
 
       
 
    .. py:attribute:: RETURNS
-      
+      :annotation: = 10
 
       
 
    .. py:attribute:: ROLLING_BETA
-      
+      :annotation: = 11
 
       
 
    .. py:attribute:: ROLLING_SHARPE
-      
+      :annotation: = 12
 
       
 
    .. py:attribute:: ROLLING_SORTINO
-      
+      :annotation: = 13
 
       
 
    .. py:attribute:: ROLLING_VOLATILITY
-      
+      :annotation: = 14
 
       
 
    .. py:attribute:: YEARLY_RETURNS
-      
+      :annotation: = 15
 
       
+
+   .. py:method:: func(self)
+      :property:
+
+
+   .. py:method:: plot(self, *args, **kwargs)
+
 
 
 .. py:function:: diff(portfolio1, portfolio2, initial_cash=1000000.0, trading_cost_model=None)
@@ -491,10 +498,13 @@ Functions
    .. py:method:: plots(self, **kwargs)
 
 
-   .. py:method:: plot(self, kind: Callable, **kwargs)
+   .. py:method:: plot(self, kind: Plot, **kwargs)
 
 
    .. py:method:: html(self, **kwargs)
+
+
+   .. py:method:: snapshot(self, **kwargs)
 
 
 
