@@ -35,12 +35,9 @@ class Plot(Enum):
     # def __call__(self, returns, **kwargs):
     #     return self._func(returns=returns, **kwargs)
 
-    @property
-    def _func(self):
-        return getattr(qs.plots, self.name.lower())
-
     def plot(self, returns, **kwargs):
-        return self._func(returns=returns, **kwargs)
+        func = getattr(qs.plots, self.name.lower())
+        return func(returns=returns, **kwargs)
 
 
 def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
