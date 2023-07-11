@@ -108,12 +108,9 @@
     <span class="c1"># def __call__(self, returns, **kwargs):</span>
     <span class="c1">#     return self._func(returns=returns, **kwargs)</span>
 
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Plot._func"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot._func">[docs]</a>    <span class="k">def</span> <span class="nf">_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span></div>
-
 <div class="viewcode-block" id="Plot.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_func</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="diff"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.diff">[docs]</a><span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="n">portfolio1</span><span class="p">,</span> <span class="n">portfolio2</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">trading_cost_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
