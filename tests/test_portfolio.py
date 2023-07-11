@@ -417,4 +417,25 @@ def test_html(portfolio, tmp_path):
 
 
 def test_enum(portfolio):
-    Plot.DRAWDOWN(portfolio.nav.pct_change().dropna())
+    Plot.DRAWDOWN.plot(portfolio.nav.pct_change().dropna())
+
+
+def test_snapshot(portfolio):
+    portfolio.snapshot()
+
+
+def test_plot_enum(portfolio):
+    for plot in Plot:
+        print("********************************************************************")
+        print(plot)
+        try:
+            plot.plot(portfolio.nav.pct_change().dropna())
+        except Exception as e:
+            print(e)
+            pass
+
+
+def test_rolling_betas(portfolio):
+    portfolio.plot(
+        kind=Plot.ROLLING_BETA, benchmark=0.5 * portfolio.nav.pct_change().dropna()
+    )
