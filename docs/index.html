@@ -357,13 +357,14 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modus-operandi">Modus operandi</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">Creating portfolios</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-portfolio">Build the portfolio</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">Analytics</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
 </ul>
@@ -381,21 +382,28 @@ document.write(`
 <h1>Simulator<a class="headerlink" href="#simulator" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://badge.fury.io/py/cvxsimulator"><img alt="PyPI version" src="https://badge.fury.io/py/cvxsimulator.svg" /></a>
 <a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
-<a class="reference external" href="https://pypi.python.org/pypi/cvxsimulator/"><img alt="PyPI download month" src="https://img.shields.io/pypi/dm/cvxsimulator.svg" /></a></p>
+<a class="reference external" href="https://pypi.python.org/pypi/cvxsimulator/"><img alt="PyPI download month" src="https://img.shields.io/pypi/dm/cvxsimulator.svg" /></a>
+<a class="reference external" href="https://coveralls.io/github/cvxgrp/simulator?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main" /></a></p>
+<p><a class="reference external" href="https://codespaces.new/cvxgrp/simulator"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
 <p>Given a universe of <span class="math notranslate nohighlight">\(m\)</span> assets we are given prices for each of them at time <span class="math notranslate nohighlight">\(t_1, t_2, \ldots t_n\)</span>,
 e.g. we operate using an <span class="math notranslate nohighlight">\(n \times m\)</span> matrix where each column corresponds to a particular asset.</p>
 <p>In a backtest we iterate in time (e.g. row by row) through the matrix and allocate positions to all or some of the assets.
 This tool shall help to simplify the accounting. It keeps track of the available cash, the profits achieved, etc.</p>
-<section id="modus-operandi">
-<h2>Modus operandi<a class="headerlink" href="#modus-operandi" title="Permalink to this heading">#</a></h2>
+<section id="creating-portfolios">
+<h2>Creating portfolios<a class="headerlink" href="#creating-portfolios" title="Permalink to this heading">#</a></h2>
 <p>The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:</p>
 <ul class="simple">
 <li><p><span class="xref myst">Create the builder object</span></p></li>
 <li><p><span class="xref myst">Loop through time</span></p></li>
-<li><p><span class="xref myst">Analyse results</span></p></li>
+<li><p><span class="xref myst">Build the portfolio</span></p></li>
 </ul>
 <p>We demonstrate those steps with somewhat silly policies. They are never good strategies, but are always valid ones.</p>
+<p>Of course, some users may know prices and weights in advance. In that case, the building procedure can be bypassed.
+We discuss this in</p>
+<ul class="simple">
+<li><p><span class="xref myst">Bypassing the builder</span></p></li>
+</ul>
 <section id="create-the-builder-object">
 <h3>Create the builder object<a class="headerlink" href="#create-the-builder-object" title="Permalink to this heading">#</a></h3>
 <p>The user defines a builder object by loading a frame of prices
@@ -429,7 +437,7 @@ Buy one (say 0.1 of your portfolio wealth) and short one the same amount.</p>
 </pre></div>
 </div>
 <p>Here t is the growing list of timestamps, e.g. in the first iteration
-t is <span class="math notranslate nohighlight">\(t1, t2\)</span>, in the second iteration it will be <span class="math notranslate nohighlight">\(t1, t2, t3\)</span> etc.</p>
+t is <span class="math notranslate nohighlight">\(t1\)</span>, in the second iteration it will be <span class="math notranslate nohighlight">\(t1, t2\)</span> etc.</p>
 <p>A lot of magic is hidden in the state variable.
 The state gives access to the currently available cash, the current prices and the current valuation of all holdings.</p>
 <p>Here’s a slightly more realistic loop. Given a set of <span class="math notranslate nohighlight">\(4\)</span> assets we want to implmenent the popular <span class="math notranslate nohighlight">\(1/n\)</span> strategy.</p>
@@ -440,33 +448,22 @@ The state gives access to the currently available cash, the current prices and t
 </div>
 <p>Note that we update the position at the last element in the t list
 using a series of actual stocks rather than weights or cashpositions.
-The builder class also exposes setters for such conventions.</p>
+The builder class also exposes setters for such alternative conventions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># each day we invest a quarter of the capital in the assets</span>
     <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">))</span>
 </pre></div>
 </div>
+</section>
+<section id="build-the-portfolio">
+<h3>Build the portfolio<a class="headerlink" href="#build-the-portfolio" title="Permalink to this heading">#</a></h3>
 <p>Once finished it is possible to build the portfolio object</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="analyse-results">
-<h3>Analyse results<a class="headerlink" href="#analyse-results" title="Permalink to this heading">#</a></h3>
-<p>The loop above is filling up the desired positions.
-After triggering the <code class="docutils literal notranslate"><span class="pre">build()</span></code> the resulting portfolio
-is ready for further analysis.
-It is possible dive into the data, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">cash</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">equity</span>
-<span class="o">...</span>
-</pre></div>
-</div>
-</section>
-</section>
 <section id="bypassing-the-builder">
-<h2>Bypassing the builder<a class="headerlink" href="#bypassing-the-builder" title="Permalink to this heading">#</a></h2>
+<h3>Bypassing the builder<a class="headerlink" href="#bypassing-the-builder" title="Permalink to this heading">#</a></h3>
 <p>Some may know the positions the portfolio shall enter for eternity.
 Running through a loop is rather non-pythonic waste of time in such a case.
 It is possible to completely bypass this step by submitting
@@ -481,6 +478,31 @@ a frame of positions together with a frame of prices when creating the portfolio
 <span class="n">portfolio</span> <span class="o">=</span> <span class="n">EquityPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span> <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+</section>
+<section id="analytics">
+<h2>Analytics<a class="headerlink" href="#analytics" title="Permalink to this heading">#</a></h2>
+<p>The portfolio object supports further analysis and exposes
+a number of properties, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">cash</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">equity</span>
+</pre></div>
+</div>
+<p>We have also integrated the <a class="reference external" href="https://github.com/ranaroussi/quantstats">quantstats</a> package for further analysis.
+Hence it is possible to perform</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">metrics</span><span class="p">()</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">plots</span><span class="p">()</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">html</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We also added an enum</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">DRAWDOWN</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>supporting all plots defined in quantstats.</p>
+<p><img alt="quantstats snapshot" src="../_images/portfolio.png" /></p>
 </section>
 <section id="poetry">
 <h2>Poetry<a class="headerlink" href="#poetry" title="Permalink to this heading">#</a></h2>
@@ -560,13 +582,14 @@ a frame of positions together with a frame of prices when creating the portfolio
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modus-operandi">Modus operandi</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">Creating portfolios</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-portfolio">Build the portfolio</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bypassing-the-builder">Bypassing the builder</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">Analytics</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poetry">Poetry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">Kernel</a></li>
 </ul>
