@@ -471,16 +471,16 @@ class EquityPortfolio:
         )
 
     def metrics(self, **kwargs):
-        return qs.reports.metrics(self.nav.pct_change().dropna(), **kwargs)
+        return qs.reports.metrics(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def plots(self, **kwargs):
-        return qs.reports.plots(self.nav.pct_change().dropna(), **kwargs)
+        return qs.reports.plots(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def plot(self, kind: Plot, **kwargs):
         return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def html(self, **kwargs):
-        return qs.reports.html(self.nav.pct_change().dropna(), **kwargs)
+        return qs.reports.html(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def snapshot(self, **kwargs):
-        return qs.plots.snapshot(self.nav.pct_change().dropna(), **kwargs)
+        return qs.plots.snapshot(returns=self.nav.pct_change().dropna(), **kwargs)

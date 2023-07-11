@@ -280,22 +280,26 @@ class _Builder:
 
         # {t: cov.loc[t, :, :] for t in cov.index.get_level_values('date').unique()}
 
-    def set_weights(self, time, weights):
+    def set_weights(self, time, weights: pd.Series):
         """
         Set the position via weights (e.g. fractions of the nav)
 
         :param time: time
         :param weights: series of weights
         """
+        assert isinstance(weights, pd.Series), "weights must be a pandas Series"
         self[time] = (self._state.nav * weights) / self._state.prices
 
-    def set_cashposition(self, time, cashposition):
+    def set_cashposition(self, time, cashposition: pd.Series):
         """
         Set the position via cash positions (e.g. USD invested per asset)
 
         :param time: time
         :param cashposition: series of cash positions
         """
+        assert isinstance(
+            cashposition, pd.Series
+        ), "cashposition must be a pandas Series"
         self[time] = cashposition / self._state.prices
 
     def set_position(self, time, position):
@@ -305,6 +309,7 @@ class _Builder:
         :param time: time
         :param position: series of number of stocks
         """
+        assert isinstance(position, pd.Series), "position must be a pandas Series"
         self[time] = position
 
     def __iter__(self):
