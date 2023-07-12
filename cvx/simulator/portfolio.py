@@ -468,17 +468,123 @@ class EquityPortfolio:
             initial_cash=self.initial_cash,
         )
 
-    def metrics(self, **kwargs):
-        return qs.reports.metrics(returns=self.nav.pct_change().dropna(), **kwargs)
+    def metrics(
+        self,
+        benchmark=None,
+        rf=0.0,
+        display=True,
+        mode="basic",
+        sep=False,
+        compound=True,
+        periods_per_year=252,
+        prepare_returns=True,
+        match_dates=True,
+        **kwargs,
+    ):
+        """
+        The metrics method calculates the performance metrics of an EquityPortfolio object.
 
-    def plots(self, **kwargs):
-        return qs.reports.plots(returns=self.nav.pct_change().dropna(), **kwargs)
+        :param kwargs:
+        :return:
+        """
+        return qs.reports.metrics(
+            returns=self.nav.pct_change().dropna(),
+            benchmark=benchmark,
+            rf=rf,
+            display=display,
+            mode=mode,
+            sep=sep,
+            compounded=compound,
+            periods_per_year=periods_per_year,
+            prepare_returns=prepare_returns,
+            match_dates=match_dates,
+            **kwargs,
+        )
+
+    def plots(
+        self,
+        benchmark=None,
+        grayscale=False,
+        figsize=(8, 5),
+        mode="basic",
+        compounded=True,
+        periods_per_year=252,
+        prepare_returns=True,
+        match_dates=True,
+        **kwargs,
+    ):
+        return qs.reports.plots(
+            returns=self.nav.pct_change().dropna(),
+            benchmark=benchmark,
+            grayscale=grayscale,
+            figsize=figsize,
+            mode=mode,
+            compounded=compounded,
+            periods_per_year=periods_per_year,
+            prepare_returns=prepare_returns,
+            match_dates=match_dates,
+            **kwargs,
+        )
 
     def plot(self, kind: Plot, **kwargs):
         return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
 
-    def html(self, **kwargs):
-        return qs.reports.html(returns=self.nav.pct_change().dropna(), **kwargs)
+    def html(
+        self,
+        benchmark=None,
+        rf=0.0,
+        grayscale=False,
+        title="Strategy Tearsheet",
+        output=None,
+        compounded=True,
+        periods_per_year=252,
+        download_filename="quantstats-tearsheet.html",
+        figfmt="svg",
+        template_path=None,
+        match_dates=True,
+        **kwargs,
+    ):
+        return qs.reports.html(
+            returns=self.nav.pct_change().dropna(),
+            benchmark=benchmark,
+            rf=rf,
+            grayscale=grayscale,
+            title=title,
+            output=output,
+            compounded=compounded,
+            periods_per_year=periods_per_year,
+            download_filename=download_filename,
+            figfmt=figfmt,
+            template_path=template_path,
+            match_dates=match_dates,
+            **kwargs,
+        )
 
-    def snapshot(self, **kwargs):
-        return qs.plots.snapshot(returns=self.nav.pct_change().dropna(), **kwargs)
+    def snapshot(
+        self,
+        grayscale=False,
+        figsize=(10, 8),
+        title="Portfolio Summary",
+        fontname="Arial",
+        lw=1.5,
+        mode="comp",
+        subtitle=True,
+        savefig=None,
+        show=True,
+        log_scale=False,
+        **kwargs,
+    ):
+        return qs.plots.snapshot(
+            returns=self.nav.pct_change().dropna(),
+            grayscale=grayscale,
+            figsize=figsize,
+            title=title,
+            fontname=fontname,
+            lw=lw,
+            mode=mode,
+            subtitle=subtitle,
+            savefig=savefig,
+            show=show,
+            log_scale=log_scale,
+            **kwargs,
+        )

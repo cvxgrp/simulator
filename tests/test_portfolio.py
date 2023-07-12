@@ -417,11 +417,11 @@ def test_html(portfolio, tmp_path):
 
 
 def test_enum(portfolio):
-    Plot.DRAWDOWN.plot(portfolio.nav.pct_change().dropna())
+    Plot.DRAWDOWN.plot(portfolio.nav.pct_change().dropna(), show=False)
 
 
 def test_snapshot(portfolio):
-    portfolio.snapshot()
+    portfolio.snapshot(show=False, fontname=None)
 
 
 def test_plot_enum(portfolio):
@@ -429,7 +429,7 @@ def test_plot_enum(portfolio):
         print("********************************************************************")
         print(plot)
         try:
-            plot.plot(portfolio.nav.pct_change().dropna())
+            plot.plot(portfolio.nav.pct_change().dropna(), show=False, fontname=None)
         except Exception as e:
             print(e)
             pass
