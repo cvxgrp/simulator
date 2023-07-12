@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_trading_costs_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-07-12 04:23 +0000
+            created at 2023-07-12 04:24 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -656,20 +656,36 @@
     <p class="pln"><span class="n"><a id="t574" href="#t574">574</a></span><span class="t">        <span class="nam">log_scale</span><span class="op">=</span><span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t575" href="#t575">575</a></span><span class="t">        <span class="op">**</span><span class="nam">kwargs</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t576" href="#t576">576</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t577" href="#t577">577</a></span><span class="t">        <span class="key">return</span> <span class="nam">qs</span><span class="op">.</span><span class="nam">plots</span><span class="op">.</span><span class="nam">snapshot</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t578" href="#t578">578</a></span><span class="t">            <span class="nam">returns</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">nav</span><span class="op">.</span><span class="nam">pct_change</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">dropna</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t579" href="#t579">579</a></span><span class="t">            <span class="nam">grayscale</span><span class="op">=</span><span class="nam">grayscale</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t580" href="#t580">580</a></span><span class="t">            <span class="nam">figsize</span><span class="op">=</span><span class="nam">figsize</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t581" href="#t581">581</a></span><span class="t">            <span class="nam">title</span><span class="op">=</span><span class="nam">title</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t582" href="#t582">582</a></span><span class="t">            <span class="nam">fontname</span><span class="op">=</span><span class="nam">fontname</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t583" href="#t583">583</a></span><span class="t">            <span class="nam">lw</span><span class="op">=</span><span class="nam">lw</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t584" href="#t584">584</a></span><span class="t">            <span class="nam">mode</span><span class="op">=</span><span class="nam">mode</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t585" href="#t585">585</a></span><span class="t">            <span class="nam">subtitle</span><span class="op">=</span><span class="nam">subtitle</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t586" href="#t586">586</a></span><span class="t">            <span class="nam">savefig</span><span class="op">=</span><span class="nam">savefig</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t587" href="#t587">587</a></span><span class="t">            <span class="nam">show</span><span class="op">=</span><span class="nam">show</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t588" href="#t588">588</a></span><span class="t">            <span class="nam">log_scale</span><span class="op">=</span><span class="nam">log_scale</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t589" href="#t589">589</a></span><span class="t">            <span class="op">**</span><span class="nam">kwargs</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t590" href="#t590">590</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t577" href="#t577">577</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t578" href="#t578">578</a></span><span class="t"><span class="str">        The snapshot method creates a snapshot of the performance of an EquityPortfolio object.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t579" href="#t579">579</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t580" href="#t580">580</a></span><span class="t"><span class="str">        :param grayscale:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t581" href="#t581">581</a></span><span class="t"><span class="str">        :param figsize:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t582" href="#t582">582</a></span><span class="t"><span class="str">        :param title:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t583" href="#t583">583</a></span><span class="t"><span class="str">        :param fontname:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t584" href="#t584">584</a></span><span class="t"><span class="str">        :param lw:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t585" href="#t585">585</a></span><span class="t"><span class="str">        :param mode:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t586" href="#t586">586</a></span><span class="t"><span class="str">        :param subtitle:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t587" href="#t587">587</a></span><span class="t"><span class="str">        :param savefig:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t588" href="#t588">588</a></span><span class="t"><span class="str">        :param show:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t589" href="#t589">589</a></span><span class="t"><span class="str">        :param log_scale:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t590" href="#t590">590</a></span><span class="t"><span class="str">        :param kwargs:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t591" href="#t591">591</a></span><span class="t"><span class="str">        :return:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t592" href="#t592">592</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t593" href="#t593">593</a></span><span class="t">        <span class="key">return</span> <span class="nam">qs</span><span class="op">.</span><span class="nam">plots</span><span class="op">.</span><span class="nam">snapshot</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t594" href="#t594">594</a></span><span class="t">            <span class="nam">returns</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">nav</span><span class="op">.</span><span class="nam">pct_change</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">dropna</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t595" href="#t595">595</a></span><span class="t">            <span class="nam">grayscale</span><span class="op">=</span><span class="nam">grayscale</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t596" href="#t596">596</a></span><span class="t">            <span class="nam">figsize</span><span class="op">=</span><span class="nam">figsize</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t597" href="#t597">597</a></span><span class="t">            <span class="nam">title</span><span class="op">=</span><span class="nam">title</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t598" href="#t598">598</a></span><span class="t">            <span class="nam">fontname</span><span class="op">=</span><span class="nam">fontname</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t599" href="#t599">599</a></span><span class="t">            <span class="nam">lw</span><span class="op">=</span><span class="nam">lw</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t600" href="#t600">600</a></span><span class="t">            <span class="nam">mode</span><span class="op">=</span><span class="nam">mode</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t601" href="#t601">601</a></span><span class="t">            <span class="nam">subtitle</span><span class="op">=</span><span class="nam">subtitle</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t602" href="#t602">602</a></span><span class="t">            <span class="nam">savefig</span><span class="op">=</span><span class="nam">savefig</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t603" href="#t603">603</a></span><span class="t">            <span class="nam">show</span><span class="op">=</span><span class="nam">show</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t604" href="#t604">604</a></span><span class="t">            <span class="nam">log_scale</span><span class="op">=</span><span class="nam">log_scale</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t605" href="#t605">605</a></span><span class="t">            <span class="op">**</span><span class="nam">kwargs</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t606" href="#t606">606</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -679,7 +695,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_trading_costs_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-07-12 04:23 +0000
+            created at 2023-07-12 04:24 +0000
         </p>
     </div>
 </footer>

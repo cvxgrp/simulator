@@ -507,5 +507,20 @@ Functions
 
    .. py:method:: snapshot(self, grayscale=False, figsize=(10, 8), title='Portfolio Summary', fontname='Arial', lw=1.5, mode='comp', subtitle=True, savefig=None, show=True, log_scale=False, **kwargs)
 
+      The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
+
+      :param grayscale:
+      :param figsize:
+      :param title:
+      :param fontname:
+      :param lw:
+      :param mode:
+      :param subtitle:
+      :param savefig:
+      :param show:
+      :param log_scale:
+      :param kwargs:
+      :return:
+
 
 
