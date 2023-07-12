@@ -397,18 +397,17 @@ def test_quantstats(portfolio):
     :param portfolio: the portfolio object (fixture)
     """
 
-    print(portfolio.nav.sharpe())
-
-    print(portfolio.metrics(mode="full"))
+    portfolio.nav.sharpe()
+    portfolio.metrics(mode="full")
 
 
 def test_plots(portfolio):
-    print(portfolio.plots(mode="full"))
+    portfolio.plots(mode="full", show=False)
 
 
 def test_plot(portfolio):
-    print(portfolio.plot(kind=Plot.DRAWDOWN))
-    print(portfolio.plot(kind=Plot.MONTHLY_HEATMAP))
+    portfolio.plot(kind=Plot.DRAWDOWN, show=False)
+    portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
 
 
 def test_html(portfolio, tmp_path):
