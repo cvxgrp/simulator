@@ -541,20 +541,126 @@
             <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.metrics"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.metrics">[docs]</a>    <span class="k">def</span> <span class="nf">metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">metrics</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EquityPortfolio.metrics"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.metrics">[docs]</a>    <span class="k">def</span> <span class="nf">metrics</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+        <span class="n">sep</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">compound</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="o">=</span><span class="mi">252</span><span class="p">,</span>
+        <span class="n">prepare_returns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The metrics method calculates the performance metrics of an EquityPortfolio object.</span>
 
-<div class="viewcode-block" id="EquityPortfolio.plots"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plots">[docs]</a>    <span class="k">def</span> <span class="nf">plots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">plots</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">metrics</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">rf</span><span class="o">=</span><span class="n">rf</span><span class="p">,</span>
+            <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compound</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">prepare_returns</span><span class="o">=</span><span class="n">prepare_returns</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.plots"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plots">[docs]</a>    <span class="k">def</span> <span class="nf">plots</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+        <span class="n">compounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="o">=</span><span class="mi">252</span><span class="p">,</span>
+        <span class="n">prepare_returns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">plots</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">prepare_returns</span><span class="o">=</span><span class="n">prepare_returns</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Plot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">kind</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.html"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EquityPortfolio.html"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Strategy Tearsheet&quot;</span><span class="p">,</span>
+        <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">compounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="o">=</span><span class="mi">252</span><span class="p">,</span>
+        <span class="n">download_filename</span><span class="o">=</span><span class="s2">&quot;quantstats-tearsheet.html&quot;</span><span class="p">,</span>
+        <span class="n">figfmt</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span>
+        <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">html</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">rf</span><span class="o">=</span><span class="n">rf</span><span class="p">,</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">download_filename</span><span class="o">=</span><span class="n">download_filename</span><span class="p">,</span>
+            <span class="n">figfmt</span><span class="o">=</span><span class="n">figfmt</span><span class="p">,</span>
+            <span class="n">template_path</span><span class="o">=</span><span class="n">template_path</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.snapshot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="EquityPortfolio.snapshot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Portfolio Summary&quot;</span><span class="p">,</span>
+        <span class="n">fontname</span><span class="o">=</span><span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;comp&quot;</span><span class="p">,</span>
+        <span class="n">subtitle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">fontname</span><span class="o">=</span><span class="n">fontname</span><span class="p">,</span>
+            <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">subtitle</span><span class="o">=</span><span class="n">subtitle</span><span class="p">,</span>
+            <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+            <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>

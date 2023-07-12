@@ -488,19 +488,24 @@ Functions
       but rather returns a new object.
 
 
-   .. py:method:: metrics(self, **kwargs)
+   .. py:method:: metrics(self, benchmark=None, rf=0.0, display=True, mode='basic', sep=False, compound=True, periods_per_year=252, prepare_returns=True, match_dates=True, **kwargs)
+
+      The metrics method calculates the performance metrics of an EquityPortfolio object.
+
+      :param kwargs:
+      :return:
 
 
-   .. py:method:: plots(self, **kwargs)
+   .. py:method:: plots(self, benchmark=None, grayscale=False, figsize=(8, 5), mode='basic', compounded=True, periods_per_year=252, prepare_returns=True, match_dates=True, **kwargs)
 
 
    .. py:method:: plot(self, kind: Plot, **kwargs)
 
 
-   .. py:method:: html(self, **kwargs)
+   .. py:method:: html(self, benchmark=None, rf=0.0, grayscale=False, title='Strategy Tearsheet', output=None, compounded=True, periods_per_year=252, download_filename='quantstats-tearsheet.html', figfmt='svg', template_path=None, match_dates=True, **kwargs)
 
 
-   .. py:method:: snapshot(self, **kwargs)
+   .. py:method:: snapshot(self, grayscale=False, figsize=(10, 8), title='Portfolio Summary', fontname='Arial', lw=1.5, mode='comp', subtitle=True, savefig=None, show=True, log_scale=False, **kwargs)
 
 
 
