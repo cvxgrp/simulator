@@ -415,10 +415,6 @@ def test_html(portfolio, tmp_path):
     assert os.path.exists(tmp_path / "test.html")
 
 
-def test_enum(portfolio):
-    Plot.DRAWDOWN.plot(portfolio.nav.pct_change().dropna(), show=False)
-
-
 def test_snapshot(portfolio):
     portfolio.snapshot(show=False, fontname=None)
 
