@@ -437,5 +437,8 @@ def test_plot_enum(portfolio):
 
 def test_rolling_betas(portfolio):
     portfolio.plot(
-        kind=Plot.ROLLING_BETA, benchmark=0.5 * portfolio.nav.pct_change().dropna()
+        kind=Plot.ROLLING_BETA,
+        benchmark=0.5 * portfolio.nav.pct_change().dropna(),
+        fontname=None,
+        show=False,
     )

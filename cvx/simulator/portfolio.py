@@ -574,6 +574,22 @@ class EquityPortfolio:
         log_scale=False,
         **kwargs,
     ):
+        """
+        The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
+
+        :param grayscale:
+        :param figsize:
+        :param title:
+        :param fontname:
+        :param lw:
+        :param mode:
+        :param subtitle:
+        :param savefig:
+        :param show:
+        :param log_scale:
+        :param kwargs:
+        :return:
+        """
         return qs.plots.snapshot(
             returns=self.nav.pct_change().dropna(),
             grayscale=grayscale,
