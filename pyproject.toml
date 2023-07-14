@@ -13,18 +13,26 @@ numpy = "*"
 pandas = "*"
 quantstats = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.test.dependencies]
 pytest = "7.2.0"
-pytest-cov = "*"
+pytest-cov = "4.0.0"
+mock = "*"
+
+[tool.poetry.group.jupyter.dependencies]
+jupyterlab = "*"
+jupyter-book = "0.15.1"
+
+[tool.peotry.group.linting.dependencies]
+pylint = "*"
+ruff = "0.0.277"
+pre-commit = "*"
+black = "23.3.0"
+
+[tool.poetry.group.dev.dependencies]
 yfinance = "*"
 plotly = "*"
 cvxpy = "*"
-jupyterlab = "*"
-jupyter-book = "0.15.1"
 loguru = "*"
-ruff = "*"
-black = "*"
-pre-commit = "*"
 
 [build-system]
 requires = ["poetry-core"]
