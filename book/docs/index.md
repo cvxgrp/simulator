@@ -1,4 +1,5 @@
 # Simulator
+
 [![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
 [![PyPI download month](https://img.shields.io/pypi/dm/cvxsimulator.svg)](https://pypi.python.org/pypi/cvxsimulator/)
@@ -114,7 +115,6 @@ stocks = pd.read_csv(Path("resources") / "stock.csv", index_col=0, parse_dates=T
 portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
 ```
 
-
 ## Analytics
 
 The portfolio object supports further analysis and exposes
@@ -145,8 +145,6 @@ portfolio.plot(kind=Plot.DRAWDOWN)
 supporting all plots defined in quantstats.
 
 ![quantstats snapshot](portfolio.png)
-
-
 
 ## Poetry
 
