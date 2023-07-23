@@ -22,6 +22,7 @@ mock = "*"
 jupyterlab = "*"
 jupyter-book = "0.15.1"
 pyyaml = "6.0"
+mplfonts = "*"
 
 [tool.peotry.group.linting.dependencies]
 pylint = "*"
