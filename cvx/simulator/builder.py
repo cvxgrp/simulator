@@ -11,11 +11,16 @@ from cvx.simulator.trading_costs import TradingCostModel
 
 @dataclass
 class _State:
-    """The _State class defines a state object used to keep track of the current state of the portfolio.
+    """The _State class defines a state object used to keep track of the current
+    state of the portfolio.
+
     Attributes:
 
-    prices: a pandas Series object containing the stock prices of the current portfolio state
+    prices: a pandas Series object containing the stock prices of the current
+    portfolio state
+
     position: a pandas Series object containing the current holdings of the portfolio
+
     cash: the amount of cash available in the portfolio.
 
     By default, prices and position are set to None, while cash is set to 1 million.
@@ -29,22 +34,11 @@ class _State:
     @property
     def value(self):
         """
-        The value method computes the value of the portfolio at the current time,
-        taking into account the current holdings and current stock prices.
-
-
-        Returns:
-
-        the value of the portfolio as a float. If the value cannot be computed due to missing position
+        The value property computes the value of the portfolio at the current
+        time taking into account the current holdings and current stock prices.
+        If the value cannot be computed due to missing positions
         (they might be still None), zero is returned instead.
-
-        The method is a decorator-based getter method, using the @property decorator to access
-        the value attribute as if it were a method. The value of the portfolio is computed as the
-        product of the current stock prices and the current holdings, summed together.
-        Note that if the current position is missing, the multiplication will raise a TypeError.
-        In this case, zero is returned as the value of the portfolio.
         """
-        # Note that the first position may not exist yet.
         try:
             return (self.prices * self.position).sum()
         except TypeError:
@@ -53,39 +47,24 @@ class _State:
     @property
     def nav(self):
         """
-        The nav method computes the net asset value (NAV) of the portfolio,
+        The nav property computes the net asset value (NAV) of the portfolio,
         which is the sum of the current value of the
-        portfolio as determined by the value method,
+        portfolio as determined by the value property,
         and the current amount of cash available in the portfolio.
-
-        Returns:
-
-        The net asset value of the portfolio as a float, computed as the sum of the current
-        value of the portfolio and the cash available in the portfolio.
-        The method is a decorator-based getter method using the @property decorator
-        to access the NAV attribute as if it were a method.
-        The NAV is computed as the sum of the current value (as computed by the value method)
-        and the amount of cash available.
         """
         return self.value + self.cash
 
     @property
     def weights(self):
         """
-        The weights method computes the weighting of each asset in the current portfolio
-        as a fraction of the total portfolio value.
+        The weights property computes the weighting of each asset in the current
+        portfolio as a fraction of the total portfolio value (nav).
 
         Returns:
 
-        a pandas series object containing the weighting of each asset as a fraction
-        of the total portfolio value. If the positions are still missing, then a series of zeroes is returned.
-        The method is a decorator-based getter method using the @property decorator to access
-        the weights attribute as if it were a method. The weighting for each asset is computed
-        as the product of the current position and the current stock prices,
-        divided by the net asset value of the portfolio (as computed by the nav method).
-        Note that this weighting represents the fraction of the portfolio value allocated to a particular asset.
-        If the portfolio weighting cannot be computed due to missing positions,
-        then a series of zeroes with the same size as the prices attribute is returned instead.
+        a pandas series object containing the weighting of each asset as a
+        fraction of the total portfolio value. If the positions are still
+        missing, then a series of zeroes is returned.
         """
         try:
             return (self.prices * self.position) / self.nav
@@ -95,23 +74,17 @@ class _State:
     @property
     def leverage(self):
         """
-        The `leverage` method computes the leverage of the portfolio,
+        The `leverage` property computes the leverage of the portfolio,
         which is the sum of the absolute values of the portfolio weights.
-
-        Returns:
-        - the portfolio leverage as a float, computed as the sum of the
-        absolute values of the portfolio weights.
-
-        The method is a decorator-based getter method using the
-        `@property` decorator to access the leverage attribute
-        as if it were a method. The portfolio leverage is computed as
-        the sum of the absolute values of the portfolio weights,
-        which represents the total exposure of the portfolio to multiple assets.
         """
         return self.weights.abs().sum()
 
     @property
     def position_robust(self):
+        """
+        The position_robust property returns the current position of the
+        portfolio or a series of zeroes if the position is still missing.
+        """
         if self.position is None:
             self.position = 0.0 * self.prices
 
@@ -119,17 +92,21 @@ class _State:
 
     def update(self, position, model=None, **kwargs):
         """
-        The update method updates the current state of the portfolio with the new input position.
-        It calculates the trades made based on the new and the previous position,
-        updates the internal position and cash attributes,
-        and applies any applicable trading costs according to model parameter.
+        The update method updates the current state of the portfolio with the
+        new input position. It calculates the trades made based on the new
+        and the previous position, updates the internal position and
+        cash attributes, and applies any trading costs according to a model parameter.
 
         The method takes three input parameters:
 
-        position: a pandas series object representing the new position of the portfolio.
-        model: an optional trading cost model (e.g. slippage, fees) to be incorporated into the update.
-        If None, no trading costs will be applied.
-        **kwargs: additional keyword arguments to pass into the trading cost model.
+        position: a pandas series object representing the new position of the
+        portfolio.
+
+        model: an optional trading cost model (e.g. slippage, fees) to be
+        incorporated into the update. If None, no trading costs will be applied.
+
+        **kwargs: additional keyword arguments to pass into the trading cost
+        model.
 
         Returns:
         self: the _State instance with the updated position and cash.
@@ -143,10 +120,6 @@ class _State:
         Note that the method does not return any value: instead,
         it updates the internal state of the _State instance.
         """
-        # if self.position is None:
-        #    self.position = 0.0 * position
-        # trades = position
-        # else:
         trades = position - self.position_robust
 
         self.position = position
