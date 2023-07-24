@@ -128,6 +128,7 @@ class _State:
         if model is not None:
             self.cash -= model.eval(self.prices, trades=trades, **kwargs).sum()
 
+        # builder is frozen, so we can't construct a new state
         return self
 
 
