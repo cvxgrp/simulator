@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
+from datetime import datetime
+from typing import Any, Generator, Optional, Tuple
 
 import pandas as pd
 
@@ -33,7 +34,7 @@ class _State:
     cash: float = 1e6
 
     @property
-    def value(self):
+    def value(self) -> float:
         """
         The value property computes the value of the portfolio at the current
         time taking into account the current holdings and current stock prices.
@@ -41,12 +42,12 @@ class _State:
         (they might be still None), zero is returned instead.
         """
         try:
-            return (self.prices * self.position).sum()
+            return float((self.prices * self.position).sum())
         except TypeError:
             return 0.0
 
     @property
-    def nav(self):
+    def nav(self) -> float:
         """
         The nav property computes the net asset value (NAV) of the portfolio,
         which is the sum of the current value of the
@@ -56,7 +57,7 @@ class _State:
         return self.value + self.cash
 
     @property
-    def weights(self):
+    def weights(self) -> pd.Series:
         """
         The weights property computes the weighting of each asset in the current
         portfolio as a fraction of the total portfolio value (nav).
@@ -73,15 +74,15 @@ class _State:
             return 0 * self.prices
 
     @property
-    def leverage(self):
+    def leverage(self) -> float:
         """
         The `leverage` property computes the leverage of the portfolio,
         which is the sum of the absolute values of the portfolio weights.
         """
-        return self.weights.abs().sum()
+        return float(self.weights.abs().sum())
 
     @property
-    def position_robust(self):
+    def position_robust(self) -> pd.Series:
         """
         The position_robust property returns the current position of the
         portfolio or a series of zeroes if the position is still missing.
@@ -91,7 +92,12 @@ class _State:
 
         return self.position
 
-    def update(self, position, model=None, **kwargs):
+    def update(
+        self,
+        position: pd.Series,
+        model: Optional[TradingCostModel] = None,
+        **kwargs: Any,
+    ) -> _State:
         """
         The update method updates the current state of the portfolio with the
         new input position. It calculates the trades made based on the new
@@ -134,17 +140,17 @@ class _State:
 
 
 def builder(
-    prices,
-    weights=None,
-    market_cap=None,
-    trade_volume=None,
-    initial_cash=1e6,
-    trading_cost_model=None,
-    max_cap_fraction=None,
-    min_cap_fraction=None,
-    max_trade_fraction=None,
-    min_trade_fraction=None,
-):
+    prices: pd.DataFrame,
+    weights: Optional[pd.DataFrame] = None,
+    market_cap: Optional[pd.DataFrame] = None,
+    trade_volume: Optional[pd.DataFrame] = None,
+    initial_cash: float = 1e6,
+    trading_cost_model: Optional[TradingCostModel] = None,
+    max_cap_fraction: Optional[float] = None,
+    min_cap_fraction: Optional[float] = None,
+    max_trade_fraction: Optional[float] = None,
+    min_trade_fraction: Optional[float] = None,
+) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
     is used to construct a portfolio of assets. The function takes in a pandas
     DataFrame of historical prices for the assets in the portfolio, optional
@@ -190,7 +196,7 @@ def builder(
 class _Builder:
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel
+    trading_cost_model: Optional[TradingCostModel] = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
     market_cap: pd.DataFrame = None
@@ -200,7 +206,7 @@ class _Builder:
     max_trade_fraction: Optional[float] = None
     min_trade_fraction: Optional[float] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         The __post_init__ method is a special method of initialized instances
         of the _Builder class and is called after initialization.
@@ -216,7 +222,7 @@ class _Builder:
         self._state.cash = self.initial_cash
 
     @property
-    def index(self):
+    def index(self) -> pd.DatetimeIndex:
         """A property that returns the index of the portfolio,
         which is the time period for which the portfolio data is available.
 
@@ -228,10 +234,10 @@ class _Builder:
         The resulting index will be a pandas index object
         with the same length as the number of rows in the prices dataframe."""
 
-        return self.prices.index
+        return pd.DatetimeIndex(self.prices.index)
 
     @property
-    def assets(self):
+    def assets(self) -> pd.Index:
         """A property that returns a list of the assets held by the portfolio.
 
         Returns: list: A list of the assets held by the portfolio.
@@ -243,10 +249,12 @@ class _Builder:
         return self.prices.columns
 
     @property
-    def returns(self):
+    def returns(self) -> pd.DataFrame:
         return self.prices.pct_change().dropna(axis=0, how="all")
 
-    def cov(self, **kwargs):
+    def cov(
+        self, **kwargs: Any
+    ) -> Generator[Tuple[datetime, pd.DataFrame], None, None]:
         # You can do much better using volatility adjusted returns rather than returns
         cov = self.returns.ewm(**kwargs).cov()
         cov = cov.dropna(how="all", axis=0)
@@ -255,7 +263,7 @@ class _Builder:
 
         # {t: cov.loc[t, :, :] for t in cov.index.get_level_values('date').unique()}
 
-    def set_weights(self, time, weights: pd.Series):
+    def set_weights(self, time: datetime, weights: pd.Series) -> None:
         """
         Set the position via weights (e.g. fractions of the nav)
 
@@ -265,7 +273,7 @@ class _Builder:
         assert isinstance(weights, pd.Series), "weights must be a pandas Series"
         self[time] = (self._state.nav * weights) / self._state.prices
 
-    def set_cashposition(self, time, cashposition: pd.Series):
+    def set_cashposition(self, time: datetime, cashposition: pd.Series) -> None:
         """
         Set the position via cash positions (e.g. USD invested per asset)
 
@@ -277,7 +285,7 @@ class _Builder:
         ), "cashposition must be a pandas Series"
         self[time] = cashposition / self._state.prices
 
-    def set_position(self, time, position):
+    def set_position(self, time: datetime, position: pd.Series) -> None:
         """
         Set the position via number of assets (e.g. number of stocks)
 
@@ -287,7 +295,7 @@ class _Builder:
         assert isinstance(position, pd.Series), "position must be a pandas Series"
         self[time] = position
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[Tuple[pd.DatetimeIndex, _State], None, None]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.
@@ -307,7 +315,7 @@ class _Builder:
             self._state.prices = self.prices.loc[t]
             yield self.index[self.index <= t], self._state
 
-    def __setitem__(self, time, position):
+    def __setitem__(self, time: datetime, position: pd.Series) -> None:
         """
         The method __setitem__ updates the stock data in the dataframe for a specific time index
         with the input position. It first checks that position is a valid input,
@@ -367,7 +375,7 @@ class _Builder:
         self.stocks.loc[time, position.index] = position
         self._state.update(position, model=self.trading_cost_model)
 
-    def __getitem__(self, time):
+    def __getitem__(self, time: datetime) -> pd.Series:
         """The __getitem__ method retrieves the stock data for a specific time in the dataframe.
         It returns the stock data for that time. The method takes one input parameter:
 
@@ -378,7 +386,7 @@ class _Builder:
         """
         return self.stocks.loc[time]
 
-    def build(self):
+    def build(self) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 
