@@ -30,4 +30,4 @@ repos:
   rev: v1.4.1
   hooks:
     - id: mypy
-      args: ["--explicit-package-bases", "cvx"]
+      command: ".venv/bin/mypy --explicit-package-bases -p cvx.simulator"
