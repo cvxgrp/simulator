@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import pandas as pd
 
 
-def iron_frame(frame, rule):
+def iron_frame(frame: pd.DataFrame, rule: Any) -> pd.DataFrame:
     """
     The iron_frame function takes a pandas DataFrame
     and keeps it constant on a coarser grid.
@@ -14,11 +16,14 @@ def iron_frame(frame, rule):
     :param rule: The rule to be used for the construction of the grid
     :return: the ironed frame
     """
-    s_index = resample_index(frame.index, rule)
+    # frame = pd.DataFrame(frame)
+    # frame.index = pd.DatetimeIndex(frame.index)
+
+    s_index = resample_index(pd.DatetimeIndex(frame.index), rule)
     return _project_frame_to_grid(frame, s_index)
 
 
-def resample_index(index, rule):
+def resample_index(index: pd.DatetimeIndex, rule: Any) -> pd.DatetimeIndex:
     """
     The resample_index function resamples a pandas DatetimeIndex object
     to a lower frequency using a specified rule.
@@ -32,7 +37,7 @@ def resample_index(index, rule):
     return pd.DatetimeIndex(a.values)
 
 
-def _project_frame_to_grid(frame, grid):
+def _project_frame_to_grid(frame: pd.DataFrame, grid: pd.DatetimeIndex) -> pd.DataFrame:
     """
     The project_frame_to_grid function projects a pandas DataFrame
     to a coarser grid while still sharing the same index.
@@ -47,5 +52,7 @@ def _project_frame_to_grid(frame, grid):
     :return: a frame changing only values on days in the grid
     """
     sample = np.NaN * frame
-    sample.loc[grid] = frame.loc[grid]
+    for t in grid:
+        sample.loc[t] = frame.loc[t]
+    # sample.loc[grid] = frame.loc[grid]
     return sample.ffill()
