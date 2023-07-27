@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 import pandas as pd
 
@@ -194,10 +195,10 @@ class _Builder:
     _state: _State = field(default_factory=_State)
     market_cap: pd.DataFrame = None
     trade_volume: pd.DataFrame = None
-    max_cap_fraction: float = None
-    min_cap_fraction: float = None
-    max_trade_fraction: float = None
-    min_trade_fraction: float = None
+    max_cap_fraction: Optional[float] = None
+    min_cap_fraction: Optional[float] = None
+    max_trade_fraction: Optional[float] = None
+    min_trade_fraction: Optional[float] = None
 
     def __post_init__(self):
         """
