@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 import pandas as pd
 import quantstats as qs
@@ -82,7 +83,7 @@ class EquityPortfolio:
 
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel = None
+    trading_cost_model: Optional[TradingCostModel] = None
     initial_cash: float = 1e6
 
     def __post_init__(self):

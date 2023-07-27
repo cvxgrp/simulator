@@ -22,7 +22,7 @@ def test_table_compounded(resource_dir, returns):
     """
     series = returns.fillna(0.0)
     pd.testing.assert_frame_equal(
-        monthlytable(series),
+        monthlytable(series.to_dict()),
         pd.read_csv(resource_dir / "monthtable.csv", index_col=0),
         check_index_type=False,
     )
@@ -32,7 +32,7 @@ def test_table_compounded(resource_dir, returns):
     ts1.index = [int(a) for a in ts1.index]
 
     # use cvxsimulaor
-    ts2 = monthlytable(series)["YTD"]
+    ts2 = monthlytable(series.to_dict())["YTD"]
 
     pd.testing.assert_series_equal(ts1, ts2, check_names=False, check_index_type=False)
 
@@ -102,7 +102,7 @@ def test_missing():
         columns=[calendar.month_abbr[i] for i in range(1, 13)] + ["STDev", "YTD"],
     )
     pd.testing.assert_frame_equal(
-        monthlytable(returns),
+        monthlytable(returns.to_dict()),
         expected_output,
         check_names=False,
         check_index_type=False,
@@ -141,7 +141,7 @@ def test_not_a_complete_year():
         columns=[calendar.month_abbr[i] for i in range(1, 13)] + ["STDev", "YTD"],
     )
     pd.testing.assert_frame_equal(
-        monthlytable(returns),
+        monthlytable(returns.to_dict()),
         expected_output,
         check_names=False,
         check_index_type=False,
