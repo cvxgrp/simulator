@@ -5,21 +5,21 @@ Popular year vs month performance table.
 from __future__ import annotations
 
 import calendar
-from datetime import datetime
-from typing import Dict
 
 import numpy as np
 import pandas as pd
 
+from cvx.simulator.types import TIMESERIES
 
-def _compound(rets):
+
+def _compound(rets) -> float:  # type: ignore
     """
     Helper function for compounded return calculation.
     """
-    return (1.0 + rets).prod() - 1.0
+    return float((1.0 + rets).prod() - 1.0)
 
 
-def monthlytable(returns: Dict[datetime, float]) -> pd.DataFrame:
+def monthlytable(returns: TIMESERIES) -> pd.DataFrame:
     """
     Get a table of monthly returns.
 

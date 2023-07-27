@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional, Tuple
 
 import pandas as pd
 import quantstats as qs
@@ -36,12 +37,17 @@ class Plot(Enum):
     # def __call__(self, returns, **kwargs):
     #     return self._func(returns=returns, **kwargs)
 
-    def plot(self, returns, **kwargs):
+    def plot(self, returns: pd.DataFrame, **kwargs: Any) -> Any:
         func = getattr(qs.plots, self.name.lower())
         return func(returns=returns, **kwargs)
 
 
-def diff(portfolio1, portfolio2, initial_cash=1e6, trading_cost_model=None):
+def diff(
+    portfolio1: EquityPortfolio,
+    portfolio2: EquityPortfolio,
+    initial_cash: float = 1e6,
+    trading_cost_model: Optional[TradingCostModel] = None,
+) -> EquityPortfolio:
     # check both portfolios are on the same price grid
     pd.testing.assert_frame_equal(portfolio1.prices, portfolio2.prices)
 
@@ -86,7 +92,7 @@ class EquityPortfolio:
     trading_cost_model: Optional[TradingCostModel] = None
     initial_cash: float = 1e6
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """A class method that performs input validation after object initialization.
         Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
         and performs a series of input validation checks to ensure that the prices
@@ -109,7 +115,7 @@ class EquityPortfolio:
         assert set(self.stocks.columns).issubset(set(self.prices.columns))
 
     @property
-    def index(self):
+    def index(self) -> pd.DatetimeIndex:
         """A property that returns the index of the EquityPortfolio instance,
         which is the time period for which the portfolio data is available.
 
@@ -120,10 +126,10 @@ class EquityPortfolio:
         which represents the time periods for which data is available for the portfolio.
         The resulting index will be a pandas index object with the same length
         as the number of rows in the prices dataframe."""
-        return self.prices.index
+        return pd.DatetimeIndex(self.prices.index)
 
     @property
-    def assets(self):
+    def assets(self) -> pd.Index:
         """A property that returns a list of the assets held by the EquityPortfolio object.
 
         Returns: list: A list of the assets held by the EquityPortfolio object.
@@ -135,7 +141,7 @@ class EquityPortfolio:
         return self.prices.columns
 
     @property
-    def weights(self):
+    def weights(self) -> pd.DataFrame:
         """A property that returns a pandas dataframe representing
         the weights of various assets in the portfolio.
 
@@ -151,7 +157,7 @@ class EquityPortfolio:
         of each asset in the portfolio at each point in time."""
         return self.equity.apply(lambda x: x / self.nav)
 
-    def __getitem__(self, time):
+    def __getitem__(self, time: datetime) -> pd.Series:
         """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
         It returns the stock data for that time.
 
@@ -166,7 +172,7 @@ class EquityPortfolio:
         return self.stocks.loc[time]
 
     @property
-    def trading_costs(self):
+    def trading_costs(self) -> pd.DataFrame:
         """A property that returns a pandas dataframe
         representing the trading costs incurred by the portfolio due to trades made.
 
@@ -320,7 +326,7 @@ class EquityPortfolio:
         """
         return 1.0 - self.nav / self.highwater
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: float) -> "EquityPortfolio":
         """A method that allows multiplication of the EquityPortfolio object with a scalar constant.
 
         Args: scalar: A scalar constant that multiplies the number of shares
@@ -346,7 +352,7 @@ class EquityPortfolio:
             trading_cost_model=self.trading_cost_model,
         )
 
-    def __rmul__(self, scalar):
+    def __rmul__(self, scalar: float) -> EquityPortfolio:
         """A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
 
         Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.
@@ -357,7 +363,7 @@ class EquityPortfolio:
         constant with an EquityPortfolio object in a reversed order"""
         return self.__mul__(scalar)
 
-    def __add__(self, port_new):
+    def __add__(self, port_new: EquityPortfolio) -> EquityPortfolio:
         """
         A method that allows addition of two EquityPortfolio objects.
         """
@@ -387,7 +393,7 @@ class EquityPortfolio:
             trading_cost_model=self.trading_cost_model,
         )
 
-    def reset_prices(self, prices):
+    def reset_prices(self, prices: pd.DataFrame) -> EquityPortfolio:
         """
         A method that constructs an EquityPortfolio object using finer prices.
         """
@@ -416,7 +422,9 @@ class EquityPortfolio:
             trading_cost_model=self.trading_cost_model,
         )
 
-    def truncate(self, before=None, after=None):
+    def truncate(
+        self, before: Optional[datetime] = None, after: Optional[datetime] = None
+    ) -> EquityPortfolio:
         """
         The truncate method truncates the prices DataFrame, stocks DataFrame
         and the cash series of an EquityPortfolio object.
@@ -449,7 +457,7 @@ class EquityPortfolio:
     #     """first index with a profit that is not zero"""
     #     return self.profit.ne(0).idxmax()
 
-    def resample(self, rule):
+    def resample(self, rule: Any) -> EquityPortfolio:
         """The resample method resamples an EquityPortfolio object to a new frequency
         specified by the rule argument.
         A new EquityPortfolio object is created with the original prices
@@ -471,17 +479,17 @@ class EquityPortfolio:
 
     def metrics(
         self,
-        benchmark=None,
-        rf=0.0,
-        display=True,
-        mode="basic",
-        sep=False,
-        compound=True,
-        periods_per_year=252,
-        prepare_returns=True,
-        match_dates=True,
-        **kwargs,
-    ):
+        benchmark: Any = None,
+        rf: float = 0.0,
+        display: bool = True,
+        mode: str = "basic",
+        sep: bool = False,
+        compound: bool = True,
+        periods_per_year: int = 252,
+        prepare_returns: bool = True,
+        match_dates: bool = True,
+        **kwargs: Any,
+    ) -> pd.DataFrame:
         """
         The metrics method calculates the performance metrics of an EquityPortfolio object.
 
@@ -504,16 +512,16 @@ class EquityPortfolio:
 
     def plots(
         self,
-        benchmark=None,
-        grayscale=False,
-        figsize=(8, 5),
-        mode="basic",
-        compounded=True,
-        periods_per_year=252,
-        prepare_returns=True,
-        match_dates=True,
-        **kwargs,
-    ):
+        benchmark: Any = None,
+        grayscale: bool = False,
+        figsize: Tuple[int, int] = (8, 5),
+        mode: str = "basic",
+        compounded: bool = True,
+        periods_per_year: int = 252,
+        prepare_returns: bool = True,
+        match_dates: bool = True,
+        **kwargs: Any,
+    ) -> Any:
         return qs.reports.plots(
             returns=self.nav.pct_change().dropna(),
             benchmark=benchmark,
@@ -527,24 +535,24 @@ class EquityPortfolio:
             **kwargs,
         )
 
-    def plot(self, kind: Plot, **kwargs):
+    def plot(self, kind: Plot, **kwargs: Any) -> Any:
         return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def html(
         self,
-        benchmark=None,
-        rf=0.0,
-        grayscale=False,
-        title="Strategy Tearsheet",
-        output=None,
-        compounded=True,
-        periods_per_year=252,
-        download_filename="quantstats-tearsheet.html",
-        figfmt="svg",
-        template_path=None,
-        match_dates=True,
-        **kwargs,
-    ):
+        benchmark: Any = None,
+        rf: float = 0.0,
+        grayscale: bool = False,
+        title: str = "Strategy Tearsheet",
+        output: Any = None,
+        compounded: bool = True,
+        periods_per_year: int = 252,
+        download_filename: str = "quantstats-tearsheet.html",
+        figfmt: str = "svg",
+        template_path: Any = None,
+        match_dates: bool = True,
+        **kwargs: Any,
+    ) -> Any:
         return qs.reports.html(
             returns=self.nav.pct_change().dropna(),
             benchmark=benchmark,
@@ -563,18 +571,18 @@ class EquityPortfolio:
 
     def snapshot(
         self,
-        grayscale=False,
-        figsize=(10, 8),
-        title="Portfolio Summary",
-        fontname="Arial",
-        lw=1.5,
-        mode="comp",
-        subtitle=True,
-        savefig=None,
-        show=True,
-        log_scale=False,
-        **kwargs,
-    ):
+        grayscale: bool = False,
+        figsize: Tuple[int, int] = (10, 8),
+        title: str = "Portfolio Summary",
+        fontname: str = "Arial",
+        lw: float = 1.5,
+        mode: str = "comp",
+        subtitle: bool = True,
+        savefig: Any = None,
+        show: bool = True,
+        log_scale: bool = False,
+        **kwargs: Any,
+    ) -> Any:
         """
         The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
 
