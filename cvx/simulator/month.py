@@ -5,6 +5,8 @@ Popular year vs month performance table.
 from __future__ import annotations
 
 import calendar
+from datetime import datetime
+from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -17,7 +19,7 @@ def _compound(rets):
     return (1.0 + rets).prod() - 1.0
 
 
-def monthlytable(returns: pd.Series):
+def monthlytable(returns: Dict[datetime, float]) -> pd.DataFrame:
     """
     Get a table of monthly returns.
 
@@ -30,12 +32,13 @@ def monthlytable(returns: pd.Series):
 
     # Works better in the first month
     # Compute all the intramonth-returns, instead of reapplying some monthly resampling of the NAV
-    returns = returns.dropna()
+    r = pd.Series(returns)
+
+    r = r.dropna()
+    r.index = pd.DatetimeIndex(r.index)
 
     return_monthly = (
-        returns.groupby([returns.index.year, returns.index.month])
-        .apply(_compound)
-        .unstack(level=1)
+        r.groupby([r.index.year, r.index.month]).apply(_compound).unstack(level=1)
     )
 
     # make sure all months are in the table!
