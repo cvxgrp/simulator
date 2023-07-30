@@ -164,7 +164,7 @@ We assume you share already the love for [Poetry](https://python-poetry.org).
 Once you have installed poetry you can perform
 
 ```bash
-poetry install
+make install
 ```
 
 to replicate the virtual environment we have defined in pyproject.toml.
