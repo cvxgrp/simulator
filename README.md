@@ -156,7 +156,7 @@ portfolio.plot(kind=Plot.DRAWDOWN)
 
 supporting all plots defined in quantstats.
 
-![](https://raw.githubusercontent.com/cvxgrp/simulator/main/portfolio.png)
+![quantstats](https://raw.githubusercontent.com/cvxgrp/simulator/main/portfolio.png)
 
 ## Poetry
 
