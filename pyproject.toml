@@ -8,8 +8,8 @@ repository = "https://github.com/cvxgrp/simulator"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4"
-numpy = "*"
+python = ">=3.9,<4"
+numpy = ">=1.25.0"
 pandas = "*"
 quantstats = "*"
 
