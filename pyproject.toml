@@ -8,11 +8,10 @@ repository = "https://github.com/cvxgrp/simulator"
 packages = [{include = "cvx"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.8,<4"
 numpy = "*"
 pandas = "*"
 quantstats = "*"
-#pandas-stubs = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.0"
@@ -25,10 +24,8 @@ jupyter-book = "0.15.1"
 pyyaml = "6.0"
 
 [tool.peotry.group.linting.dependencies]
-pylint = "*"
 ruff = "0.0.277"
 pre-commit = "*"
-black = "23.3.0"
 
 [tool.poetry.group.dev.dependencies]
 yfinance = "*"
@@ -39,7 +36,6 @@ loguru = "*"
 [tool.poetry.group.stubs.dependencies]
 mypy = "*"
 pandas-stubs = "*"
-#pandera = {version="*", extras = ["mypy"]}
 
 [tool.mypy]
 files = ["cvx/simulator"]
