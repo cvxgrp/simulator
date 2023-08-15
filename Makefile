@@ -15,7 +15,6 @@ kernel: install ## Create a kernel for jupyter lab
 	@poetry run pip install ipykernel
 	@poetry run python -m ipykernel install --user --name=${KERNEL}
 
-
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
 	@poetry run pre-commit run --all-files
@@ -26,13 +25,7 @@ test: install ## Run tests
 
 .PHONY: clean
 clean:  ## Clean up caches and build artifacts
-	@rm -rf .pytest_cache/
-	@rm -rf .ruff_cache/
-	@rm -f .coverage
-	@rm -rf htmlcov
-	@rm -rf html-coverage
-	@find . -type f -name '*.py[co]' -delete -or -type d -name __pycache__ -delete
-
+	@git clean -X -d -f
 
 .PHONY: coverage
 coverage: ## test and coverage
