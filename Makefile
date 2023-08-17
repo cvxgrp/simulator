@@ -48,4 +48,5 @@ help:  ## Display this help screen
 
 .PHONY: jupyter
 jupyter: ## Run jupyter lab
+	@poetry run pip install jupyterlab
 	@poetry run jupyter lab
