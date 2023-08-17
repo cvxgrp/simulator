@@ -12,6 +12,7 @@ python = ">=3.9,<3.12"
 numpy = "*"
 pandas = "*"
 quantstats = "*"
+ipython = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.4.0"
