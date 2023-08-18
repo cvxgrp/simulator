@@ -17,6 +17,7 @@ kernel: install ## Create a kernel for jupyter lab
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
+	@poetry run pip install pre-commit
 	@poetry run pre-commit run --all-files
 
 .PHONY: test
@@ -47,6 +48,6 @@ help:  ## Display this help screen
 
 
 .PHONY: jupyter
-jupyter: ## Run jupyter lab
+jupyter: kernel ## Run jupyter lab
 	@poetry run pip install jupyterlab
 	@poetry run jupyter lab
