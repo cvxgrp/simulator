@@ -3,7 +3,6 @@
 SHELL=/bin/bash
 
 UNAME=$(shell uname -s)
-KERNEL=$(shell poetry version | cut -d' ' -f1)
 
 .PHONY: install
 install:  ## Install a virtual environment
