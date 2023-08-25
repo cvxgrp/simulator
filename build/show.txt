@@ -1,0 +1,108 @@
+ipython 8.14.0 IPython: Productive Interactive Computing
+├── appnope *
+├── backcall *
+├── colorama *
+├── decorator *
+├── jedi >=0.16
+│   └── parso >=0.8.3,<0.9.0 
+├── matplotlib-inline *
+│   └── traitlets * 
+├── pexpect >4.3
+│   └── ptyprocess >=0.5 
+├── pickleshare *
+├── prompt-toolkit >=3.0.30,<3.0.37 || >3.0.37,<3.1.0
+│   └── wcwidth * 
+├── pygments >=2.4.0
+├── stack-data *
+│   ├── asttokens >=2.1.0 
+│   │   └── six * 
+│   ├── executing >=1.2.0 
+│   └── pure-eval * 
+├── traitlets >=5
+└── typing-extensions *
+numpy 1.25.2 Fundamental package for array computing in Python
+pandas 2.0.3 Powerful data structures for data analysis, time series, and statistics
+├── numpy >=1.20.3
+├── numpy >=1.21.0
+├── numpy >=1.23.2
+├── python-dateutil >=2.8.2
+│   └── six >=1.5 
+├── pytz >=2020.1
+└── tzdata >=2022.1
+quantstats 0.0.62 Portfolio analytics for quants
+├── matplotlib >=3.0.0
+│   ├── contourpy >=1.0.1 
+│   │   └── numpy >=1.16 
+│   ├── cycler >=0.10 
+│   ├── fonttools >=4.22.0 
+│   ├── importlib-resources >=3.2.0 
+│   │   └── zipp >=3.1.0 
+│   ├── kiwisolver >=1.0.1 
+│   ├── numpy >=1.20 (circular dependency aborted here)
+│   ├── packaging >=20.0 
+│   ├── pillow >=6.2.0 
+│   ├── pyparsing >=2.3.1,<3.1 
+│   └── python-dateutil >=2.7 
+│       └── six >=1.5 
+├── numpy >=1.16.5
+├── pandas >=0.24.0
+│   ├── numpy >=1.20.3 
+│   ├── numpy >=1.21.0 (circular dependency aborted here)
+│   ├── numpy >=1.23.2 (circular dependency aborted here)
+│   ├── python-dateutil >=2.8.2 
+│   │   └── six >=1.5 
+│   ├── pytz >=2020.1 
+│   └── tzdata >=2022.1 
+├── python-dateutil >=2.0
+│   └── six >=1.5 
+├── scipy >=1.2.0
+│   └── numpy >=1.21.6,<1.28.0 
+├── seaborn >=0.9.0
+│   ├── matplotlib >=3.1,<3.6.1 || >3.6.1 
+│   │   ├── contourpy >=1.0.1 
+│   │   │   └── numpy >=1.16 
+│   │   ├── cycler >=0.10 
+│   │   ├── fonttools >=4.22.0 
+│   │   ├── importlib-resources >=3.2.0 
+│   │   │   └── zipp >=3.1.0 
+│   │   ├── kiwisolver >=1.0.1 
+│   │   ├── numpy >=1.20 (circular dependency aborted here)
+│   │   ├── packaging >=20.0 
+│   │   ├── pillow >=6.2.0 
+│   │   ├── pyparsing >=2.3.1,<3.1 
+│   │   └── python-dateutil >=2.7 
+│   │       └── six >=1.5 
+│   ├── numpy >=1.17,<1.24.0 || >1.24.0 (circular dependency aborted here)
+│   └── pandas >=0.25 
+│       ├── numpy >=1.20.3 (circular dependency aborted here)
+│       ├── numpy >=1.21.0 (circular dependency aborted here)
+│       ├── numpy >=1.23.2 (circular dependency aborted here)
+│       ├── python-dateutil >=2.8.2 (circular dependency aborted here)
+│       ├── pytz >=2020.1 
+│       └── tzdata >=2022.1 
+├── tabulate >=0.8.0
+└── yfinance >=0.1.70
+    ├── appdirs >=1.4.4 
+    ├── beautifulsoup4 >=4.11.1 
+    │   └── soupsieve >1.2 
+    ├── frozendict >=2.3.4 
+    ├── html5lib >=1.1 
+    │   ├── six >=1.9 
+    │   └── webencodings * 
+    ├── lxml >=4.9.1 
+    ├── multitasking >=0.0.7 
+    ├── numpy >=1.16.5 
+    ├── pandas >=1.3.0 
+    │   ├── numpy >=1.20.3 (circular dependency aborted here)
+    │   ├── numpy >=1.21.0 (circular dependency aborted here)
+    │   ├── numpy >=1.23.2 (circular dependency aborted here)
+    │   ├── python-dateutil >=2.8.2 
+    │   │   └── six >=1.5 (circular dependency aborted here)
+    │   ├── pytz >=2020.1 
+    │   └── tzdata >=2022.1 
+    ├── pytz >=2022.5 (circular dependency aborted here)
+    └── requests >=2.31 
+        ├── certifi >=2017.4.17 
+        ├── charset-normalizer >=2,<4 
+        ├── idna >=2.5,<4 
+        └── urllib3 >=1.21.1,<3 
