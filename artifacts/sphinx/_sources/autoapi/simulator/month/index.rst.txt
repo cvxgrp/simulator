@@ -1,0 +1,39 @@
+:py:mod:`simulator.month`
+=========================
+
+.. py:module:: simulator.month
+
+.. autoapi-nested-parse::
+
+   Popular year vs month performance table.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.month._compound
+   simulator.month.monthlytable
+
+
+
+.. py:function:: _compound(rets) -> float
+
+   Helper function for compounded return calculation.
+
+
+.. py:function:: monthlytable(returns: cvx.simulator.types.TIMESERIES) -> pandas.DataFrame
+
+   Get a table of monthly returns.
+
+   :param returns: Series of individual returns.
+
+   :returns: DataFrame with monthly returns, their STDev and YTD.
+
+

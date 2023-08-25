@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulator.portfolio &mdash; cvxsimulator Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/logo.jpeg"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> cvxsimulator
+            <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cvxsimulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>simulator.portfolio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for simulator.portfolio</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">quantstats</span> <span class="k">as</span> <span class="nn">qs</span>
+
+<span class="kn">from</span> <span class="nn">cvx.simulator.grid</span> <span class="kn">import</span> <span class="n">iron_frame</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
+
+<span class="n">qs</span><span class="o">.</span><span class="n">extend_pandas</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot">[docs]</a><span class="k">class</span> <span class="nc">Plot</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Plot.DAILY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DAILY_RETURNS">[docs]</a>    <span class="n">DAILY_RETURNS</span> <span class="o">=</span> <span class="mi">1</span></div>
+<div class="viewcode-block" id="Plot.DISTRIBUTION"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DISTRIBUTION">[docs]</a>    <span class="n">DISTRIBUTION</span> <span class="o">=</span> <span class="mi">2</span></div>
+<div class="viewcode-block" id="Plot.DRAWDOWN"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWN">[docs]</a>    <span class="n">DRAWDOWN</span> <span class="o">=</span> <span class="mi">3</span></div>
+<div class="viewcode-block" id="Plot.DRAWDOWNS_PERIODS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWNS_PERIODS">[docs]</a>    <span class="n">DRAWDOWNS_PERIODS</span> <span class="o">=</span> <span class="mi">4</span></div>
+<div class="viewcode-block" id="Plot.EARNINGS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.EARNINGS">[docs]</a>    <span class="n">EARNINGS</span> <span class="o">=</span> <span class="mi">5</span></div>
+<div class="viewcode-block" id="Plot.HISTOGRAM"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.HISTOGRAM">[docs]</a>    <span class="n">HISTOGRAM</span> <span class="o">=</span> <span class="mi">6</span></div>
+<div class="viewcode-block" id="Plot.LOG_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.LOG_RETURNS">[docs]</a>    <span class="n">LOG_RETURNS</span> <span class="o">=</span> <span class="mi">7</span></div>
+<div class="viewcode-block" id="Plot.MONTHLY_HEATMAP"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_HEATMAP">[docs]</a>    <span class="n">MONTHLY_HEATMAP</span> <span class="o">=</span> <span class="mi">8</span></div>
+    <span class="c1"># see issue: https://github.com/ranaroussi/quantstats/issues/276</span>
+<div class="viewcode-block" id="Plot.MONTHLY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_RETURNS">[docs]</a>    <span class="n">MONTHLY_RETURNS</span> <span class="o">=</span> <span class="mi">9</span></div>
+<div class="viewcode-block" id="Plot.RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.RETURNS">[docs]</a>    <span class="n">RETURNS</span> <span class="o">=</span> <span class="mi">10</span></div>
+<div class="viewcode-block" id="Plot.ROLLING_BETA"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_BETA">[docs]</a>    <span class="n">ROLLING_BETA</span> <span class="o">=</span> <span class="mi">11</span></div>
+<div class="viewcode-block" id="Plot.ROLLING_SHARPE"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SHARPE">[docs]</a>    <span class="n">ROLLING_SHARPE</span> <span class="o">=</span> <span class="mi">12</span></div>
+<div class="viewcode-block" id="Plot.ROLLING_SORTINO"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SORTINO">[docs]</a>    <span class="n">ROLLING_SORTINO</span> <span class="o">=</span> <span class="mi">13</span></div>
+<div class="viewcode-block" id="Plot.ROLLING_VOLATILITY"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_VOLATILITY">[docs]</a>    <span class="n">ROLLING_VOLATILITY</span> <span class="o">=</span> <span class="mi">14</span></div>
+<div class="viewcode-block" id="Plot.YEARLY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.YEARLY_RETURNS">[docs]</a>    <span class="n">YEARLY_RETURNS</span> <span class="o">=</span> <span class="mi">15</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># def __call__(self, returns, **kwargs):</span>
+    <span class="c1">#     return self._func(returns=returns, **kwargs)</span>
+
+<div class="viewcode-block" id="Plot.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="diff"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.diff">[docs]</a><span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
+    <span class="n">portfolio1</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
+    <span class="n">portfolio2</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
+    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
+    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TradingCostModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+    <span class="c1"># check both portfolios are on the same price grid</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">portfolio1</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">portfolio2</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
+
+    <span class="n">stocks</span> <span class="o">=</span> <span class="n">portfolio1</span><span class="o">.</span><span class="n">stocks</span> <span class="o">-</span> <span class="n">portfolio2</span><span class="o">.</span><span class="n">stocks</span>
+
+    <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+        <span class="n">prices</span><span class="o">=</span><span class="n">portfolio1</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
+        <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+        <span class="n">initial_cash</span><span class="o">=</span><span class="n">initial_cash</span><span class="p">,</span>
+        <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="EquityPortfolio"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio">[docs]</a><span class="k">class</span> <span class="nc">EquityPortfolio</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class that represents an equity portfolio</span>
+<span class="sd">    and contains dataframes for prices and stock holdings,</span>
+<span class="sd">    as well as optional parameters for trading cost models</span>
+<span class="sd">    and initial cash values.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        prices (pd.DataFrame): A pandas dataframe representing</span>
+<span class="sd">        the prices of various assets held by the portfolio over time.</span>
+<span class="sd">        stocks (pd.DataFrame): A pandas dataframe representing the number of shares</span>
+<span class="sd">        held for each asset in the portfolio over time.</span>
+<span class="sd">        trading_cost_model (TradingCostModel): An optional trading cost model</span>
+<span class="sd">        to use when trading assets in the portfolio.</span>
+<span class="sd">        initial_cash (float): An optional scalar float representing the initial</span>
+<span class="sd">        cash value available for the portfolio.</span>
+
+<span class="sd">    Notes: The EquityPortfolio class is designed to represent</span>
+<span class="sd">    a portfolio of assets where only equity positions are held.</span>
+<span class="sd">    The prices and stocks dataframes are assumed to have the same</span>
+<span class="sd">    index object representing the available time periods for which data is available.</span>
+<span class="sd">    If no trading cost model is provided, the trading_cost_model attribute</span>
+<span class="sd">    will be set to None by default.</span>
+<span class="sd">    If no initial cash value is provided, the initial_cash attribute</span>
+<span class="sd">    will be set to a default value of 1,000,000.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EquityPortfolio.prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="EquityPortfolio.stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.stocks">[docs]</a>    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+<div class="viewcode-block" id="EquityPortfolio.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TradingCostModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="EquityPortfolio.initial_cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.initial_cash">[docs]</a>    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__post_init__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A class method that performs input validation after object initialization.</span>
+<span class="sd">        Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,</span>
+<span class="sd">        and performs a series of input validation checks to ensure that the prices</span>
+<span class="sd">        and stocks dataframes are in the expected format</span>
+<span class="sd">        with no duplicates or missing data,</span>
+<span class="sd">        and that the stocks dataframe represents valid equity positions</span>
+<span class="sd">        for the assets held in the portfolio.</span>
+<span class="sd">        Specifically, the method checks that both the prices and stocks dataframes</span>
+<span class="sd">        have a monotonic increasing and unique index,</span>
+<span class="sd">        and that the index and columns of the stocks dataframe are subsets</span>
+<span class="sd">        of the index and columns of the prices dataframe, respectively.</span>
+<span class="sd">        If any of these checks fail, an assertion error will be raised.&quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
+
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.index"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the EquityPortfolio instance,</span>
+<span class="sd">        which is the time period for which the portfolio data is available.</span>
+
+<span class="sd">        Returns: pd.Index: A pandas index representing the time period for which the</span>
+<span class="sd">        portfolio data is available.</span>
+
+<span class="sd">        Notes: The function extracts the index of the prices dataframe,</span>
+<span class="sd">        which represents the time periods for which data is available for the portfolio.</span>
+<span class="sd">        The resulting index will be a pandas index object with the same length</span>
+<span class="sd">        as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.assets"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a list of the assets held by the EquityPortfolio object.</span>
+
+<span class="sd">        Returns: list: A list of the assets held by the EquityPortfolio object.</span>
+
+<span class="sd">        Notes: The function extracts the column names of the prices dataframe,</span>
+<span class="sd">        which correspond to the assets held by the EquityPortfolio object.</span>
+<span class="sd">        The resulting list will contain the names of all assets held by the portfolio, without any duplicates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.weights"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.weights">[docs]</a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing</span>
+<span class="sd">        the weights of various assets in the portfolio.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the weights</span>
+<span class="sd">        of various assets in the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the weights of various assets</span>
+<span class="sd">        in the portfolio by dividing the equity positions</span>
+<span class="sd">        for each asset (as represented in the equity dataframe)</span>
+<span class="sd">        by the total portfolio value (as represented in the nav dataframe).</span>
+<span class="sd">        Both dataframes are assumed to have the same dimensions.</span>
+<span class="sd">        The resulting dataframe will show the relative weight</span>
+<span class="sd">        of each asset in the portfolio at each point in time.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The `__getitem__` method retrieves the stock data for a specific time in the dataframe.</span>
+<span class="sd">        It returns the stock data for that time.</span>
+
+<span class="sd">        The method takes one input parameter:</span>
+<span class="sd">        - `time`: the time index for which to retrieve the stock data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        - stock data for the input time</span>
+
+<span class="sd">        Note that the input time must be in the index of the dataframe,</span>
+<span class="sd">        otherwise a KeyError will be raised.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.trading_costs"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe</span>
+<span class="sd">        representing the trading costs incurred by the portfolio due to trades made.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trading</span>
+<span class="sd">        costs incurred by the portfolio due to trades made.</span>
+
+<span class="sd">        Notes: The function calculates the trading costs using the specified</span>
+<span class="sd">        trading cost model (if available) and the prices and trading</span>
+<span class="sd">        data represented by the prices and trades_stocks</span>
+<span class="sd">        dataframes, respectively. If no trading cost model is provided,</span>
+<span class="sd">        a dataframe with all zeros will be returned.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions as</span>
+<span class="sd">        the prices and trades_stocks dataframes,</span>
+<span class="sd">        showing the trading costs incurred at each point in time for each asset traded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.equity"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.equity">[docs]</a>    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe</span>
+<span class="sd">        representing the equity positions of the portfolio,</span>
+<span class="sd">        which is the value of each asset held by the portfolio.</span>
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing</span>
+<span class="sd">        the equity positions of the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the equity of the portfolio</span>
+<span class="sd">        by multiplying the current prices of each asset</span>
+<span class="sd">        by the number of shares held by the portfolio.</span>
+<span class="sd">        The resulting values are filled forward to account</span>
+<span class="sd">        for any missing data or NaN values.</span>
+<span class="sd">        The equity dataframe will have the same dimensions</span>
+<span class="sd">        as the prices and stocks dataframes.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_stocks">[docs]</a>    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
+
+<span class="sd">        Notes: The function calculates the trades made by the portfolio by taking</span>
+<span class="sd">        the difference between the current and previous values of the stocks dataframe.</span>
+<span class="sd">        The resulting values will represent the number of shares of each asset</span>
+<span class="sd">        bought or sold by the portfolio at each point in time.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions</span>
+<span class="sd">        as the stocks dataframe, with NaN values filled with zeros.&quot;&quot;&quot;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_currency"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_currency">[docs]</a>    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing</span>
+<span class="sd">        the trades made in the portfolio in terms of currency.</span>
+
+<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.</span>
+
+<span class="sd">        Notes: The function calculates the trades made in currency by multiplying</span>
+<span class="sd">        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)</span>
+<span class="sd">        with the current prices of each asset (as represented in the prices dataframe).</span>
+<span class="sd">        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.</span>
+<span class="sd">        The resulting dataframe will have the same dimensions as the stocks and prices dataframes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.turnover"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.turnover">[docs]</a>    <span class="k">def</span> <span class="nf">turnover</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cash">[docs]</a>    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the cash on hand in the portfolio.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the cash available in the portfolio by subtracting</span>
+<span class="sd">        the sum of trades currency and cumulative trading costs from the initial cash value specified</span>
+<span class="sd">        when constructing the object. Uses pandas cumsum() method</span>
+<span class="sd">        to calculate the cumulative sum of trading costs and</span>
+<span class="sd">        trades currency along the time axis.</span>
+<span class="sd">        The resulting series will show how much money is available for further trades at each point in time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.nav"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a pandas series representing the total value</span>
+<span class="sd">        of the portfolio&#39;s investments and cash.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">                            total value of the portfolio&#39;s investments and cash.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.profit"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.profit">[docs]</a>    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the</span>
+<span class="sd">        profit gained or lost in the portfolio based on changes in asset prices.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the profit</span>
+<span class="sd">        gained or lost in the portfolio based on changes in asset prices.</span>
+
+<span class="sd">        Notes: The calculation is based on the difference between</span>
+<span class="sd">        the previous and current prices of the assets in the portfolio,</span>
+<span class="sd">        multiplied by the number of stocks in each asset previously held.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">price_changes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">previous_stocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">previous_stocks</span> <span class="o">*</span> <span class="n">price_changes</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.highwater"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.highwater">[docs]</a>    <span class="k">def</span> <span class="nf">highwater</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that returns a pandas series representing</span>
+<span class="sd">        the high-water mark of the portfolio, which is the highest point</span>
+<span class="sd">        the portfolio value has reached over time.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">        high-water mark of the portfolio.</span>
+
+<span class="sd">        Notes: The function performs a rolling computation based on</span>
+<span class="sd">        the cumulative maximum of the portfolio&#39;s value over time,</span>
+<span class="sd">        starting from the beginning of the time period being considered.</span>
+<span class="sd">        Min_periods argument is set to 1 to include the minimum period of one day.</span>
+<span class="sd">        The resulting series will show the highest value the portfolio has reached at each point in time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">expanding</span><span class="p">(</span><span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.drawdown"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.drawdown">[docs]</a>    <span class="k">def</span> <span class="nf">drawdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the</span>
+<span class="sd">        drawdown of the portfolio, which measures the decline</span>
+<span class="sd">        in the portfolio&#39;s value from its (previously) highest</span>
+<span class="sd">        point to its current point.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">        drawdown of the portfolio.</span>
+
+<span class="sd">        Notes: The function calculates the ratio of the portfolio&#39;s current value</span>
+<span class="sd">        vs. its current high-water-mark and then subtracting the result from 1.</span>
+<span class="sd">        A positive drawdown means the portfolio is currently worth</span>
+<span class="sd">        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EquityPortfolio&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method that allows multiplication of the EquityPortfolio object with a scalar constant.</span>
+
+<span class="sd">        Args: scalar: A scalar constant that multiplies the number of shares</span>
+<span class="sd">        of each asset held in the EquityPortfolio object.</span>
+
+<span class="sd">        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.</span>
+
+<span class="sd">        Notes: The mul method allows multiplication of an EquityPortfolio object</span>
+<span class="sd">        with a scalar constant to increase or decrease</span>
+<span class="sd">        the number of shares held for each asset in the portfolio accordingly.</span>
+<span class="sd">        The method returns a new EquityPortfolio object with the same prices</span>
+<span class="sd">        and trading cost model as the original object,</span>
+<span class="sd">        and with the number of shares for each asset multiplied by the scalar constant</span>
+<span class="sd">        (as represented in the stocks dataframe).</span>
+<span class="sd">        Additionally, the initial cash value is multiplied</span>
+<span class="sd">        by the scalar to maintain the same cash-to-equity ratio as the original portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">scalar</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__rmul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.</span>
+
+<span class="sd">        Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.</span>
+
+<span class="sd">        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.</span>
+
+<span class="sd">        Notes: The rmul method allows multiplication of a scalar</span>
+<span class="sd">        constant with an EquityPortfolio object in a reversed order&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method that allows addition of two EquityPortfolio objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the other object is an EquityPortfolio object</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">port_new</span><span class="p">,</span> <span class="n">EquityPortfolio</span><span class="p">)</span>
+
+        <span class="c1"># make sure the prices are aligned for overlapping points</span>
+        <span class="n">prices_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
+        <span class="n">prices_right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">prices_left</span><span class="p">,</span> <span class="n">prices_right</span><span class="p">)</span>
+
+        <span class="c1"># bring both portfolios to the finer grid</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">port_new</span><span class="o">.</span><span class="n">reset_prices</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices_left</span><span class="p">)</span>
+
+        <span class="c1"># just make sure the left and right portfolio are now on exactly the same grid</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_index_equal</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">right</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># add the stocks</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="c1"># make sure the trading cost models are the same</span>
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="n">prices_right</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span> <span class="o">+</span> <span class="n">port_new</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.reset_prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.reset_prices">[docs]</a>    <span class="k">def</span> <span class="nf">reset_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method that constructs an EquityPortfolio object using finer prices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># extract the relevant columns from prices</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span>
+
+        <span class="c1"># the prices need to contain the original index</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># build a frame for the stocks</span>
+        <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
+
+        <span class="c1"># only forward fill stocks on the subgrid induced by the original index</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">stocks</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">after</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
+
+        <span class="c1"># outside the original index, the stocks are zero</span>
+        <span class="n">stocks</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="n">stocks</span> <span class="o">=</span> <span class="n">stocks</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.truncate"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The truncate method truncates the prices DataFrame, stocks DataFrame</span>
+<span class="sd">        and the cash series of an EquityPortfolio object.</span>
+<span class="sd">        The method also optionally accepts a before and/or after argument</span>
+<span class="sd">        to specify a date range for truncation.</span>
+
+<span class="sd">        The method returns a new EquityPortfolio object which is a truncated version</span>
+<span class="sd">        of the original object, with the same trading cost model</span>
+<span class="sd">        and initial cash value. The stocks DataFrame is truncated</span>
+<span class="sd">        using the same before and after arguments and the prices DataFrame</span>
+<span class="sd">        is truncated similarly. The cash value is truncated</span>
+<span class="sd">        to match the new date range and the first value of the</span>
+<span class="sd">        truncated cash series is used as the initial cash value for the new object.</span>
+
+<span class="sd">        Note that this method does not modify the original EquityPortfolio object,</span>
+<span class="sd">        but rather returns a new object.</span>
+<span class="sd">        :param before:</span>
+<span class="sd">        :param after:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">),</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">),</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+    <span class="c1"># @property</span>
+    <span class="c1"># def start(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;first index with a profit that is not zero&quot;&quot;&quot;</span>
+    <span class="c1">#     return self.profit.ne(0).idxmax()</span>
+
+<div class="viewcode-block" id="EquityPortfolio.resample"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The resample method resamples an EquityPortfolio object to a new frequency</span>
+<span class="sd">        specified by the rule argument.</span>
+<span class="sd">        A new EquityPortfolio object is created with the original prices</span>
+<span class="sd">        DataFrame and the resampled stocks DataFrame. The objects trading cost model and initial cash value</span>
+<span class="sd">        are also copied into the new object.</span>
+
+<span class="sd">        Note that the resample method does not modify the original EquityPortfolio object,</span>
+<span class="sd">        but rather returns a new object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># iron out the stocks index</span>
+        <span class="n">stocks</span> <span class="o">=</span> <span class="n">iron_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
+            <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+            <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.metrics"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.metrics">[docs]</a>    <span class="k">def</span> <span class="nf">metrics</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">display</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+        <span class="n">sep</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">compound</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">252</span><span class="p">,</span>
+        <span class="n">prepare_returns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The metrics method calculates the performance metrics of an EquityPortfolio object.</span>
+
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">metrics</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">rf</span><span class="o">=</span><span class="n">rf</span><span class="p">,</span>
+            <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compound</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">prepare_returns</span><span class="o">=</span><span class="n">prepare_returns</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.plots"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plots">[docs]</a>    <span class="k">def</span> <span class="nf">plots</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+        <span class="n">compounded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">252</span><span class="p">,</span>
+        <span class="n">prepare_returns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">plots</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">prepare_returns</span><span class="o">=</span><span class="n">prepare_returns</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Plot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">kind</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.html"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Strategy Tearsheet&quot;</span><span class="p">,</span>
+        <span class="n">output</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">compounded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">periods_per_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">252</span><span class="p">,</span>
+        <span class="n">download_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;quantstats-tearsheet.html&quot;</span><span class="p">,</span>
+        <span class="n">figfmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span><span class="p">,</span>
+        <span class="n">template_path</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">match_dates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">html</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+            <span class="n">rf</span><span class="o">=</span><span class="n">rf</span><span class="p">,</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span>
+            <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">,</span>
+            <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+            <span class="n">download_filename</span><span class="o">=</span><span class="n">download_filename</span><span class="p">,</span>
+            <span class="n">figfmt</span><span class="o">=</span><span class="n">figfmt</span><span class="p">,</span>
+            <span class="n">template_path</span><span class="o">=</span><span class="n">template_path</span><span class="p">,</span>
+            <span class="n">match_dates</span><span class="o">=</span><span class="n">match_dates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.snapshot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Portfolio Summary&quot;</span><span class="p">,</span>
+        <span class="n">fontname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="n">lw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;comp&quot;</span><span class="p">,</span>
+        <span class="n">subtitle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">savefig</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The snapshot method creates a snapshot of the performance of an EquityPortfolio object.</span>
+
+<span class="sd">        :param grayscale:</span>
+<span class="sd">        :param figsize:</span>
+<span class="sd">        :param title:</span>
+<span class="sd">        :param fontname:</span>
+<span class="sd">        :param lw:</span>
+<span class="sd">        :param mode:</span>
+<span class="sd">        :param subtitle:</span>
+<span class="sd">        :param savefig:</span>
+<span class="sd">        :param show:</span>
+<span class="sd">        :param log_scale:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+            <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">fontname</span><span class="o">=</span><span class="n">fontname</span><span class="p">,</span>
+            <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">subtitle</span><span class="o">=</span><span class="n">subtitle</span><span class="p">,</span>
+            <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+            <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
