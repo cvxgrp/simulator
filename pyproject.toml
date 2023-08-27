@@ -16,7 +16,7 @@ ipython = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.4.0"
-pytest-cov = "4.1.0"
+pytest-cov = "*"
 mock = "*"
 
 [tool.poetry.group.dev.dependencies]
