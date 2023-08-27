@@ -15,7 +15,7 @@ quantstats = "*"
 ipython = "*"
 
 [tool.poetry.group.test.dependencies]
-pytest = "7.4.0"
+pytest = "*"
 pytest-cov = "*"
 mock = "*"
 
