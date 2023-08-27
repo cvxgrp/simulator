@@ -34,7 +34,6 @@ repos:
     rev: 0.26.1
     hooks:
       - id: check-dependabot
-      - id: check-github-actions
       - id: check-github-workflows
 
   - repo: https://github.com/python-poetry/poetry
