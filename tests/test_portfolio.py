@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-import os
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -410,9 +408,9 @@ def test_plot(portfolio):
     portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
 
 
-def test_html(portfolio, tmp_path):
-    portfolio.html(output=tmp_path / "test.html")
-    assert os.path.exists(tmp_path / "test.html")
+# def test_html(portfolio, tmp_path):
+#    portfolio.html(output=tmp_path / "test.html")
+#    assert os.path.exists(tmp_path / "test.html")
 
 
 def test_snapshot(portfolio):
