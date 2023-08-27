@@ -16,3 +16,6 @@ jobs:
 
     steps:
       - uses: cvxgrp/.github/actions/test@main
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
