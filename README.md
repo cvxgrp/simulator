@@ -169,14 +169,13 @@ make install
 
 to replicate the virtual environment we have defined in pyproject.toml.
 
-## Kernel
+## Jupyter
 
-We install [JupyterLab](https://jupyter.org) within your new virtual
-environment. Executing
+We install [JupyterLab](https://jupyter.org) on fly within the aforementioned
+virtual environment. Executing
 
 ```bash
-make kernel
+make jupyter
 ```
 
-constructs a dedicated [Kernel](https://docs.jupyter.org/en/latest/projects/kernels.html)
-for the project.
+will install and start the jupyter lab.
