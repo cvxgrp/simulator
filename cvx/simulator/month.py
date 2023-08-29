@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Popular year vs month performance table.
 """

@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Generator, Optional, Tuple
+from typing import Any, Generator
 
 import pandas as pd
 
@@ -95,7 +94,7 @@ class _State:
     def update(
         self,
         position: pd.Series,
-        model: Optional[TradingCostModel] = None,
+        model: TradingCostModel | None = None,
         **kwargs: Any,
     ) -> _State:
         """
@@ -141,15 +140,15 @@ class _State:
 
 def builder(
     prices: pd.DataFrame,
-    weights: Optional[pd.DataFrame] = None,
-    market_cap: Optional[pd.DataFrame] = None,
-    trade_volume: Optional[pd.DataFrame] = None,
+    weights: pd.DataFrame | None = None,
+    market_cap: pd.DataFrame | None = None,
+    trade_volume: pd.DataFrame | None = None,
     initial_cash: float = 1e6,
-    trading_cost_model: Optional[TradingCostModel] = None,
-    max_cap_fraction: Optional[float] = None,
-    min_cap_fraction: Optional[float] = None,
-    max_trade_fraction: Optional[float] = None,
-    min_trade_fraction: Optional[float] = None,
+    trading_cost_model: TradingCostModel | None = None,
+    max_cap_fraction: float | None = None,
+    min_cap_fraction: float | None = None,
+    max_trade_fraction: float | None = None,
+    min_trade_fraction: float | None = None,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
     is used to construct a portfolio of assets. The function takes in a pandas
@@ -196,15 +195,15 @@ def builder(
 class _Builder:
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: Optional[TradingCostModel] = None
+    trading_cost_model: TradingCostModel | None = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
     market_cap: pd.DataFrame = None
     trade_volume: pd.DataFrame = None
-    max_cap_fraction: Optional[float] = None
-    min_cap_fraction: Optional[float] = None
-    max_trade_fraction: Optional[float] = None
-    min_trade_fraction: Optional[float] = None
+    max_cap_fraction: float | None = None
+    min_cap_fraction: float | None = None
+    max_trade_fraction: float | None = None
+    min_trade_fraction: float | None = None
 
     def __post_init__(self) -> None:
         """
@@ -254,7 +253,7 @@ class _Builder:
 
     def cov(
         self, **kwargs: Any
-    ) -> Generator[Tuple[datetime, pd.DataFrame], None, None]:
+    ) -> Generator[tuple[datetime, pd.DataFrame], None, None]:
         # You can do much better using volatility adjusted returns rather than returns
         cov = self.returns.ewm(**kwargs).cov()
         cov = cov.dropna(how="all", axis=0)
@@ -295,7 +294,7 @@ class _Builder:
         assert isinstance(position, pd.Series), "position must be a pandas Series"
         self[time] = position
 
-    def __iter__(self) -> Generator[Tuple[pd.DatetimeIndex, _State], None, None]:
+    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.

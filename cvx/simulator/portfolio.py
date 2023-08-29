@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional, Tuple
+from typing import Any
 
 import pandas as pd
 import quantstats as qs
@@ -46,7 +45,7 @@ def diff(
     portfolio1: EquityPortfolio,
     portfolio2: EquityPortfolio,
     initial_cash: float = 1e6,
-    trading_cost_model: Optional[TradingCostModel] = None,
+    trading_cost_model: TradingCostModel | None = None,
 ) -> EquityPortfolio:
     # check both portfolios are on the same price grid
     pd.testing.assert_frame_equal(portfolio1.prices, portfolio2.prices)
@@ -89,7 +88,7 @@ class EquityPortfolio:
 
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: Optional[TradingCostModel] = None
+    trading_cost_model: TradingCostModel | None = None
     initial_cash: float = 1e6
 
     def __post_init__(self) -> None:
@@ -326,7 +325,7 @@ class EquityPortfolio:
         """
         return 1.0 - self.nav / self.highwater
 
-    def __mul__(self, scalar: float) -> "EquityPortfolio":
+    def __mul__(self, scalar: float) -> EquityPortfolio:
         """A method that allows multiplication of the EquityPortfolio object with a scalar constant.
 
         Args: scalar: A scalar constant that multiplies the number of shares
@@ -423,7 +422,7 @@ class EquityPortfolio:
         )
 
     def truncate(
-        self, before: Optional[datetime] = None, after: Optional[datetime] = None
+        self, before: datetime | None = None, after: datetime | None = None
     ) -> EquityPortfolio:
         """
         The truncate method truncates the prices DataFrame, stocks DataFrame
@@ -514,7 +513,7 @@ class EquityPortfolio:
         self,
         benchmark: Any = None,
         grayscale: bool = False,
-        figsize: Tuple[int, int] = (8, 5),
+        figsize: tuple[int, int] = (8, 5),
         mode: str = "basic",
         compounded: bool = True,
         periods_per_year: int = 252,
@@ -572,7 +571,7 @@ class EquityPortfolio:
     def snapshot(
         self,
         grayscale: bool = False,
-        figsize: Tuple[int, int] = (10, 8),
+        figsize: tuple[int, int] = (10, 8),
         title: str = "Portfolio Summary",
         fontname: str = "Arial",
         lw: float = 1.5,
