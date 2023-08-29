@@ -113,7 +113,7 @@ Functions
 
 
 
-.. py:function:: diff(portfolio1: EquityPortfolio, portfolio2: EquityPortfolio, initial_cash: float = 1000000.0, trading_cost_model: Optional[cvx.simulator.trading_costs.TradingCostModel] = None) -> EquityPortfolio
+.. py:function:: diff(portfolio1: EquityPortfolio, portfolio2: EquityPortfolio, initial_cash: float = 1000000.0, trading_cost_model: TradingCostModel | None = None) -> EquityPortfolio
 
 
 .. py:class:: EquityPortfolio
@@ -183,7 +183,7 @@ Functions
       
 
    .. py:attribute:: trading_cost_model
-      :annotation: :Optional[cvx.simulator.trading_costs.TradingCostModel]
+      :annotation: :TradingCostModel | None
 
       
 
@@ -454,7 +454,7 @@ Functions
       A method that constructs an EquityPortfolio object using finer prices.
 
 
-   .. py:method:: truncate(self, before: Optional[datetime.datetime] = None, after: Optional[datetime.datetime] = None) -> EquityPortfolio
+   .. py:method:: truncate(self, before: datetime | None = None, after: datetime | None = None) -> EquityPortfolio
 
       The truncate method truncates the prices DataFrame, stocks DataFrame
       and the cash series of an EquityPortfolio object.
@@ -496,7 +496,7 @@ Functions
       :return:
 
 
-   .. py:method:: plots(self, benchmark: Any = None, grayscale: bool = False, figsize: Tuple[int, int] = (8, 5), mode: str = 'basic', compounded: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> Any
+   .. py:method:: plots(self, benchmark: Any = None, grayscale: bool = False, figsize: tuple[int, int] = (8, 5), mode: str = 'basic', compounded: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> Any
 
 
    .. py:method:: plot(self, kind: Plot, **kwargs: Any) -> Any
@@ -505,7 +505,7 @@ Functions
    .. py:method:: html(self, benchmark: Any = None, rf: float = 0.0, grayscale: bool = False, title: str = 'Strategy Tearsheet', output: Any = None, compounded: bool = True, periods_per_year: int = 252, download_filename: str = 'quantstats-tearsheet.html', figfmt: str = 'svg', template_path: Any = None, match_dates: bool = True, **kwargs: Any) -> Any
 
 
-   .. py:method:: snapshot(self, grayscale: bool = False, figsize: Tuple[int, int] = (10, 8), title: str = 'Portfolio Summary', fontname: str = 'Arial', lw: float = 1.5, mode: str = 'comp', subtitle: bool = True, savefig: Any = None, show: bool = True, log_scale: bool = False, **kwargs: Any) -> Any
+   .. py:method:: snapshot(self, grayscale: bool = False, figsize: tuple[int, int] = (10, 8), title: str = 'Portfolio Summary', fontname: str = 'Arial', lw: float = 1.5, mode: str = 'comp', subtitle: bool = True, savefig: Any = None, show: bool = True, log_scale: bool = False, **kwargs: Any) -> Any
 
       The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
 

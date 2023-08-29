@@ -71,13 +71,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for simulator.portfolio</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">quantstats</span> <span class="k">as</span> <span class="nn">qs</span>
@@ -119,7 +118,7 @@
     <span class="n">portfolio1</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
     <span class="n">portfolio2</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
-    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TradingCostModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
     <span class="c1"># check both portfolios are on the same price grid</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">portfolio1</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">portfolio2</span><span class="o">.</span><span class="n">prices</span><span class="p">)</span>
@@ -162,7 +161,7 @@
 
 <div class="viewcode-block" id="EquityPortfolio.prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
 <div class="viewcode-block" id="EquityPortfolio.stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.stocks">[docs]</a>    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
-<div class="viewcode-block" id="EquityPortfolio.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TradingCostModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+<div class="viewcode-block" id="EquityPortfolio.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
 <div class="viewcode-block" id="EquityPortfolio.initial_cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.initial_cash">[docs]</a>    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.__post_init__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -399,7 +398,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EquityPortfolio&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A method that allows multiplication of the EquityPortfolio object with a scalar constant.</span>
 
 <span class="sd">        Args: scalar: A scalar constant that multiplies the number of shares</span>
@@ -496,7 +495,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="EquityPortfolio.truncate"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The truncate method truncates the prices DataFrame, stocks DataFrame</span>
@@ -587,7 +586,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
         <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;basic&quot;</span><span class="p">,</span>
         <span class="n">compounded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">periods_per_year</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">252</span><span class="p">,</span>
@@ -645,7 +644,7 @@
 <div class="viewcode-block" id="EquityPortfolio.snapshot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
         <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Portfolio Summary&quot;</span><span class="p">,</span>
         <span class="n">fontname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
         <span class="n">lw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>

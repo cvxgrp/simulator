@@ -103,7 +103,7 @@ Functions
       portfolio or a series of zeroes if the position is still missing.
 
 
-   .. py:method:: update(self, position: pandas.Series, model: Optional[cvx.simulator.trading_costs.TradingCostModel] = None, **kwargs: Any) -> _State
+   .. py:method:: update(self, position: pandas.Series, model: TradingCostModel | None = None, **kwargs: Any) -> _State
 
       The update method updates the current state of the portfolio with the
       new input position. It calculates the trades made based on the new
@@ -135,7 +135,7 @@ Functions
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: Optional[pandas.DataFrame] = None, market_cap: Optional[pandas.DataFrame] = None, trade_volume: Optional[pandas.DataFrame] = None, initial_cash: float = 1000000.0, trading_cost_model: Optional[cvx.simulator.trading_costs.TradingCostModel] = None, max_cap_fraction: Optional[float] = None, min_cap_fraction: Optional[float] = None, max_trade_fraction: Optional[float] = None, min_trade_fraction: Optional[float] = None) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pd.DataFrame | None = None, market_cap: pd.DataFrame | None = None, trade_volume: pd.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -164,7 +164,7 @@ Functions
       
 
    .. py:attribute:: trading_cost_model
-      :annotation: :Optional[cvx.simulator.trading_costs.TradingCostModel]
+      :annotation: :TradingCostModel | None
 
       
 
@@ -189,22 +189,22 @@ Functions
       
 
    .. py:attribute:: max_cap_fraction
-      :annotation: :Optional[float]
+      :annotation: :float | None
 
       
 
    .. py:attribute:: min_cap_fraction
-      :annotation: :Optional[float]
+      :annotation: :float | None
 
       
 
    .. py:attribute:: max_trade_fraction
-      :annotation: :Optional[float]
+      :annotation: :float | None
 
       
 
    .. py:attribute:: min_trade_fraction
-      :annotation: :Optional[float]
+      :annotation: :float | None
 
       
 
@@ -254,7 +254,7 @@ Functions
       :property:
 
 
-   .. py:method:: cov(self, **kwargs: Any) -> Generator[Tuple[datetime.datetime, pandas.DataFrame], None, None]
+   .. py:method:: cov(self, **kwargs: Any) -> Generator[tuple[datetime.datetime, pandas.DataFrame], None, None]
 
 
    .. py:method:: set_weights(self, time: datetime.datetime, weights: pandas.Series) -> None
@@ -281,7 +281,7 @@ Functions
       :param position: series of number of stocks
 
 
-   .. py:method:: __iter__(self) -> Generator[Tuple[pandas.DatetimeIndex, _State], None, None]
+   .. py:method:: __iter__(self) -> Generator[tuple[pandas.DatetimeIndex, _State], None, None]
 
       The __iter__ method allows the object to be iterated over in a for loop,
       yielding time and the current state of the portfolio.
