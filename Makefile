@@ -45,3 +45,8 @@ help:  ## Display this help screen
 jupyter: install ## Run jupyter lab
 	@poetry run pip install jupyterlab
 	@poetry run jupyter lab
+
+.PHONY: marimo
+marimo: install ## Run jupyter lab
+	@poetry run pip install marimo
+	@poetry run marimo
