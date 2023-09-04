@@ -21,3 +21,6 @@ jobs:
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
+        with:
+          files: artifacts/tests/coverage/coverage.info
+          format: lcov
