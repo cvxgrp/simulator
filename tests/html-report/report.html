@@ -2,1010 +2,769 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>report.html</title>
-    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
-  <body onLoad="init()">
-    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-
-function toArray(iter) {
-    if (iter === null) {
-        return null;
-    }
-    return Array.prototype.slice.call(iter);
-}
-
-function find(selector, elem) { // eslint-disable-line no-redeclare
-    if (!elem) {
-        elem = document;
-    }
-    return elem.querySelector(selector);
-}
-
-function findAll(selector, elem) {
-    if (!elem) {
-        elem = document;
-    }
-    return toArray(elem.querySelectorAll(selector));
-}
-
-function sortColumn(elem) {
-    toggleSortStates(elem);
-    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
-    let key;
-    if (elem.classList.contains('result')) {
-        key = keyResult;
-    } else if (elem.classList.contains('links')) {
-        key = keyLink;
-    } else {
-        key = keyAlpha;
-    }
-    sortTable(elem, key(colIndex));
-}
-
-function showAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(showExtras);
-}
-
-function hideAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(hideExtras);
-}
-
-function showExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.remove('collapsed');
-    expandcollapse.classList.remove('expander');
-    expandcollapse.classList.add('collapser');
-}
-
-function hideExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.add('collapsed');
-    expandcollapse.classList.remove('collapser');
-    expandcollapse.classList.add('expander');
-}
-
-function showFilters() {
-    let visibleString = getQueryParameter('visible') || 'all';
-    visibleString = visibleString.toLowerCase();
-    const checkedItems = visibleString.split(',');
-
-    const filterItems = document.getElementsByClassName('filter');
-    for (let i = 0; i < filterItems.length; i++) {
-        filterItems[i].hidden = false;
-
-        if (visibleString != 'all') {
-            filterItems[i].checked = checkedItems.includes(filterItems[i].getAttribute('data-test-result'));
-            filterTable(filterItems[i]);
-        }
-    }
-}
-
-function addCollapse() {
-    // Add links for show/hide all
-    const resulttable = find('table#results-table');
-    const showhideall = document.createElement('p');
-    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
-                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
-    resulttable.parentElement.insertBefore(showhideall, resulttable);
-
-    // Add show/hide link to each result
-    findAll('.col-result').forEach(function(elem) {
-        const collapsed = getQueryParameter('collapsed') || 'Passed';
-        const extras = elem.parentNode.nextElementSibling;
-        const expandcollapse = document.createElement('span');
-        if (extras.classList.contains('collapsed')) {
-            expandcollapse.classList.add('expander');
-        } else if (collapsed.includes(elem.innerHTML)) {
-            extras.classList.add('collapsed');
-            expandcollapse.classList.add('expander');
-        } else {
-            expandcollapse.classList.add('collapser');
-        }
-        elem.appendChild(expandcollapse);
-
-        elem.addEventListener('click', function(event) {
-            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
-                showExtras(event.currentTarget);
-            } else {
-                hideExtras(event.currentTarget);
-            }
-        });
-    });
-}
-
-function getQueryParameter(name) {
-    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-function init () { // eslint-disable-line no-unused-vars
-    resetSortHeaders();
-
-    addCollapse();
-
-    showFilters();
-
-    sortColumn(find('.initial-sort'));
-
-    findAll('.sortable').forEach(function(elem) {
-        elem.addEventListener('click',
-            function() {
-                sortColumn(elem);
-            }, false);
-    });
-}
-
-function sortTable(clicked, keyFunc) {
-    const rows = findAll('.results-table-row');
-    const reversed = !clicked.classList.contains('asc');
-    const sortedRows = sort(rows, keyFunc, reversed);
-    /* Whole table is removed here because browsers acts much slower
-     * when appending existing elements.
-     */
-    const thead = document.getElementById('results-table-head');
-    document.getElementById('results-table').remove();
-    const parent = document.createElement('table');
-    parent.id = 'results-table';
-    parent.appendChild(thead);
-    sortedRows.forEach(function(elem) {
-        parent.appendChild(elem);
-    });
-    document.getElementsByTagName('BODY')[0].appendChild(parent);
-}
-
-function sort(items, keyFunc, reversed) {
-    const sortArray = items.map(function(item, i) {
-        return [keyFunc(item), i];
-    });
-
-    sortArray.sort(function(a, b) {
-        const keyA = a[0];
-        const keyB = b[0];
-
-        if (keyA == keyB) return 0;
-
-        if (reversed) {
-            return keyA < keyB ? 1 : -1;
-        } else {
-            return keyA > keyB ? 1 : -1;
-        }
-    });
-
-    return sortArray.map(function(item) {
-        const index = item[1];
-        return items[index];
-    });
-}
-
-function keyAlpha(colIndex) {
-    return function(elem) {
-        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
-    };
-}
-
-function keyLink(colIndex) {
-    return function(elem) {
-        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
-        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
-    };
-}
-
-function keyResult(colIndex) {
-    return function(elem) {
-        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
-            'Skipped', 'Passed'];
-        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
-    };
-}
-
-function resetSortHeaders() {
-    findAll('.sort-icon').forEach(function(elem) {
-        elem.parentNode.removeChild(elem);
-    });
-    findAll('.sortable').forEach(function(elem) {
-        const icon = document.createElement('div');
-        icon.className = 'sort-icon';
-        icon.textContent = 'vvv';
-        elem.insertBefore(icon, elem.firstChild);
-        elem.classList.remove('desc', 'active');
-        elem.classList.add('asc', 'inactive');
-    });
-}
-
-function toggleSortStates(elem) {
-    //if active, toggle between asc and desc
-    if (elem.classList.contains('active')) {
-        elem.classList.toggle('asc');
-        elem.classList.toggle('desc');
-    }
-
-    //if inactive, reset all other functions and add ascending active
-    if (elem.classList.contains('inactive')) {
-        resetSortHeaders();
-        elem.classList.remove('inactive');
-        elem.classList.add('active');
-    }
-}
-
-function isAllRowsHidden(value) {
-    return value.hidden == false;
-}
-
-function filterTable(elem) { // eslint-disable-line no-unused-vars
-    const outcomeAtt = 'data-test-result';
-    const outcome = elem.getAttribute(outcomeAtt);
-    const classOutcome = outcome + ' results-table-row';
-    const outcomeRows = document.getElementsByClassName(classOutcome);
-
-    for(let i = 0; i < outcomeRows.length; i++){
-        outcomeRows[i].hidden = !elem.checked;
-    }
-
-    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
-    const allRowsHidden = rows.length == 0 ? true : false;
-    const notFoundMessage = document.getElementById('not-found-message');
-    notFoundMessage.hidden = !allRowsHidden;
-}
-</script>
-    <h1>report.html</h1>
-    <p>Report generated on 04-Sep-2023 at 03:49:44 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
-    <h2>Summary</h2>
-    <p>53 tests ran in 30.51 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">53 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
-    <h2>Results</h2>
+    <title id="head-title">report.html</title>
+      <link href="assets/style.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h1 id="title">report.html</h1>
+    <p>Report generated on 04-Sep-2023 at 04:06:04 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.0.0</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+        </div>
+        <p class="run-count">53 tests took 00:00:26.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to ge the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
+            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">53 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Unexpected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
+            <span class="rerun">0 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
     <table id="results-table">
       <thead id="results-table-head">
         <tr>
-          <th class="sortable result initial-sort" col="result">Result</th>
-          <th class="sortable" col="name">Test</th>
-          <th class="sortable" col="duration">Duration</th>
-          <th class="sortable links" col="links">Links</th></tr>
-        <tr hidden="true" id="not-found-message">
-          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_build_empty</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_iteration</td>
-          <td class="col-duration">0.30</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_set_position</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_prices</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_box</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_with_costmodel</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_trading_cost_model_is_none</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_iteration_state</td>
-          <td class="col-duration">1.32</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_cov</td>
-          <td class="col-duration">0.78</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_stocks</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_returns</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_build</td>
-          <td class="col-duration">3.11</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_index</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_assets</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_set_cashpositions</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_initial_cash</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_builder.py::test_set_weights</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_pandas.py::test_ratio</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_grid.py::test_iron_frame</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_trading_costs.py::test_linear_model</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_metrics.py::test_profit</td>
-          <td class="col-duration">0.26</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_not_a_complete_year</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_table_compounded</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_monthlytable</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_month.py::test_missing</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_add</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>              A    B    C
-2013-01-01  0.0  0.0  3.0
-2013-01-02  2.0  2.0  3.0
-2013-01-03  1.0  3.0  0.0
-2013-01-04  2.0  4.0  0.0
-                  A         B        C
-2013-01-01  1673.78       NaN  62550.1
-2013-01-02  1686.90  23311.98  62550.1
-2013-01-03  1663.95  23398.60      NaN
-2013-01-04  1655.65  23331.09      NaN
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_quantstats</td>
-          <td class="col-duration">0.62</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>                           Strategy
--------------------------  ----------
-Start Period               2013-01-02
-End Period                 2015-04-22
-Risk-Free Rate             0.0%
-Time in Market             100.0%
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.10.12&#34;, &#34;Platform&#34;: &#34;Linux-5.15.0-1041-azure-x86_64-with-glibc2.35&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;7.4.1&#34;, &#34;pluggy&#34;: &#34;1.3.0&#34;}, &#34;Plugins&#34;: {&#34;metadata&#34;: &#34;3.0.0&#34;, &#34;html&#34;: &#34;4.0.0&#34;, &#34;cov&#34;: &#34;4.1.0&#34;, &#34;random-order&#34;: &#34;1.1.0&#34;}, &#34;CI&#34;: &#34;true&#34;, &#34;JAVA_HOME&#34;: &#34;/usr/lib/jvm/temurin-11-jdk-amd64&#34;}, &#34;tests&#34;: {&#34;tests/test_metrics.py::test_profit&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_metrics.py::test_profit&#34;, &#34;duration&#34;: &#34;253 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_metrics.py::test_profit&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;253 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_assets&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_assets&#34;, &#34;duration&#34;: &#34;0 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_assets&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;0 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_set_cashpositions&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_set_cashpositions&#34;, &#34;duration&#34;: &#34;19 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_set_cashpositions&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;19 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_with_costmodel&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_with_costmodel&#34;, &#34;duration&#34;: &#34;24 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_with_costmodel&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;24 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_box&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_box&#34;, &#34;duration&#34;: &#34;52 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_box&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;52 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_iteration_state&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_iteration_state&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_iteration_state&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_set_position&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_set_position&#34;, &#34;duration&#34;: &#34;19 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_set_position&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;19 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_stocks&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_stocks&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_stocks&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_index&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_index&#34;, &#34;duration&#34;: &#34;3 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_index&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;3 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_build_empty&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_build_empty&#34;, &#34;duration&#34;: &#34;14 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_build_empty&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;14 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_set_weights&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_set_weights&#34;, &#34;duration&#34;: &#34;18 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_set_weights&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;18 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_initial_cash&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_initial_cash&#34;, &#34;duration&#34;: &#34;0 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_initial_cash&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;0 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_returns&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_returns&#34;, &#34;duration&#34;: &#34;7 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_returns&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;7 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_trading_cost_model_is_none&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_trading_cost_model_is_none&#34;, &#34;duration&#34;: &#34;0 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_trading_cost_model_is_none&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;0 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_prices&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_prices&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_prices&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_cov&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_cov&#34;, &#34;duration&#34;: &#34;685 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_cov&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;685 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_iteration&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_iteration&#34;, &#34;duration&#34;: &#34;220 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_iteration&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;220 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_builder.py::test_build&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_builder.py::test_build&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_builder.py::test_build&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_pandas.py::test_ratio&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_pandas.py::test_ratio&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_pandas.py::test_ratio&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_truncate&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_truncate&#34;, &#34;duration&#34;: &#34;24 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_truncate&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;24 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_multiply&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_multiply&#34;, &#34;duration&#34;: &#34;4 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_multiply&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;4 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_get&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_get&#34;, &#34;duration&#34;: &#34;48 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_get&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;48 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_weights&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_weights&#34;, &#34;duration&#34;: &#34;73 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_weights&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;73 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_plots&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_plots&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_plots&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;------------------------------ Captured log call -------------------------------\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\n\n&#34;}], &#34;tests/test_portfolio.py::test_snapshot&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_snapshot&#34;, &#34;duration&#34;: &#34;640 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_snapshot&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;640 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_portfolio&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_portfolio&#34;, &#34;duration&#34;: &#34;984 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_portfolio&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;984 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_turnover&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_turnover&#34;, &#34;duration&#34;: &#34;8 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_turnover&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;8 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_monotonic&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_monotonic&#34;, &#34;duration&#34;: &#34;1 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_monotonic&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;1 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_state&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_state&#34;, &#34;duration&#34;: &#34;3 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_state&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;3 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_stocks&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_stocks&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_stocks&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_drawdown&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_drawdown&#34;, &#34;duration&#34;: &#34;31 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_drawdown&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;31 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_prices&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_prices&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_prices&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_duplicates&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_duplicates&#34;, &#34;duration&#34;: &#34;3 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_duplicates&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;3 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_rolling_betas&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_rolling_betas&#34;, &#34;duration&#34;: &#34;239 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_rolling_betas&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;239 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_html&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_html&#34;, &#34;duration&#34;: &#34;00:00:07&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_html&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:07&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;------------------------------ Captured log call -------------------------------\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\n\n&#34;}], &#34;tests/test_portfolio.py::test_add&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_add&#34;, &#34;duration&#34;: &#34;48 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_add&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;48 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n              A    B    C\n2013-01-01  0.0  0.0  3.0\n2013-01-02  2.0  2.0  3.0\n2013-01-03  1.0  3.0  0.0\n2013-01-04  2.0  4.0  0.0\n                  A         B        C\n2013-01-01  1673.78       NaN  62550.1\n2013-01-02  1686.90  23311.98  62550.1\n2013-01-03  1663.95  23398.60      NaN\n2013-01-04  1655.65  23331.09      NaN\n&#34;}], &#34;tests/test_portfolio.py::test_assets&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_assets&#34;, &#34;duration&#34;: &#34;0 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_assets&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;0 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_index&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_index&#34;, &#34;duration&#34;: &#34;1 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_index&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;1 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_long_short&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_long_short&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_long_short&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_multiply_r&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_multiply_r&#34;, &#34;duration&#34;: &#34;4 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_multiply_r&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;4 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_plot_enum&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_plot_enum&#34;, &#34;duration&#34;: &#34;00:00:03&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_plot_enum&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:03&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n********************************************************************\nPlot.DAILY_RETURNS\ndaily_returns() missing 1 required positional argument: &#39;benchmark&#39;\n********************************************************************\nPlot.DISTRIBUTION\n********************************************************************\nPlot.DRAWDOWN\n********************************************************************\nPlot.DRAWDOWNS_PERIODS\n********************************************************************\nPlot.EARNINGS\n********************************************************************\nPlot.HISTOGRAM\n********************************************************************\nPlot.LOG_RETURNS\n********************************************************************\nPlot.MONTHLY_HEATMAP\n********************************************************************\nPlot.MONTHLY_RETURNS\n********************************************************************\nPlot.RETURNS\n********************************************************************\nPlot.ROLLING_BETA\nrolling_beta() missing 1 required positional argument: &#39;benchmark&#39;\n********************************************************************\nPlot.ROLLING_SHARPE\n********************************************************************\nPlot.ROLLING_SORTINO\n********************************************************************\nPlot.ROLLING_VOLATILITY\n********************************************************************\nPlot.YEARLY_RETURNS\n\n------------------------------ Captured log call -------------------------------\nWARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\nWARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\nWARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\nWARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\nWARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\n\n&#34;}], &#34;tests/test_portfolio.py::test_resample&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_resample&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_resample&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_quantstats&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_quantstats&#34;, &#34;duration&#34;: &#34;517 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_quantstats&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;517 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n                           Strategy\n-------------------------  ----------\nStart Period               2013-01-02\nEnd Period                 2015-04-22\nRisk-Free Rate             0.0%\nTime in Market             100.0%\n\nCumulative Return          -0.35%\nCAGR\ufe6a                     -0.1%\n\nSharpe                     -0.1\nProb. Sharpe Ratio         43.74%\nSmart Sharpe               -0.1\nSortino                    -0.14\nSmart Sortino              -0.14\nSortino/\u221a2                 -0.1\nSmart Sortino/\u221a2           -0.1\nOmega                      0.98\n\nMax Drawdown               -2.21%\nLongest DD Days            602\nVolatility (ann.)          1.35%\nCalmar                     -0.05\nSkew                       0.0\nKurtosis                   0.91\n\nExpected Daily %           -0.0%\nExpected Monthly %         -0.01%\nExpected Yearly %          -0.12%\nKelly Criterion            -0.84%\nRisk of Ruin               0.0%\nDaily Value-at-Risk        -0.14%\nExpected Shortfall (cVaR)  -0.14%\n\nMax Consecutive Wins       9\nMax Consecutive Losses     7\nGain/Pain Ratio            -0.02\nGain/Pain (1M)             -0.07\n\nPayoff Ratio               1.03\nProfit Factor              0.98\nCommon Sense Ratio         1.01\nCPC Index                  0.49\nTail Ratio                 1.02\nOutlier Win Ratio          3.38\nOutlier Loss Ratio         3.28\n\nMTD                        0.59%\n3M                         0.86%\n6M                         0.68%\nYTD                        0.88%\n1Y                         0.69%\n3Y (ann.)                  -0.1%\n5Y (ann.)                  -0.1%\n10Y (ann.)                 -0.1%\nAll-time (ann.)            -0.1%\n\nBest Day                   0.29%\nWorst Day                  -0.31%\nBest Month                 0.59%\nWorst Month                -0.95%\nBest Year                  0.88%\nWorst Year                 -1.1%\n\nAvg. Drawdown              -1.35%\nAvg. Drawdown Days         278\nRecovery Factor            0.15\nUlcer Index                0.01\nSerenity Index             -0.01\n\nAvg. Up Month              0.25%\nAvg. Down Month            -0.37%\nWin Days %                 48.92%\nWin Month %                57.14%\nWin Quarter %              50.0%\nWin Year %                 33.33%\n&#34;}], &#34;tests/test_portfolio.py::test_plot&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_plot&#34;, &#34;duration&#34;: &#34;463 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_plot&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;463 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;------------------------------ Captured log call -------------------------------\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\nWARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#39;Arial&#39; not found.\n\n&#34;}], &#34;tests/test_portfolio.py::test_long_only&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_long_only&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_long_only&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_iter&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_iter&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_iter&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_portfolio.py::test_diff&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_portfolio.py::test_diff&#34;, &#34;duration&#34;: &#34;6 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_portfolio.py::test_diff&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;6 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_month.py::test_not_a_complete_year&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_month.py::test_not_a_complete_year&#34;, &#34;duration&#34;: &#34;16 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_month.py::test_not_a_complete_year&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;16 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_month.py::test_table_compounded&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_month.py::test_table_compounded&#34;, &#34;duration&#34;: &#34;56 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_month.py::test_table_compounded&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;56 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_month.py::test_missing&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_month.py::test_missing&#34;, &#34;duration&#34;: &#34;17 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_month.py::test_missing&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;17 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_month.py::test_monthlytable&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_month.py::test_monthlytable&#34;, &#34;duration&#34;: &#34;17 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_month.py::test_monthlytable&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;17 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_trading_costs.py::test_linear_model&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_trading_costs.py::test_linear_model&#34;, &#34;duration&#34;: &#34;2 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_trading_costs.py::test_linear_model&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;2 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}], &#34;tests/test_grid.py::test_iron_frame&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_grid.py::test_iron_frame&#34;, &#34;duration&#34;: &#34;13 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_grid.py::test_iron_frame&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;13 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;No log output captured.&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
 
-Cumulative Return          -0.35%
-CAGR﹪                     -0.1%
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
 
-Sharpe                     -0.1
-Prob. Sharpe Ratio         43.74%
-Smart Sharpe               -0.1
-Sortino                    -0.14
-Smart Sortino              -0.14
-Sortino/√2                 -0.1
-Smart Sortino/√2           -0.1
-Omega                      0.98
+    get allData() {
+        return { ...this.data }
+    }
 
-Max Drawdown               -2.21%
-Longest DD Days            602
-Volatility (ann.)          1.35%
-Calmar                     -0.05
-Skew                       0.0
-Kurtosis                   0.91
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
 
-Expected Daily %           -0.0%
-Expected Monthly %         -0.01%
-Expected Yearly %          -0.12%
-Kelly Criterion            -0.84%
-Risk of Ruin               0.0%
-Daily Value-at-Risk        -0.14%
-Expected Shortfall (cVaR)  -0.14%
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
 
-Max Consecutive Wins       9
-Max Consecutive Losses     7
-Gain/Pain Ratio            -0.02
-Gain/Pain (1M)             -0.07
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
 
-Payoff Ratio               1.03
-Profit Factor              0.98
-Common Sense Ratio         1.01
-CPC Index                  0.49
-Tail Ratio                 1.02
-Outlier Win Ratio          3.38
-Outlier Loss Ratio         3.28
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
 
-MTD                        0.59%
-3M                         0.86%
-6M                         0.68%
-YTD                        0.88%
-1Y                         0.69%
-3Y (ann.)                  -0.1%
-5Y (ann.)                  -0.1%
-10Y (ann.)                 -0.1%
-All-time (ann.)            -0.1%
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
 
-Best Day                   0.29%
-Worst Day                  -0.31%
-Best Month                 0.59%
-Worst Month                -0.95%
-Best Year                  0.88%
-Worst Year                 -1.1%
+    get environment() {
+        return this.renderData.environment
+    }
 
-Avg. Drawdown              -1.35%
-Avg. Drawdown Days         278
-Recovery Factor            0.15
-Ulcer Index                0.01
-Serenity Index             -0.01
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
 
-Avg. Up Month              0.25%
-Avg. Down Month            -0.37%
-Win Days %                 48.92%
-Win Month %                57.14%
-Win Quarter %              50.0%
-Win Year %                 33.33%
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_html</td>
-          <td class="col-duration">8.47</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_plots</td>
-          <td class="col-duration">2.80</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_state</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_portfolio</td>
-          <td class="col-duration">1.15</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_rolling_betas</td>
-          <td class="col-duration">0.28</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_index</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_weights</td>
-          <td class="col-duration">0.10</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_diff</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_stocks</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_plot_enum</td>
-          <td class="col-duration">3.16</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>********************************************************************
-Plot.DAILY_RETURNS
-daily_returns() missing 1 required positional argument: &#x27;benchmark&#x27;
-********************************************************************
-Plot.DISTRIBUTION
-********************************************************************
-Plot.DRAWDOWN
-********************************************************************
-Plot.DRAWDOWNS_PERIODS
-********************************************************************
-Plot.EARNINGS
-********************************************************************
-Plot.HISTOGRAM
-********************************************************************
-Plot.LOG_RETURNS
-********************************************************************
-Plot.MONTHLY_HEATMAP
-********************************************************************
-Plot.MONTHLY_RETURNS
-********************************************************************
-Plot.RETURNS
-********************************************************************
-Plot.ROLLING_BETA
-rolling_beta() missing 1 required positional argument: &#x27;benchmark&#x27;
-********************************************************************
-Plot.ROLLING_SHARPE
-********************************************************************
-Plot.ROLLING_SORTINO
-********************************************************************
-Plot.ROLLING_VOLATILITY
-********************************************************************
-Plot.YEARLY_RETURNS
-<br/> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-WARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-WARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-WARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-WARNING  matplotlib.legend:legend.py:1323 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_monotonic</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_snapshot</td>
-          <td class="col-duration">0.74</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_truncate</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_drawdown</td>
-          <td class="col-duration">0.04</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_long_short</td>
-          <td class="col-duration">1.37</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_get</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_multiply</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_prices</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_assets</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_resample</td>
-          <td class="col-duration">1.44</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_turnover</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_long_only</td>
-          <td class="col-duration">1.35</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_multiply_r</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_iter</td>
-          <td class="col-duration">1.30</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_duplicates</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_portfolio.py::test_plot</td>
-          <td class="col-duration">0.53</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> -------------------------------Captured log call-------------------------------- <br/>WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.
-WARNING  matplotlib.font_manager:font_manager.py:1339 findfont: Font family &#x27;Arial&#x27; not found.<br/></div></td></tr></tbody></table></body></html>
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`).classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>

@@ -1,8 +1,9 @@
-ipython 8.14.0 IPython: Productive Interactive Computing
+ipython 8.15.0 IPython: Productive Interactive Computing
 ├── appnope *
 ├── backcall *
 ├── colorama *
 ├── decorator *
+├── exceptiongroup *
 ├── jedi >=0.16
 │   └── parso >=0.8.3,<0.9.0 
 ├── matplotlib-inline *
@@ -15,7 +16,7 @@ ipython 8.14.0 IPython: Productive Interactive Computing
 ├── pygments >=2.4.0
 ├── stack-data *
 │   ├── asttokens >=2.1.0 
-│   │   └── six * 
+│   │   └── six >=1.12.0 
 │   ├── executing >=1.2.0 
 │   └── pure-eval * 
 ├── traitlets >=5
