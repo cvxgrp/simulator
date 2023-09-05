@@ -278,6 +278,19 @@ class EquityPortfolio:
         )
 
     @property
+    def cashflow(self) -> pd.Series:
+        """A property that returns a pandas series representing the cash flows
+        in the portfolio over time.
+
+        Returns: pd.Series: A pandas series representing the cash flows
+        in the portfolio over time.
+        """
+
+        cashflow = self.cash.diff(1)  # cashflow over t=2,...,T
+        cashflow.iloc[0] = self.cash.iloc[0] - self.initial_cash  # cashflow at t=1
+        return cashflow
+
+    @property
     def nav(self) -> pd.Series:
         """Returns a pandas series representing the total value
         of the portfolio's investments and cash.
