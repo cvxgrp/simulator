@@ -351,6 +351,19 @@
         <span class="p">)</span></div>
 
     <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.cashflow"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cashflow">[docs]</a>    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the cash flows</span>
+<span class="sd">        in the portfolio over time.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the cash flows</span>
+<span class="sd">        in the portfolio over time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cashflow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># cashflow over t=2,...,T</span>
+        <span class="n">cashflow</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>  <span class="c1"># cashflow at t=1</span>
+        <span class="k">return</span> <span class="n">cashflow</span></div>
+
+    <span class="nd">@property</span>
 <div class="viewcode-block" id="EquityPortfolio.nav"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a pandas series representing the total value</span>
 <span class="sd">        of the portfolio&#39;s investments and cash.</span>

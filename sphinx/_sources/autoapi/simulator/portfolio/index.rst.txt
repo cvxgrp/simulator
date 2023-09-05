@@ -354,6 +354,16 @@ Functions
       The resulting series will show how much money is available for further trades at each point in time.
 
 
+   .. py:method:: cashflow(self) -> pandas.Series
+      :property:
+
+      A property that returns a pandas series representing the cash flows
+      in the portfolio over time.
+
+      Returns: pd.Series: A pandas series representing the cash flows
+      in the portfolio over time.
+
+
    .. py:method:: nav(self) -> pandas.Series
       :property:
 
