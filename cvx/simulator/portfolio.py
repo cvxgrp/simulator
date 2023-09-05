@@ -287,10 +287,8 @@ class EquityPortfolio:
         in the portfolio over time.
         """
 
-
         cash_flows = self.cash.diff(1) # cash flows over t=2,...,T
-        cash_flows[0] = self.cash[0]-self.initial_cash # cash flow at t=1
-
+        cash_flows.iloc[0] = self.cash.iloc[0]-self.initial_cash # cash flow at t=1
         return cash_flows
     @property
     def nav(self) -> pd.Series:
