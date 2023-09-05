@@ -437,6 +437,8 @@ def test_rolling_betas(portfolio):
         show=False,
     )
 
-def test_cash_flows(portfolio):
 
-    assert portfolio.cash_flows.sum() + portfolio.initial_cash == portfolio.cash.iloc[-1]
+def test_cash_flows(portfolio):
+    assert (
+        portfolio.cash_flows.sum() + portfolio.initial_cash == portfolio.cash.iloc[-1]
+    )
