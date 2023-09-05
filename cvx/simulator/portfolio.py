@@ -278,7 +278,7 @@ class EquityPortfolio:
         )
 
     @property
-    def cash_flows(self) -> pd.Series:
+    def cashflow(self) -> pd.Series:
         """A property that returns a pandas series representing the cash flows
         in the portfolio over time.
 
@@ -286,9 +286,9 @@ class EquityPortfolio:
         in the portfolio over time.
         """
 
-        cash_flows = self.cash.diff(1)  # cash flows over t=2,...,T
-        cash_flows.iloc[0] = self.cash.iloc[0] - self.initial_cash  # cash flow at t=1
-        return cash_flows
+        cashflow = self.cash.diff(1)  # cashflow over t=2,...,T
+        cashflow.iloc[0] = self.cash.iloc[0] - self.initial_cash  # cashflow at t=1
+        return cashflow
 
     @property
     def nav(self) -> pd.Series:
