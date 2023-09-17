@@ -51,9 +51,9 @@ marimo: install ## Run jupyter lab
 	@poetry run pip install marimo
 	@poetry run marimo edit
 
-.PHONY: conduct
-conduct: ## Generete CODE of CONDUCT and Contributing
-	@poetry run pip install jinja2 toml
-	@gh gist clone a4a054e3e80a8021c351b027280d3b09 tmp
-	@poetry run python tmp/parse.py
-	@rm -rf tmp
+.PHONY: boil
+boil: ## Update the boilerplate code
+	@gh repo clone git@github.com:cvxgrp/boilerplate.git .tmp
+	@cd .tmp  && poetry install -vv && cd ..
+	@.tmp/.venv/bin/python .tmp/parse.py pyproject.toml
+	@rm -rf .tmp
