@@ -21,7 +21,7 @@ ipython 8.15.0 IPython: Productive Interactive Computing
 │   └── pure-eval * 
 ├── traitlets >=5
 └── typing-extensions *
-numpy 1.25.2 Fundamental package for array computing in Python
+numpy 1.26.0 Fundamental package for array computing in Python
 pandas 2.1.0 Powerful data structures for data analysis, time series, and statistics
 ├── numpy >=1.22.4
 ├── numpy >=1.23.2
