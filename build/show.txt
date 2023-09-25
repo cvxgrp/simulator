@@ -97,6 +97,7 @@ quantstats 0.0.62 Portfolio analytics for quants
     │   │   └── six >=1.5 (circular dependency aborted here)
     │   ├── pytz >=2020.1 
     │   └── tzdata >=2022.1 
+    ├── peewee >=3.16.2 
     ├── pytz >=2022.5 (circular dependency aborted here)
     └── requests >=2.31 
         ├── certifi >=2017.4.17 
