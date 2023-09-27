@@ -2,6 +2,7 @@ import pandas as pd
 
 
 def test_ratio():
+    """test the ratio of two series with different indices"""
     a = pd.Series(index=["a", "b"], data=[1.0, 2.0])
     b = pd.Series(index=["a", "b", "c"], data=[2.0, 4.0, 6.0])
     assert set(a.index).issubset(set(b.index))

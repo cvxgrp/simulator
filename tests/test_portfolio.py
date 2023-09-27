@@ -439,4 +439,9 @@ def test_rolling_betas(portfolio):
 
 
 def test_cashflow(portfolio):
+    """
+    Test cashflow
+
+    :param portfolio: portfolio fixture
+    """
     assert portfolio.cashflow.sum() + portfolio.initial_cash == portfolio.cash.iloc[-1]
