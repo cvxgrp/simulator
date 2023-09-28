@@ -28,6 +28,7 @@ Functions
 
 .. py:class:: _State
 
+
    The _State class defines a state object used to keep track of the current
    state of the portfolio.
 
@@ -43,41 +44,24 @@ Functions
    By default, prices and position are set to None, while cash is set to 1 million.
    These attributes can be updated and accessed through setter and getter methods
 
-   .. py:attribute:: prices
-      :annotation: :pandas.Series
-
-      
-
-   .. py:attribute:: position
-      :annotation: :pandas.Series
-
-      
-
-   .. py:attribute:: cash
-      :annotation: :float = 1000000.0
-
-      
-
-   .. py:method:: value(self) -> float
-      :property:
+   .. py:property:: value
+      :type: float
 
       The value property computes the value of the portfolio at the current
       time taking into account the current holdings and current stock prices.
       If the value cannot be computed due to missing positions
       (they might be still None), zero is returned instead.
 
-
-   .. py:method:: nav(self) -> float
-      :property:
+   .. py:property:: nav
+      :type: float
 
       The nav property computes the net asset value (NAV) of the portfolio,
       which is the sum of the current value of the
       portfolio as determined by the value property,
       and the current amount of cash available in the portfolio.
 
-
-   .. py:method:: weights(self) -> pandas.Series
-      :property:
+   .. py:property:: weights
+      :type: pandas.Series
 
       The weights property computes the weighting of each asset in the current
       portfolio as a fraction of the total portfolio value (nav).
@@ -88,22 +72,35 @@ Functions
       fraction of the total portfolio value. If the positions are still
       missing, then a series of zeroes is returned.
 
-
-   .. py:method:: leverage(self) -> float
-      :property:
+   .. py:property:: leverage
+      :type: float
 
       The `leverage` property computes the leverage of the portfolio,
       which is the sum of the absolute values of the portfolio weights.
 
-
-   .. py:method:: position_robust(self) -> pandas.Series
-      :property:
+   .. py:property:: position_robust
+      :type: pandas.Series
 
       The position_robust property returns the current position of the
       portfolio or a series of zeroes if the position is still missing.
 
+   .. py:attribute:: prices
+      :type: pandas.Series
 
-   .. py:method:: update(self, position: pandas.Series, model: TradingCostModel | None = None, **kwargs: Any) -> _State
+      
+
+   .. py:attribute:: position
+      :type: pandas.Series
+
+      
+
+   .. py:attribute:: cash
+      :type: float
+      :value: 1000000.0
+
+      
+
+   .. py:method:: update(position: pandas.Series, model: cvx.simulator.trading_costs.TradingCostModel | None = None, **kwargs: Any) -> _State
 
       The update method updates the current state of the portfolio with the
       new input position. It calculates the trades made based on the new
@@ -135,7 +132,7 @@ Functions
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pd.DataFrame | None = None, market_cap: pd.DataFrame | None = None, trade_volume: pd.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -153,62 +150,94 @@ Functions
 
 .. py:class:: _Builder
 
+
+   .. py:property:: index
+      :type: pandas.DatetimeIndex
+
+      A property that returns the index of the portfolio,
+      which is the time period for which the portfolio data is available.
+
+      Returns: pd.Index: A pandas index representing the
+      time period for which the portfolio data is available.
+
+      Notes: The function extracts the index of the prices dataframe,
+      which represents the time periods for which data is available for the portfolio.
+      The resulting index will be a pandas index object
+      with the same length as the number of rows in the prices dataframe.
+
+   .. py:property:: assets
+      :type: pandas.Index
+
+      A property that returns a list of the assets held by the portfolio.
+
+      Returns: list: A list of the assets held by the portfolio.
+
+      Notes: The function extracts the column names of the prices dataframe,
+      which correspond to the assets held by the portfolio.
+      The resulting list will contain the names of all assets
+      held by the portfolio, without any duplicates.
+
+   .. py:property:: returns
+      :type: pandas.DataFrame
+
+
    .. py:attribute:: prices
-      :annotation: :pandas.DataFrame
+      :type: pandas.DataFrame
 
       
 
    .. py:attribute:: stocks
-      :annotation: :pandas.DataFrame
+      :type: pandas.DataFrame
 
       
 
    .. py:attribute:: trading_cost_model
-      :annotation: :TradingCostModel | None
+      :type: cvx.simulator.trading_costs.TradingCostModel | None
 
       
 
    .. py:attribute:: initial_cash
-      :annotation: :float = 1000000.0
+      :type: float
+      :value: 1000000.0
 
       
 
    .. py:attribute:: _state
-      :annotation: :_State
+      :type: _State
 
       
 
    .. py:attribute:: market_cap
-      :annotation: :pandas.DataFrame
+      :type: pandas.DataFrame
 
       
 
    .. py:attribute:: trade_volume
-      :annotation: :pandas.DataFrame
+      :type: pandas.DataFrame
 
       
 
    .. py:attribute:: max_cap_fraction
-      :annotation: :float | None
+      :type: float | None
 
       
 
    .. py:attribute:: min_cap_fraction
-      :annotation: :float | None
+      :type: float | None
 
       
 
    .. py:attribute:: max_trade_fraction
-      :annotation: :float | None
+      :type: float | None
 
       
 
    .. py:attribute:: min_trade_fraction
-      :annotation: :float | None
+      :type: float | None
 
       
 
-   .. py:method:: __post_init__(self) -> None
+   .. py:method:: __post_init__() -> None
 
       The __post_init__ method is a special method of initialized instances
       of the _Builder class and is called after initialization.
@@ -222,42 +251,10 @@ Functions
       is called automatically after the object initialization.
 
 
-   .. py:method:: index(self) -> pandas.DatetimeIndex
-      :property:
-
-      A property that returns the index of the portfolio,
-      which is the time period for which the portfolio data is available.
-
-      Returns: pd.Index: A pandas index representing the
-      time period for which the portfolio data is available.
-
-      Notes: The function extracts the index of the prices dataframe,
-      which represents the time periods for which data is available for the portfolio.
-      The resulting index will be a pandas index object
-      with the same length as the number of rows in the prices dataframe.
+   .. py:method:: cov(**kwargs: Any) -> Generator[tuple[datetime.datetime, pandas.DataFrame], None, None]
 
 
-   .. py:method:: assets(self) -> pandas.Index
-      :property:
-
-      A property that returns a list of the assets held by the portfolio.
-
-      Returns: list: A list of the assets held by the portfolio.
-
-      Notes: The function extracts the column names of the prices dataframe,
-      which correspond to the assets held by the portfolio.
-      The resulting list will contain the names of all assets
-      held by the portfolio, without any duplicates.
-
-
-   .. py:method:: returns(self) -> pandas.DataFrame
-      :property:
-
-
-   .. py:method:: cov(self, **kwargs: Any) -> Generator[tuple[datetime.datetime, pandas.DataFrame], None, None]
-
-
-   .. py:method:: set_weights(self, time: datetime.datetime, weights: pandas.Series) -> None
+   .. py:method:: set_weights(time: datetime.datetime, weights: pandas.Series) -> None
 
       Set the position via weights (e.g. fractions of the nav)
 
@@ -265,7 +262,7 @@ Functions
       :param weights: series of weights
 
 
-   .. py:method:: set_cashposition(self, time: datetime.datetime, cashposition: pandas.Series) -> None
+   .. py:method:: set_cashposition(time: datetime.datetime, cashposition: pandas.Series) -> None
 
       Set the position via cash positions (e.g. USD invested per asset)
 
@@ -273,7 +270,7 @@ Functions
       :param cashposition: series of cash positions
 
 
-   .. py:method:: set_position(self, time: datetime.datetime, position: pandas.Series) -> None
+   .. py:method:: set_position(time: datetime.datetime, position: pandas.Series) -> None
 
       Set the position via number of assets (e.g. number of stocks)
 
@@ -281,7 +278,7 @@ Functions
       :param position: series of number of stocks
 
 
-   .. py:method:: __iter__(self) -> Generator[tuple[pandas.DatetimeIndex, _State], None, None]
+   .. py:method:: __iter__() -> Generator[tuple[pandas.DatetimeIndex, _State], None, None]
 
       The __iter__ method allows the object to be iterated over in a for loop,
       yielding time and the current state of the portfolio.
@@ -297,7 +294,7 @@ Functions
       taking into account the stock prices at each interval.
 
 
-   .. py:method:: __setitem__(self, time: datetime.datetime, position: pandas.Series) -> None
+   .. py:method:: __setitem__(time: datetime.datetime, position: pandas.Series) -> None
 
       The method __setitem__ updates the stock data in the dataframe for a specific time index
       with the input position. It first checks that position is a valid input,
@@ -318,7 +315,7 @@ Functions
       or its index is not a subset of the assets of the dataframe.
 
 
-   .. py:method:: __getitem__(self, time: datetime.datetime) -> pandas.Series
+   .. py:method:: __getitem__(time: datetime.datetime) -> pandas.Series
 
       The __getitem__ method retrieves the stock data for a specific time in the dataframe.
       It returns the stock data for that time. The method takes one input parameter:
@@ -329,7 +326,7 @@ Functions
       Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
 
 
-   .. py:method:: build(self) -> cvx.simulator.portfolio.EquityPortfolio
+   .. py:method:: build() -> cvx.simulator.portfolio.EquityPortfolio
 
       A function that creates a new instance of the EquityPortfolio
       class based on the internal state of the Portfolio builder object.

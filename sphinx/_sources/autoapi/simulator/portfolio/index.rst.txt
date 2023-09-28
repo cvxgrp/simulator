@@ -28,6 +28,7 @@ Functions
 
 .. py:class:: Plot
 
+
    Bases: :py:obj:`enum.Enum`
 
    Generic enumeration.
@@ -35,88 +36,89 @@ Functions
    Derive from this class to define new enumerations.
 
    .. py:attribute:: DAILY_RETURNS
-      :annotation: = 1
+      :value: 1
 
       
 
    .. py:attribute:: DISTRIBUTION
-      :annotation: = 2
+      :value: 2
 
       
 
    .. py:attribute:: DRAWDOWN
-      :annotation: = 3
+      :value: 3
 
       
 
    .. py:attribute:: DRAWDOWNS_PERIODS
-      :annotation: = 4
+      :value: 4
 
       
 
    .. py:attribute:: EARNINGS
-      :annotation: = 5
+      :value: 5
 
       
 
    .. py:attribute:: HISTOGRAM
-      :annotation: = 6
+      :value: 6
 
       
 
    .. py:attribute:: LOG_RETURNS
-      :annotation: = 7
+      :value: 7
 
       
 
    .. py:attribute:: MONTHLY_HEATMAP
-      :annotation: = 8
+      :value: 8
 
       
 
    .. py:attribute:: MONTHLY_RETURNS
-      :annotation: = 9
+      :value: 9
 
       
 
    .. py:attribute:: RETURNS
-      :annotation: = 10
+      :value: 10
 
       
 
    .. py:attribute:: ROLLING_BETA
-      :annotation: = 11
+      :value: 11
 
       
 
    .. py:attribute:: ROLLING_SHARPE
-      :annotation: = 12
+      :value: 12
 
       
 
    .. py:attribute:: ROLLING_SORTINO
-      :annotation: = 13
+      :value: 13
 
       
 
    .. py:attribute:: ROLLING_VOLATILITY
-      :annotation: = 14
+      :value: 14
 
       
 
    .. py:attribute:: YEARLY_RETURNS
-      :annotation: = 15
+      :value: 15
 
       
 
-   .. py:method:: plot(self, returns: pandas.DataFrame, **kwargs: Any) -> Any
+   .. py:method:: plot(returns: pandas.DataFrame, **kwargs: Any) -> Any
 
 
 
-.. py:function:: diff(portfolio1: EquityPortfolio, portfolio2: EquityPortfolio, initial_cash: float = 1000000.0, trading_cost_model: TradingCostModel | None = None) -> EquityPortfolio
+.. py:function:: diff(portfolio1: EquityPortfolio, portfolio2: EquityPortfolio, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None) -> EquityPortfolio
 
 
 .. py:class:: EquityPortfolio
+
 
    A class that represents an equity portfolio
    and contains dataframes for prices and stock holdings,
@@ -172,44 +174,8 @@ Functions
    If no initial cash value is provided, the initial_cash attribute
    will be set to a default value of 1,000,000.
 
-   .. py:attribute:: prices
-      :annotation: :pandas.DataFrame
-
-      
-
-   .. py:attribute:: stocks
-      :annotation: :pandas.DataFrame
-
-      
-
-   .. py:attribute:: trading_cost_model
-      :annotation: :TradingCostModel | None
-
-      
-
-   .. py:attribute:: initial_cash
-      :annotation: :float = 1000000.0
-
-      
-
-   .. py:method:: __post_init__(self) -> None
-
-      A class method that performs input validation after object initialization.
-      Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
-      and performs a series of input validation checks to ensure that the prices
-      and stocks dataframes are in the expected format
-      with no duplicates or missing data,
-      and that the stocks dataframe represents valid equity positions
-      for the assets held in the portfolio.
-      Specifically, the method checks that both the prices and stocks dataframes
-      have a monotonic increasing and unique index,
-      and that the index and columns of the stocks dataframe are subsets
-      of the index and columns of the prices dataframe, respectively.
-      If any of these checks fail, an assertion error will be raised.
-
-
-   .. py:method:: index(self) -> pandas.DatetimeIndex
-      :property:
+   .. py:property:: index
+      :type: pandas.DatetimeIndex
 
       A property that returns the index of the EquityPortfolio instance,
       which is the time period for which the portfolio data is available.
@@ -222,9 +188,8 @@ Functions
       The resulting index will be a pandas index object with the same length
       as the number of rows in the prices dataframe.
 
-
-   .. py:method:: assets(self) -> pandas.Index
-      :property:
+   .. py:property:: assets
+      :type: pandas.Index
 
       A property that returns a list of the assets held by the EquityPortfolio object.
 
@@ -234,9 +199,8 @@ Functions
       which correspond to the assets held by the EquityPortfolio object.
       The resulting list will contain the names of all assets held by the portfolio, without any duplicates.
 
-
-   .. py:method:: weights(self) -> pandas.DataFrame
-      :property:
+   .. py:property:: weights
+      :type: pandas.DataFrame
 
       A property that returns a pandas dataframe representing
       the weights of various assets in the portfolio.
@@ -252,24 +216,8 @@ Functions
       The resulting dataframe will show the relative weight
       of each asset in the portfolio at each point in time.
 
-
-   .. py:method:: __getitem__(self, time: datetime.datetime) -> pandas.Series
-
-      The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
-      It returns the stock data for that time.
-
-      The method takes one input parameter:
-      - `time`: the time index for which to retrieve the stock data
-
-      Returns:
-      - stock data for the input time
-
-      Note that the input time must be in the index of the dataframe,
-      otherwise a KeyError will be raised.
-
-
-   .. py:method:: trading_costs(self) -> pandas.DataFrame
-      :property:
+   .. py:property:: trading_costs
+      :type: pandas.DataFrame
 
       A property that returns a pandas dataframe
       representing the trading costs incurred by the portfolio due to trades made.
@@ -286,9 +234,8 @@ Functions
       the prices and trades_stocks dataframes,
       showing the trading costs incurred at each point in time for each asset traded.
 
-
-   .. py:method:: equity(self) -> pandas.DataFrame
-      :property:
+   .. py:property:: equity
+      :type: pandas.DataFrame
 
       A property that returns a pandas dataframe
       representing the equity positions of the portfolio,
@@ -304,9 +251,8 @@ Functions
       The equity dataframe will have the same dimensions
       as the prices and stocks dataframes.
 
-
-   .. py:method:: trades_stocks(self) -> pandas.DataFrame
-      :property:
+   .. py:property:: trades_stocks
+      :type: pandas.DataFrame
 
       A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.
 
@@ -319,9 +265,8 @@ Functions
       The resulting dataframe will have the same dimensions
       as the stocks dataframe, with NaN values filled with zeros.
 
-
-   .. py:method:: trades_currency(self) -> pandas.DataFrame
-      :property:
+   .. py:property:: trades_currency
+      :type: pandas.DataFrame
 
       A property that returns a pandas dataframe representing
       the trades made in the portfolio in terms of currency.
@@ -334,13 +279,12 @@ Functions
       Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
       The resulting dataframe will have the same dimensions as the stocks and prices dataframes.
 
+   .. py:property:: turnover
+      :type: pandas.DataFrame
 
-   .. py:method:: turnover(self) -> pandas.DataFrame
-      :property:
 
-
-   .. py:method:: cash(self) -> pandas.Series
-      :property:
+   .. py:property:: cash
+      :type: pandas.Series
 
       A property that returns a pandas series representing the cash on hand in the portfolio.
 
@@ -353,9 +297,8 @@ Functions
       trades currency along the time axis.
       The resulting series will show how much money is available for further trades at each point in time.
 
-
-   .. py:method:: cashflow(self) -> pandas.Series
-      :property:
+   .. py:property:: cashflow
+      :type: pandas.Series
 
       A property that returns a pandas series representing the cash flows
       in the portfolio over time.
@@ -363,9 +306,8 @@ Functions
       Returns: pd.Series: A pandas series representing the cash flows
       in the portfolio over time.
 
-
-   .. py:method:: nav(self) -> pandas.Series
-      :property:
+   .. py:property:: nav
+      :type: pandas.Series
 
       Returns a pandas series representing the total value
       of the portfolio's investments and cash.
@@ -373,9 +315,8 @@ Functions
       Returns: pd.Series: A pandas series representing the
                           total value of the portfolio's investments and cash.
 
-
-   .. py:method:: profit(self) -> pandas.Series
-      :property:
+   .. py:property:: profit
+      :type: pandas.Series
 
       A property that returns a pandas series representing the
       profit gained or lost in the portfolio based on changes in asset prices.
@@ -387,9 +328,8 @@ Functions
       the previous and current prices of the assets in the portfolio,
       multiplied by the number of stocks in each asset previously held.
 
-
-   .. py:method:: highwater(self) -> pandas.Series
-      :property:
+   .. py:property:: highwater
+      :type: pandas.Series
 
       A function that returns a pandas series representing
       the high-water mark of the portfolio, which is the highest point
@@ -404,9 +344,8 @@ Functions
       Min_periods argument is set to 1 to include the minimum period of one day.
       The resulting series will show the highest value the portfolio has reached at each point in time.
 
-
-   .. py:method:: drawdown(self) -> pandas.Series
-      :property:
+   .. py:property:: drawdown
+      :type: pandas.Series
 
       A property that returns a pandas series representing the
       drawdown of the portfolio, which measures the decline
@@ -421,8 +360,59 @@ Functions
       A positive drawdown means the portfolio is currently worth
       less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
 
+   .. py:attribute:: prices
+      :type: pandas.DataFrame
 
-   .. py:method:: __mul__(self, scalar: float) -> EquityPortfolio
+      
+
+   .. py:attribute:: stocks
+      :type: pandas.DataFrame
+
+      
+
+   .. py:attribute:: trading_cost_model
+      :type: cvx.simulator.trading_costs.TradingCostModel | None
+
+      
+
+   .. py:attribute:: initial_cash
+      :type: float
+      :value: 1000000.0
+
+      
+
+   .. py:method:: __post_init__() -> None
+
+      A class method that performs input validation after object initialization.
+      Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
+      and performs a series of input validation checks to ensure that the prices
+      and stocks dataframes are in the expected format
+      with no duplicates or missing data,
+      and that the stocks dataframe represents valid equity positions
+      for the assets held in the portfolio.
+      Specifically, the method checks that both the prices and stocks dataframes
+      have a monotonic increasing and unique index,
+      and that the index and columns of the stocks dataframe are subsets
+      of the index and columns of the prices dataframe, respectively.
+      If any of these checks fail, an assertion error will be raised.
+
+
+   .. py:method:: __getitem__(time: datetime.datetime) -> pandas.Series
+
+      The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
+      It returns the stock data for that time.
+
+      The method takes one input parameter:
+      - `time`: the time index for which to retrieve the stock data
+
+      Returns:
+      - stock data for the input time
+
+      Note that the input time must be in the index of the dataframe,
+      otherwise a KeyError will be raised.
+
+
+   .. py:method:: __mul__(scalar: float) -> EquityPortfolio
 
       A method that allows multiplication of the EquityPortfolio object with a scalar constant.
 
@@ -442,7 +432,7 @@ Functions
       by the scalar to maintain the same cash-to-equity ratio as the original portfolio.
 
 
-   .. py:method:: __rmul__(self, scalar: float) -> EquityPortfolio
+   .. py:method:: __rmul__(scalar: float) -> EquityPortfolio
 
       A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
 
@@ -454,17 +444,17 @@ Functions
       constant with an EquityPortfolio object in a reversed order
 
 
-   .. py:method:: __add__(self, port_new: EquityPortfolio) -> EquityPortfolio
+   .. py:method:: __add__(port_new: EquityPortfolio) -> EquityPortfolio
 
       A method that allows addition of two EquityPortfolio objects.
 
 
-   .. py:method:: reset_prices(self, prices: pandas.DataFrame) -> EquityPortfolio
+   .. py:method:: reset_prices(prices: pandas.DataFrame) -> EquityPortfolio
 
       A method that constructs an EquityPortfolio object using finer prices.
 
 
-   .. py:method:: truncate(self, before: datetime | None = None, after: datetime | None = None) -> EquityPortfolio
+   .. py:method:: truncate(before: datetime.datetime | None = None, after: datetime.datetime | None = None) -> EquityPortfolio
 
       The truncate method truncates the prices DataFrame, stocks DataFrame
       and the cash series of an EquityPortfolio object.
@@ -486,7 +476,7 @@ Functions
       :return:
 
 
-   .. py:method:: resample(self, rule: Any) -> EquityPortfolio
+   .. py:method:: resample(rule: Any) -> EquityPortfolio
 
       The resample method resamples an EquityPortfolio object to a new frequency
       specified by the rule argument.
@@ -498,7 +488,7 @@ Functions
       but rather returns a new object.
 
 
-   .. py:method:: metrics(self, benchmark: Any = None, rf: float = 0.0, display: bool = True, mode: str = 'basic', sep: bool = False, compound: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> pandas.DataFrame
+   .. py:method:: metrics(benchmark: Any = None, rf: float = 0.0, display: bool = True, mode: str = 'basic', sep: bool = False, compound: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> pandas.DataFrame
 
       The metrics method calculates the performance metrics of an EquityPortfolio object.
 
@@ -506,16 +496,16 @@ Functions
       :return:
 
 
-   .. py:method:: plots(self, benchmark: Any = None, grayscale: bool = False, figsize: tuple[int, int] = (8, 5), mode: str = 'basic', compounded: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> Any
+   .. py:method:: plots(benchmark: Any = None, grayscale: bool = False, figsize: tuple[int, int] = (8, 5), mode: str = 'basic', compounded: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> Any
 
 
-   .. py:method:: plot(self, kind: Plot, **kwargs: Any) -> Any
+   .. py:method:: plot(kind: Plot, **kwargs: Any) -> Any
 
 
-   .. py:method:: html(self, benchmark: Any = None, rf: float = 0.0, grayscale: bool = False, title: str = 'Strategy Tearsheet', output: Any = None, compounded: bool = True, periods_per_year: int = 252, download_filename: str = 'quantstats-tearsheet.html', figfmt: str = 'svg', template_path: Any = None, match_dates: bool = True, **kwargs: Any) -> Any
+   .. py:method:: html(benchmark: Any = None, rf: float = 0.0, grayscale: bool = False, title: str = 'Strategy Tearsheet', output: Any = None, compounded: bool = True, periods_per_year: int = 252, download_filename: str = 'quantstats-tearsheet.html', figfmt: str = 'svg', template_path: Any = None, match_dates: bool = True, **kwargs: Any) -> Any
 
 
-   .. py:method:: snapshot(self, grayscale: bool = False, figsize: tuple[int, int] = (10, 8), title: str = 'Portfolio Summary', fontname: str = 'Arial', lw: float = 1.5, mode: str = 'comp', subtitle: bool = True, savefig: Any = None, show: bool = True, log_scale: bool = False, **kwargs: Any) -> Any
+   .. py:method:: snapshot(grayscale: bool = False, figsize: tuple[int, int] = (10, 8), title: str = 'Portfolio Summary', fontname: str = 'Arial', lw: float = 1.5, mode: str = 'comp', subtitle: bool = True, savefig: Any = None, show: bool = True, log_scale: bool = False, **kwargs: Any) -> Any
 
       The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
 

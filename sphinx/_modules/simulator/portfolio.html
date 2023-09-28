@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -28,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cvxsimulator
-            <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cvxsimulator
+              <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -59,9 +63,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>simulator.portfolio</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">simulator.portfolio</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -100,34 +104,87 @@
 <span class="n">qs</span><span class="o">.</span><span class="n">extend_pandas</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="Plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot">[docs]</a><span class="k">class</span> <span class="nc">Plot</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<div class="viewcode-block" id="Plot.DAILY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DAILY_RETURNS">[docs]</a>    <span class="n">DAILY_RETURNS</span> <span class="o">=</span> <span class="mi">1</span></div>
-<div class="viewcode-block" id="Plot.DISTRIBUTION"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DISTRIBUTION">[docs]</a>    <span class="n">DISTRIBUTION</span> <span class="o">=</span> <span class="mi">2</span></div>
-<div class="viewcode-block" id="Plot.DRAWDOWN"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWN">[docs]</a>    <span class="n">DRAWDOWN</span> <span class="o">=</span> <span class="mi">3</span></div>
-<div class="viewcode-block" id="Plot.DRAWDOWNS_PERIODS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWNS_PERIODS">[docs]</a>    <span class="n">DRAWDOWNS_PERIODS</span> <span class="o">=</span> <span class="mi">4</span></div>
-<div class="viewcode-block" id="Plot.EARNINGS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.EARNINGS">[docs]</a>    <span class="n">EARNINGS</span> <span class="o">=</span> <span class="mi">5</span></div>
-<div class="viewcode-block" id="Plot.HISTOGRAM"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.HISTOGRAM">[docs]</a>    <span class="n">HISTOGRAM</span> <span class="o">=</span> <span class="mi">6</span></div>
-<div class="viewcode-block" id="Plot.LOG_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.LOG_RETURNS">[docs]</a>    <span class="n">LOG_RETURNS</span> <span class="o">=</span> <span class="mi">7</span></div>
-<div class="viewcode-block" id="Plot.MONTHLY_HEATMAP"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_HEATMAP">[docs]</a>    <span class="n">MONTHLY_HEATMAP</span> <span class="o">=</span> <span class="mi">8</span></div>
+<div class="viewcode-block" id="Plot">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot">[docs]</a>
+<span class="k">class</span> <span class="nc">Plot</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Plot.DAILY_RETURNS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DAILY_RETURNS">[docs]</a>
+    <span class="n">DAILY_RETURNS</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Plot.DISTRIBUTION">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DISTRIBUTION">[docs]</a>
+    <span class="n">DISTRIBUTION</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="Plot.DRAWDOWN">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWN">[docs]</a>
+    <span class="n">DRAWDOWN</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+<div class="viewcode-block" id="Plot.DRAWDOWNS_PERIODS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.DRAWDOWNS_PERIODS">[docs]</a>
+    <span class="n">DRAWDOWNS_PERIODS</span> <span class="o">=</span> <span class="mi">4</span></div>
+
+<div class="viewcode-block" id="Plot.EARNINGS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.EARNINGS">[docs]</a>
+    <span class="n">EARNINGS</span> <span class="o">=</span> <span class="mi">5</span></div>
+
+<div class="viewcode-block" id="Plot.HISTOGRAM">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.HISTOGRAM">[docs]</a>
+    <span class="n">HISTOGRAM</span> <span class="o">=</span> <span class="mi">6</span></div>
+
+<div class="viewcode-block" id="Plot.LOG_RETURNS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.LOG_RETURNS">[docs]</a>
+    <span class="n">LOG_RETURNS</span> <span class="o">=</span> <span class="mi">7</span></div>
+
+<div class="viewcode-block" id="Plot.MONTHLY_HEATMAP">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_HEATMAP">[docs]</a>
+    <span class="n">MONTHLY_HEATMAP</span> <span class="o">=</span> <span class="mi">8</span></div>
+
     <span class="c1"># see issue: https://github.com/ranaroussi/quantstats/issues/276</span>
-<div class="viewcode-block" id="Plot.MONTHLY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_RETURNS">[docs]</a>    <span class="n">MONTHLY_RETURNS</span> <span class="o">=</span> <span class="mi">9</span></div>
-<div class="viewcode-block" id="Plot.RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.RETURNS">[docs]</a>    <span class="n">RETURNS</span> <span class="o">=</span> <span class="mi">10</span></div>
-<div class="viewcode-block" id="Plot.ROLLING_BETA"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_BETA">[docs]</a>    <span class="n">ROLLING_BETA</span> <span class="o">=</span> <span class="mi">11</span></div>
-<div class="viewcode-block" id="Plot.ROLLING_SHARPE"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SHARPE">[docs]</a>    <span class="n">ROLLING_SHARPE</span> <span class="o">=</span> <span class="mi">12</span></div>
-<div class="viewcode-block" id="Plot.ROLLING_SORTINO"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SORTINO">[docs]</a>    <span class="n">ROLLING_SORTINO</span> <span class="o">=</span> <span class="mi">13</span></div>
-<div class="viewcode-block" id="Plot.ROLLING_VOLATILITY"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_VOLATILITY">[docs]</a>    <span class="n">ROLLING_VOLATILITY</span> <span class="o">=</span> <span class="mi">14</span></div>
-<div class="viewcode-block" id="Plot.YEARLY_RETURNS"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.YEARLY_RETURNS">[docs]</a>    <span class="n">YEARLY_RETURNS</span> <span class="o">=</span> <span class="mi">15</span></div>
+<div class="viewcode-block" id="Plot.MONTHLY_RETURNS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.MONTHLY_RETURNS">[docs]</a>
+    <span class="n">MONTHLY_RETURNS</span> <span class="o">=</span> <span class="mi">9</span></div>
+
+<div class="viewcode-block" id="Plot.RETURNS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.RETURNS">[docs]</a>
+    <span class="n">RETURNS</span> <span class="o">=</span> <span class="mi">10</span></div>
+
+<div class="viewcode-block" id="Plot.ROLLING_BETA">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_BETA">[docs]</a>
+    <span class="n">ROLLING_BETA</span> <span class="o">=</span> <span class="mi">11</span></div>
+
+<div class="viewcode-block" id="Plot.ROLLING_SHARPE">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SHARPE">[docs]</a>
+    <span class="n">ROLLING_SHARPE</span> <span class="o">=</span> <span class="mi">12</span></div>
+
+<div class="viewcode-block" id="Plot.ROLLING_SORTINO">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_SORTINO">[docs]</a>
+    <span class="n">ROLLING_SORTINO</span> <span class="o">=</span> <span class="mi">13</span></div>
+
+<div class="viewcode-block" id="Plot.ROLLING_VOLATILITY">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.ROLLING_VOLATILITY">[docs]</a>
+    <span class="n">ROLLING_VOLATILITY</span> <span class="o">=</span> <span class="mi">14</span></div>
+
+<div class="viewcode-block" id="Plot.YEARLY_RETURNS">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.YEARLY_RETURNS">[docs]</a>
+    <span class="n">YEARLY_RETURNS</span> <span class="o">=</span> <span class="mi">15</span></div>
+
 
     <span class="c1">#</span>
     <span class="c1"># def __call__(self, returns, **kwargs):</span>
     <span class="c1">#     return self._func(returns=returns, **kwargs)</span>
 
-<div class="viewcode-block" id="Plot.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="Plot.plot">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.Plot.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="diff"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.diff">[docs]</a><span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
+
+<div class="viewcode-block" id="diff">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.diff">[docs]</a>
+<span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
     <span class="n">portfolio1</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
     <span class="n">portfolio2</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">,</span>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
@@ -146,8 +203,11 @@
     <span class="p">)</span></div>
 
 
+
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<div class="viewcode-block" id="EquityPortfolio"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio">[docs]</a><span class="k">class</span> <span class="nc">EquityPortfolio</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio">[docs]</a>
+<span class="k">class</span> <span class="nc">EquityPortfolio</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class that represents an equity portfolio</span>
 <span class="sd">    and contains dataframes for prices and stock holdings,</span>
 <span class="sd">    as well as optional parameters for trading cost models</span>
@@ -172,12 +232,26 @@
 <span class="sd">    If no initial cash value is provided, the initial_cash attribute</span>
 <span class="sd">    will be set to a default value of 1,000,000.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EquityPortfolio.prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.prices">[docs]</a>    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
-<div class="viewcode-block" id="EquityPortfolio.stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.stocks">[docs]</a>    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
-<div class="viewcode-block" id="EquityPortfolio.trading_cost_model"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
-<div class="viewcode-block" id="EquityPortfolio.initial_cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.initial_cash">[docs]</a>    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+<div class="viewcode-block" id="EquityPortfolio.prices">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.prices">[docs]</a>
+    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__post_init__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.stocks">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.stocks">[docs]</a>
+    <span class="n">stocks</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.trading_cost_model">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_cost_model">[docs]</a>
+    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="EquityPortfolio.initial_cash">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.initial_cash">[docs]</a>
+    <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+
+<div class="viewcode-block" id="EquityPortfolio.__post_init__">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__post_init__">[docs]</a>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A class method that performs input validation after object initialization.</span>
 <span class="sd">        Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,</span>
 <span class="sd">        and performs a series of input validation checks to ensure that the prices</span>
@@ -199,8 +273,11 @@
         <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
         <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.index"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.index">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.index">[docs]</a>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the EquityPortfolio instance,</span>
 <span class="sd">        which is the time period for which the portfolio data is available.</span>
 
@@ -213,8 +290,11 @@
 <span class="sd">        as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.assets"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.assets">[docs]</a>    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.assets">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.assets">[docs]</a>
+    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a list of the assets held by the EquityPortfolio object.</span>
 
 <span class="sd">        Returns: list: A list of the assets held by the EquityPortfolio object.</span>
@@ -225,8 +305,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.weights"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.weights">[docs]</a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.weights">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.weights">[docs]</a>
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing</span>
 <span class="sd">        the weights of various assets in the portfolio.</span>
 
@@ -242,7 +325,10 @@
 <span class="sd">        of each asset in the portfolio at each point in time.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__getitem__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.__getitem__">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__getitem__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The `__getitem__` method retrieves the stock data for a specific time in the dataframe.</span>
 <span class="sd">        It returns the stock data for that time.</span>
 
@@ -256,8 +342,11 @@
 <span class="sd">        otherwise a KeyError will be raised.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.trading_costs"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.trading_costs">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trading_costs">[docs]</a>
+    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe</span>
 <span class="sd">        representing the trading costs incurred by the portfolio due to trades made.</span>
 
@@ -278,8 +367,11 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span><span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.equity"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.equity">[docs]</a>    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.equity">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.equity">[docs]</a>
+    <span class="k">def</span> <span class="nf">equity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe</span>
 <span class="sd">        representing the equity positions of the portfolio,</span>
 <span class="sd">        which is the value of each asset held by the portfolio.</span>
@@ -296,8 +388,11 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.trades_stocks"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_stocks">[docs]</a>    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_stocks">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_stocks">[docs]</a>
+    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
 
 <span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.</span>
@@ -312,8 +407,11 @@
         <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.trades_currency"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_currency">[docs]</a>    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.trades_currency">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.trades_currency">[docs]</a>
+    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing</span>
 <span class="sd">        the trades made in the portfolio in terms of currency.</span>
 
@@ -327,12 +425,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
 
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.turnover"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.turnover">[docs]</a>    <span class="k">def</span> <span class="nf">turnover</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.cash"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cash">[docs]</a>    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.turnover">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.turnover">[docs]</a>
+    <span class="k">def</span> <span class="nf">turnover</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.cash">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cash">[docs]</a>
+    <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the cash on hand in the portfolio.</span>
 
 <span class="sd">        Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.</span>
@@ -350,8 +454,11 @@
             <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
         <span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.cashflow"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cashflow">[docs]</a>    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.cashflow">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.cashflow">[docs]</a>
+    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the cash flows</span>
 <span class="sd">        in the portfolio over time.</span>
 
@@ -363,8 +470,11 @@
         <span class="n">cashflow</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>  <span class="c1"># cashflow at t=1</span>
         <span class="k">return</span> <span class="n">cashflow</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.nav"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.nav">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.nav">[docs]</a>
+    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a pandas series representing the total value</span>
 <span class="sd">        of the portfolio&#39;s investments and cash.</span>
 
@@ -373,8 +483,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.profit"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.profit">[docs]</a>    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.profit">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.profit">[docs]</a>
+    <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the</span>
 <span class="sd">        profit gained or lost in the portfolio based on changes in asset prices.</span>
 
@@ -390,8 +503,11 @@
         <span class="n">previous_stocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">previous_stocks</span> <span class="o">*</span> <span class="n">price_changes</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.highwater"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.highwater">[docs]</a>    <span class="k">def</span> <span class="nf">highwater</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.highwater">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.highwater">[docs]</a>
+    <span class="k">def</span> <span class="nf">highwater</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that returns a pandas series representing</span>
 <span class="sd">        the high-water mark of the portfolio, which is the highest point</span>
 <span class="sd">        the portfolio value has reached over time.</span>
@@ -407,8 +523,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">expanding</span><span class="p">(</span><span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
 
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.drawdown"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.drawdown">[docs]</a>    <span class="k">def</span> <span class="nf">drawdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.drawdown">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.drawdown">[docs]</a>
+    <span class="k">def</span> <span class="nf">drawdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas series representing the</span>
 <span class="sd">        drawdown of the portfolio, which measures the decline</span>
 <span class="sd">        in the portfolio&#39;s value from its (previously) highest</span>
@@ -424,7 +543,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__mul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.__mul__">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__mul__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A method that allows multiplication of the EquityPortfolio object with a scalar constant.</span>
 
 <span class="sd">        Args: scalar: A scalar constant that multiplies the number of shares</span>
@@ -450,7 +572,10 @@
             <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__rmul__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.__rmul__">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__rmul__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.</span>
 
 <span class="sd">        Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.</span>
@@ -461,7 +586,10 @@
 <span class="sd">        constant with an EquityPortfolio object in a reversed order&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.__add__"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.__add__">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.__add__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_new</span><span class="p">:</span> <span class="n">EquityPortfolio</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A method that allows addition of two EquityPortfolio objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -491,7 +619,10 @@
             <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.reset_prices"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.reset_prices">[docs]</a>    <span class="k">def</span> <span class="nf">reset_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.reset_prices">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.reset_prices">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A method that constructs an EquityPortfolio object using finer prices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -520,7 +651,10 @@
             <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.truncate"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span>
+
+<div class="viewcode-block" id="EquityPortfolio.truncate">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.truncate">[docs]</a>
+    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -550,12 +684,15 @@
             <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">before</span><span class="o">=</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="n">after</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
         <span class="p">)</span></div>
 
+
     <span class="c1"># @property</span>
     <span class="c1"># def start(self):</span>
     <span class="c1">#     &quot;&quot;&quot;first index with a profit that is not zero&quot;&quot;&quot;</span>
     <span class="c1">#     return self.profit.ne(0).idxmax()</span>
 
-<div class="viewcode-block" id="EquityPortfolio.resample"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+<div class="viewcode-block" id="EquityPortfolio.resample">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.resample">[docs]</a>
+    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The resample method resamples an EquityPortfolio object to a new frequency</span>
 <span class="sd">        specified by the rule argument.</span>
 <span class="sd">        A new EquityPortfolio object is created with the original prices</span>
@@ -575,7 +712,10 @@
             <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.metrics"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.metrics">[docs]</a>    <span class="k">def</span> <span class="nf">metrics</span><span class="p">(</span>
+
+<div class="viewcode-block" id="EquityPortfolio.metrics">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.metrics">[docs]</a>
+    <span class="k">def</span> <span class="nf">metrics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">rf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -608,7 +748,10 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.plots"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plots">[docs]</a>    <span class="k">def</span> <span class="nf">plots</span><span class="p">(</span>
+
+<div class="viewcode-block" id="EquityPortfolio.plots">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plots">[docs]</a>
+    <span class="k">def</span> <span class="nf">plots</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -633,10 +776,16 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.plot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Plot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+
+<div class="viewcode-block" id="EquityPortfolio.plot">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Plot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">kind</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.html"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span>
+
+<div class="viewcode-block" id="EquityPortfolio.html">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.html">[docs]</a>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">rf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -667,7 +816,10 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EquityPortfolio.snapshot"><a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
+
+<div class="viewcode-block" id="EquityPortfolio.snapshot">
+<a class="viewcode-back" href="../../autoapi/simulator/portfolio/index.html#simulator.portfolio.EquityPortfolio.snapshot">[docs]</a>
+    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">grayscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
@@ -710,7 +862,9 @@
             <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
             <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
