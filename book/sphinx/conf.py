@@ -13,7 +13,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "autoapi.extension"
+    "autoapi.extension",
 ]
 
 source_dir = "cvx"
