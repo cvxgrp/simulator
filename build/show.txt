@@ -1,4 +1,4 @@
-ipython 8.15.0 IPython: Productive Interactive Computing
+ipython 8.16.1 IPython: Productive Interactive Computing
 ├── appnope *
 ├── backcall *
 ├── colorama *
