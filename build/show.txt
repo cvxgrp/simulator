@@ -1,4 +1,4 @@
-ipython 8.17.1 IPython: Productive Interactive Computing
+ipython 8.17.2 IPython: Productive Interactive Computing
 ├── appnope *
 ├── colorama *
 ├── decorator *
