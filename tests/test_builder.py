@@ -269,3 +269,20 @@ def test_cov(prices):
         # print(time)
         # print(mat)
         assert np.all(np.isfinite(mat))
+
+
+def test_parameter(prices):
+    b = _builder(
+        prices=prices,
+        initial_cash=50000,
+        a=2,
+        b=3,
+        c="wurst",
+        d=[1, 2, 3],
+        e={"a": 1, "b": 2},
+    )
+    assert b.parameter["a"] == 2
+    assert b.parameter["b"] == 3
+    assert b.parameter["c"] == "wurst"
+    assert b.parameter["d"] == [1, 2, 3]
+    assert b.parameter["e"] == {"a": 1, "b": 2}
