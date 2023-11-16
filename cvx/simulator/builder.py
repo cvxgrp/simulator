@@ -162,6 +162,7 @@ def builder(
     min_cap_fraction: float | None = None,
     max_trade_fraction: float | None = None,
     min_trade_fraction: float | None = None,
+    **kwargs,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
     is used to construct a portfolio of assets. The function takes in a pandas
@@ -195,6 +196,7 @@ def builder(
         min_cap_fraction=min_cap_fraction,
         max_trade_fraction=max_trade_fraction,
         min_trade_fraction=min_trade_fraction,
+        parameter=dict(kwargs),
     )
 
     if weights is not None:
@@ -217,6 +219,7 @@ class _Builder:
     min_cap_fraction: float | None = None
     max_trade_fraction: float | None = None
     min_trade_fraction: float | None = None
+    parameter: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         """
