@@ -286,3 +286,9 @@ def test_parameter(prices):
     assert b.parameter["c"] == "wurst"
     assert b.parameter["d"] == [1, 2, 3]
     assert b.parameter["e"] == {"a": 1, "b": 2}
+
+
+def test_input_data(prices):
+    b = _builder(prices=prices, initial_cash=50000, a=2, input_data={"a": 1, "b": 2})
+    assert b.input_data["a"] == 1
+    assert b.input_data["b"] == 2
