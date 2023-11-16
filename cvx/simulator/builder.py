@@ -162,6 +162,7 @@ def builder(
     min_cap_fraction: float | None = None,
     max_trade_fraction: float | None = None,
     min_trade_fraction: float | None = None,
+    input_data: dict[str, Any] = field(default_factory=dict),
     **kwargs,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
@@ -196,6 +197,7 @@ def builder(
         min_cap_fraction=min_cap_fraction,
         max_trade_fraction=max_trade_fraction,
         min_trade_fraction=min_trade_fraction,
+        input_data=input_data,
         parameter=dict(kwargs),
     )
 
@@ -219,6 +221,7 @@ class _Builder:
     min_cap_fraction: float | None = None
     max_trade_fraction: float | None = None
     min_trade_fraction: float | None = None
+    input_data: dict[str, Any] = field(default_factory=dict)
     parameter: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
