@@ -25,6 +25,7 @@ yfinance = "*"
 plotly = "*"
 cvxpy = "*"
 loguru = "*"
+polars = "*"
 
 [tool.poetry.group.stubs.dependencies]
 pandas-stubs = "*"
