@@ -132,7 +132,7 @@ Functions
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None, **kwargs) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -234,6 +234,11 @@ Functions
 
    .. py:attribute:: min_trade_fraction
       :type: float | None
+
+      
+
+   .. py:attribute:: parameter
+      :type: dict[str, Any]
 
       
 

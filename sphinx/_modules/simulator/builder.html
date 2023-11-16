@@ -271,6 +271,7 @@
     <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Builder</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The builder function creates an instance of the _Builder class, which</span>
 <span class="sd">    is used to construct a portfolio of assets. The function takes in a pandas</span>
@@ -304,6 +305,7 @@
         <span class="n">min_cap_fraction</span><span class="o">=</span><span class="n">min_cap_fraction</span><span class="p">,</span>
         <span class="n">max_trade_fraction</span><span class="o">=</span><span class="n">max_trade_fraction</span><span class="p">,</span>
         <span class="n">min_trade_fraction</span><span class="o">=</span><span class="n">min_trade_fraction</span><span class="p">,</span>
+        <span class="n">parameter</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -361,6 +363,10 @@
 <div class="viewcode-block" id="_Builder.min_trade_fraction">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_trade_fraction">[docs]</a>
     <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="_Builder.parameter">
+<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.parameter">[docs]</a>
+    <span class="n">parameter</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="_Builder.__post_init__">
