@@ -272,4 +272,5 @@ def test_cov(prices):
 def test_input_data(prices):
     b = _builder(prices=prices, initial_cash=50000, volume=prices.ffill())
     for t, state in b:
+        print(state.volume)
         pd.testing.assert_series_equal(state.prices, state.input_data["volume"])
