@@ -271,7 +271,6 @@ def test_cov(prices):
         assert np.all(np.isfinite(mat))
 
 
-
 def test_input_data(prices):
     b = _builder(prices=prices, initial_cash=50000, volume=prices.ffill())
     for t, state in b:
