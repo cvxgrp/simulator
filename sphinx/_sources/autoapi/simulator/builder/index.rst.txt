@@ -23,7 +23,6 @@ Functions
 .. autoapisummary::
 
    simulator.builder.builder
-   simulator.builder.empty
 
 
 
@@ -154,9 +153,6 @@ Functions
    constructed _Builder object.
 
 
-.. py:function:: empty()
-
-
 .. py:class:: _Builder
 
 
@@ -247,11 +243,6 @@ Functions
       
 
    .. py:attribute:: input_data
-      :type: dict[str, Any]
-
-      
-
-   .. py:attribute:: parameter
       :type: dict[str, Any]
 
       
