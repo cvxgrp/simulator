@@ -339,11 +339,6 @@ class _Builder:
         for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
-            print(type(self.input_data))
-            print(dir(self.input_data))
-
-            for key, data in self.input_data.items():
-                print(key)
 
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
