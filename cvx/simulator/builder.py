@@ -151,6 +151,9 @@ class _State:
         # builder is frozen, so we can't construct a new state
         return self
 
+    def __getattr__(self, item):
+        return self.input_data[item]
+
 
 def builder(
     prices: pd.DataFrame,
