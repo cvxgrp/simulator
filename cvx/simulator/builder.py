@@ -44,6 +44,7 @@ class _State:
     prices: pd.Series = None
     position: pd.Series = None
     cash: float = 1e6
+    input_data: dict[str, Any] = field(default_factory=dict)
 
     @property
     def value(self) -> float:
@@ -331,6 +332,10 @@ class _Builder:
         for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
+            self._state.input_data = {key: data.loc[t] for key, data in self.input_data.items()}
+
+
+
             yield self.index[self.index <= t], self._state
 
     def __setitem__(self, time: datetime, position: pd.Series) -> None:
