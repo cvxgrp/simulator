@@ -271,25 +271,7 @@ def test_cov(prices):
         assert np.all(np.isfinite(mat))
 
 
-def test_parameter(prices):
-    b = _builder(
-        prices=prices,
-        initial_cash=50000,
-        a=2,
-        b=3,
-        c="wurst",
-        d=[1, 2, 3],
-        e={"a": 1, "b": 2},
-    )
-    assert b.parameter["a"] == 2
-    assert b.parameter["b"] == 3
-    assert b.parameter["c"] == "wurst"
-    assert b.parameter["d"] == [1, 2, 3]
-    assert b.parameter["e"] == {"a": 1, "b": 2}
-
-
 def test_input_data(prices):
-    b = _builder(prices=prices, initial_cash=50000, a=2, input_data={"volume": prices.ffill()})
+    b = _builder(prices=prices, initial_cash=50000, volume=prices.ffill())
     for t, state in b:
-        assert b.parameter["a"] == 2
         pd.testing.assert_series_equal(state.prices, state.input_data["volume"])
