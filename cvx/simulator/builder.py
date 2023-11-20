@@ -163,8 +163,9 @@ def builder(
     min_cap_fraction: float | None = None,
     max_trade_fraction: float | None = None,
     min_trade_fraction: float | None = None,
-    input_data: dict[str, Any] = field(default_factory=dict),
     **kwargs,
+    #input_data: dict[str, Any] = field(default_factory=dict),
+    #**kwargs,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
     is used to construct a portfolio of assets. The function takes in a pandas
@@ -187,9 +188,12 @@ def builder(
         index=prices.index, columns=prices.columns, data=0.0, dtype=float
     )
 
+    #print(input_data)
+    #if input_data is None:
+
     builder = _Builder(
         stocks=stocks,
-        prices=prices.ffill(),
+        prices=prices,
         initial_cash=float(initial_cash),
         trading_cost_model=trading_cost_model,
         market_cap=market_cap,
@@ -198,8 +202,7 @@ def builder(
         min_cap_fraction=min_cap_fraction,
         max_trade_fraction=max_trade_fraction,
         min_trade_fraction=min_trade_fraction,
-        input_data=input_data,
-        parameter=dict(kwargs),
+        input_data=dict(kwargs)
     )
 
     if weights is not None:
@@ -208,6 +211,9 @@ def builder(
 
     return builder
 
+
+def empty():
+    return dict()
 
 @dataclass(frozen=True)
 class _Builder:
@@ -222,7 +228,7 @@ class _Builder:
     min_cap_fraction: float | None = None
     max_trade_fraction: float | None = None
     min_trade_fraction: float | None = None
-    input_data: dict[str, Any] = field(default_factory=dict)
+    input_data: dict[str, Any] = field(default_factory=empty)
     parameter: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -332,6 +338,12 @@ class _Builder:
         for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
+            print(type(self.input_data))
+            print(dir(self.input_data))
+
+            for key, data in self.input_data.items():
+                print(key)
+
             self._state.input_data = {key: data.loc[t] for key, data in self.input_data.items()}
 
 
