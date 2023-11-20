@@ -289,6 +289,7 @@ def test_parameter(prices):
 
 
 def test_input_data(prices):
-    b = _builder(prices=prices, initial_cash=50000, a=2, input_data={"a": 1, "b": 2})
-    assert b.input_data["a"] == 1
-    assert b.input_data["b"] == 2
+    b = _builder(prices=prices, initial_cash=50000, a=2, input_data={"volume": prices.ffill()})
+    for t, state in b:
+        assert b.parameter["a"] == 2
+        pd.testing.assert_series_equal(state.prices, state.input_data["volume"])
