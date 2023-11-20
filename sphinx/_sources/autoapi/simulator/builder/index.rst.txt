@@ -23,6 +23,7 @@ Functions
 .. autoapisummary::
 
    simulator.builder.builder
+   simulator.builder.empty
 
 
 
@@ -100,6 +101,11 @@ Functions
 
       
 
+   .. py:attribute:: input_data
+      :type: dict[str, Any]
+
+      
+
    .. py:method:: update(position: pandas.Series, model: cvx.simulator.trading_costs.TradingCostModel | None = None, **kwargs: Any) -> _State
 
       The update method updates the current state of the portfolio with the
@@ -132,7 +138,7 @@ Functions
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None, input_data: dict[str, Any] = field(default_factory=dict), **kwargs) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None, **kwargs) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -146,6 +152,9 @@ Functions
    model. If weights are provided, they are set for each time step using
    set_weights method of the _Builder object. The final output is the
    constructed _Builder object.
+
+
+.. py:function:: empty()
 
 
 .. py:class:: _Builder
