@@ -258,6 +258,12 @@
 
         <span class="c1"># builder is frozen, so we can&#39;t construct a new state</span>
         <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="_State.__getattr__">
+<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.__getattr__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
 </div>
 
 
