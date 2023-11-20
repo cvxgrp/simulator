@@ -266,8 +266,6 @@ def test_returns(prices):
 def test_cov(prices):
     b = _builder(prices=prices, initial_cash=50000)
     for time, mat in b.cov(min_periods=50, com=50):
-        # print(time)
-        # print(mat)
         assert np.all(np.isfinite(mat))
 
 
