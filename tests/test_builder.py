@@ -274,3 +274,35 @@ def test_input_data(prices):
     for t, state in b:
         print(state.volume)
         pd.testing.assert_series_equal(state.prices, state.input_data["volume"])
+
+
+def test_weights_on_wrong_days(resource_dir):
+    prices = pd.read_csv(
+        resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0
+    )
+
+    b = _builder(prices=prices, initial_cash=50000)
+    t = prices.index
+
+    for t, state in b:
+        with pytest.raises(ValueError):
+            b.set_weights(
+                t[-1], pd.Series(index={"A", "B", "C"}, data=[0.5, 0.25, 0.25])
+            )
+
+        with pytest.raises(ValueError):
+            b.set_cashposition(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
+
+        with pytest.raises(ValueError):
+            b.set_position(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
+
+    for t, state in b:
+        b.set_weights(
+            t[-1],
+            pd.Series(
+                index=prices.loc[t[-1]].dropna().index,
+                data=np.random.rand(6),
+                dtype=float,
+            ),
+        )
+    # assert False
