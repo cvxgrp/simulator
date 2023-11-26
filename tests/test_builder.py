@@ -298,7 +298,7 @@ def test_weights_on_wrong_days(resource_dir):
 
         with pytest.raises(ValueError):
             b[t[-1]] = pd.Series(index={"A", "B", "C"}, data=[5, 5, 5])
-            
+
     for t, state in b:
         b.set_weights(
             t[-1],
