@@ -293,7 +293,12 @@ class _Builder:
         :param weights: series of weights
         """
         assert isinstance(weights, pd.Series), "weights must be a pandas Series"
-        self[time] = (self._state.nav * weights) / self._state.prices
+        valid = self._state.prices.dropna().index
+        # check that you have weights exactly for those indices
+        if not set(weights.dropna().index) == set(valid):
+            raise ValueError("weights must have same index as prices")
+
+        self[time] = (self._state.nav * weights[valid]) / self._state.prices[valid]
 
     def set_cashposition(self, time: datetime, cashposition: pd.Series) -> None:
         """
@@ -305,7 +310,13 @@ class _Builder:
         assert isinstance(
             cashposition, pd.Series
         ), "cashposition must be a pandas Series"
-        self[time] = cashposition / self._state.prices
+
+        valid = self._state.prices.dropna().index
+        # check that you have weights exactly for those indices
+        if not set(cashposition.dropna().index) == set(valid):
+            raise ValueError("cashposition must have same index as prices")
+
+        self[time] = cashposition[valid] / self._state.prices[valid]
 
     def set_position(self, time: datetime, position: pd.Series) -> None:
         """
@@ -315,6 +326,12 @@ class _Builder:
         :param position: series of number of stocks
         """
         assert isinstance(position, pd.Series), "position must be a pandas Series"
+
+        valid = self._state.prices.dropna().index
+        # check that you have weights exactly for those indices
+        if not set(position.dropna().index) == set(valid):
+            raise ValueError("position must have same index as prices")
+
         self[time] = position
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
@@ -364,6 +381,11 @@ class _Builder:
         """
         assert isinstance(position, pd.Series)
         assert set(position.index).issubset(set(self.assets))
+
+        valid = self._state.prices.dropna().index
+        # check that you have weights exactly for those indices
+        if not set(position.dropna().index) == set(valid):
+            raise ValueError("position must have same index as prices")
 
         if self.market_cap is not None:
             # compute capitalization of desired position
