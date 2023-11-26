@@ -308,4 +308,3 @@ def test_weights_on_wrong_days(resource_dir):
                 dtype=float,
             ),
         )
-    # assert False
