@@ -1032,21 +1032,6 @@ test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
 xml = ["lxml (>=4.8.0)"]
 
 [[package]]
-name = "pandas-stubs"
-version = "2.1.1.230928"
-description = "Type annotations for pandas"
-optional = false
-python-versions = ">=3.9"
-files = [
-    {file = "pandas_stubs-2.1.1.230928-py3-none-any.whl", hash = "sha256:992d97159e054ca3175ebe8321ac5616cf6502dd8218b03bb0eaf3c4f6939037"},
-    {file = "pandas_stubs-2.1.1.230928.tar.gz", hash = "sha256:ce1691c71c5d67b8f332da87763f7f54650f46895d99964d588c3a5d79e2cacc"},
-]
-
-[package.dependencies]
-numpy = {version = ">=1.26.0", markers = "python_version < \"3.13\""}
-types-pytz = ">=2022.1.1"
-
-[[package]]
 name = "parso"
 version = "0.8.3"
 description = "A Python Parser"
@@ -1516,17 +1501,6 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx"]
 test = ["argcomplete (>=3.0.3)", "mypy (>=1.6.0)", "pre-commit", "pytest (>=7.0,<7.5)", "pytest-mock", "pytest-mypy-testing"]
 
 [[package]]
-name = "types-pytz"
-version = "2023.3.1.1"
-description = "Typing stubs for pytz"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-pytz-2023.3.1.1.tar.gz", hash = "sha256:cc23d0192cd49c8f6bba44ee0c81e4586a8f30204970fc0894d209a6b08dab9a"},
-    {file = "types_pytz-2023.3.1.1-py3-none-any.whl", hash = "sha256:1999a123a3dc0e39a2ef6d19f3f8584211de9e6a77fe7a0259f04a524e90a5cf"},
-]
-
-[[package]]
 name = "typing-extensions"
 version = "4.8.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1642,4 +1616,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "5547e94eb5c324e00f09135183d89e310c2ae1baa6466ea8026d99a003f3e7e7"
+content-hash = "3eef4dc7408ee8ab5129c7e667a6c78cd79e47f33c1f550038df8ff9e4e03d93"
