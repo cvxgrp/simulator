@@ -174,6 +174,11 @@ which is the sum of the absolute values of the portfolio weights.</p>
 portfolio or a series of zeroes if the position is still missing.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._State.assets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.assets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._State.prices">
 <span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.prices" title="Link to this definition"></a></dt>
@@ -258,22 +263,6 @@ The resulting index will be a pandas index object
 with the same length as the number of rows in the prices dataframe.</p>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="simulator.builder._Builder.assets">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Index</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.assets" title="Link to this definition"></a></dt>
-<dd><p>A property that returns a list of the assets held by the portfolio.</p>
-<p>Returns: list: A list of the assets held by the portfolio.</p>
-<p>Notes: The function extracts the column names of the prices dataframe,
-which correspond to the assets held by the portfolio.
-The resulting list will contain the names of all assets
-held by the portfolio, without any duplicates.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="simulator.builder._Builder.returns">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.returns" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._Builder.prices">
 <span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.prices" title="Link to this definition"></a></dt>
@@ -346,11 +335,6 @@ _State object with the initial amount of cash in the portfolio, self.initial_cas
 that can only be performed after the object is fully initialized. __post_init__
 is called automatically after the object initialization.</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.cov">
-<span class="sig-name descname"><span class="pre">cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.cov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.cov" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._Builder.set_weights">

@@ -84,6 +84,9 @@ Functions
       The position_robust property returns the current position of the
       portfolio or a series of zeroes if the position is still missing.
 
+   .. py:property:: assets
+
+
    .. py:attribute:: prices
       :type: pandas.Series
 
@@ -173,22 +176,6 @@ Functions
       The resulting index will be a pandas index object
       with the same length as the number of rows in the prices dataframe.
 
-   .. py:property:: assets
-      :type: pandas.Index
-
-      A property that returns a list of the assets held by the portfolio.
-
-      Returns: list: A list of the assets held by the portfolio.
-
-      Notes: The function extracts the column names of the prices dataframe,
-      which correspond to the assets held by the portfolio.
-      The resulting list will contain the names of all assets
-      held by the portfolio, without any duplicates.
-
-   .. py:property:: returns
-      :type: pandas.DataFrame
-
-
    .. py:attribute:: prices
       :type: pandas.DataFrame
 
@@ -262,9 +249,6 @@ Functions
       Note that this method is often used in Python classes for additional initialization routines
       that can only be performed after the object is fully initialized. __post_init__
       is called automatically after the object initialization.
-
-
-   .. py:method:: cov(**kwargs: Any) -> Generator[tuple[datetime.datetime, pandas.DataFrame], None, None]
 
 
    .. py:method:: set_weights(time: datetime.datetime, weights: pandas.Series) -> None

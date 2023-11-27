@@ -386,7 +386,7 @@
 <span class="sd">        The equity dataframe will have the same dimensions</span>
 <span class="sd">        as the prices and stocks dataframes.&quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span></div>
 
 
     <span class="nd">@property</span>
@@ -423,7 +423,7 @@
 <span class="sd">        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.</span>
 <span class="sd">        The resulting dataframe will have the same dimensions as the stocks and prices dataframes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
 
 
     <span class="nd">@property</span>
