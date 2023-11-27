@@ -154,6 +154,10 @@ class _State:
     def __getattr__(self, item):
         return self.input_data[item]
 
+    @property
+    def assets(self):
+        return self.prices.dropna().index
+
 
 def builder(
     prices: pd.DataFrame,
@@ -258,33 +262,6 @@ class _Builder:
 
         return pd.DatetimeIndex(self.prices.index)
 
-    @property
-    def assets(self) -> pd.Index:
-        """A property that returns a list of the assets held by the portfolio.
-
-        Returns: list: A list of the assets held by the portfolio.
-
-        Notes: The function extracts the column names of the prices dataframe,
-        which correspond to the assets held by the portfolio.
-        The resulting list will contain the names of all assets
-        held by the portfolio, without any duplicates."""
-        return self.prices.columns
-
-    @property
-    def returns(self) -> pd.DataFrame:
-        return self.prices.pct_change().dropna(axis=0, how="all")
-
-    def cov(
-        self, **kwargs: Any
-    ) -> Generator[tuple[datetime, pd.DataFrame], None, None]:
-        # You can do much better using volatility adjusted returns rather than returns
-        cov = self.returns.ewm(**kwargs).cov()
-        cov = cov.dropna(how="all", axis=0)
-        for t in cov.index.get_level_values(level=0).unique():
-            yield t, cov.loc[t, :, :]
-
-        # {t: cov.loc[t, :, :] for t in cov.index.get_level_values('date').unique()}
-
     def set_weights(self, time: datetime, weights: pd.Series) -> None:
         """
         Set the position via weights (e.g. fractions of the nav)
@@ -380,7 +357,7 @@ class _Builder:
         or its index is not a subset of the assets of the dataframe.
         """
         assert isinstance(position, pd.Series)
-        assert set(position.index).issubset(set(self.assets))
+        # assert set(position.index).issubset(set(self.assets))
 
         valid = self._state.prices.dropna().index
         # check that you have weights exactly for those indices

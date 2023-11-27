@@ -47,15 +47,6 @@ def test_initial_cash(builder):
     assert builder.initial_cash == 1e6
 
 
-def test_assets(builder, prices):
-    """
-    Test that the assets of the builder are the same as the columns of the prices
-    :param builder: the builder object (fixture)
-    :param prices: the prices frame (fixture)
-    """
-    assert set(builder.assets) == set(prices.columns)
-
-
 def test_index(builder, prices):
     """
     Test that the index of the builder is the same as the index of the prices
@@ -117,10 +108,10 @@ def test_iteration_state(builder):
         assert state.nav == 1e6
         assert state.value == 0.0
         pd.testing.assert_series_equal(
-            state.weights, pd.Series(index=builder.assets, data=0.0), check_names=False
+            state.weights, pd.Series(index=state.assets, data=0.0), check_names=False
         )
         pd.testing.assert_series_equal(
-            builder[t[-1]], pd.Series(index=builder.assets, data=0.0), check_names=False
+            builder[t[-1]], pd.Series(index=state.assets, data=0.0), check_names=False
         )
 
 
@@ -135,7 +126,7 @@ def test_build(builder_weights):
     # loop and set the weights explicitly
     for t, state in builder_weights:
         builder_weights.set_weights(
-            time=t[-1], weights=pd.Series(index=builder_weights.assets, data=1.0 / 7.0)
+            time=t[-1], weights=pd.Series(index=state.assets, data=1.0 / 7.0)
         )
 
     # build again
@@ -252,21 +243,6 @@ def test_box(resource_dir):
             data=[[0.2, 0.4], [0.4, 0.8], [0.6, 1.2], [0.6, 1.2]],
         ),
     )
-
-
-def test_returns(prices):
-    """
-    Test that the returns are calculated correctly
-    :param prices: the prices frame (fixture)
-    """
-    b = _builder(prices=prices, initial_cash=50000)
-    pd.testing.assert_frame_equal(b.returns, prices.pct_change().dropna())
-
-
-def test_cov(prices):
-    b = _builder(prices=prices, initial_cash=50000)
-    for time, mat in b.cov(min_periods=50, com=50):
-        assert np.all(np.isfinite(mat))
 
 
 def test_input_data(prices):
