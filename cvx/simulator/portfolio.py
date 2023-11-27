@@ -221,7 +221,7 @@ class EquityPortfolio:
         The equity dataframe will have the same dimensions
         as the prices and stocks dataframes."""
 
-        return (self.prices * self.stocks).ffill()
+        return self.prices * self.stocks
 
     @property
     def trades_stocks(self) -> pd.DataFrame:
@@ -252,7 +252,7 @@ class EquityPortfolio:
         Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
         The resulting dataframe will have the same dimensions as the stocks and prices dataframes.
         """
-        return self.trades_stocks * self.prices.ffill()
+        return self.trades_stocks * self.prices
 
     @property
     def turnover(self) -> pd.DataFrame:

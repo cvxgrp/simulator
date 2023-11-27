@@ -70,7 +70,7 @@ def test_stocks(builder):
     :param builder: the builder object (fixture)
     :param prices: the prices frame (fixture)
     """
-    pd.testing.assert_frame_equal(builder.stocks, 0.0 * builder.prices)
+    pd.testing.assert_frame_equal(builder.stocks, np.NaN * builder.prices)
 
 
 def test_build_empty(builder, prices):
@@ -81,7 +81,7 @@ def test_build_empty(builder, prices):
     """
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
-    pd.testing.assert_frame_equal(portfolio.stocks, 0.0 * prices.ffill())
+    pd.testing.assert_frame_equal(portfolio.stocks, np.NaN * prices.ffill())
     pd.testing.assert_series_equal(
         portfolio.profit, pd.Series(index=prices.index[1:], data=0.0)
     )
@@ -111,7 +111,7 @@ def test_iteration_state(builder):
             state.weights, pd.Series(index=state.assets, data=0.0), check_names=False
         )
         pd.testing.assert_series_equal(
-            builder[t[-1]], pd.Series(index=state.assets, data=0.0), check_names=False
+            builder[t[-1]], pd.Series(index=state.assets, data=np.NaN), check_names=False
         )
 
 

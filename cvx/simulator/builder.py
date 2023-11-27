@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Generator
 
+import numpy as np
 import pandas as pd
 
 from cvx.simulator.portfolio import EquityPortfolio
@@ -190,7 +191,7 @@ def builder(
     assert prices.index.is_unique
 
     stocks = pd.DataFrame(
-        index=prices.index, columns=prices.columns, data=0.0, dtype=float
+        index=prices.index, columns=prices.columns, data=np.NaN, dtype=float
     )
 
     # print(input_data)
