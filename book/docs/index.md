@@ -57,9 +57,9 @@ Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 ```python
 for t, state in b:
     # pick two assets at random
-    pair = np.random.choice(b.assets, 2, replace=False)
+    pair = np.random.choice(state.assets, 2, replace=False)
     # compute the pair
-    stocks = pd.Series(index=b.assets, data=0.0)
+    stocks = pd.Series(index=state.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position
     b[t[-1]] = 0.1 * stocks
@@ -86,7 +86,7 @@ The builder class also exposes setters for such alternative conventions.
 ```python
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b.set_weights(t[-1], pd.Series(index=b.assets, data = 0.25))
+    b.set_weights(t[-1], pd.Series(index=state.assets, data = 0.25))
 ```
 
 ### Build the portfolio
