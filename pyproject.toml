@@ -23,16 +23,11 @@ mock = "*"
 [tool.poetry.group.dev.dependencies]
 yfinance = "*"
 plotly = "*"
-cvxpy = "*"
 loguru = "*"
-polars = "*"
 
-[tool.poetry.group.stubs.dependencies]
-pandas-stubs = "*"
-
-[tool.mypy]
-files = ["cvx/simulator"]
-explicit_package_bases = true
+#[tool.mypy]
+#files = ["cvx/simulator"]
+#explicit_package_bases = true
 
 [build-system]
 requires = ["poetry>=1.6.0"]

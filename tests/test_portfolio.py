@@ -102,7 +102,7 @@ def test_iter(prices):
     """
 
     # Let's setup a portfolio with one asset: A
-    b = builder(prices[["A"]])
+    b = builder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
@@ -376,7 +376,7 @@ def test_resample(prices):
 
     for time, state in b:
         # each day we do a one-over-N rebalancing
-        b[time[-1]] = 1.0 / len(b.assets) * state.nav / state.prices
+        b[time[-1]] = 1.0 / len(state.assets) * state.nav / state.prices
 
     portfolio = b.build()
 
