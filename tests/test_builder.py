@@ -111,7 +111,9 @@ def test_iteration_state(builder):
             state.weights, pd.Series(index=state.assets, data=0.0), check_names=False
         )
         pd.testing.assert_series_equal(
-            builder[t[-1]], pd.Series(index=state.assets, data=np.NaN), check_names=False
+            builder[t[-1]],
+            pd.Series(index=state.assets, data=np.NaN),
+            check_names=False,
         )
 
 
