@@ -132,16 +132,21 @@ class _State:
         Note that the method does not return any value: instead,
         it updates the internal state of the _State instance.
         """
+        # all assets used for the next trading
         if self.position is None:
-            self.position = pd.Series(data=0.0, index=self.assets)
+            assets = set(position.index)
+        else:
+            assets = set(self.position.index).union(position.index)
 
-        # trade completely into the target position
-        trades = position.copy()
+        # the existing position on assets grid
+        ex_pos = pd.Series(index=assets, data=0.0)
+        if self.position is not None:
+            ex_pos.loc[self.position.dropna().index] = self.position.dropna()
 
-        # but if there are existing positions the trades are the
-        # difference between the existing position the target
-        existing = set(self.position.dropna().index).union(position.dropna().index)
-        trades[existing] = position[existing] - self.position[existing]
+        go_pos = pd.Series(index=assets, data=0.0)
+        go_pos.loc[position.dropna().index] = position.dropna()
+
+        trades = go_pos - ex_pos
 
         logger.info(f"Trade: {trades}")
 
