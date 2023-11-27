@@ -23,9 +23,9 @@ mock = "*"
 [tool.poetry.group.dev.dependencies]
 yfinance = "*"
 plotly = "*"
-cvxpy = "*"
+#cvxpy = "*"
 loguru = "*"
-polars = "*"
+#polars = "*"
 
 [tool.poetry.group.stubs.dependencies]
 pandas-stubs = "*"
