@@ -1,4 +1,4 @@
-ipython 8.18.0 IPython: Productive Interactive Computing
+ipython 8.18.1 IPython: Productive Interactive Computing
 ├── colorama *
 ├── decorator *
 ├── exceptiongroup *
@@ -8,7 +8,7 @@ ipython 8.18.0 IPython: Productive Interactive Computing
 │   └── traitlets * 
 ├── pexpect >4.3
 │   └── ptyprocess >=0.5 
-├── prompt-toolkit >=3.0.30,<3.0.37 || >3.0.37,<3.1.0
+├── prompt-toolkit >=3.0.41,<3.1.0
 │   └── wcwidth * 
 ├── pygments >=2.4.0
 ├── stack-data *
