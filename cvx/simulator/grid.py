@@ -28,9 +28,6 @@ def iron_frame(frame: pd.DataFrame, rule: Any) -> pd.DataFrame:
     :param rule: The rule to be used for the construction of the grid
     :return: the ironed frame
     """
-    # frame = pd.DataFrame(frame)
-    # frame.index = pd.DatetimeIndex(frame.index)
-
     s_index = resample_index(pd.DatetimeIndex(frame.index), rule)
     return _project_frame_to_grid(frame, s_index)
 
