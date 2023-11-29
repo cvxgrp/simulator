@@ -262,16 +262,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span></div>
 
 
-<div class="viewcode-block" id="_State.position">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.position">[docs]</a>
-    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assets</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">x</span>
-
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">assets</span><span class="p">]</span></div>
-
-
 <div class="viewcode-block" id="_State.trade">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._State.trade">[docs]</a>
     <span class="k">def</span> <span class="nf">trade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">):</span>
@@ -291,14 +281,8 @@
 <span class="k">def</span> <span class="nf">builder</span><span class="p">(</span>
     <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">weights</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">market_cap</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">trade_volume</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
     <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Builder</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The builder function creates an instance of the _Builder class, which</span>
@@ -327,12 +311,6 @@
         <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span>
         <span class="n">initial_cash</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">),</span>
         <span class="n">trading_cost_model</span><span class="o">=</span><span class="n">trading_cost_model</span><span class="p">,</span>
-        <span class="n">market_cap</span><span class="o">=</span><span class="n">market_cap</span><span class="p">,</span>
-        <span class="n">trade_volume</span><span class="o">=</span><span class="n">trade_volume</span><span class="p">,</span>
-        <span class="n">max_cap_fraction</span><span class="o">=</span><span class="n">max_cap_fraction</span><span class="p">,</span>
-        <span class="n">min_cap_fraction</span><span class="o">=</span><span class="n">min_cap_fraction</span><span class="p">,</span>
-        <span class="n">max_trade_fraction</span><span class="o">=</span><span class="n">max_trade_fraction</span><span class="p">,</span>
-        <span class="n">min_trade_fraction</span><span class="o">=</span><span class="n">min_trade_fraction</span><span class="p">,</span>
         <span class="n">input_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span>
     <span class="p">)</span>
 
@@ -547,41 +525,6 @@
         <span class="c1"># check that you have weights exactly for those indices</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">valid</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;position must have same index as prices&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># compute capitalization of desired position</span>
-            <span class="n">cap</span> <span class="o">=</span> <span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-            <span class="c1"># compute relative capitalization</span>
-            <span class="n">rel_cap</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
-            <span class="c1"># clip relative capitalization</span>
-            <span class="n">rel_cap</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
-                <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_cap_fraction</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_cap_fraction</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
-            <span class="p">)</span>
-            <span class="c1"># move back to capitalization</span>
-            <span class="n">cap</span> <span class="o">=</span> <span class="n">rel_cap</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">market_cap</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
-            <span class="c1"># compute position</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">trade</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">trade</span><span class="p">(</span><span class="n">target_pos</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
-            <span class="c1"># - self._state.position(self.prices.index))</span>
-
-            <span class="c1"># move to trade in USD</span>
-            <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-            <span class="c1"># compute relative trade volume</span>
-            <span class="n">rel_trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
-            <span class="c1"># clip relative trade volume</span>
-            <span class="n">rel_trade</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
-                <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_trade_fraction</span><span class="p">,</span>
-                <span class="n">upper</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_trade_fraction</span><span class="p">,</span>
-                <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="c1"># move back to trade</span>
-            <span class="n">trade</span> <span class="o">=</span> <span class="n">rel_trade</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_volume</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">]</span>
-            <span class="c1"># move back to trade in number of stocks</span>
-            <span class="n">trade</span> <span class="o">=</span> <span class="n">trade</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span>
-            <span class="c1"># compute position</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">trade</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">)</span></div>

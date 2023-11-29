@@ -645,6 +645,54 @@ capital of 1m. All numbers picked are unrealistic!</p>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">portfolio</span> <span class="o">=</span> <span class="n">builder</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">initial_cash</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">market_cap</span><span class="o">=</span><span class="n">market_cap</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">trade_volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">max_cap_fraction</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>  <span class="c1"># position max 6% of market cap</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">max_trade_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="c1"># trade max 20% of daily volume</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="nn">File ~/work/simulator/simulator/cvx/simulator/builder.py:198,</span> in <span class="ni">builder</span><span class="nt">(prices, weights, initial_cash, trading_cost_model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">189</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">_Builder</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span>     <span class="n">stocks</span><span class="o">=</span><span class="n">stocks</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span>     <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">194</span>     <span class="n">input_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">195</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span> <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">198</span>     <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="n">builder</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="k">return</span> <span class="n">builder</span>
+
+<span class="nn">File ~/work/simulator/simulator/cvx/simulator/builder.py:317,</span> in <span class="ni">_Builder.__iter__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">313</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span>     <span class="c1"># valuation of the current position</span>
+<span class="g g-Whitespace">    </span><span class="mi">315</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+<span class="ne">--&gt; </span><span class="mi">317</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span>
+<span class="nn">    318         key: data.loc[t] for key, data</span> in <span class="ni">self.input_data.items</span><span class="nt">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">319</span>     <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">321</span>     <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+<span class="nn">File ~/work/simulator/simulator/cvx/simulator/builder.py:318,</span> in <span class="ni">&lt;dictcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">313</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span>     <span class="c1"># valuation of the current position</span>
+<span class="g g-Whitespace">    </span><span class="mi">315</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">317</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span>
+<span class="nn">--&gt; 318         key: data.loc[t] for key, data</span> in <span class="ni">self.input_data.items</span><span class="nt">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">319</span>     <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">321</span>     <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+<span class="ne">AttributeError</span>: &#39;float&#39; object has no attribute &#39;loc&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

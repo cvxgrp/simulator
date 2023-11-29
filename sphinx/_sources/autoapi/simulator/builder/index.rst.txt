@@ -136,16 +136,13 @@ Functions
    .. py:method:: __getattr__(item)
 
 
-   .. py:method:: position(assets)
-
-
    .. py:method:: trade(target_pos)
 
       Compute the trade vector given a target position
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, market_cap: pandas.DataFrame | None = None, trade_volume: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, max_cap_fraction: float | None = None, min_cap_fraction: float | None = None, max_trade_fraction: float | None = None, min_trade_fraction: float | None = None, **kwargs) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, **kwargs) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas

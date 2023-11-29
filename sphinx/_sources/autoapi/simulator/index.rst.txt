@@ -12,9 +12,7 @@ Submodules
 
    builder/index.rst
    grid/index.rst
-   month/index.rst
    portfolio/index.rst
    trading_costs/index.rst
-   types/index.rst
 
 
