@@ -446,3 +446,14 @@ def test_cashflow(portfolio):
     :param portfolio: portfolio fixture
     """
     assert portfolio.cashflow.sum() + portfolio.initial_cash == portfolio.cash.iloc[-1]
+
+
+def test_profit(portfolio):
+    """
+    Test that the profit is computed correctly
+    :param portfolio: the portfolio object (fixture)
+    """
+    assert portfolio.profit.mean() == pytest.approx(-5.810981697171386)
+    assert portfolio.profit.std() == pytest.approx(840.5615726803527)
+    assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
+    assert portfolio.profit.sharpe() == pytest.approx(-0.10974386369939439)
