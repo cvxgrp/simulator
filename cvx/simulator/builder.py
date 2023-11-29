@@ -43,7 +43,7 @@ class _State:
     """
 
     prices: pd.Series = None
-    position: pd.Series = None
+    _position: pd.Series = None
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
 
@@ -56,7 +56,7 @@ class _State:
         (they might be still None), zero is returned instead.
         """
         try:
-            return float((self.prices * self.position).sum())
+            return float((self.prices * self._position).sum())
         except TypeError:
             return 0.0
 
@@ -83,7 +83,7 @@ class _State:
         missing, then a series of zeroes is returned.
         """
         try:
-            return (self.prices * self.position) / self.nav
+            return (self.prices * self._position) / self.nav
         except TypeError:
             return 0 * self.prices
 
@@ -130,23 +130,9 @@ class _State:
         Note that the method does not return any value: instead,
         it updates the internal state of the _State instance.
         """
-        # all assets used for the next trading
-        if self.position is None:
-            assets = set(position.index)
-        else:
-            assets = set(self.position.index).union(position.index)
+        trades = self.trade(target_pos=position)
 
-        # the existing position on assets grid
-        ex_pos = pd.Series(index=assets, data=0.0)
-        if self.position is not None:
-            ex_pos.loc[self.position.dropna().index] = self.position.dropna()
-
-        go_pos = pd.Series(index=assets, data=0.0)
-        go_pos.loc[position.dropna().index] = position.dropna()
-
-        trades = go_pos - ex_pos
-
-        self.position = position
+        self._position = position
         self.cash -= (trades * self.prices).sum()
 
         if model is not None:
@@ -161,6 +147,22 @@ class _State:
     @property
     def assets(self):
         return self.prices.dropna().index
+
+    def position(self, assets):
+        x = pd.Series(index=assets, data=0.0)
+        if self._position is None:
+            return x
+
+        return x.add(self._position, fill_value=0)[assets]
+
+    def trade(self, target_pos):
+        """
+        Compute the trade vector given a target position
+        """
+        if self._position is None:
+            return target_pos
+
+        return target_pos.subtract(self._position, fill_value=0.0)
 
 
 def builder(
@@ -358,7 +360,6 @@ class _Builder:
         or its index is not a subset of the assets of the dataframe.
         """
         assert isinstance(position, pd.Series)
-        # assert set(position.index).issubset(set(self.assets))
 
         valid = self._state.prices.dropna().index
         # check that you have weights exactly for those indices
@@ -380,7 +381,8 @@ class _Builder:
             position = cap / self._state.prices
 
         if self.trade_volume is not None:
-            trade = position - self._state.position_robust
+            trade = self._state.trade(target_pos=position)
+            # - self._state.position(self.prices.index))
 
             # move to trade in USD
             trade = trade * self._state.prices
@@ -397,7 +399,7 @@ class _Builder:
             # move back to trade in number of stocks
             trade = trade / self._state.prices
             # compute position
-            position = self._state.position_robust + trade
+            position = self._state.position(position.index).add(trade, fill_value=0.0)
 
         self.stocks.loc[time, position.index] = position
         self._state.update(position, model=self.trading_cost_model)

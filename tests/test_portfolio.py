@@ -14,17 +14,18 @@ def test_state():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
     cash = 400
-    state = _State(cash=cash, prices=prices, position=positions)
+    state = _State(cash=cash, prices=prices)
+    state.update(position=positions)
     # value is the money in stocks
     assert state.value == 1100.0
     # nav is the value plus the cash
-    assert state.nav == 1500.0
+    assert state.nav == 400.0
     # weights are the positions divided by the value
     pd.testing.assert_series_equal(
-        state.weights, pd.Series(data=[2.0 / 15.0, 9.0 / 15.0])
+        state.weights, pd.Series(data=[2.0 / 4.0, 9.0 / 4.0])
     )
     # leverage is the value divided by the nav
-    assert state.leverage == 11.0 / 15.0
+    assert state.leverage == 11.0 / 4.0
 
 
 def test_assets(portfolio, prices):
