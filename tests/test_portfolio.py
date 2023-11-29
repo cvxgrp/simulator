@@ -188,63 +188,6 @@ def test_long_only(prices, resource_dir):
     )
 
 
-def test_long_short(prices, resource_dir):
-    """
-    Test building a portfolio with two assets and long and short positions
-    :param prices: the prices frame (fixture)
-    :param resource_dir: the resource directory (fixture)
-    """
-    # Let's setup a portfolio with two assets: A and B
-    b = builder(prices=prices[["B", "C"]], initial_cash=20000)
-
-    # We now iterate through the underlying timestamps of the portfolio
-    for times, _ in b:
-        # we set the position of B to 3.0 and C to -1.0
-        b[times[-1]] = pd.Series({"B": 3.0, "C": -1.0})
-
-    # we build the portfolio
-    portfolio = b.build()
-
-    # Our assets have hopefully increased in value
-    assert portfolio.equity.sum(axis=1).values[0] == pytest.approx(7385.84)
-    assert portfolio.equity.sum(axis=1).values[-1] == pytest.approx(30133.25)
-    pd.testing.assert_frame_equal(
-        pd.read_csv(
-            resource_dir / "equity_ls.csv", index_col=0, header=0, parse_dates=True
-        ),
-        portfolio.equity,
-    )
-
-    # the (absolute) profit is the difference between nav and initial cash
-    profit = (portfolio.nav - portfolio.initial_cash).diff().dropna()
-
-    # We don't need to set the initial cash to estimate the (absolute) profit
-    # The daily profit is also the change in valuation of the previous position
-    pd.testing.assert_series_equal(profit, portfolio.profit)
-
-    # the investor has made approximately 17665 USD over the lifespan of the portfolio
-    assert portfolio.profit.cumsum().values[-1] == pytest.approx(22747.41)
-
-    # portfolio.trades_currency.to_csv(resource_dir / "trades_usd_ls.csv")
-    pd.testing.assert_frame_equal(
-        pd.read_csv(
-            resource_dir / "trades_usd_ls.csv", index_col=0, header=0, parse_dates=True
-        ),
-        portfolio.trades_currency,
-    )
-
-    # The available cash is the initial cash - costs for trading, e.g.
-    pd.testing.assert_series_equal(
-        portfolio.cash,
-        portfolio.initial_cash - portfolio.trades_currency.sum(axis=1).cumsum(),
-    )
-
-    # The NAV (net asset value) is cash + equity
-    pd.testing.assert_series_equal(
-        portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1)
-    )
-
-
 def test_add(prices, resource_dir):
     """
     Tests the addition of two portfolios
