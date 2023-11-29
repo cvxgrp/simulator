@@ -78,12 +78,6 @@ Functions
       The `leverage` property computes the leverage of the portfolio,
       which is the sum of the absolute values of the portfolio weights.
 
-   .. py:property:: position_robust
-      :type: pandas.Series
-
-      The position_robust property returns the current position of the
-      portfolio or a series of zeroes if the position is still missing.
-
    .. py:property:: assets
 
 
@@ -92,7 +86,7 @@ Functions
 
       
 
-   .. py:attribute:: position
+   .. py:attribute:: _position
       :type: pandas.Series
 
       
@@ -140,6 +134,14 @@ Functions
 
 
    .. py:method:: __getattr__(item)
+
+
+   .. py:method:: position(assets)
+
+
+   .. py:method:: trade(target_pos)
+
+      Compute the trade vector given a target position
 
 
 

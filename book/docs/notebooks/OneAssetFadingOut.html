@@ -348,7 +348,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -364,6 +366,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterate">Iterate</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -448,84 +458,8 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Define builder</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">builder</span><span class="p">(</span>
-    <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span>
-    <span class="n">initial_cash</span><span class="o">=</span><span class="mi">2000</span>
-<span class="p">)</span>
-
-<span class="n">b</span><span class="o">.</span><span class="n">stocks</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>A</th>
-      <th>B</th>
-    </tr>
-    <tr>
-      <th>date</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>2022-01-01</th>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2022-01-02</th>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2022-01-03</th>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2022-01-04</th>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Iterate</span>
-</pre></div>
-</div>
-</div>
-</div>
+<section id="iterate">
+<h2>Iterate<a class="headerlink" href="#iterate" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">builder</span><span class="p">(</span>
@@ -535,38 +469,7 @@ document.write(`
 
 
 <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">)))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">)</span>
-    
     <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">)))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;A&#39;, &#39;B&#39;], dtype=&#39;object&#39;)
-2022-01-01 00:00:00
-A    0.5
-B    0.5
-dtype: float64
-2000.0
-Index([&#39;A&#39;, &#39;B&#39;], dtype=&#39;object&#39;)
-2022-01-02 00:00:00
-A    0.5
-B    0.5
-dtype: float64
-2000.0
-Index([&#39;A&#39;], dtype=&#39;object&#39;)
-2022-01-03 00:00:00
-A    1.0
-dtype: float64
-1000.0
-Index([&#39;A&#39;], dtype=&#39;object&#39;)
-2022-01-04 00:00:00
-A    1.0
-dtype: float64
-1000.0
 </pre></div>
 </div>
 </div>
@@ -832,6 +735,7 @@ dtype: float64
 </div></div></div>
 </div>
 </section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -887,6 +791,20 @@ dtype: float64
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterate">Iterate</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

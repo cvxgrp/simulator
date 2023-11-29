@@ -170,13 +170,6 @@ which is the sum of the absolute values of the portfolio weights.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="simulator.builder._State.position_robust">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position_robust</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.position_robust"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.position_robust" title="Link to this definition"></a></dt>
-<dd><p>The position_robust property returns the current position of the
-portfolio or a series of zeroes if the position is still missing.</p>
-</dd></dl>
-
-<dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder._State.assets">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.assets" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -187,8 +180,8 @@ portfolio or a series of zeroes if the position is still missing.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._State.position">
-<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.position" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="simulator.builder._State._position">
+<span class="sig-name descname"><span class="pre">_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State._position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State._position" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -229,6 +222,17 @@ it updates the internal state of the _State instance.</p>
 <dt class="sig sig-object py" id="simulator.builder._State.__getattr__">
 <span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.__getattr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.__getattr__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.builder._State.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.builder._State.trade">
+<span class="sig-name descname"><span class="pre">trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.trade" title="Link to this definition"></a></dt>
+<dd><p>Compute the trade vector given a target position</p>
+</dd></dl>
 
 </dd></dl>
 
