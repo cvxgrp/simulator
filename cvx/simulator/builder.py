@@ -97,7 +97,7 @@ class _State:
 
     def update(
         self,
-        position: pd.Series,
+        position: np.array,
         model: TradingCostModel | None = None,
         **kwargs: Any,
     ) -> _State:
@@ -130,6 +130,7 @@ class _State:
         Note that the method does not return any value: instead,
         it updates the internal state of the _State instance.
         """
+        position = pd.Series(index=self.assets, data=position)
         trades = self.trade(target_pos=position)
 
         self._position = position
@@ -196,7 +197,9 @@ def builder(
 
     if weights is not None:
         for t, state in builder:
-            builder.set_weights(time=t[-1], weights=weights.loc[t[-1]])
+            builder.set_weights(
+                time=t[-1], weights=weights[state.assets].loc[t[-1]].dropna().values
+            )
 
     return builder
 
@@ -246,52 +249,44 @@ class _Builder:
 
         return pd.DatetimeIndex(self.prices.index)
 
-    def set_weights(self, time: datetime, weights: pd.Series) -> None:
+    @property
+    def current_prices(self) -> np.array:
+        """ """
+        return self._state.prices[self._state.assets].values
+
+    def set_weights(self, time: datetime, weights: np.array) -> None:
         """
         Set the position via weights (e.g. fractions of the nav)
 
         :param time: time
         :param weights: series of weights
         """
-        assert isinstance(weights, pd.Series), "weights must be a pandas Series"
-        valid = self._state.prices.dropna().index
-        # check that you have weights exactly for those indices
-        if not set(weights.dropna().index) == set(valid):
-            raise ValueError("weights must have same index as prices")
+        if not len(weights) == len(self._state.assets):
+            raise ValueError("For each asset one weight")
 
-        self[time] = (self._state.nav * weights[valid]) / self._state.prices[valid]
+        self[time] = self._state.nav * weights / self.current_prices
 
-    def set_cashposition(self, time: datetime, cashposition: pd.Series) -> None:
+    def set_cashposition(self, time: datetime, cashposition: np.array) -> None:
         """
         Set the position via cash positions (e.g. USD invested per asset)
 
         :param time: time
         :param cashposition: series of cash positions
         """
-        assert isinstance(
-            cashposition, pd.Series
-        ), "cashposition must be a pandas Series"
+        if not len(cashposition) == len(self._state.assets):
+            raise ValueError("For each asset one cashposition")
 
-        valid = self._state.prices.dropna().index
-        # check that you have weights exactly for those indices
-        if not set(cashposition.dropna().index) == set(valid):
-            raise ValueError("cashposition must have same index as prices")
+        self[time] = cashposition / self.current_prices
 
-        self[time] = cashposition[valid] / self._state.prices[valid]
-
-    def set_position(self, time: datetime, position: pd.Series) -> None:
+    def set_position(self, time: datetime, position: np.array) -> None:
         """
         Set the position via number of assets (e.g. number of stocks)
 
         :param time: time
         :param position: series of number of stocks
         """
-        assert isinstance(position, pd.Series), "position must be a pandas Series"
-
-        valid = self._state.prices.dropna().index
-        # check that you have weights exactly for those indices
-        if not set(position.dropna().index) == set(valid):
-            raise ValueError("position must have same index as prices")
+        if not len(position) == len(self._state.assets):
+            raise ValueError("For each asset one position")
 
         self[time] = position
 
@@ -320,7 +315,7 @@ class _Builder:
 
             yield self.index[self.index <= t], self._state
 
-    def __setitem__(self, time: datetime, position: pd.Series) -> None:
+    def __setitem__(self, time: datetime, position: np.array) -> None:
         """
         The method __setitem__ updates the stock data in the dataframe for a specific time index
         with the input position. It first checks that position is a valid input,
@@ -340,14 +335,7 @@ class _Builder:
         AssertionError: if the input position is not a pandas Series object
         or its index is not a subset of the assets of the dataframe.
         """
-        assert isinstance(position, pd.Series)
-
-        valid = self._state.prices.dropna().index
-        # check that you have weights exactly for those indices
-        if not set(position.dropna().index) == set(valid):
-            raise ValueError("position must have same index as prices")
-
-        self.stocks.loc[time, position.index] = position
+        self.stocks.loc[time, self._state.assets] = position
         self._state.update(position, model=self.trading_cost_model)
 
     def __getitem__(self, time: datetime) -> pd.Series:
