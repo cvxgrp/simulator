@@ -6,6 +6,7 @@ __pycache__/
 *$py.class
 .pytest_cache
 .ruff_cache
+htmlcov
 
 # C extensions
 *.so

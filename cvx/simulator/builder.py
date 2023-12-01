@@ -335,13 +335,6 @@ class _Builder:
         AssertionError: if the input position is not a pandas Series object
         or its index is not a subset of the assets of the dataframe.
         """
-        # assert isinstance(position, pd.Series)
-
-        # valid = self._state.assets #prices.dropna().index
-        # check that you have weights exactly for those indices
-        # if not set(position.dropna().index) == set(valid):
-        #    raise ValueError("position must have same index as prices")
-
         self.stocks.loc[time, self._state.assets] = position
         self._state.update(position, model=self.trading_cost_model)
 
