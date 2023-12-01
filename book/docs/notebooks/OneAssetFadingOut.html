@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/OneAssetFadingOut';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Estimating capacity using boxing constraints" href="capacity.html" />
+    <link rel="next" title="Long only 1/n portfolio" href="demo.html" />
     <link rel="prev" title="Notebooks" href="../nb.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -166,7 +166,6 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../nb.html">Notebooks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">One asset fading out</a></li>
-<li class="toctree-l2"><a class="reference internal" href="capacity.html">Estimating capacity using boxing constraints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="demo.html">Long only 1/n portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="difference.html">Portfolio difference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monkey.html">Monkey portfolios</a></li>
@@ -469,7 +468,7 @@ document.write(`
 
 
 <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">)))</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -777,11 +776,11 @@ dtype: float64
       </div>
     </a>
     <a class="right-next"
-       href="capacity.html"
+       href="demo.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Estimating capacity using boxing constraints</p>
+        <p class="prev-next-title">Long only 1/n portfolio</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
