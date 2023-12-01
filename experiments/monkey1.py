@@ -32,3 +32,19 @@ if __name__ == "__main__":
         logger.info(f"Value: {state.value}")
         logger.info(f"Assets: {state.assets}")
         logger.info(200 * "-")
+
+    # portfolio = b.build()
+
+    print(b.stocks)
+
+    portfolio = b.build()
+    print(portfolio.equity)
+    print(portfolio.nav)
+
+    print(portfolio.trades_stocks)
+    print(portfolio.trades_currency)
+    print(portfolio.cash)
+    print(portfolio.nav)
+    print(portfolio.weights)
+    # print(portfolio.weights)
+    # print(portfolio.cash)

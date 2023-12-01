@@ -349,7 +349,7 @@ class _Builder:
         """
         return self.stocks.loc[time]
 
-    def build(self) -> EquityPortfolio:
+    def build(self, extra=0) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 
@@ -365,6 +365,6 @@ class _Builder:
         return EquityPortfolio(
             prices=self.prices,
             stocks=self.stocks,
-            initial_cash=self.initial_cash,
+            initial_cash=self.initial_cash,  # - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),
             trading_cost_model=self.trading_cost_model,
         )
