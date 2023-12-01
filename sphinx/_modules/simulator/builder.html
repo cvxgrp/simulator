@@ -537,7 +537,7 @@
 
 <div class="viewcode-block" id="_Builder.build">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.build">[docs]</a>
-    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EquityPortfolio</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
 <span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 
@@ -553,7 +553,7 @@
         <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
             <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
             <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
-            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>
+            <span class="n">initial_cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span><span class="p">,</span>  <span class="c1"># - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),</span>
             <span class="n">trading_cost_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>

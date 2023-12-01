@@ -326,7 +326,7 @@ Functions
       Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
 
 
-   .. py:method:: build() -> cvx.simulator.portfolio.EquityPortfolio
+   .. py:method:: build(extra=0) -> cvx.simulator.portfolio.EquityPortfolio
 
       A function that creates a new instance of the EquityPortfolio
       class based on the internal state of the Portfolio builder object.

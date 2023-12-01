@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_grid_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.2">coverage.py v7.3.2</a>,
-            created at 2023-12-01 11:02 +0000
+            created at 2023-12-01 14:17 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -431,7 +431,7 @@
     <p class="pln"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">stocks</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">time</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t">    <span class="key">def</span> <span class="nam">build</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span> <span class="op">-></span> <span class="nam">EquityPortfolio</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t352" href="#t352">352</a></span><span class="t">    <span class="key">def</span> <span class="nam">build</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">extra</span><span class="op">=</span><span class="num">0</span><span class="op">)</span> <span class="op">-></span> <span class="nam">EquityPortfolio</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t">        <span class="str">"""A function that creates a new instance of the EquityPortfolio</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">        class based on the internal state of the Portfolio builder object.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -447,7 +447,7 @@
     <p class="run"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">        <span class="key">return</span> <span class="nam">EquityPortfolio</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">            <span class="nam">prices</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">prices</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t367" href="#t367">367</a></span><span class="t">            <span class="nam">stocks</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">stocks</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t">            <span class="nam">initial_cash</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">initial_cash</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t">            <span class="nam">initial_cash</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">initial_cash</span><span class="op">,</span>  <span class="com"># - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t">            <span class="nam">trading_cost_model</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">trading_cost_model</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
@@ -459,7 +459,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_grid_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.2">coverage.py v7.3.2</a>,
-            created at 2023-12-01 11:02 +0000
+            created at 2023-12-01 14:17 +0000
         </p>
     </div>
 </footer>

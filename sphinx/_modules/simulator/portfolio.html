@@ -405,7 +405,7 @@
 <span class="sd">        bought or sold by the portfolio at each point in time.</span>
 <span class="sd">        The resulting dataframe will have the same dimensions</span>
 <span class="sd">        as the stocks dataframe, with NaN values filled with zeros.&quot;&quot;&quot;</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
         <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
 
