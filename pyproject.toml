@@ -19,6 +19,7 @@ ipython = "*"
 pytest = "*"
 pytest-cov = "*"
 mock = "*"
+pre-commit = "*"
 
 [tool.poetry.group.dev.dependencies]
 yfinance = "*"

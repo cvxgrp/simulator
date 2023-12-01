@@ -8,6 +8,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.builder import builder as _builder
+from cvx.simulator.interpolation import interpolate
 from cvx.simulator.trading_costs import LinearCostModel
 
 
@@ -204,32 +205,39 @@ def test_input_data(prices):
 def test_weights_on_wrong_days(resource_dir):
     prices = pd.read_csv(
         resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0
-    )
+    ).apply(interpolate)
+
+    print(prices)
+    # there are no inner NaNs
 
     b = _builder(prices=prices, initial_cash=50000)
     t = prices.index
 
     for t, state in b:
         with pytest.raises(ValueError):
+            # C is not there yet
             b.set_weights(
                 t[-1], pd.Series(index={"A", "B", "C"}, data=[0.5, 0.25, 0.25])
             )
 
         with pytest.raises(ValueError):
+            # C is not there yet
             b.set_cashposition(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
 
         with pytest.raises(ValueError):
+            # C is not there yet
             b.set_position(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
 
         with pytest.raises(ValueError):
+            # C is not there yet
             b[t[-1]] = pd.Series(index={"A", "B", "C"}, data=[5, 5, 5])
 
     for t, state in b:
+        # set the weights for all assets alive
         b.set_weights(
             t[-1],
             pd.Series(
-                index=prices.loc[t[-1]].dropna().index,
-                data=np.random.rand(6),
-                dtype=float,
+                index=state.assets,
+                data=np.random.rand(len(state.assets)),
             ),
         )
