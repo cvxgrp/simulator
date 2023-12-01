@@ -95,7 +95,7 @@ The builder class also exposes setters for such alternative conventions.
 ```python
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b.set_weights(t[-1], pd.Series(index=state.assets, data = 0.25))
+    b.set_weights(t[-1], np.ones(4)*0.25)
 ```
 
 ### Build the portfolio
