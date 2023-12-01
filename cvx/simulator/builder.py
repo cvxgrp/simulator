@@ -211,12 +211,6 @@ class _Builder:
     trading_cost_model: TradingCostModel | None = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
-    market_cap: pd.DataFrame = None
-    trade_volume: pd.DataFrame = None
-    max_cap_fraction: float | None = None
-    min_cap_fraction: float | None = None
-    max_trade_fraction: float | None = None
-    min_trade_fraction: float | None = None
     input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
