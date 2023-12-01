@@ -235,7 +235,7 @@ class EquityPortfolio:
         bought or sold by the portfolio at each point in time.
         The resulting dataframe will have the same dimensions
         as the stocks dataframe, with NaN values filled with zeros."""
-        t = self.stocks.diff()
+        t = self.stocks.fillna(0.0).diff()
         t.loc[self.index[0]] = self.stocks.loc[self.index[0]]
         return t.fillna(0.0)
 
