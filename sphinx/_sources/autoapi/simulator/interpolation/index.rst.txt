@@ -1,0 +1,28 @@
+:py:mod:`simulator.interpolation`
+=================================
+
+.. py:module:: simulator.interpolation
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulator.interpolation.interpolate
+   simulator.interpolation.valid
+
+
+
+.. py:function:: interpolate(ts)
+
+   interpolate
+
+
+.. py:function:: valid(ts)
+
+

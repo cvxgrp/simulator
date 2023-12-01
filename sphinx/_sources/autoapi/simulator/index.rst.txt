@@ -12,6 +12,7 @@ Submodules
 
    builder/index.rst
    grid/index.rst
+   interpolation/index.rst
    portfolio/index.rst
    trading_costs/index.rst
 
