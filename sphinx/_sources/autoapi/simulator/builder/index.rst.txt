@@ -161,6 +161,15 @@ Functions
 .. py:class:: _Builder
 
 
+   .. py:property:: valid
+
+      Analyse the validity of the data
+      Do it column by column of the prices
+
+   .. py:property:: intervals
+
+      Find for each column the first and the last valid index
+
    .. py:property:: index
       :type: pandas.DatetimeIndex
 
@@ -178,6 +187,7 @@ Functions
    .. py:property:: current_prices
       :type: numpy.array
 
+      Get the current prices from the state
 
    .. py:attribute:: prices
       :type: pandas.DataFrame
@@ -202,36 +212,6 @@ Functions
 
    .. py:attribute:: _state
       :type: _State
-
-      
-
-   .. py:attribute:: market_cap
-      :type: pandas.DataFrame
-
-      
-
-   .. py:attribute:: trade_volume
-      :type: pandas.DataFrame
-
-      
-
-   .. py:attribute:: max_cap_fraction
-      :type: float | None
-
-      
-
-   .. py:attribute:: min_cap_fraction
-      :type: float | None
-
-      
-
-   .. py:attribute:: max_trade_fraction
-      :type: float | None
-
-      
-
-   .. py:attribute:: min_trade_fraction
-      :type: float | None
 
       
 

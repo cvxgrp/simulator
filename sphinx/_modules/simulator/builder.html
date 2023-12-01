@@ -99,6 +99,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">cvx.simulator.interpolation</span> <span class="kn">import</span> <span class="n">valid</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
 
@@ -349,30 +350,6 @@
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder._state">[docs]</a>
     <span class="n">_state</span><span class="p">:</span> <span class="n">_State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_State</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="_Builder.market_cap">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.market_cap">[docs]</a>
-    <span class="n">market_cap</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="_Builder.trade_volume">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.trade_volume">[docs]</a>
-    <span class="n">trade_volume</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="_Builder.max_cap_fraction">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_cap_fraction">[docs]</a>
-    <span class="n">max_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="_Builder.min_cap_fraction">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_cap_fraction">[docs]</a>
-    <span class="n">min_cap_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="_Builder.max_trade_fraction">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.max_trade_fraction">[docs]</a>
-    <span class="n">max_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="_Builder.min_trade_fraction">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.min_trade_fraction">[docs]</a>
-    <span class="n">min_trade_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
-
 <div class="viewcode-block" id="_Builder.input_data">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.input_data">[docs]</a>
     <span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
@@ -397,6 +374,31 @@
 
 
     <span class="nd">@property</span>
+<div class="viewcode-block" id="_Builder.valid">
+<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyse the validity of the data</span>
+<span class="sd">        Do it column by column of the prices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="_Builder.intervals">
+<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.intervals">[docs]</a>
+    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find for each column the first and the last valid index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">ts</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;first&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">(),</span> <span class="s2">&quot;last&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">last_valid_index</span><span class="p">()}</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
 <div class="viewcode-block" id="_Builder.index">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.index">[docs]</a>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
@@ -418,7 +420,9 @@
 <div class="viewcode-block" id="_Builder.current_prices">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder._Builder.current_prices">[docs]</a>
     <span class="k">def</span> <span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current prices from the state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
 
 

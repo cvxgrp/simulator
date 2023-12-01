@@ -251,6 +251,19 @@ constructed _Builder object.</p>
 <dt class="sig sig-object py" id="simulator.builder._Builder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.builder.</span></span><span class="sig-name descname"><span class="pre">_Builder</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._Builder.valid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.valid" title="Link to this definition"></a></dt>
+<dd><p>Analyse the validity of the data
+Do it column by column of the prices</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._Builder.intervals">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.intervals" title="Link to this definition"></a></dt>
+<dd><p>Find for each column the first and the last valid index</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder._Builder.index">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DatetimeIndex</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.index" title="Link to this definition"></a></dt>
 <dd><p>A property that returns the index of the portfolio,
@@ -266,7 +279,8 @@ with the same length as the number of rows in the prices dataframe.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder._Builder.current_prices">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.array</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.current_prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.current_prices" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the current prices from the state</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._Builder.prices">
@@ -291,36 +305,6 @@ with the same length as the number of rows in the prices dataframe.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._Builder._state">
 <span class="sig-name descname"><span class="pre">_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#simulator.builder._State" title="simulator.builder._State"><span class="pre">_State</span></a></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder._state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder._state" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.market_cap">
-<span class="sig-name descname"><span class="pre">market_cap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.market_cap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.market_cap" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.trade_volume">
-<span class="sig-name descname"><span class="pre">trade_volume</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.trade_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.trade_volume" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.max_cap_fraction">
-<span class="sig-name descname"><span class="pre">max_cap_fraction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.max_cap_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.max_cap_fraction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.min_cap_fraction">
-<span class="sig-name descname"><span class="pre">min_cap_fraction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.min_cap_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.min_cap_fraction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.max_trade_fraction">
-<span class="sig-name descname"><span class="pre">max_trade_fraction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.max_trade_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.max_trade_fraction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._Builder.min_trade_fraction">
-<span class="sig-name descname"><span class="pre">min_trade_fraction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.min_trade_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.min_trade_fraction" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
