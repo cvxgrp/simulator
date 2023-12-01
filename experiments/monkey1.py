@@ -1,5 +1,6 @@
 from io import StringIO
 
+import numpy as np
 import pandas as pd
 from loguru import logger
 
@@ -21,15 +22,13 @@ if __name__ == "__main__":
         logger.info(f"Cash: {state.cash}")
         logger.info(f"Value: {state.value}")
         logger.info(f"Assets: {state.assets}")
-        logger.info(f"Position: {state.position}")
         logger.info(100 * "*")
         # print(state.value)
         # print(state.position)
         # print("******************")
-        b.set_weights(t[-1], pd.Series(index=state.assets, data=1 / len(state.assets)))
+        b.set_weights(t[-1], weights=np.ones(len(state.assets)) / len(state.assets))
         logger.info(f"Nav: {state.nav}")
         logger.info(f"Cash: {state.cash}")
         logger.info(f"Value: {state.value}")
         logger.info(f"Assets: {state.assets}")
-        logger.info(f"Position: {state.position}")
         logger.info(200 * "-")

@@ -128,9 +128,7 @@ def test_build(builder_weights):
 
     # loop and set the weights explicitly
     for t, state in builder_weights:
-        builder_weights.set_weights(
-            time=t[-1], weights=pd.Series(index=state.assets, data=1.0 / 7.0)
-        )
+        builder_weights.set_weights(time=t[-1], weights=np.ones(7) / 7)
 
     # build again
     portfolio2 = builder_weights.build()
@@ -146,7 +144,7 @@ def test_set_weights(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_weights(time=times[-1], weights=pd.Series(index=["B", "C"], data=0.5))
+        b.set_weights(time=times[-1], weights=np.array([0.5, 0.5]))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -159,9 +157,7 @@ def test_set_cashpositions(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_cashposition(
-            time=times[-1], cashposition=pd.Series(index=["B", "C"], data=state.nav / 2)
-        )
+        b.set_cashposition(time=times[-1], cashposition=np.ones(2) * state.nav / 2)
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -215,29 +211,19 @@ def test_weights_on_wrong_days(resource_dir):
 
     for t, state in b:
         with pytest.raises(ValueError):
-            # C is not there yet
-            b.set_weights(
-                t[-1], pd.Series(index={"A", "B", "C"}, data=[0.5, 0.25, 0.25])
-            )
+            b.set_weights(t[-1], weights=[0.5, 0.25, 0.25])
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.set_cashposition(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
+            b.set_cashposition(t[-1], cashposition=[5, 5, 5])
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.set_position(t[-1], pd.Series(index={"A", "B", "C"}, data=[5, 5, 5]))
-
-        with pytest.raises(ValueError):
-            # C is not there yet
-            b[t[-1]] = pd.Series(index={"A", "B", "C"}, data=[5, 5, 5])
+            b.set_position(t[-1], position=[5, 5, 5])
 
     for t, state in b:
         # set the weights for all assets alive
         b.set_weights(
             t[-1],
-            pd.Series(
-                index=state.assets,
-                data=np.random.rand(len(state.assets)),
-            ),
+            weights=np.random.rand(len(state.assets)),
         )
