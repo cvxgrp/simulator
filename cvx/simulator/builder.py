@@ -20,6 +20,7 @@ from typing import Any, Generator
 import numpy as np
 import pandas as pd
 
+from cvx.simulator.interpolation import valid
 from cvx.simulator.portfolio import EquityPortfolio
 from cvx.simulator.trading_costs import TradingCostModel
 
@@ -211,12 +212,6 @@ class _Builder:
     trading_cost_model: TradingCostModel | None = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
-    market_cap: pd.DataFrame = None
-    trade_volume: pd.DataFrame = None
-    max_cap_fraction: float | None = None
-    min_cap_fraction: float | None = None
-    max_trade_fraction: float | None = None
-    min_trade_fraction: float | None = None
     input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -235,6 +230,25 @@ class _Builder:
         self._state.cash = self.initial_cash
 
     @property
+    def valid(self):
+        """
+        Analyse the validity of the data
+        Do it column by column of the prices
+        """
+        return self.prices.apply(valid)
+
+    @property
+    def intervals(self):
+        """
+        Find for each column the first and the last valid index
+        """
+        return self.prices.apply(
+            lambda ts: pd.Series(
+                {"first": ts.first_valid_index(), "last": ts.last_valid_index()}
+            )
+        ).transpose()
+
+    @property
     def index(self) -> pd.DatetimeIndex:
         """A property that returns the index of the portfolio,
         which is the time period for which the portfolio data is available.
@@ -251,7 +265,9 @@ class _Builder:
 
     @property
     def current_prices(self) -> np.array:
-        """ """
+        """
+        Get the current prices from the state
+        """
         return self._state.prices[self._state.assets].values
 
     def set_weights(self, time: datetime, weights: np.array) -> None:
