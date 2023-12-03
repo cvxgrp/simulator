@@ -447,7 +447,7 @@ Buy one (say 0.1 of your portfolio wealth) and short one the same amount.</p>
     <span class="n">stocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
     <span class="n">stocks</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">,</span> <span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">nav</span><span class="p">]</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="c1"># update the position</span>
-    <span class="n">b</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stocks</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stocks</span>
 </pre></div>
 </div>
 <p>Here t is the growing list of timestamps, e.g. in the first iteration
@@ -465,7 +465,7 @@ using a series of actual stocks rather than weights or cashpositions.
 The builder class also exposes setters for such alternative conventions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># each day we invest a quarter of the capital in the assets</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">))</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mf">0.25</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
