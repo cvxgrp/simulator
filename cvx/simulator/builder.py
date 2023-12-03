@@ -56,10 +56,10 @@ class _State:
         If the value cannot be computed due to missing positions
         (they might be still None), zero is returned instead.
         """
-        try:
-            return float((self.prices * self._position).sum())
-        except TypeError:
-            return 0.0
+        # try:
+        return self.cashposition.sum()
+        # except TypeError:
+        #    return 0.0
 
     @property
     def nav(self) -> float:
@@ -84,7 +84,7 @@ class _State:
         missing, then a series of zeroes is returned.
         """
         try:
-            return (self.prices * self._position) / self.nav
+            return self.cashposition / self.nav
         except TypeError:
             return 0 * self.prices
 
@@ -95,6 +95,21 @@ class _State:
         which is the sum of the absolute values of the portfolio weights.
         """
         return float(self.weights.abs().sum())
+
+    @property
+    def cashposition(self):
+        """
+        The `cashposition` property computes the cash position of the portfolio,
+        which is the amount of cash in the portfolio as a fraction of the total portfolio value.
+        """
+        return self.prices * self.position
+
+    @property
+    def position(self):
+        if self._position is None:
+            return pd.Series(dtype=float)
+
+        return self._position
 
     def update(
         self,
@@ -199,7 +214,7 @@ def builder(
     if weights is not None:
         for t, state in builder:
             builder.set_weights(
-                time=t[-1], weights=weights[state.assets].loc[t[-1]].dropna().values
+                weights=weights[state.assets].loc[t[-1]].dropna().values
             )
 
     return builder
@@ -270,7 +285,7 @@ class _Builder:
         """
         return self._state.prices[self._state.assets].values
 
-    def set_weights(self, time: datetime, weights: np.array) -> None:
+    def set_weights(self, weights: np.array) -> None:
         """
         Set the position via weights (e.g. fractions of the nav)
 
@@ -280,9 +295,9 @@ class _Builder:
         if not len(weights) == len(self._state.assets):
             raise ValueError("For each asset one weight")
 
-        self[time] = self._state.nav * weights / self.current_prices
+        self[self._state.time] = self._state.nav * weights / self.current_prices
 
-    def set_cashposition(self, time: datetime, cashposition: np.array) -> None:
+    def set_cashposition(self, cashposition: np.array) -> None:
         """
         Set the position via cash positions (e.g. USD invested per asset)
 
@@ -292,9 +307,9 @@ class _Builder:
         if not len(cashposition) == len(self._state.assets):
             raise ValueError("For each asset one cashposition")
 
-        self[time] = cashposition / self.current_prices
+        self[self._state.time] = cashposition / self.current_prices
 
-    def set_position(self, time: datetime, position: np.array) -> None:
+    def set_position(self, position: np.array) -> None:
         """
         Set the position via number of assets (e.g. number of stocks)
 
@@ -304,7 +319,8 @@ class _Builder:
         if not len(position) == len(self._state.assets):
             raise ValueError("For each asset one position")
 
-        self[time] = position
+        self[self._state.time] = position
+        # self[time] = position
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
         """
@@ -324,6 +340,7 @@ class _Builder:
         for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
+            self._state.time = t
 
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
