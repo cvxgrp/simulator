@@ -78,6 +78,14 @@ Functions
       The `leverage` property computes the leverage of the portfolio,
       which is the sum of the absolute values of the portfolio weights.
 
+   .. py:property:: cashposition
+
+      The `cashposition` property computes the cash position of the portfolio,
+      which is the amount of cash in the portfolio as a fraction of the total portfolio value.
+
+   .. py:property:: position
+
+
    .. py:property:: assets
 
 
@@ -86,7 +94,7 @@ Functions
 
       
 
-   .. py:attribute:: _position
+   .. py:attribute:: __position
       :type: pandas.Series
 
       
@@ -102,41 +110,20 @@ Functions
 
       
 
-   .. py:method:: update(position: numpy.array, model: cvx.simulator.trading_costs.TradingCostModel | None = None, **kwargs: Any) -> _State
+   .. py:attribute:: model
+      :type: cvx.simulator.trading_costs.TradingCostModel | None
 
-      The update method updates the current state of the portfolio with the
-      new input position. It calculates the trades made based on the new
-      and the previous position, updates the internal position and
-      cash attributes, and applies any trading costs according to a model parameter.
+      
 
-      The method takes three input parameters:
+   .. py:attribute:: time
+      :type: datetime.datetime | None
 
-      position: a pandas series object representing the new position of the
-      portfolio.
-
-      model: an optional trading cost model (e.g. slippage, fees) to be
-      incorporated into the update. If None, no trading costs will be applied.
-
-      **kwargs: additional keyword arguments to pass into the trading cost
-      model.
-
-      Returns:
-      self: the _State instance with the updated position and cash.
-
-      Updates:
-
-      trades: the difference between positions in the old and new portfolio.
-      position: the new position of the portfolio.
-      cash: the new amount of cash in the portfolio after any trades and trading costs are applied.
-
-      Note that the method does not return any value: instead,
-      it updates the internal state of the _State instance.
-
+      
 
    .. py:method:: __getattr__(item)
 
 
-   .. py:method:: trade(target_pos)
+   .. py:method:: _trade(target_pos)
 
       Compute the trade vector given a target position
 
@@ -189,6 +176,22 @@ Functions
 
       Get the current prices from the state
 
+   .. py:property:: weights
+      :type: numpy.array
+
+      Get the current weights from the state
+
+   .. py:property:: position
+      :type: pandas.Series
+
+      The position property returns the current position of the portfolio.
+      It returns a pandas Series object containing the current position of the portfolio.
+
+      Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
+
+   .. py:property:: cashposition
+
+
    .. py:attribute:: prices
       :type: pandas.DataFrame
 
@@ -234,30 +237,6 @@ Functions
       is called automatically after the object initialization.
 
 
-   .. py:method:: set_weights(time: datetime.datetime, weights: numpy.array) -> None
-
-      Set the position via weights (e.g. fractions of the nav)
-
-      :param time: time
-      :param weights: series of weights
-
-
-   .. py:method:: set_cashposition(time: datetime.datetime, cashposition: numpy.array) -> None
-
-      Set the position via cash positions (e.g. USD invested per asset)
-
-      :param time: time
-      :param cashposition: series of cash positions
-
-
-   .. py:method:: set_position(time: datetime.datetime, position: numpy.array) -> None
-
-      Set the position via number of assets (e.g. number of stocks)
-
-      :param time: time
-      :param position: series of number of stocks
-
-
    .. py:method:: __iter__() -> Generator[tuple[pandas.DatetimeIndex, _State], None, None]
 
       The __iter__ method allows the object to be iterated over in a for loop,
@@ -272,38 +251,6 @@ Functions
 
       state: the current state of the portfolio,
       taking into account the stock prices at each interval.
-
-
-   .. py:method:: __setitem__(time: datetime.datetime, position: numpy.array) -> None
-
-      The method __setitem__ updates the stock data in the dataframe for a specific time index
-      with the input position. It first checks that position is a valid input,
-      meaning it is a pandas Series object and has its index within the assets of the dataframe.
-      The method takes two input parameters:
-
-      time: time index for which to update the stock data
-      position: pandas series object containing the updated stock data
-
-      Returns: None
-
-      Updates:
-      the stock data of the dataframe at the given time index with the input position
-      the internal state of the portfolio with the updated position, taking into account the trading cost model
-
-      Raises:
-      AssertionError: if the input position is not a pandas Series object
-      or its index is not a subset of the assets of the dataframe.
-
-
-   .. py:method:: __getitem__(time: datetime.datetime) -> pandas.Series
-
-      The __getitem__ method retrieves the stock data for a specific time in the dataframe.
-      It returns the stock data for that time. The method takes one input parameter:
-
-      time: the time index for which to retrieve the stock data
-      Returns: stock data for the input time
-
-      Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
 
 
    .. py:method:: build(extra=0) -> cvx.simulator.portfolio.EquityPortfolio

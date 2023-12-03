@@ -169,6 +169,18 @@ which is the sum of the absolute values of the portfolio weights.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._State.cashposition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.cashposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.cashposition" title="Link to this definition"></a></dt>
+<dd><p>The <cite>cashposition</cite> property computes the cash position of the portfolio,
+which is the amount of cash in the portfolio as a fraction of the total portfolio value.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._State.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder._State.assets">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.assets" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -179,8 +191,8 @@ which is the sum of the absolute values of the portfolio weights.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.builder._State._position">
-<span class="sig-name descname"><span class="pre">_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State._position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State._position" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="simulator.builder._State.__position">
+<span class="sig-name descname"><span class="pre">__position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.__position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.__position" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -193,29 +205,15 @@ which is the sum of the absolute values of the portfolio weights.</p>
 <span class="sig-name descname"><span class="pre">input_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.input_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.input_data" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._State.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">cvx.simulator.trading_costs.TradingCostModel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#simulator.builder._State" title="simulator.builder._State"><span class="pre">_State</span></a></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.update" title="Link to this definition"></a></dt>
-<dd><p>The update method updates the current state of the portfolio with the
-new input position. It calculates the trades made based on the new
-and the previous position, updates the internal position and
-cash attributes, and applies any trading costs according to a model parameter.</p>
-<p>The method takes three input parameters:</p>
-<p>position: a pandas series object representing the new position of the
-portfolio.</p>
-<p>model: an optional trading cost model (e.g. slippage, fees) to be
-incorporated into the update. If None, no trading costs will be applied.</p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: additional keyword arguments to pass into the trading cost
-model.</p>
-<p>Returns:
-self: the _State instance with the updated position and cash.</p>
-<p>Updates:</p>
-<p>trades: the difference between positions in the old and new portfolio.
-position: the new position of the portfolio.
-cash: the new amount of cash in the portfolio after any trades and trading costs are applied.</p>
-<p>Note that the method does not return any value: instead,
-it updates the internal state of the _State instance.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.builder._State.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">cvx.simulator.trading_costs.TradingCostModel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.builder._State.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._State.__getattr__">
@@ -223,8 +221,8 @@ it updates the internal state of the _State instance.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._State.trade">
-<span class="sig-name descname"><span class="pre">trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State.trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State.trade" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="simulator.builder._State._trade">
+<span class="sig-name descname"><span class="pre">_trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/builder.html#_State._trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._State._trade" title="Link to this definition"></a></dt>
 <dd><p>Compute the trade vector given a target position</p>
 </dd></dl>
 
@@ -282,6 +280,25 @@ with the same length as the number of rows in the prices dataframe.</p>
 <dd><p>Get the current prices from the state</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._Builder.weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.array</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.weights" title="Link to this definition"></a></dt>
+<dd><p>Get the current weights from the state</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._Builder.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.position" title="Link to this definition"></a></dt>
+<dd><p>The position property returns the current position of the portfolio.
+It returns a pandas Series object containing the current position of the portfolio.</p>
+<p>Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.builder._Builder.cashposition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.cashposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.cashposition" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder._Builder.prices">
 <span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.prices" title="Link to this definition"></a></dt>
@@ -326,48 +343,6 @@ is called automatically after the object initialization.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.set_weights">
-<span class="sig-name descname"><span class="pre">set_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.set_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.set_weights" title="Link to this definition"></a></dt>
-<dd><p>Set the position via weights (e.g. fractions of the nav)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> – time</p></li>
-<li><p><strong>weights</strong> – series of weights</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.set_cashposition">
-<span class="sig-name descname"><span class="pre">set_cashposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cashposition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.set_cashposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.set_cashposition" title="Link to this definition"></a></dt>
-<dd><p>Set the position via cash positions (e.g. USD invested per asset)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> – time</p></li>
-<li><p><strong>cashposition</strong> – series of cash positions</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.set_position">
-<span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.set_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.set_position" title="Link to this definition"></a></dt>
-<dd><p>Set the position via number of assets (e.g. number of stocks)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> – time</p></li>
-<li><p><strong>position</strong> – series of number of stocks</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder._Builder.__iter__">
 <span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DatetimeIndex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#simulator.builder._State" title="simulator.builder._State"><span class="pre">_State</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.__iter__" title="Link to this definition"></a></dt>
 <dd><p>The __iter__ method allows the object to be iterated over in a for loop,
@@ -379,34 +354,6 @@ containing the list of dates and the current portfolio state.</p>
 <p>interval: a pandas DatetimeIndex object containing the dates seen so far.</p>
 <p>state: the current state of the portfolio,
 taking into account the stock prices at each interval.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.__setitem__">
-<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.__setitem__" title="Link to this definition"></a></dt>
-<dd><p>The method __setitem__ updates the stock data in the dataframe for a specific time index
-with the input position. It first checks that position is a valid input,
-meaning it is a pandas Series object and has its index within the assets of the dataframe.
-The method takes two input parameters:</p>
-<p>time: time index for which to update the stock data
-position: pandas series object containing the updated stock data</p>
-<p>Returns: None</p>
-<p>Updates:
-the stock data of the dataframe at the given time index with the input position
-the internal state of the portfolio with the updated position, taking into account the trading cost model</p>
-<p>Raises:
-AssertionError: if the input position is not a pandas Series object
-or its index is not a subset of the assets of the dataframe.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.builder._Builder.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#_Builder.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder._Builder.__getitem__" title="Link to this definition"></a></dt>
-<dd><p>The __getitem__ method retrieves the stock data for a specific time in the dataframe.
-It returns the stock data for that time. The method takes one input parameter:</p>
-<p>time: the time index for which to retrieve the stock data
-Returns: stock data for the input time</p>
-<p>Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.</p>
 </dd></dl>
 
 <dl class="py method">

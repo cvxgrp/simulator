@@ -1,0 +1,96 @@
+Traceback (most recent call last):
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+    return loop.run_until_complete(inner)
+  File "/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+b = builder(prices=prices, initial_cash=capital)
+
+# define a grid
+grid = resample_index(prices.index, rule="M")
+
+for time, state in b:
+    # each day we invest a quarter of the capital in the assets
+    if time[-1] in grid:
+        b.position = 0.25 * state.nav / state.prices
+    else:
+        # forward fill an existing position
+        b.position = state.position
+        
+portfolio = b.build()
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[13], line 4[0m
+[1;32m      1[0m b [38;5;241m=[39m builder(prices[38;5;241m=[39mprices, initial_cash[38;5;241m=[39mcapital)
+[1;32m      3[0m [38;5;66;03m# define a grid[39;00m
+[0;32m----> 4[0m grid [38;5;241m=[39m [43mresample_index[49m[43m([49m[43mprices[49m[38;5;241;43m.[39;49m[43mindex[49m[43m,[49m[43m [49m[43mrule[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mM[39;49m[38;5;124;43m"[39;49m[43m)[49m
+[1;32m      6[0m [38;5;28;01mfor[39;00m time, state [38;5;129;01min[39;00m b:
+[1;32m      7[0m     [38;5;66;03m# each day we invest a quarter of the capital in the assets[39;00m
+[1;32m      8[0m     [38;5;28;01mif[39;00m time[[38;5;241m-[39m[38;5;241m1[39m] [38;5;129;01min[39;00m grid:
+
+File [0;32m~/work/simulator/simulator/cvx/simulator/grid.py:45[0m, in [0;36mresample_index[0;34m(index, rule)[0m
+[1;32m     36[0m [38;5;250m[39m[38;5;124;03m"""[39;00m
+[1;32m     37[0m [38;5;124;03mThe resample_index function resamples a pandas DatetimeIndex object[39;00m
+[1;32m     38[0m [38;5;124;03mto a lower frequency using a specified rule.[39;00m
+[0;32m   (...)[0m
+[1;32m     42[0m [38;5;124;03mbut rather returns a pandas DatetimeIndex[39;00m
+[1;32m     43[0m [38;5;124;03m"""[39;00m
+[1;32m     44[0m series [38;5;241m=[39m pd[38;5;241m.[39mSeries(index[38;5;241m=[39mindex, data[38;5;241m=[39mindex)
+[0;32m---> 45[0m a [38;5;241m=[39m [43mseries[49m[38;5;241;43m.[39;49m[43mresample[49m[43m([49m[43mrule[49m[38;5;241;43m=[39;49m[43mrule[49m[43m)[49m[38;5;241m.[39mfirst()
+[1;32m     46[0m [38;5;28;01mreturn[39;00m pd[38;5;241m.[39mDatetimeIndex(a[38;5;241m.[39mvalues)
+
+File [0;32m~/work/simulator/simulator/.venv/lib/python3.10/site-packages/pandas/core/generic.py:9439[0m, in [0;36mNDFrame.resample[0;34m(self, rule, axis, closed, label, convention, kind, on, level, origin, offset, group_keys)[0m
+[1;32m   9436[0m [38;5;28;01melse[39;00m:
+[1;32m   9437[0m     axis [38;5;241m=[39m [38;5;241m0[39m
+[0;32m-> 9439[0m [38;5;28;01mreturn[39;00m [43mget_resampler[49m[43m([49m
+[1;32m   9440[0m [43m    [49m[43mcast[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mSeries | DataFrame[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m)[49m[43m,[49m
+[1;32m   9441[0m [43m    [49m[43mfreq[49m[38;5;241;43m=[39;49m[43mrule[49m[43m,[49m
+[1;32m   9442[0m [43m    [49m[43mlabel[49m[38;5;241;43m=[39;49m[43mlabel[49m[43m,[49m
+[1;32m   9443[0m [43m    [49m[43mclosed[49m[38;5;241;43m=[39;49m[43mclosed[49m[43m,[49m
+[1;32m   9444[0m [43m    [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m,[49m
+[1;32m   9445[0m [43m    [49m[43mkind[49m[38;5;241;43m=[39;49m[43mkind[49m[43m,[49m
+[1;32m   9446[0m [43m    [49m[43mconvention[49m[38;5;241;43m=[39;49m[43mconvention[49m[43m,[49m
+[1;32m   9447[0m [43m    [49m[43mkey[49m[38;5;241;43m=[39;49m[43mon[49m[43m,[49m
+[1;32m   9448[0m [43m    [49m[43mlevel[49m[38;5;241;43m=[39;49m[43mlevel[49m[43m,[49m
+[1;32m   9449[0m [43m    [49m[43morigin[49m[38;5;241;43m=[39;49m[43morigin[49m[43m,[49m
+[1;32m   9450[0m [43m    [49m[43moffset[49m[38;5;241;43m=[39;49m[43moffset[49m[43m,[49m
+[1;32m   9451[0m [43m    [49m[43mgroup_keys[49m[38;5;241;43m=[39;49m[43mgroup_keys[49m[43m,[49m
+[1;32m   9452[0m [43m[49m[43m)[49m
+
+File [0;32m~/work/simulator/simulator/.venv/lib/python3.10/site-packages/pandas/core/resample.py:1970[0m, in [0;36mget_resampler[0;34m(obj, kind, **kwds)[0m
+[1;32m   1966[0m [38;5;250m[39m[38;5;124;03m"""[39;00m
+[1;32m   1967[0m [38;5;124;03mCreate a TimeGrouper and return our resampler.[39;00m
+[1;32m   1968[0m [38;5;124;03m"""[39;00m
+[1;32m   1969[0m tg [38;5;241m=[39m TimeGrouper([38;5;241m*[39m[38;5;241m*[39mkwds)
+[0;32m-> 1970[0m [38;5;28;01mreturn[39;00m [43mtg[49m[38;5;241;43m.[39;49m[43m_get_resampler[49m[43m([49m[43mobj[49m[43m,[49m[43m [49m[43mkind[49m[38;5;241;43m=[39;49m[43mkind[49m[43m)[49m
+
+File [0;32m~/work/simulator/simulator/.venv/lib/python3.10/site-packages/pandas/core/resample.py:2160[0m, in [0;36mTimeGrouper._get_resampler[0;34m(self, obj, kind)[0m
+[1;32m   2151[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(ax, TimedeltaIndex):
+[1;32m   2152[0m     [38;5;28;01mreturn[39;00m TimedeltaIndexResampler(
+[1;32m   2153[0m         obj,
+[1;32m   2154[0m         timegrouper[38;5;241m=[39m[38;5;28mself[39m,
+[0;32m   (...)[0m
+[1;32m   2157[0m         gpr_index[38;5;241m=[39max,
+[1;32m   2158[0m     )
+[0;32m-> 2160[0m [38;5;28;01mraise[39;00m [38;5;167;01mTypeError[39;00m(
+[1;32m   2161[0m     [38;5;124m"[39m[38;5;124mOnly valid with DatetimeIndex, [39m[38;5;124m"[39m
+[1;32m   2162[0m     [38;5;124m"[39m[38;5;124mTimedeltaIndex or PeriodIndex, [39m[38;5;124m"[39m
+[1;32m   2163[0m     [38;5;124mf[39m[38;5;124m"[39m[38;5;124mbut got an instance of [39m[38;5;124m'[39m[38;5;132;01m{[39;00m[38;5;28mtype[39m(ax)[38;5;241m.[39m[38;5;18m__name__[39m[38;5;132;01m}[39;00m[38;5;124m'[39m[38;5;124m"[39m
+[1;32m   2164[0m )
+
+[0;31mTypeError[0m: Only valid with DatetimeIndex, TimedeltaIndex or PeriodIndex, but got an instance of 'Index'
+

@@ -414,7 +414,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># each day we invest a quarter of the capital in the assets</span>
-    <span class="n">b</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">))</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
 </pre></div>
 </div>
 </div>
@@ -501,6 +501,9 @@ Avg. Drawdown Days  16
 Recovery Factor     1.01
 Ulcer Index         0.03
 Serenity Index      0.55
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
