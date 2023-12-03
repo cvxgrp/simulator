@@ -47,6 +47,8 @@ class _State:
     _position: pd.Series = None
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
+    model: TradingCostModel | None = None
+    time: datetime | None = None
 
     @property
     def value(self) -> float:
@@ -56,10 +58,7 @@ class _State:
         If the value cannot be computed due to missing positions
         (they might be still None), zero is returned instead.
         """
-        # try:
         return self.cashposition.sum()
-        # except TypeError:
-        #    return 0.0
 
     @property
     def nav(self) -> float:
@@ -111,52 +110,16 @@ class _State:
 
         return self._position
 
-    def update(
-        self,
-        position: np.array,
-        model: TradingCostModel | None = None,
-        **kwargs: Any,
-    ) -> _State:
-        """
-        The update method updates the current state of the portfolio with the
-        new input position. It calculates the trades made based on the new
-        and the previous position, updates the internal position and
-        cash attributes, and applies any trading costs according to a model parameter.
-
-        The method takes three input parameters:
-
-        position: a pandas series object representing the new position of the
-        portfolio.
-
-        model: an optional trading cost model (e.g. slippage, fees) to be
-        incorporated into the update. If None, no trading costs will be applied.
-
-        **kwargs: additional keyword arguments to pass into the trading cost
-        model.
-
-        Returns:
-        self: the _State instance with the updated position and cash.
-
-        Updates:
-
-        trades: the difference between positions in the old and new portfolio.
-        position: the new position of the portfolio.
-        cash: the new amount of cash in the portfolio after any trades and trading costs are applied.
-
-        Note that the method does not return any value: instead,
-        it updates the internal state of the _State instance.
-        """
+    @position.setter
+    def position(self, position):
         position = pd.Series(index=self.assets, data=position)
-        trades = self.trade(target_pos=position)
+        trades = self._trade(target_pos=position)
 
         self._position = position
         self.cash -= (trades * self.prices).sum()
 
-        if model is not None:
-            self.cash -= model.eval(self.prices, trades=trades, **kwargs).sum()
-
-        # builder is frozen, so we can't construct a new state
-        return self
+        if self.model is not None:
+            self.cash -= self.model.eval(self.prices, trades=trades).sum()
 
     def __getattr__(self, item):
         return self.input_data[item]
@@ -165,7 +128,7 @@ class _State:
     def assets(self):
         return self.prices.dropna().index
 
-    def trade(self, target_pos):
+    def _trade(self, target_pos):
         """
         Compute the trade vector given a target position
         """
@@ -213,14 +176,12 @@ def builder(
 
     if weights is not None:
         for t, state in builder:
-            builder.set_weights(
-                weights=weights[state.assets].loc[t[-1]].dropna().values
-            )
+            builder.weights = weights[state.assets].loc[t[-1]].dropna().values
 
     return builder
 
 
-@dataclass(frozen=True)
+@dataclass
 class _Builder:
     prices: pd.DataFrame
     stocks: pd.DataFrame
@@ -243,6 +204,7 @@ class _Builder:
         is called automatically after the object initialization.
         """
         self._state.cash = self.initial_cash
+        self._state.model = self.trading_cost_model
 
     @property
     def valid(self):
@@ -285,42 +247,16 @@ class _Builder:
         """
         return self._state.prices[self._state.assets].values
 
-    def set_weights(self, weights: np.array) -> None:
+    @property
+    def weights(self) -> np.array:
         """
-        Set the position via weights (e.g. fractions of the nav)
-
-        :param time: time
-        :param weights: series of weights
+        Get the current weights from the state
         """
-        if not len(weights) == len(self._state.assets):
-            raise ValueError("For each asset one weight")
+        return self._state.weights[self._state.assets].values
 
-        self[self._state.time] = self._state.nav * weights / self.current_prices
-
-    def set_cashposition(self, cashposition: np.array) -> None:
-        """
-        Set the position via cash positions (e.g. USD invested per asset)
-
-        :param time: time
-        :param cashposition: series of cash positions
-        """
-        if not len(cashposition) == len(self._state.assets):
-            raise ValueError("For each asset one cashposition")
-
-        self[self._state.time] = cashposition / self.current_prices
-
-    def set_position(self, position: np.array) -> None:
-        """
-        Set the position via number of assets (e.g. number of stocks)
-
-        :param time: time
-        :param position: series of number of stocks
-        """
-        if not len(position) == len(self._state.assets):
-            raise ValueError("For each asset one position")
-
-        self[self._state.time] = position
-        # self[time] = position
+    @weights.setter
+    def weights(self, weights: np.array) -> None:
+        self.position = self._state.nav * weights / self.current_prices
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
         """
@@ -348,39 +284,34 @@ class _Builder:
 
             yield self.index[self.index <= t], self._state
 
-    def __setitem__(self, time: datetime, position: np.array) -> None:
+    @property
+    def position(self) -> pd.Series:
         """
-        The method __setitem__ updates the stock data in the dataframe for a specific time index
-        with the input position. It first checks that position is a valid input,
-        meaning it is a pandas Series object and has its index within the assets of the dataframe.
-        The method takes two input parameters:
+        The position property returns the current position of the portfolio.
+        It returns a pandas Series object containing the current position of the portfolio.
 
-        time: time index for which to update the stock data
-        position: pandas series object containing the updated stock data
-
-        Returns: None
-
-        Updates:
-        the stock data of the dataframe at the given time index with the input position
-        the internal state of the portfolio with the updated position, taking into account the trading cost model
-
-        Raises:
-        AssertionError: if the input position is not a pandas Series object
-        or its index is not a subset of the assets of the dataframe.
+        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self.stocks.loc[time, self._state.assets] = position
-        self._state.update(position, model=self.trading_cost_model)
+        return self.stocks.loc[self._state.time]
 
-    def __getitem__(self, time: datetime) -> pd.Series:
-        """The __getitem__ method retrieves the stock data for a specific time in the dataframe.
-        It returns the stock data for that time. The method takes one input parameter:
-
-        time: the time index for which to retrieve the stock data
-        Returns: stock data for the input time
-
-        Note that the input time must be in the index of the dataframe, otherwise a KeyError will be raised.
+    @position.setter
+    def position(self, position: pd.Series) -> None:
         """
-        return self.stocks.loc[time]
+        The position property returns the current position of the portfolio.
+        It returns a pandas Series object containing the current position of the portfolio.
+
+        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
+        """
+        self.stocks.loc[self._state.time, self._state.assets] = position
+        self._state.position = position
+
+    @property
+    def cashposition(self):
+        return self.position * self.current_prices
+
+    @cashposition.setter
+    def cashposition(self, cashposition: pd.Series) -> None:
+        self.position = cashposition / self.current_prices
 
     def build(self, extra=0) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio

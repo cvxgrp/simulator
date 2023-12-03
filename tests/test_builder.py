@@ -112,7 +112,7 @@ def test_iteration_state(builder):
             state.weights, pd.Series(index=state.assets, data=np.NaN), check_names=False
         )
         pd.testing.assert_series_equal(
-            builder[t[-1]],
+            builder.position,
             pd.Series(index=state.assets, data=np.NaN),
             check_names=False,
         )
@@ -128,7 +128,7 @@ def test_build(builder_weights):
 
     # loop and set the weights explicitly
     for t, state in builder_weights:
-        builder_weights.set_weights(weights=np.ones(7) / 7)
+        builder_weights.weights = np.ones(7) / 7
 
     # build again
     portfolio2 = builder_weights.build()
@@ -144,7 +144,7 @@ def test_set_weights(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_weights(weights=np.array([0.5, 0.5]))
+        b.weights = np.array([0.5, 0.5])
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -157,7 +157,7 @@ def test_set_cashpositions(prices):
     """
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_cashposition(cashposition=np.ones(2) * state.nav / 2)
+        b.cashposition = np.ones(2) * state.nav / 2
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -166,9 +166,8 @@ def test_set_cashpositions(prices):
 def test_set_position(prices):
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
-        b.set_position(
-            position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)),
-        )
+        b.position = state.nav / (state.prices * 2)
+
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
@@ -181,9 +180,7 @@ def test_with_costmodel(prices):
     )
 
     for times, state in b:
-        b.set_position(
-            position=pd.Series(index=["B", "C"], data=state.nav / (state.prices * 2)),
-        )
+        b.position = state.nav / (state.prices * 2)
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49722.58492364325)
@@ -209,18 +206,16 @@ def test_weights_on_wrong_days(resource_dir):
 
     for t, state in b:
         with pytest.raises(ValueError):
-            b.set_weights(weights=[0.5, 0.25, 0.25])
+            b.weights = np.array([0.5, 0.25, 0.25])
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.set_cashposition(cashposition=[5, 5, 5])
+            b.cashposition = [5, 5, 5]
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.set_position(position=[5, 5, 5])
+            b.position = [5, 5, 5]
 
     for t, state in b:
         # set the weights for all assets alive
-        b.set_weights(
-            weights=np.random.rand(len(state.assets)),
-        )
+        b.weights = np.random.rand(len(state.assets))
