@@ -145,6 +145,8 @@ def test_set_weights(prices):
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
         b.weights = np.array([0.5, 0.5])
+        assert np.allclose(b.weights, np.array([0.5, 0.5]))
+        assert np.allclose(state.weights.values, np.array([0.5, 0.5]))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -158,6 +160,7 @@ def test_set_cashpositions(prices):
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
         b.cashposition = np.ones(2) * state.nav / 2
+        assert np.allclose(b.cashposition, np.ones(2) * state.nav / 2)
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -167,6 +170,7 @@ def test_set_position(prices):
     b = _builder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
+        assert np.allclose(b.position, state.nav / (state.prices * 2))
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)

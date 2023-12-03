@@ -44,7 +44,7 @@ class _State:
     """
 
     prices: pd.Series = None
-    _position: pd.Series = None
+    __position: pd.Series = None
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
     model: TradingCostModel | None = None
@@ -82,10 +82,7 @@ class _State:
         fraction of the total portfolio value. If the positions are still
         missing, then a series of zeroes is returned.
         """
-        try:
-            return self.cashposition / self.nav
-        except TypeError:
-            return 0 * self.prices
+        return self.cashposition / self.nav
 
     @property
     def leverage(self) -> float:
@@ -105,17 +102,17 @@ class _State:
 
     @property
     def position(self):
-        if self._position is None:
+        if self.__position is None:
             return pd.Series(dtype=float)
 
-        return self._position
+        return self.__position
 
     @position.setter
-    def position(self, position):
+    def _position(self, position: np.array):
         position = pd.Series(index=self.assets, data=position)
         trades = self._trade(target_pos=position)
 
-        self._position = position
+        self.__position = position
         self.cash -= (trades * self.prices).sum()
 
         if self.model is not None:
@@ -132,10 +129,10 @@ class _State:
         """
         Compute the trade vector given a target position
         """
-        if self._position is None:
-            return target_pos
+        # if self._position is None:
+        #    return target_pos
 
-        return target_pos.subtract(self._position, fill_value=0.0)
+        return target_pos.subtract(self.position, fill_value=0.0)
 
 
 def builder(
@@ -303,7 +300,7 @@ class _Builder:
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
         self.stocks.loc[self._state.time, self._state.assets] = position
-        self._state.position = position
+        self._state._position = position
 
     @property
     def cashposition(self):
