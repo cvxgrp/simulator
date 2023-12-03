@@ -15,7 +15,7 @@ def test_state():
     positions = pd.Series(data=[100, 300])
     cash = 400
     state = _State(cash=cash, prices=prices)
-    state.update(position=positions)
+    state._position = positions
     # value is the money in stocks
     assert state.value == 1100.0
     # nav is the value plus the cash
@@ -108,7 +108,7 @@ def test_iter(prices):
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
         # we set the position of A to 1.0
-        b[times[-1]] = pd.Series({"A": 1.0})
+        b.position = pd.Series({"A": 1.0})
 
     # we build the portfolio
     portfolio = b.build()
@@ -141,7 +141,7 @@ def test_long_only(prices, resource_dir):
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
         # we set the position of A to 2.0 and B to 4.0
-        b[times[-1]] = pd.Series({"A": 2.0, "B": 4.0})
+        b.position = pd.Series({"A": 2.0, "B": 4.0})
 
     portfolio = b.build()
 
@@ -258,7 +258,7 @@ def test_portfolio(prices):
 
     for t, _ in b:
         # set the position
-        b[t[-1]] = pd.Series(index=prices.keys(), data=1000.0)
+        b.position = pd.Series(index=prices.keys(), data=1000.0)
 
     portfolio = b.build()
 
@@ -320,7 +320,7 @@ def test_resample(prices):
 
     for time, state in b:
         # each day we do a one-over-N rebalancing
-        b[time[-1]] = 1.0 / len(state.assets) * state.nav / state.prices
+        b.position = 1.0 / len(state.assets) * state.nav / state.prices
 
     portfolio = b.build()
 

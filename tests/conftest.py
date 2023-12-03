@@ -28,13 +28,3 @@ def portfolio(prices):
     """portfolio fixture"""
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
     return EquityPortfolio(prices, stocks=positions, initial_cash=1e6)
-
-
-@pytest.fixture()
-def returns(resource_dir):
-    """returns fixture"""
-    return (
-        pd.read_csv(resource_dir / "ts.csv", index_col=0, header=None, parse_dates=True)
-        .squeeze()
-        .pct_change()
-    )
