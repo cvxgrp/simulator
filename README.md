@@ -36,19 +36,20 @@ We discuss this in
 
 ### Create the builder object
 
-The user defines a builder object by loading a frame of prices
-and initialize the amount of cash used in our experiment:
+The user defines a builder object by loading prices
+and initialize the amount of cash used in an experiment:
 
 ```python
-from pathlib import Path
-
 import pandas as pd
 from cvx.simulator.builder import builder
 
-prices = pd.read_csv(Path("resources") / "price.csv",
-                     index_col=0, parse_dates=True, header=0).ffill()
+prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True, header=0)
 b = builder(prices=prices, initial_cash=1e6)
 ```
+
+Prices have to be valid, there may be NaNs only at the beginning and the end of
+each column in frame.
+There can be no NaNs hiding in the middle of any time series.
 
 It is also possible to specify a model for trading costs.
 The builder helps to fill up the frame of positions. Only once done
@@ -56,10 +57,10 @@ we construct the actual portfolio.
 
 ### Loop through time
 
-We have overloaded the `__iter__` and `__setitem__` methods
-to create a custom loop. Let's start with a first strategy. Each day we choose
-two names from the universe at random. Buy one (say 0.1 of your
-portfolio wealth) and short one the same amount.
+We have overloaded the `__iter__` and `__setitem__` methods to create a custom loop.
+Let's start with a first strategy. Each day we choose two names from the
+universe at random.
+Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
 for t, state in b:
@@ -80,7 +81,7 @@ The state gives access to the currently available cash, the current prices
 and the current valuation of all holdings.
 
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to
-implmenent the popular $1/n$ strategy.
+implemenent the popular $1/n$ strategy.
 
 ```python
 for t, state in b:
@@ -95,7 +96,7 @@ The builder class also exposes setters for such alternative conventions.
 ```python
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b.weights = 0.25*np.ones(4)
+    b.weights = np.ones(4)*0.25
 ```
 
 ### Build the portfolio
