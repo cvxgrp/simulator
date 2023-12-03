@@ -22,13 +22,9 @@ mock = "*"
 pre-commit = "*"
 
 [tool.poetry.group.dev.dependencies]
-yfinance = "*"
 plotly = "*"
 loguru = "*"
-
-#[tool.mypy]
-#files = ["cvx/simulator"]
-#explicit_package_bases = true
+cvxpy = "*"
 
 [build-system]
 requires = ["poetry>=1.6.0"]
