@@ -69,7 +69,7 @@ for t, state in b:
     stocks = pd.Series(index=state.assets, data=0.0)
     stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position
-    b[t[-1]] = 0.1 * stocks
+    b.position = 0.1 * stocks
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
@@ -85,7 +85,7 @@ implmenent the popular $1/n$ strategy.
 ```python
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b[t[-1]] = 0.25 * state.nav / state.prices
+    b.position = 0.25 * state.nav / state.prices
 ```
 
 Note that we update the position at the last element in the t list
@@ -95,7 +95,7 @@ The builder class also exposes setters for such alternative conventions.
 ```python
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
-    b.set_weights(t[-1], np.ones(4)*0.25)
+    b.weights = 0.25*np.ones(4)
 ```
 
 ### Build the portfolio
