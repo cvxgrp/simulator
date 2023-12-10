@@ -13,7 +13,7 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -76,6 +76,7 @@ class EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
     cash: pd.Series
+    timeseries: dict[str, pd.Series] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         """A class method that performs input validation after object initialization.

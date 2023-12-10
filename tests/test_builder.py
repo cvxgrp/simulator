@@ -192,6 +192,7 @@ def test_with_costmodel(prices):
         prices=prices[["B", "C"]].head(5),
         initial_cash=50000,
         trading_cost_model=LinearCostModel(factor=0.0010),
+        input_data={"volume": prices[["B", "C"]].head(5)},
     )
 
     for times, state in b:
