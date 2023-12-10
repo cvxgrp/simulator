@@ -46,6 +46,7 @@ class _State:
     prices: pd.Series = None
     __position: pd.Series = None
     risk_free_rate: float = 0.0
+    borrow_rate: float = 0.0
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
     model: TradingCostModel | None = None
@@ -103,6 +104,13 @@ class _State:
         return self.prices * self.position
 
     @property
+    def short(self):
+        """
+        How short are we at this stage in USD
+        """
+        return self.cashposition[self.cashposition < 0].sum()
+
+    @property
     def position(self):
         if self.__position is None:
             return pd.Series(dtype=float)
@@ -111,6 +119,16 @@ class _State:
 
     @position.setter
     def position(self, position: np.array):
+        # update the cash first using the risk-free interest rate
+        # Note the the risk_free_rate is shifted
+        # e.g. we update our cash using the old risk_free_rate
+        self.cash = self.cash * (self.risk_free_rate + 1) ** self.days
+
+        # pay fees for the short position
+        # Note that self.short is a negative number
+        self.cash += self.short * (self.borrow_rate + 1) ** self.days - self.short
+
+        # update the position now
         position = pd.Series(index=self.assets, data=position)
         trades = self._trade(target_pos=position)
 
@@ -120,19 +138,14 @@ class _State:
         if self.model is not None:
             self.cash -= self.model.eval(self.prices, trades=trades).sum()
 
-        # update the cash using the risk-free interest rate
-        # Note the the risk_free_rate is shifted
-        # e.g. we update our cash using the old risk_free_rate
-        self.cash = self.cash * (self.risk_free_rate + 1) ** self.days
-
     def __getattr__(self, item):
         return self.input_data[item]
 
     @property
-    def assets(self):
+    def assets(self) -> pd.Index:
         return self.prices.dropna().index
 
-    def _trade(self, target_pos):
+    def _trade(self, target_pos: pd.Series) -> pd.Series:
         """
         Compute the trade vector given a target position
         """
@@ -145,6 +158,7 @@ def builder(
     initial_cash: float = 1e6,
     trading_cost_model: TradingCostModel | None = None,
     risk_free_rate: pd.Series | None = None,
+    borrow_rate: pd.Series | None = None,
     **kwargs,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
@@ -175,6 +189,7 @@ def builder(
         trading_cost_model=trading_cost_model,
         input_data=dict(kwargs),
         risk_free_rate=risk_free_rate,
+        borrow_rate=borrow_rate,
     )
 
     if weights is not None:
@@ -190,6 +205,7 @@ class _Builder:
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel | None = None
     risk_free_rate: pd.Series | None = None
+    borrow_rate: pd.Series | None = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
     input_data: dict[str, Any] = field(default_factory=dict)
@@ -209,6 +225,7 @@ class _Builder:
         """
         self._state.cash = self.initial_cash
         self._state.model = self.trading_cost_model
+
         if self.risk_free_rate is None:
             self.risk_free_rate = pd.Series(index=self.index, data=0.0)
         else:
@@ -216,6 +233,12 @@ class _Builder:
             self.risk_free_rate = (
                 self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
             )
+
+        if self.borrow_rate is None:
+            self.borrow_rate = pd.Series(index=self.index, data=0.0)
+        else:
+            # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
+            self.borrow_rate = self.borrow_rate.loc[self.index].shift(1).fillna(0.0)
 
     @property
     def valid(self):
@@ -294,7 +317,7 @@ class _Builder:
 
             self._state.time = t
             self._state.risk_free_rate = self.risk_free_rate.loc[t]
-
+            self._state.borrow_rate = self.borrow_rate.loc[t]
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
             }
