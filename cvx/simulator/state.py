@@ -48,7 +48,7 @@ class State:
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
     model: TradingCostModel = None
-    time: datetime | None = None
+    time: datetime = None
     days: int = 1
 
     @property

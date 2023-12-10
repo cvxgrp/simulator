@@ -47,8 +47,11 @@ def test_markowitz(builder, feasible, covariance, means):
     """
     Test the markowitz portfolio complete with interest on cash and borrowing fees.
     """
+    # We loop over the entire history the builder
     for t, state in builder:
+        # the very first and the very last elements are ignored
         if t[-1] in feasible:
+            # State is exposing numerous quantities
             print(state.cash_interest)
             print(state.borrow_fees)
             print(state.cash)
@@ -61,16 +64,21 @@ def test_markowitz(builder, feasible, covariance, means):
             print(state.nav)
             print(state.assets)
 
+            # We define the input needed for the optimizer
             _input = OptimizationInput(
                 mean=means.loc[t[-1]],
                 covariance=covariance[t[-1]],
                 risk_target=0.01,
             )
 
+            #  optimize portfolio
             w, _ = basic_markowitz(_input)
+
+            # update weights in builder
             builder.weights = w
 
-            # makes only sense to address now
+            # the builder keeps also track of the state
+            # some quanties are only post-trading interesting
             print(state.trades)
             print(state.trading_costs)
             print(state.cash)
