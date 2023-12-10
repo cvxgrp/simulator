@@ -14,6 +14,7 @@ Submodules
    grid/index.rst
    interpolation/index.rst
    portfolio/index.rst
+   state/index.rst
    trading_costs/index.rst
 
 

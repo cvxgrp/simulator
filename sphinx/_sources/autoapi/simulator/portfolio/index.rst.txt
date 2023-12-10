@@ -17,14 +17,6 @@ Classes
 
 
 
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   simulator.portfolio.diff
-
-
 
 .. py:class:: Plot
 
@@ -112,9 +104,6 @@ Functions
 
    .. py:method:: plot(returns: pandas.DataFrame, **kwargs: Any) -> Any
 
-
-
-.. py:function:: diff(portfolio1: EquityPortfolio, portfolio2: EquityPortfolio, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None) -> EquityPortfolio
 
 
 .. py:class:: EquityPortfolio
@@ -216,24 +205,6 @@ Functions
       The resulting dataframe will show the relative weight
       of each asset in the portfolio at each point in time.
 
-   .. py:property:: trading_costs
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe
-      representing the trading costs incurred by the portfolio due to trades made.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the trading
-      costs incurred by the portfolio due to trades made.
-
-      Notes: The function calculates the trading costs using the specified
-      trading cost model (if available) and the prices and trading
-      data represented by the prices and trades_stocks
-      dataframes, respectively. If no trading cost model is provided,
-      a dataframe with all zeros will be returned.
-      The resulting dataframe will have the same dimensions as
-      the prices and trades_stocks dataframes,
-      showing the trading costs incurred at each point in time for each asset traded.
-
    .. py:property:: equity
       :type: pandas.DataFrame
 
@@ -282,29 +253,6 @@ Functions
    .. py:property:: turnover
       :type: pandas.DataFrame
 
-
-   .. py:property:: cash
-      :type: pandas.Series
-
-      A property that returns a pandas series representing the cash on hand in the portfolio.
-
-      Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.
-
-      Notes: The function calculates the cash available in the portfolio by subtracting
-      the sum of trades currency and cumulative trading costs from the initial cash value specified
-      when constructing the object. Uses pandas cumsum() method
-      to calculate the cumulative sum of trading costs and
-      trades currency along the time axis.
-      The resulting series will show how much money is available for further trades at each point in time.
-
-   .. py:property:: cashflow
-      :type: pandas.Series
-
-      A property that returns a pandas series representing the cash flows
-      in the portfolio over time.
-
-      Returns: pd.Series: A pandas series representing the cash flows
-      in the portfolio over time.
 
    .. py:property:: nav
       :type: pandas.Series
@@ -370,14 +318,8 @@ Functions
 
       
 
-   .. py:attribute:: trading_cost_model
-      :type: cvx.simulator.trading_costs.TradingCostModel | None
-
-      
-
-   .. py:attribute:: initial_cash
-      :type: float
-      :value: 1000000.0
+   .. py:attribute:: cash
+      :type: pandas.Series
 
       
 
@@ -410,82 +352,6 @@ Functions
 
       Note that the input time must be in the index of the dataframe,
       otherwise a KeyError will be raised.
-
-
-   .. py:method:: __mul__(scalar: float) -> EquityPortfolio
-
-      A method that allows multiplication of the EquityPortfolio object with a scalar constant.
-
-      Args: scalar: A scalar constant that multiplies the number of shares
-      of each asset held in the EquityPortfolio object.
-
-      Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
-
-      Notes: The mul method allows multiplication of an EquityPortfolio object
-      with a scalar constant to increase or decrease
-      the number of shares held for each asset in the portfolio accordingly.
-      The method returns a new EquityPortfolio object with the same prices
-      and trading cost model as the original object,
-      and with the number of shares for each asset multiplied by the scalar constant
-      (as represented in the stocks dataframe).
-      Additionally, the initial cash value is multiplied
-      by the scalar to maintain the same cash-to-equity ratio as the original portfolio.
-
-
-   .. py:method:: __rmul__(scalar: float) -> EquityPortfolio
-
-      A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
-
-      Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.
-
-      Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
-
-      Notes: The rmul method allows multiplication of a scalar
-      constant with an EquityPortfolio object in a reversed order
-
-
-   .. py:method:: __add__(port_new: EquityPortfolio) -> EquityPortfolio
-
-      A method that allows addition of two EquityPortfolio objects.
-
-
-   .. py:method:: reset_prices(prices: pandas.DataFrame) -> EquityPortfolio
-
-      A method that constructs an EquityPortfolio object using finer prices.
-
-
-   .. py:method:: truncate(before: datetime.datetime | None = None, after: datetime.datetime | None = None) -> EquityPortfolio
-
-      The truncate method truncates the prices DataFrame, stocks DataFrame
-      and the cash series of an EquityPortfolio object.
-      The method also optionally accepts a before and/or after argument
-      to specify a date range for truncation.
-
-      The method returns a new EquityPortfolio object which is a truncated version
-      of the original object, with the same trading cost model
-      and initial cash value. The stocks DataFrame is truncated
-      using the same before and after arguments and the prices DataFrame
-      is truncated similarly. The cash value is truncated
-      to match the new date range and the first value of the
-      truncated cash series is used as the initial cash value for the new object.
-
-      Note that this method does not modify the original EquityPortfolio object,
-      but rather returns a new object.
-      :param before:
-      :param after:
-      :return:
-
-
-   .. py:method:: resample(rule: Any) -> EquityPortfolio
-
-      The resample method resamples an EquityPortfolio object to a new frequency
-      specified by the rule argument.
-      A new EquityPortfolio object is created with the original prices
-      DataFrame and the resampled stocks DataFrame. The objects trading cost model and initial cash value
-      are also copied into the new object.
-
-      Note that the resample method does not modify the original EquityPortfolio object,
-      but rather returns a new object.
 
 
    .. py:method:: metrics(benchmark: Any = None, rf: float = 0.0, display: bool = True, mode: str = 'basic', sep: bool = False, compound: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> pandas.DataFrame

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulator.state &mdash; cvxsimulator Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=c267ad58" />
+
+  
+    <link rel="shortcut icon" href="../../_static/logo.jpeg"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cvxsimulator
+              <img src="../../_static/logo.jpeg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cvxsimulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">simulator.state</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for simulator.state</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    Copyright 2023 Stanford University Convex Optimization Group</span>
+<span class="c1">#</span>
+<span class="c1">#    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#    you may not use this file except in compliance with the License.</span>
+<span class="c1">#    You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#        http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#    Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#    See the License for the specific language governing permissions and</span>
+<span class="c1">#    limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
+
+
+<span class="nd">@dataclass</span>
+<div class="viewcode-block" id="State">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State">[docs]</a>
+<span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The _State class defines a state object used to keep track of the current</span>
+<span class="sd">    state of the portfolio.</span>
+
+<span class="sd">    Attributes:</span>
+
+<span class="sd">    prices: a pandas Series object containing the stock prices of the current</span>
+<span class="sd">    portfolio state</span>
+
+<span class="sd">    position: a pandas Series object containing the current holdings of the portfolio</span>
+
+<span class="sd">    cash: the amount of cash available in the portfolio.</span>
+
+<span class="sd">    By default, prices and position are set to None, while cash is set to 1 million.</span>
+<span class="sd">    These attributes can be updated and accessed through setter and getter methods</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="State.prices">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.prices">[docs]</a>
+    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.__position">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__position">[docs]</a>
+    <span class="n">__position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.__trades">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__trades">[docs]</a>
+    <span class="n">__trades</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.__trading_costs">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__trading_costs">[docs]</a>
+    <span class="n">__trading_costs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.risk_free_rate">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.risk_free_rate">[docs]</a>
+    <span class="n">risk_free_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+<div class="viewcode-block" id="State.borrow_rate">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.borrow_rate">[docs]</a>
+    <span class="n">borrow_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+<div class="viewcode-block" id="State.cash">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.cash">[docs]</a>
+    <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+<div class="viewcode-block" id="State.input_data">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.input_data">[docs]</a>
+    <span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="State.model">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.model">[docs]</a>
+    <span class="n">model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.time">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.time">[docs]</a>
+    <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="State.days">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.days">[docs]</a>
+    <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.value">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.value">[docs]</a>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The value property computes the value of the portfolio at the current</span>
+<span class="sd">        time taking into account the current holdings and current stock prices.</span>
+<span class="sd">        If the value cannot be computed due to missing positions</span>
+<span class="sd">        (they might be still None), zero is returned instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.nav">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.nav">[docs]</a>
+    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The nav property computes the net asset value (NAV) of the portfolio,</span>
+<span class="sd">        which is the sum of the current value of the</span>
+<span class="sd">        portfolio as determined by the value property,</span>
+<span class="sd">        and the current amount of cash available in the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.weights">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.weights">[docs]</a>
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The weights property computes the weighting of each asset in the current</span>
+<span class="sd">        portfolio as a fraction of the total portfolio value (nav).</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        a pandas series object containing the weighting of each asset as a</span>
+<span class="sd">        fraction of the total portfolio value. If the positions are still</span>
+<span class="sd">        missing, then a series of zeroes is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.leverage">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.leverage">[docs]</a>
+    <span class="k">def</span> <span class="nf">leverage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The `leverage` property computes the leverage of the portfolio,</span>
+<span class="sd">        which is the sum of the absolute values of the portfolio weights.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.cashposition">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.cashposition">[docs]</a>
+    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The `cashposition` property computes the cash position of the portfolio,</span>
+<span class="sd">        which is the amount of cash in the portfolio as a fraction of the total portfolio value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.short">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.short">[docs]</a>
+    <span class="k">def</span> <span class="nf">short</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        How short are we at this stage in USD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.position">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.position">[docs]</a>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__position</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.cash_interest">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.cash_interest">[docs]</a>
+    <span class="k">def</span> <span class="nf">cash_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        How much interest do we get for the cash</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">days</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.borrow_fees">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.borrow_fees">[docs]</a>
+    <span class="k">def</span> <span class="nf">borrow_fees</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        How much interest do we pay for the short position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">short</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">days</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">short</span></div>
+
+
+    <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+        <span class="c1"># update the cash first using the risk-free interest rate</span>
+        <span class="c1"># Note the risk_free_rate is shifted</span>
+        <span class="c1"># e.g. we update our cash using the old risk_free_rate</span>
+        <span class="k">for</span> <span class="n">fee</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cash_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_fees</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">+=</span> <span class="n">fee</span>
+
+        <span class="c1"># update the position</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="c1"># compute the trades (can be fractional)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__trades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trade</span><span class="p">(</span><span class="n">target_pos</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="c1"># update only now as otherwise the trades would be wrong</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="n">position</span>
+
+        <span class="c1"># cash is spent for shares or received for selling them</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gross</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">trades</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">input_data</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<div class="viewcode-block" id="State.__getattr__">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__getattr__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.trading_costs">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.trading_costs">[docs]</a>
+    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.trades">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.trades">[docs]</a>
+    <span class="k">def</span> <span class="nf">trades</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trades</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.gross">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.gross">[docs]</a>
+    <span class="k">def</span> <span class="nf">gross</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.assets">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.assets">[docs]</a>
+    <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="State._trade">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State._trade">[docs]</a>
+    <span class="k">def</span> <span class="nf">_trade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the trade vector given a target position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

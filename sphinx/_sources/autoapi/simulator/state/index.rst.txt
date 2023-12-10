@@ -1,0 +1,172 @@
+:py:mod:`simulator.state`
+=========================
+
+.. py:module:: simulator.state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.state.State
+
+
+
+
+.. py:class:: State
+
+
+   The _State class defines a state object used to keep track of the current
+   state of the portfolio.
+
+   Attributes:
+
+   prices: a pandas Series object containing the stock prices of the current
+   portfolio state
+
+   position: a pandas Series object containing the current holdings of the portfolio
+
+   cash: the amount of cash available in the portfolio.
+
+   By default, prices and position are set to None, while cash is set to 1 million.
+   These attributes can be updated and accessed through setter and getter methods
+
+   .. py:property:: value
+      :type: float
+
+      The value property computes the value of the portfolio at the current
+      time taking into account the current holdings and current stock prices.
+      If the value cannot be computed due to missing positions
+      (they might be still None), zero is returned instead.
+
+   .. py:property:: nav
+      :type: float
+
+      The nav property computes the net asset value (NAV) of the portfolio,
+      which is the sum of the current value of the
+      portfolio as determined by the value property,
+      and the current amount of cash available in the portfolio.
+
+   .. py:property:: weights
+      :type: pandas.Series
+
+      The weights property computes the weighting of each asset in the current
+      portfolio as a fraction of the total portfolio value (nav).
+
+      Returns:
+
+      a pandas series object containing the weighting of each asset as a
+      fraction of the total portfolio value. If the positions are still
+      missing, then a series of zeroes is returned.
+
+   .. py:property:: leverage
+      :type: float
+
+      The `leverage` property computes the leverage of the portfolio,
+      which is the sum of the absolute values of the portfolio weights.
+
+   .. py:property:: cashposition
+
+      The `cashposition` property computes the cash position of the portfolio,
+      which is the amount of cash in the portfolio as a fraction of the total portfolio value.
+
+   .. py:property:: short
+
+      How short are we at this stage in USD
+
+   .. py:property:: position
+
+
+   .. py:property:: cash_interest
+
+      How much interest do we get for the cash
+
+   .. py:property:: borrow_fees
+
+      How much interest do we pay for the short position
+
+   .. py:property:: trading_costs
+
+
+   .. py:property:: trades
+
+
+   .. py:property:: gross
+
+
+   .. py:property:: assets
+      :type: pandas.Index
+
+
+   .. py:attribute:: prices
+      :type: pandas.Series
+
+      
+
+   .. py:attribute:: __position
+      :type: pandas.Series
+
+      
+
+   .. py:attribute:: __trades
+      :type: pandas.Series
+
+      
+
+   .. py:attribute:: __trading_costs
+      :type: pandas.Series
+
+      
+
+   .. py:attribute:: risk_free_rate
+      :type: float
+      :value: 0.0
+
+      
+
+   .. py:attribute:: borrow_rate
+      :type: float
+      :value: 0.0
+
+      
+
+   .. py:attribute:: cash
+      :type: float
+      :value: 1000000.0
+
+      
+
+   .. py:attribute:: input_data
+      :type: dict[str, Any]
+
+      
+
+   .. py:attribute:: model
+      :type: cvx.simulator.trading_costs.TradingCostModel
+
+      
+
+   .. py:attribute:: time
+      :type: datetime.datetime
+
+      
+
+   .. py:attribute:: days
+      :type: int
+      :value: 1
+
+      
+
+   .. py:method:: __getattr__(item)
+
+
+   .. py:method:: _trade(target_pos: pandas.Series) -> pandas.Series
+
+      Compute the trade vector given a target position
+
+
+
