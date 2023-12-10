@@ -99,6 +99,12 @@ Functions
 
       
 
+   .. py:attribute:: risk_free_rate
+      :type: float
+      :value: 0.0
+
+      
+
    .. py:attribute:: cash
       :type: float
       :value: 1000000.0
@@ -120,6 +126,12 @@ Functions
 
       
 
+   .. py:attribute:: days
+      :type: int
+      :value: 1
+
+      
+
    .. py:method:: __getattr__(item)
 
 
@@ -129,7 +141,7 @@ Functions
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, **kwargs) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, risk_free_rate: pandas.Series | None = None, **kwargs) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -204,6 +216,11 @@ Functions
 
    .. py:attribute:: trading_cost_model
       :type: cvx.simulator.trading_costs.TradingCostModel | None
+
+      
+
+   .. py:attribute:: risk_free_rate
+      :type: pandas.Series | None
 
       
 
