@@ -1,8 +1,11 @@
 import pytest
 
 from cvx.simulator.builder import builder as _builder
-from cvx.simulator.synthetic import synthetic_returns
-from tests.test_reference.markowitz import OptimizationInput, basic_markowitz
+from tests.test_reference.markowitz import (
+    OptimizationInput,
+    basic_markowitz,
+    synthetic_returns,
+)
 
 
 @pytest.fixture()
