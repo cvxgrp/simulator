@@ -88,6 +88,8 @@ def test_markowitz(builder, feasible, covariance, means):
     print(builder.borrow_fees)
     print(builder.trading_costs)
     print(builder.cash)
+    print(builder.cashflow)
 
+    # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()
