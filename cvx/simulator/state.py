@@ -13,7 +13,7 @@
 #    limitations under the License.
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any
+from typing import Any, Union
 
 import numpy as np
 import pandas as pd
@@ -47,7 +47,7 @@ class State:
     borrow_rate: float = 0.0
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
-    model: TradingCostModel | None = None
+    model: Union[TradingCostModel, None] = None
     time: datetime | None = None
     days: int = 1
 
