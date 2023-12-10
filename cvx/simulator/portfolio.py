@@ -270,36 +270,6 @@ class EquityPortfolio:
         """
         return 1.0 - self.nav / self.highwater
 
-    def truncate(
-        self, before: datetime | None = None, after: datetime | None = None
-    ) -> EquityPortfolio:
-        """
-        The truncate method truncates the prices DataFrame, stocks DataFrame
-        and the cash series of an EquityPortfolio object.
-        The method also optionally accepts a before and/or after argument
-        to specify a date range for truncation.
-
-        The method returns a new EquityPortfolio object which is a truncated version
-        of the original object, with the same trading cost model
-        and initial cash value. The stocks DataFrame is truncated
-        using the same before and after arguments and the prices DataFrame
-        is truncated similarly. The cash value is truncated
-        to match the new date range and the first value of the
-        truncated cash series is used as the initial cash value for the new object.
-
-        Note that this method does not modify the original EquityPortfolio object,
-        but rather returns a new object.
-        :param before:
-        :param after:
-        :return:
-        """
-        return EquityPortfolio(
-            prices=self.prices.truncate(before=before, after=after),
-            stocks=self.stocks.truncate(before=before, after=after),
-            cash=self.cash.truncate(before=before, after=after)
-            # initial_cash=self.nav.truncate(before=before, after=after).values[0],
-        )
-
     def metrics(
         self,
         benchmark: Any = None,

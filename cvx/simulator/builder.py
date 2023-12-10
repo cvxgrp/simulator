@@ -25,62 +25,12 @@ from cvx.simulator.state import State
 from cvx.simulator.trading_costs import TradingCostModel
 
 
-def builder(
-    prices: pd.DataFrame,
-    weights: pd.DataFrame | None = None,
-    initial_cash: float = 1e6,
-    trading_cost_model: TradingCostModel | None = None,
-    risk_free_rate: pd.Series | None = None,
-    borrow_rate: pd.Series | None = None,
-    **kwargs,
-) -> _Builder:
-    """The builder function creates an instance of the _Builder class, which
-    is used to construct a portfolio of assets. The function takes in a pandas
-    DataFrame of historical prices for the assets in the portfolio, optional
-    weights for each asset, an initial cash value, and a trading cost model.
-    The function first asserts that the prices DataFrame has a monotonic
-    increasing and unique index. It then creates a DataFrame of zeros to hold
-    the number of shares of each asset owned at each time step. The function
-    initializes a _Builder object with the stocks DataFrame, the prices
-    DataFrame (forward-filled), the initial cash value, and the trading cost
-    model. If weights are provided, they are set for each time step using
-    set_weights method of the _Builder object. The final output is the
-    constructed _Builder object."""
-
-    assert isinstance(prices, pd.DataFrame)
-    assert prices.index.is_monotonic_increasing
-    assert prices.index.is_unique
-
-    stocks = pd.DataFrame(
-        index=prices.index, columns=prices.columns, data=np.NaN, dtype=float
-    )
-
-    builder = _Builder(
-        stocks=stocks,
-        prices=prices,
-        initial_cash=float(initial_cash),
-        trading_cost_model=trading_cost_model,
-        input_data=dict(kwargs),
-        risk_free_rate=risk_free_rate,
-        borrow_rate=borrow_rate,
-    )
-
-    if weights is not None:
-        for t, state in builder:
-            builder.weights = weights[state.assets].loc[t[-1]].dropna().values
-
-    return builder
-
-
 @dataclass
-class _Builder:
+class Builder:
     prices: pd.DataFrame
-    stocks: pd.DataFrame
     trading_cost_model: TradingCostModel | None = None
     risk_free_rate: pd.Series | None = None
     borrow_rate: pd.Series | None = None
-    # _borrow_rates: pd.Series | None = None
-    # _interest_rates: pd.Series | None = None
 
     initial_cash: float = 1e6
     _state: State = field(default_factory=State)
@@ -99,6 +49,18 @@ class _Builder:
         that can only be performed after the object is fully initialized. __post_init__
         is called automatically after the object initialization.
         """
+
+        # assert isinstance(self.prices, pd.DataFrame)
+        assert self.prices.index.is_monotonic_increasing
+        assert self.prices.index.is_unique
+
+        self.__stocks = pd.DataFrame(
+            index=self.prices.index,
+            columns=self.prices.columns,
+            data=np.NaN,
+            dtype=float,
+        )
+
         self._state.cash = self.initial_cash
         self._state.model = self.trading_cost_model
 
@@ -217,7 +179,7 @@ class _Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        return self.stocks.loc[self._state.time]
+        return self.__stocks.loc[self._state.time]
 
     @position.setter
     def position(self, position: pd.Series) -> None:
@@ -227,7 +189,7 @@ class _Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self.stocks.loc[self._state.time, self._state.assets] = position
+        self.__stocks.loc[self._state.time, self._state.assets] = position
         self._state.position = position
 
         self.__cash[self._state.time] = self._state.cash
@@ -259,11 +221,15 @@ class _Builder:
         flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
         return flow
 
+    @property
+    def stocks(self):
+        return self.__stocks
+
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
         self.position = cashposition / self.current_prices
 
-    def build(self, extra=0) -> EquityPortfolio:
+    def build(self) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 

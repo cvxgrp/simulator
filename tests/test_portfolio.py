@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import builder
+from cvx.simulator.builder import Builder
 from cvx.simulator.portfolio import Plot
 
 
@@ -84,7 +84,7 @@ def test_iter(prices):
     """
 
     # Let's setup a portfolio with one asset: A
-    b = builder(prices[["A"]].dropna())
+    b = Builder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
@@ -117,7 +117,7 @@ def test_long_only(prices, resource_dir):
     :param resource_dir: the resource directory (fixture)
     """
     # Let's setup a portfolio with two assets: A and B
-    b = builder(prices=prices[["A", "B"]], initial_cash=100000)
+    b = Builder(prices=prices[["A", "B"]], initial_cash=100000)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
@@ -169,14 +169,14 @@ def test_monotonic():
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
-        builder(prices=prices)
+        Builder(prices=prices)
 
 
 def test_portfolio(prices):
     """
     build portfolio from price
     """
-    b = builder(prices=prices)
+    b = Builder(prices=prices)
     pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
     for t, _ in b:

@@ -1,6 +1,6 @@
 import pytest
 
-from cvx.simulator.builder import builder as _builder
+from cvx.simulator.builder import Builder
 from tests.test_reference.markowitz import (
     OptimizationInput,
     basic_markowitz,
@@ -22,12 +22,12 @@ def means(prices):
 
 @pytest.fixture()
 def builder(prices, spreads, rf):
-    return _builder(
+    return Builder(
         prices=prices,
         initial_cash=1e6,
         risk_free_rate=rf,
         borrow_rate=5 * rf,
-        spreads=spreads,
+        input_data={"spreads": spreads},
     )
 
 
