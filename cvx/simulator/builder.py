@@ -26,7 +26,7 @@ from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass
-class _State:
+class State:
     """The _State class defines a state object used to keep track of the current
     state of the portfolio.
 
@@ -244,7 +244,7 @@ class _Builder:
     # _interest_rates: pd.Series | None = None
 
     initial_cash: float = 1e6
-    _state: _State = field(default_factory=_State)
+    _state: State = field(default_factory=State)
     input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -277,10 +277,10 @@ class _Builder:
             # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
             self.borrow_rate = self.borrow_rate.loc[self.index].shift(1).fillna(0.0)
 
-        self.__cash = pd.Series(index=self.index, data=self.initial_cash)
-        self.__trading_costs = pd.Series(index=self.index, data=0.0)
-        self.__cash_interest = pd.Series(index=self.index, data=0.0)
-        self.__borrow_fees = pd.Series(index=self.index, data=0.0)
+        self.__cash = pd.Series(index=self.index, data=np.NaN)
+        self.__trading_costs = pd.Series(index=self.index, data=np.NaN)
+        self.__cash_interest = pd.Series(index=self.index, data=np.NaN)
+        self.__borrow_fees = pd.Series(index=self.index, data=np.NaN)
 
     @property
     def valid(self):
@@ -334,7 +334,7 @@ class _Builder:
     def weights(self, weights: np.array) -> None:
         self.position = self._state.nav * weights / self.current_prices
 
-    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
+    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.
@@ -396,19 +396,19 @@ class _Builder:
 
     @property
     def cash(self):
-        return self.__cash.ffill()
+        return self.__cash
 
     @property
     def trading_costs(self):
-        return self.__trading_costs.fillna(0.0)
+        return self.__trading_costs
 
     @property
     def cash_interest(self):
-        return self.__cash_interest.fillna(0.0)
+        return self.__cash_interest
 
     @property
     def borrow_fees(self):
-        return self.__borrow_fees.fillna(0.0)
+        return self.__borrow_fees
 
     @property
     def cashposition(self):
@@ -441,6 +441,4 @@ class _Builder:
             prices=self.prices,
             stocks=self.stocks,
             cash=self.cash,
-            # initial_cash=self.initial_cash,  # - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),
-            # trading_cost_model=self.trading_cost_model,
         )

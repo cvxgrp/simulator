@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-from cvx.simulator.builder import _State
+from cvx.simulator.builder import State
 
 
 def test_trade(prices):
-    s = _State(prices=prices[["A", "B", "C"]].iloc[0], risk_free_rate=0.0)
+    s = State(prices=prices[["A", "B", "C"]].iloc[0], risk_free_rate=0.0)
     s.time = prices.index[0]
     print(s.assets)
 
@@ -19,13 +19,13 @@ def test_trade(prices):
 
 
 def test_trade_no_init_pos(prices):
-    s = _State(prices=prices.iloc[0])
+    s = State(prices=prices.iloc[0])
     x = s._trade(pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
 def test_update(prices):
-    s = _State(prices=prices.iloc[0])
+    s = State(prices=prices.iloc[0])
     assert s.cash == 1e6
     s.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
     assert s.cash == 1206047.2

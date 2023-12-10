@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import _State, builder
+from cvx.simulator.builder import State, builder
 from cvx.simulator.portfolio import Plot
 
 
@@ -13,7 +13,7 @@ def test_state():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
     cash = 400
-    state = _State(cash=cash, prices=prices)
+    state = State(cash=cash, prices=prices)
     state.position = positions
     # value is the money in stocks
     assert state.value == 1100.0
