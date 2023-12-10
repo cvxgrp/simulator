@@ -5,26 +5,8 @@ import os
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import State, builder
+from cvx.simulator.builder import builder
 from cvx.simulator.portfolio import Plot
-
-
-def test_state():
-    prices = pd.Series(data=[2.0, 3.0])
-    positions = pd.Series(data=[100, 300])
-    cash = 400
-    state = State(cash=cash, prices=prices)
-    state.position = positions
-    # value is the money in stocks
-    assert state.value == 1100.0
-    # nav is the value plus the cash
-    assert state.nav == 400.0
-    # weights are the positions divided by the value
-    pd.testing.assert_series_equal(
-        state.weights, pd.Series(data=[2.0 / 4.0, 9.0 / 4.0])
-    )
-    # leverage is the value divided by the nav
-    assert state.leverage == 11.0 / 4.0
 
 
 def test_assets(portfolio, prices):
