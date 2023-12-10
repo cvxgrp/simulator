@@ -83,10 +83,15 @@ Functions
       The `cashposition` property computes the cash position of the portfolio,
       which is the amount of cash in the portfolio as a fraction of the total portfolio value.
 
+   .. py:property:: short
+
+      How short are we at this stage in USD
+
    .. py:property:: position
 
 
    .. py:property:: assets
+      :type: pandas.Index
 
 
    .. py:attribute:: prices
@@ -100,6 +105,12 @@ Functions
       
 
    .. py:attribute:: risk_free_rate
+      :type: float
+      :value: 0.0
+
+      
+
+   .. py:attribute:: borrow_rate
       :type: float
       :value: 0.0
 
@@ -135,13 +146,13 @@ Functions
    .. py:method:: __getattr__(item)
 
 
-   .. py:method:: _trade(target_pos)
+   .. py:method:: _trade(target_pos: pandas.Series) -> pandas.Series
 
       Compute the trade vector given a target position
 
 
 
-.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, risk_free_rate: pandas.Series | None = None, **kwargs) -> _Builder
+.. py:function:: builder(prices: pandas.DataFrame, weights: pandas.DataFrame | None = None, initial_cash: float = 1000000.0, trading_cost_model: cvx.simulator.trading_costs.TradingCostModel | None = None, risk_free_rate: pandas.Series | None = None, borrow_rate: pandas.Series | None = None, **kwargs) -> _Builder
 
    The builder function creates an instance of the _Builder class, which
    is used to construct a portfolio of assets. The function takes in a pandas
@@ -220,6 +231,11 @@ Functions
       
 
    .. py:attribute:: risk_free_rate
+      :type: pandas.Series | None
+
+      
+
+   .. py:attribute:: borrow_rate
       :type: pandas.Series | None
 
       
