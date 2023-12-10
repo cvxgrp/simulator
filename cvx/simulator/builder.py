@@ -117,26 +117,44 @@ class _State:
 
         return self.__position
 
+    @property
+    def cash_interest(self):
+        """
+        How much interest do we get for the cash
+        """
+        return self.cash * (self.risk_free_rate + 1) ** self.days - self.cash
+
+    @property
+    def borrow_fees(self):
+        """
+        How much interest do we pay for the short position
+        """
+        return self.short * (self.borrow_rate + 1) ** self.days - self.short
+
     @position.setter
     def position(self, position: np.array):
         # update the cash first using the risk-free interest rate
         # Note the the risk_free_rate is shifted
         # e.g. we update our cash using the old risk_free_rate
-        self.cash = self.cash * (self.risk_free_rate + 1) ** self.days
+        for fee in [self.cash_interest, self.borrow_fees]:
+            self.cash += fee
 
-        # pay fees for the short position
-        # Note that self.short is a negative number
-        self.cash += self.short * (self.borrow_rate + 1) ** self.days - self.short
-
-        # update the position now
+        # update the position
         position = pd.Series(index=self.assets, data=position)
+
+        # compute the trades (can be fractional)
         trades = self._trade(target_pos=position)
 
+        # update only now as otherwise the trades would be wrong
         self.__position = position
+
+        # cash is spent for shares or received for selling them
         self.cash -= (trades * self.prices).sum()
 
         if self.model is not None:
-            self.cash -= self.model.eval(self.prices, trades=trades).sum()
+            self.cash -= self.model.eval(
+                self.prices, trades=trades, **self.input_data
+            ).sum()
 
     def __getattr__(self, item):
         return self.input_data[item]
@@ -206,6 +224,9 @@ class _Builder:
     trading_cost_model: TradingCostModel | None = None
     risk_free_rate: pd.Series | None = None
     borrow_rate: pd.Series | None = None
+    _borrow_fees: pd.Series | None = None
+    _interest_rates: pd.Series | None = None
+
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
     input_data: dict[str, Any] = field(default_factory=dict)
@@ -318,6 +339,7 @@ class _Builder:
             self._state.time = t
             self._state.risk_free_rate = self.risk_free_rate.loc[t]
             self._state.borrow_rate = self.borrow_rate.loc[t]
+
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
             }
