@@ -90,6 +90,14 @@ Functions
    .. py:property:: position
 
 
+   .. py:property:: cash_interest
+
+      How much interest do we get for the cash
+
+   .. py:property:: borrow_fees
+
+      How much interest do we pay for the short position
+
    .. py:property:: assets
       :type: pandas.Index
 
@@ -236,6 +244,16 @@ Functions
       
 
    .. py:attribute:: borrow_rate
+      :type: pandas.Series | None
+
+      
+
+   .. py:attribute:: _borrow_fees
+      :type: pandas.Series | None
+
+      
+
+   .. py:attribute:: _interest_rates
       :type: pandas.Series | None
 
       
