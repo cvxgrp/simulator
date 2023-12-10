@@ -123,7 +123,7 @@ class _State:
         # update the cash using the risk-free interest rate
         # Note the the risk_free_rate is shifted
         # e.g. we update our cash using the old risk_free_rate
-        self.cash = self.cash * (self.risk_free_rate.loc[self.time] + 1) ** self.days
+        self.cash = self.cash * (self.risk_free_rate + 1) ** self.days
 
     def __getattr__(self, item):
         return self.input_data[item]
@@ -210,11 +210,11 @@ class _Builder:
         self._state.cash = self.initial_cash
         self._state.model = self.trading_cost_model
         if self.risk_free_rate is None:
-            self._state.risk_free_rate = pd.Series(index=self.index, data=0.0)
+            self.risk_free_rate = pd.Series(index=self.index, data=0.0)
         else:
             # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
             r = self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
-            self._state.risk_free_rate = r
+            self.risk_free_rate = r
 
     @property
     def valid(self):
@@ -292,6 +292,7 @@ class _Builder:
                 self._state.days = 0
 
             self._state.time = t
+            self._state.risk_free_rate = self.risk_free_rate.loc[t]
 
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()

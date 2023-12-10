@@ -5,7 +5,7 @@ from cvx.simulator.builder import _State
 
 
 def test_trade(prices):
-    s = _State(prices=prices[["A", "B", "C"]].iloc[0])
+    s = _State(prices=prices[["A", "B", "C"]].iloc[0], risk_free_rate=0.0)
     s.time = prices.index[0]
     print(s.assets)
 
