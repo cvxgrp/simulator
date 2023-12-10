@@ -43,10 +43,9 @@ def covariance(prices):
     return {day: covariance_df.loc[day] for day in returns.index}
 
 
-def test_a(builder, feasible, covariance, means):
+def test_markowitz(builder, feasible, covariance, means):
     """
-    Test that the prices are the same
-    :param data: the data (fixture)
+    Test the markowitz portfolio complete with interest on cash and borrowing fees.
     """
     for t, state in builder:
         if t[-1] in feasible:
@@ -70,6 +69,11 @@ def test_a(builder, feasible, covariance, means):
 
             w, _ = basic_markowitz(_input)
             builder.weights = w
+
+    # builder.cash_interest
+    # builder.borrow_fees
+    # builder.trading_gross
+    # builder.cash
 
     portfolio = builder.build()
     portfolio.snapshot()
