@@ -45,6 +45,8 @@ class _State:
 
     prices: pd.Series = None
     __position: pd.Series = None
+    __trades: pd.Series = None
+    __trading_costs: pd.Series = None
     risk_free_rate: float = 0.0
     borrow_rate: float = 0.0
     cash: float = 1e6
@@ -143,21 +145,35 @@ class _State:
         position = pd.Series(index=self.assets, data=position)
 
         # compute the trades (can be fractional)
-        trades = self._trade(target_pos=position)
+        self.__trades = self._trade(target_pos=position)
 
         # update only now as otherwise the trades would be wrong
         self.__position = position
 
         # cash is spent for shares or received for selling them
-        self.cash -= (trades * self.prices).sum()
+        self.cash -= self.gross.sum()
 
         if self.model is not None:
-            self.cash -= self.model.eval(
-                self.prices, trades=trades, **self.input_data
+            self.__trading_costs = self.model.eval(
+                self.prices, trades=self.trades, **self.input_data
             ).sum()
+
+            self.cash -= self.trading_costs.sum()
 
     def __getattr__(self, item):
         return self.input_data[item]
+
+    @property
+    def trading_costs(self):
+        return self.__trading_costs
+
+    @property
+    def trades(self):
+        return self.__trades
+
+    @property
+    def gross(self):
+        return self.trades * self.prices
 
     @property
     def assets(self) -> pd.Index:
@@ -224,8 +240,8 @@ class _Builder:
     trading_cost_model: TradingCostModel | None = None
     risk_free_rate: pd.Series | None = None
     borrow_rate: pd.Series | None = None
-    _borrow_fees: pd.Series | None = None
-    _interest_rates: pd.Series | None = None
+    # _borrow_rates: pd.Series | None = None
+    # _interest_rates: pd.Series | None = None
 
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
@@ -260,6 +276,11 @@ class _Builder:
         else:
             # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
             self.borrow_rate = self.borrow_rate.loc[self.index].shift(1).fillna(0.0)
+
+        self.__cash = pd.Series(index=self.index, data=self.initial_cash)
+        self.__trading_costs = pd.Series(index=self.index, data=0.0)
+        self.__cash_interest = pd.Series(index=self.index, data=0.0)
+        self.__borrow_fees = pd.Series(index=self.index, data=0.0)
 
     @property
     def valid(self):
@@ -340,6 +361,9 @@ class _Builder:
             self._state.risk_free_rate = self.risk_free_rate.loc[t]
             self._state.borrow_rate = self.borrow_rate.loc[t]
 
+            self.__borrow_fees[self._state.time] = self._state.borrow_fees
+            self.__cash_interest[self._state.time] = self._state.cash_interest
+
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
             }
@@ -367,9 +391,34 @@ class _Builder:
         self.stocks.loc[self._state.time, self._state.assets] = position
         self._state.position = position
 
+        self.__cash[self._state.time] = self._state.cash
+        self.__trading_costs[self._state.time] = self._state.trading_costs
+
+    @property
+    def cash(self):
+        return self.__cash.ffill()
+
+    @property
+    def trading_costs(self):
+        return self.__trading_costs.fillna(0.0)
+
+    @property
+    def cash_interest(self):
+        return self.__cash_interest.fillna(0.0)
+
+    @property
+    def borrow_fees(self):
+        return self.__borrow_fees.fillna(0.0)
+
     @property
     def cashposition(self):
         return self.position * self.current_prices
+
+    @property
+    def cashflow(self):
+        flow = self.cash.diff()
+        flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
+        return flow
 
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
@@ -391,6 +440,7 @@ class _Builder:
         return EquityPortfolio(
             prices=self.prices,
             stocks=self.stocks,
-            initial_cash=self.initial_cash,  # - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),
-            trading_cost_model=self.trading_cost_model,
+            cash=self.cash,
+            # initial_cash=self.initial_cash,  # - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),
+            # trading_cost_model=self.trading_cost_model,
         )

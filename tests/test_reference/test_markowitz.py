@@ -70,10 +70,16 @@ def test_markowitz(builder, feasible, covariance, means):
             w, _ = basic_markowitz(_input)
             builder.weights = w
 
-    # builder.cash_interest
-    # builder.borrow_fees
-    # builder.trading_gross
-    # builder.cash
+            # makes only sense to address now
+            print(state.trades)
+            print(state.trading_costs)
+            print(state.cash)
+
+    print("**************************************************************")
+    print(builder.cash_interest)
+    print(builder.borrow_fees)
+    print(builder.trading_costs)
+    print(builder.cash)
 
     portfolio = builder.build()
     portfolio.snapshot()

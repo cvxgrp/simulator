@@ -21,9 +21,6 @@ from typing import Any
 import pandas as pd
 import quantstats as qs
 
-from cvx.simulator.grid import iron_frame
-from cvx.simulator.trading_costs import TradingCostModel
-
 qs.extend_pandas()
 
 
@@ -45,32 +42,9 @@ class Plot(Enum):
     ROLLING_VOLATILITY = 14
     YEARLY_RETURNS = 15
 
-    #
-    # def __call__(self, returns, **kwargs):
-    #     return self._func(returns=returns, **kwargs)
-
     def plot(self, returns: pd.DataFrame, **kwargs: Any) -> Any:
         func = getattr(qs.plots, self.name.lower())
         return func(returns=returns, **kwargs)
-
-
-def diff(
-    portfolio1: EquityPortfolio,
-    portfolio2: EquityPortfolio,
-    initial_cash: float = 1e6,
-    trading_cost_model: TradingCostModel | None = None,
-) -> EquityPortfolio:
-    # check both portfolios are on the same price grid
-    pd.testing.assert_frame_equal(portfolio1.prices, portfolio2.prices)
-
-    stocks = portfolio1.stocks - portfolio2.stocks
-
-    return EquityPortfolio(
-        prices=portfolio1.prices,
-        stocks=stocks,
-        initial_cash=initial_cash,
-        trading_cost_model=trading_cost_model,
-    )
 
 
 @dataclass(frozen=True)
@@ -101,8 +75,7 @@ class EquityPortfolio:
 
     prices: pd.DataFrame
     stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel | None = None
-    initial_cash: float = 1e6
+    cash: pd.Series
 
     def __post_init__(self) -> None:
         """A class method that performs input validation after object initialization.
@@ -184,28 +157,6 @@ class EquityPortfolio:
         return self.stocks.loc[time]
 
     @property
-    def trading_costs(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe
-        representing the trading costs incurred by the portfolio due to trades made.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the trading
-        costs incurred by the portfolio due to trades made.
-
-        Notes: The function calculates the trading costs using the specified
-        trading cost model (if available) and the prices and trading
-        data represented by the prices and trades_stocks
-        dataframes, respectively. If no trading cost model is provided,
-        a dataframe with all zeros will be returned.
-        The resulting dataframe will have the same dimensions as
-        the prices and trades_stocks dataframes,
-        showing the trading costs incurred at each point in time for each asset traded.
-        """
-        if self.trading_cost_model is None:
-            return 0.0 * self.prices
-
-        return self.trading_cost_model.eval(self.prices, self.trades_stocks)
-
-    @property
     def equity(self) -> pd.DataFrame:
         """A property that returns a pandas dataframe
         representing the equity positions of the portfolio,
@@ -257,38 +208,6 @@ class EquityPortfolio:
     @property
     def turnover(self) -> pd.DataFrame:
         return self.trades_currency.abs()
-
-    @property
-    def cash(self) -> pd.Series:
-        """A property that returns a pandas series representing the cash on hand in the portfolio.
-
-        Returns: pd.Series: A pandas series representing the cash on hand in the portfolio.
-
-        Notes: The function calculates the cash available in the portfolio by subtracting
-        the sum of trades currency and cumulative trading costs from the initial cash value specified
-        when constructing the object. Uses pandas cumsum() method
-        to calculate the cumulative sum of trading costs and
-        trades currency along the time axis.
-        The resulting series will show how much money is available for further trades at each point in time.
-        """
-        return (
-            self.initial_cash
-            - self.trades_currency.sum(axis=1).cumsum()
-            - self.trading_costs.sum(axis=1).cumsum()
-        )
-
-    @property
-    def cashflow(self) -> pd.Series:
-        """A property that returns a pandas series representing the cash flows
-        in the portfolio over time.
-
-        Returns: pd.Series: A pandas series representing the cash flows
-        in the portfolio over time.
-        """
-
-        cashflow = self.cash.diff(1)  # cashflow over t=2,...,T
-        cashflow.iloc[0] = self.cash.iloc[0] - self.initial_cash  # cashflow at t=1
-        return cashflow
 
     @property
     def nav(self) -> pd.Series:
@@ -351,102 +270,6 @@ class EquityPortfolio:
         """
         return 1.0 - self.nav / self.highwater
 
-    def __mul__(self, scalar: float) -> EquityPortfolio:
-        """A method that allows multiplication of the EquityPortfolio object with a scalar constant.
-
-        Args: scalar: A scalar constant that multiplies the number of shares
-        of each asset held in the EquityPortfolio object.
-
-        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
-
-        Notes: The mul method allows multiplication of an EquityPortfolio object
-        with a scalar constant to increase or decrease
-        the number of shares held for each asset in the portfolio accordingly.
-        The method returns a new EquityPortfolio object with the same prices
-        and trading cost model as the original object,
-        and with the number of shares for each asset multiplied by the scalar constant
-        (as represented in the stocks dataframe).
-        Additionally, the initial cash value is multiplied
-        by the scalar to maintain the same cash-to-equity ratio as the original portfolio.
-        """
-        assert scalar > 0
-        return EquityPortfolio(
-            prices=self.prices,
-            stocks=self.stocks * scalar,
-            initial_cash=self.initial_cash * scalar,
-            trading_cost_model=self.trading_cost_model,
-        )
-
-    def __rmul__(self, scalar: float) -> EquityPortfolio:
-        """A method that allows multiplication of the EquityPortfolio object with a scalar constant in a reversed order.
-
-        Args: scalar: A scalar constant that multiplies the EquityPortfolio object in a reversed order.
-
-        Returns: EquityPortfolio: A new EquityPortfolio object multiplied by the scalar constant.
-
-        Notes: The rmul method allows multiplication of a scalar
-        constant with an EquityPortfolio object in a reversed order"""
-        return self.__mul__(scalar)
-
-    def __add__(self, port_new: EquityPortfolio) -> EquityPortfolio:
-        """
-        A method that allows addition of two EquityPortfolio objects.
-        """
-        # check if the other object is an EquityPortfolio object
-        assert isinstance(port_new, EquityPortfolio)
-
-        # make sure the prices are aligned for overlapping points
-        prices_left = self.prices.combine_first(port_new.prices)
-        prices_right = port_new.prices.combine_first(self.prices)
-        pd.testing.assert_frame_equal(prices_left, prices_right)
-
-        # bring both portfolios to the finer grid
-        left = self.reset_prices(prices=prices_left)
-        right = port_new.reset_prices(prices=prices_left)
-
-        # just make sure the left and right portfolio are now on exactly the same grid
-        pd.testing.assert_index_equal(left.index, right.index)
-
-        # add the stocks
-        positions = left.stocks.add(right.stocks, fill_value=0.0)
-
-        # make sure the trading cost models are the same
-        return EquityPortfolio(
-            prices=prices_right,
-            stocks=positions,
-            initial_cash=self.initial_cash + port_new.initial_cash,
-            trading_cost_model=self.trading_cost_model,
-        )
-
-    def reset_prices(self, prices: pd.DataFrame) -> EquityPortfolio:
-        """
-        A method that constructs an EquityPortfolio object using finer prices.
-        """
-        # extract the relevant columns from prices
-        p = prices[self.assets]
-
-        # the prices need to contain the original index
-        assert set(self.index).issubset(set(prices.index))
-
-        # build a frame for the stocks
-        stocks = pd.DataFrame(index=prices.index, columns=self.assets)
-
-        # only forward fill stocks on the subgrid induced by the original index
-        sub = stocks.truncate(before=self.index[0], after=self.index[-1])
-        sub.update(self.stocks)
-        sub = sub.ffill()
-
-        # outside the original index, the stocks are zero
-        stocks.update(sub)
-        stocks = stocks.fillna(0.0)
-
-        return EquityPortfolio(
-            prices=p,
-            stocks=stocks,
-            initial_cash=self.initial_cash,
-            trading_cost_model=self.trading_cost_model,
-        )
-
     def truncate(
         self, before: datetime | None = None, after: datetime | None = None
     ) -> EquityPortfolio:
@@ -473,33 +296,8 @@ class EquityPortfolio:
         return EquityPortfolio(
             prices=self.prices.truncate(before=before, after=after),
             stocks=self.stocks.truncate(before=before, after=after),
-            trading_cost_model=self.trading_cost_model,
-            initial_cash=self.nav.truncate(before=before, after=after).values[0],
-        )
-
-    # @property
-    # def start(self):
-    #     """first index with a profit that is not zero"""
-    #     return self.profit.ne(0).idxmax()
-
-    def resample(self, rule: Any) -> EquityPortfolio:
-        """The resample method resamples an EquityPortfolio object to a new frequency
-        specified by the rule argument.
-        A new EquityPortfolio object is created with the original prices
-        DataFrame and the resampled stocks DataFrame. The objects trading cost model and initial cash value
-        are also copied into the new object.
-
-        Note that the resample method does not modify the original EquityPortfolio object,
-        but rather returns a new object.
-        """
-        # iron out the stocks index
-        stocks = iron_frame(self.stocks, rule=rule)
-
-        return EquityPortfolio(
-            prices=self.prices,
-            stocks=stocks,
-            trading_cost_model=self.trading_cost_model,
-            initial_cash=self.initial_cash,
+            cash=self.cash.truncate(before=before, after=after)
+            # initial_cash=self.nav.truncate(before=before, after=after).values[0],
         )
 
     def metrics(
