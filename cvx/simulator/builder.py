@@ -213,8 +213,9 @@ class _Builder:
             self.risk_free_rate = pd.Series(index=self.index, data=0.0)
         else:
             # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
-            r = self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
-            self.risk_free_rate = r
+            self.risk_free_rate = (
+                self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
+            )
 
     @property
     def valid(self):
