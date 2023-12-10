@@ -74,6 +74,12 @@ def test_stocks(builder):
     pd.testing.assert_frame_equal(builder.stocks, np.NaN * builder.prices)
 
 
+def test_build_with_risk_free_rate(prices):
+    b = _builder(prices=prices, risk_free_rate=pd.Series(index=prices.index, data=0.01))
+    print(b.risk_free_rate)
+    assert b.risk_free_rate.values[0] == 0.0
+
+
 def test_build_empty(builder, prices):
     """
     Test that the portfolio is still empty
