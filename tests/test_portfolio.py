@@ -15,7 +15,7 @@ def test_state():
     positions = pd.Series(data=[100, 300])
     cash = 400
     state = _State(cash=cash, prices=prices)
-    state._position = positions
+    state.position = positions
     # value is the money in stocks
     assert state.value == 1100.0
     # nav is the value plus the cash

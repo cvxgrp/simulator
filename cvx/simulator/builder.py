@@ -45,10 +45,12 @@ class _State:
 
     prices: pd.Series = None
     __position: pd.Series = None
+    risk_free_rate: float = 0.0
     cash: float = 1e6
     input_data: dict[str, Any] = field(default_factory=dict)
     model: TradingCostModel | None = None
     time: datetime | None = None
+    days: int = 1
 
     @property
     def value(self) -> float:
@@ -108,7 +110,7 @@ class _State:
         return self.__position
 
     @position.setter
-    def _position(self, position: np.array):
+    def position(self, position: np.array):
         position = pd.Series(index=self.assets, data=position)
         trades = self._trade(target_pos=position)
 
@@ -117,6 +119,8 @@ class _State:
 
         if self.model is not None:
             self.cash -= self.model.eval(self.prices, trades=trades).sum()
+
+        self.cash = self.cash * (self.risk_free_rate.loc[self.time] + 1) ** self.days
 
     def __getattr__(self, item):
         return self.input_data[item]
@@ -129,9 +133,6 @@ class _State:
         """
         Compute the trade vector given a target position
         """
-        # if self._position is None:
-        #    return target_pos
-
         return target_pos.subtract(self.position, fill_value=0.0)
 
 
@@ -140,6 +141,7 @@ def builder(
     weights: pd.DataFrame | None = None,
     initial_cash: float = 1e6,
     trading_cost_model: TradingCostModel | None = None,
+    risk_free_rate: pd.Series | None = None,
     **kwargs,
 ) -> _Builder:
     """The builder function creates an instance of the _Builder class, which
@@ -169,6 +171,7 @@ def builder(
         initial_cash=float(initial_cash),
         trading_cost_model=trading_cost_model,
         input_data=dict(kwargs),
+        risk_free_rate=risk_free_rate,
     )
 
     if weights is not None:
@@ -183,6 +186,7 @@ class _Builder:
     prices: pd.DataFrame
     stocks: pd.DataFrame
     trading_cost_model: TradingCostModel | None = None
+    risk_free_rate: pd.Series | None = None
     initial_cash: float = 1e6
     _state: _State = field(default_factory=_State)
     input_data: dict[str, Any] = field(default_factory=dict)
@@ -202,6 +206,12 @@ class _Builder:
         """
         self._state.cash = self.initial_cash
         self._state.model = self.trading_cost_model
+        if self.risk_free_rate is None:
+            self._state.risk_free_rate = pd.Series(index=self.index, data=0.0)
+        else:
+            # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
+            r = self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
+            self._state.risk_free_rate = r
 
     @property
     def valid(self):
@@ -273,6 +283,11 @@ class _Builder:
         for t in self.index:
             # valuation of the current position
             self._state.prices = self.prices.loc[t]
+            try:
+                self._state.days = (t - self._state.time).days
+            except TypeError:
+                self._state.days = 0
+
             self._state.time = t
 
             self._state.input_data = {
@@ -300,7 +315,7 @@ class _Builder:
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
         self.stocks.loc[self._state.time, self._state.assets] = position
-        self._state._position = position
+        self._state.position = position
 
     @property
     def cashposition(self):
