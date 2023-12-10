@@ -28,9 +28,9 @@ from cvx.simulator.trading_costs import TradingCostModel
 @dataclass
 class Builder:
     prices: pd.DataFrame
-    trading_cost_model: TradingCostModel | None = None
-    risk_free_rate: pd.Series | None = None
-    borrow_rate: pd.Series | None = None
+    trading_cost_model: TradingCostModel = None
+    risk_free_rate: pd.Series = None
+    borrow_rate: pd.Series = None
 
     initial_cash: float = 1e6
     _state: State = field(default_factory=State)
