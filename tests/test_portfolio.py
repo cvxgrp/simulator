@@ -2,30 +2,11 @@ from __future__ import annotations
 
 import os
 
-import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import _State, builder
-from cvx.simulator.portfolio import EquityPortfolio, Plot, diff
-
-
-def test_state():
-    prices = pd.Series(data=[2.0, 3.0])
-    positions = pd.Series(data=[100, 300])
-    cash = 400
-    state = _State(cash=cash, prices=prices)
-    state.position = positions
-    # value is the money in stocks
-    assert state.value == 1100.0
-    # nav is the value plus the cash
-    assert state.nav == 400.0
-    # weights are the positions divided by the value
-    pd.testing.assert_series_equal(
-        state.weights, pd.Series(data=[2.0 / 4.0, 9.0 / 4.0])
-    )
-    # leverage is the value divided by the nav
-    assert state.leverage == 11.0 / 4.0
+from cvx.simulator.builder import Builder
+from cvx.simulator.portfolio import Plot
 
 
 def test_assets(portfolio, prices):
@@ -103,7 +84,7 @@ def test_iter(prices):
     """
 
     # Let's setup a portfolio with one asset: A
-    b = builder(prices[["A"]].dropna())
+    b = Builder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
@@ -136,7 +117,7 @@ def test_long_only(prices, resource_dir):
     :param resource_dir: the resource directory (fixture)
     """
     # Let's setup a portfolio with two assets: A and B
-    b = builder(prices=prices[["A", "B"]], initial_cash=100000)
+    b = Builder(prices=prices[["A", "B"]], initial_cash=100000)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, _ in b:
@@ -157,7 +138,7 @@ def test_long_only(prices, resource_dir):
     )
 
     # the (absolute) profit is the difference between nav and initial cash
-    profit = (portfolio.nav - portfolio.initial_cash).diff().dropna()
+    profit = (portfolio.nav - portfolio.cash).diff().dropna()
 
     # We don't need to set the initial cash to estimate the (absolute) profit
     # The daily profit is also the change in valuation of the previous position
@@ -176,68 +157,10 @@ def test_long_only(prices, resource_dir):
         portfolio.trades_currency,
     )
 
-    # The available cash is the initial cash - costs for trading, e.g.
-    pd.testing.assert_series_equal(
-        portfolio.cash,
-        portfolio.initial_cash - portfolio.trades_currency.sum(axis=1).cumsum(),
-    )
-
     # The NAV (net asset value) is cash + equity
     pd.testing.assert_series_equal(
         portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1)
     )
-
-
-def test_add(prices, resource_dir):
-    """
-    Tests the addition of two portfolios
-    TODP: Currently only tests the positions of the portfolios
-    """
-    index_left = pd.DatetimeIndex(
-        [pd.Timestamp("2013-01-01"), pd.Timestamp("2013-01-02")]
-    )
-    index_right = pd.DatetimeIndex(
-        [
-            pd.Timestamp("2013-01-02"),
-            pd.Timestamp("2013-01-03"),
-            pd.Timestamp("2013-01-04"),
-        ]
-    )
-
-    pos_left = pd.DataFrame(data={"A": [0, 1], "C": [3, 3]}, index=index_left)
-    pos_right = pd.DataFrame(data={"A": [1, 1, 2], "B": [2, 3, 4]}, index=index_right)
-
-    port_left = EquityPortfolio(
-        prices.loc[pos_left.index][pos_left.columns], stocks=pos_left
-    )
-    port_right = EquityPortfolio(
-        prices.loc[pos_right.index][pos_right.columns], stocks=pos_right
-    )
-
-    pd.testing.assert_frame_equal(pos_left, port_left.stocks)
-    pd.testing.assert_frame_equal(pos_right, port_right.stocks)
-
-    port_add = port_left + port_right
-    print(port_add.stocks)
-    print(port_add.prices)
-
-    www = pd.read_csv(resource_dir / "positions.csv", index_col=0, parse_dates=[0])
-    pd.testing.assert_frame_equal(www, port_add.stocks, check_freq=False)
-
-
-def test_duplicates():
-    """
-    test for duplicates in the index
-    """
-    prices = pd.DataFrame(index=[1, 1], columns=["A"])
-    with pytest.raises(AssertionError):
-        builder(prices=prices)
-
-    prices = pd.DataFrame(index=[1], columns=["A"])
-    position = pd.DataFrame(index=[1, 1], columns=["A"])
-
-    with pytest.raises(AssertionError):
-        EquityPortfolio(prices=prices, stocks=position)
 
 
 def test_monotonic():
@@ -246,14 +169,14 @@ def test_monotonic():
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
-        builder(prices=prices)
+        Builder(prices=prices)
 
 
 def test_portfolio(prices):
     """
     build portfolio from price
     """
-    b = builder(prices=prices)
+    b = Builder(prices=prices)
     pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
     for t, _ in b:
@@ -265,72 +188,6 @@ def test_portfolio(prices):
     pd.testing.assert_frame_equal(
         portfolio.stocks,
         pd.DataFrame(index=prices.index, columns=prices.keys(), data=1000.0),
-    )
-
-
-def test_multiply(portfolio):
-    """
-    Test multiplication of portfolio
-    :param portfolio: the portfolio object (fixture)
-    """
-    double = portfolio * 2.0
-    pd.testing.assert_frame_equal(2.0 * portfolio.stocks, double.stocks)
-
-
-def test_multiply_r(portfolio):
-    """
-    Test multiplication of portfolio
-    :param portfolio: the portfolio object (fixture)
-    """
-    double = 2.0 * portfolio
-    pd.testing.assert_frame_equal(2.0 * portfolio.stocks, double.stocks)
-
-
-def test_truncate(portfolio):
-    """
-    Test truncation of portfolio
-    :param portfolio: the portfolio object (fixture)
-    """
-    p = portfolio.truncate(before=portfolio.index[100])
-    assert set(p.index) == set(portfolio.index[100:])
-    assert p.initial_cash == portfolio.nav.values[100]
-    assert p.nav.values[-1] == portfolio.nav.values[-1]
-
-
-def test_diff(portfolio):
-    """
-    Test diff of portfolio
-    :param portfolio: the portfolio object (fixture)
-    """
-    p = diff(portfolio, portfolio)
-    assert p.initial_cash == 1e6
-    assert p.trading_cost_model is None
-
-    pd.testing.assert_frame_equal(p.stocks, 0.0 * portfolio.stocks)
-
-
-def test_resample(prices):
-    """
-    Test resampling of portfolio
-    :param prices:
-    :return:
-    """
-    b = builder(prices=prices)
-    # pd.testing.assert_frame_equal(b.prices, prices.ffill())
-
-    for time, state in b:
-        # each day we do a one-over-N rebalancing
-        b.position = 1.0 / len(state.assets) * state.nav / state.prices
-
-    portfolio = b.build()
-
-    # only now we resample the portfolio
-    p = portfolio.resample(rule="M")
-
-    # check the last few rows
-    p = p.truncate(before=p.index[590])
-    assert np.linalg.norm(p.trades_stocks.iloc[1:].values) == pytest.approx(
-        0.0, abs=1e-12
     )
 
 
@@ -380,15 +237,6 @@ def test_rolling_betas(portfolio):
         fontname=None,
         show=False,
     )
-
-
-def test_cashflow(portfolio):
-    """
-    Test cashflow
-
-    :param portfolio: portfolio fixture
-    """
-    assert portfolio.cashflow.sum() + portfolio.initial_cash == portfolio.cash.iloc[-1]
 
 
 def test_profit(portfolio):

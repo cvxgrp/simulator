@@ -14,7 +14,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any, Generator
 
 import numpy as np
@@ -22,213 +21,19 @@ import pandas as pd
 
 from cvx.simulator.interpolation import valid
 from cvx.simulator.portfolio import EquityPortfolio
+from cvx.simulator.state import State
 from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass
-class _State:
-    """The _State class defines a state object used to keep track of the current
-    state of the portfolio.
-
-    Attributes:
-
-    prices: a pandas Series object containing the stock prices of the current
-    portfolio state
-
-    position: a pandas Series object containing the current holdings of the portfolio
-
-    cash: the amount of cash available in the portfolio.
-
-    By default, prices and position are set to None, while cash is set to 1 million.
-    These attributes can be updated and accessed through setter and getter methods
-    """
-
-    prices: pd.Series = None
-    __position: pd.Series = None
-    risk_free_rate: float = 0.0
-    borrow_rate: float = 0.0
-    cash: float = 1e6
-    input_data: dict[str, Any] = field(default_factory=dict)
-    model: TradingCostModel | None = None
-    time: datetime | None = None
-    days: int = 1
-
-    @property
-    def value(self) -> float:
-        """
-        The value property computes the value of the portfolio at the current
-        time taking into account the current holdings and current stock prices.
-        If the value cannot be computed due to missing positions
-        (they might be still None), zero is returned instead.
-        """
-        return self.cashposition.sum()
-
-    @property
-    def nav(self) -> float:
-        """
-        The nav property computes the net asset value (NAV) of the portfolio,
-        which is the sum of the current value of the
-        portfolio as determined by the value property,
-        and the current amount of cash available in the portfolio.
-        """
-        return self.value + self.cash
-
-    @property
-    def weights(self) -> pd.Series:
-        """
-        The weights property computes the weighting of each asset in the current
-        portfolio as a fraction of the total portfolio value (nav).
-
-        Returns:
-
-        a pandas series object containing the weighting of each asset as a
-        fraction of the total portfolio value. If the positions are still
-        missing, then a series of zeroes is returned.
-        """
-        return self.cashposition / self.nav
-
-    @property
-    def leverage(self) -> float:
-        """
-        The `leverage` property computes the leverage of the portfolio,
-        which is the sum of the absolute values of the portfolio weights.
-        """
-        return float(self.weights.abs().sum())
-
-    @property
-    def cashposition(self):
-        """
-        The `cashposition` property computes the cash position of the portfolio,
-        which is the amount of cash in the portfolio as a fraction of the total portfolio value.
-        """
-        return self.prices * self.position
-
-    @property
-    def short(self):
-        """
-        How short are we at this stage in USD
-        """
-        return self.cashposition[self.cashposition < 0].sum()
-
-    @property
-    def position(self):
-        if self.__position is None:
-            return pd.Series(dtype=float)
-
-        return self.__position
-
-    @property
-    def cash_interest(self):
-        """
-        How much interest do we get for the cash
-        """
-        return self.cash * (self.risk_free_rate + 1) ** self.days - self.cash
-
-    @property
-    def borrow_fees(self):
-        """
-        How much interest do we pay for the short position
-        """
-        return self.short * (self.borrow_rate + 1) ** self.days - self.short
-
-    @position.setter
-    def position(self, position: np.array):
-        # update the cash first using the risk-free interest rate
-        # Note the the risk_free_rate is shifted
-        # e.g. we update our cash using the old risk_free_rate
-        for fee in [self.cash_interest, self.borrow_fees]:
-            self.cash += fee
-
-        # update the position
-        position = pd.Series(index=self.assets, data=position)
-
-        # compute the trades (can be fractional)
-        trades = self._trade(target_pos=position)
-
-        # update only now as otherwise the trades would be wrong
-        self.__position = position
-
-        # cash is spent for shares or received for selling them
-        self.cash -= (trades * self.prices).sum()
-
-        if self.model is not None:
-            self.cash -= self.model.eval(
-                self.prices, trades=trades, **self.input_data
-            ).sum()
-
-    def __getattr__(self, item):
-        return self.input_data[item]
-
-    @property
-    def assets(self) -> pd.Index:
-        return self.prices.dropna().index
-
-    def _trade(self, target_pos: pd.Series) -> pd.Series:
-        """
-        Compute the trade vector given a target position
-        """
-        return target_pos.subtract(self.position, fill_value=0.0)
-
-
-def builder(
-    prices: pd.DataFrame,
-    weights: pd.DataFrame | None = None,
-    initial_cash: float = 1e6,
-    trading_cost_model: TradingCostModel | None = None,
-    risk_free_rate: pd.Series | None = None,
-    borrow_rate: pd.Series | None = None,
-    **kwargs,
-) -> _Builder:
-    """The builder function creates an instance of the _Builder class, which
-    is used to construct a portfolio of assets. The function takes in a pandas
-    DataFrame of historical prices for the assets in the portfolio, optional
-    weights for each asset, an initial cash value, and a trading cost model.
-    The function first asserts that the prices DataFrame has a monotonic
-    increasing and unique index. It then creates a DataFrame of zeros to hold
-    the number of shares of each asset owned at each time step. The function
-    initializes a _Builder object with the stocks DataFrame, the prices
-    DataFrame (forward-filled), the initial cash value, and the trading cost
-    model. If weights are provided, they are set for each time step using
-    set_weights method of the _Builder object. The final output is the
-    constructed _Builder object."""
-
-    assert isinstance(prices, pd.DataFrame)
-    assert prices.index.is_monotonic_increasing
-    assert prices.index.is_unique
-
-    stocks = pd.DataFrame(
-        index=prices.index, columns=prices.columns, data=np.NaN, dtype=float
-    )
-
-    builder = _Builder(
-        stocks=stocks,
-        prices=prices,
-        initial_cash=float(initial_cash),
-        trading_cost_model=trading_cost_model,
-        input_data=dict(kwargs),
-        risk_free_rate=risk_free_rate,
-        borrow_rate=borrow_rate,
-    )
-
-    if weights is not None:
-        for t, state in builder:
-            builder.weights = weights[state.assets].loc[t[-1]].dropna().values
-
-    return builder
-
-
-@dataclass
-class _Builder:
+class Builder:
     prices: pd.DataFrame
-    stocks: pd.DataFrame
-    trading_cost_model: TradingCostModel | None = None
-    risk_free_rate: pd.Series | None = None
-    borrow_rate: pd.Series | None = None
-    _borrow_fees: pd.Series | None = None
-    _interest_rates: pd.Series | None = None
+    trading_cost_model: TradingCostModel = None
+    risk_free_rate: pd.Series = None
+    borrow_rate: pd.Series = None
 
     initial_cash: float = 1e6
-    _state: _State = field(default_factory=_State)
+    _state: State = field(default_factory=State)
     input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -244,6 +49,18 @@ class _Builder:
         that can only be performed after the object is fully initialized. __post_init__
         is called automatically after the object initialization.
         """
+
+        # assert isinstance(self.prices, pd.DataFrame)
+        assert self.prices.index.is_monotonic_increasing
+        assert self.prices.index.is_unique
+
+        self.__stocks = pd.DataFrame(
+            index=self.prices.index,
+            columns=self.prices.columns,
+            data=np.NaN,
+            dtype=float,
+        )
+
         self._state.cash = self.initial_cash
         self._state.model = self.trading_cost_model
 
@@ -260,6 +77,11 @@ class _Builder:
         else:
             # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
             self.borrow_rate = self.borrow_rate.loc[self.index].shift(1).fillna(0.0)
+
+        self.__cash = pd.Series(index=self.index, data=np.NaN)
+        self.__trading_costs = pd.Series(index=self.index, data=np.NaN)
+        self.__cash_interest = pd.Series(index=self.index, data=np.NaN)
+        self.__borrow_fees = pd.Series(index=self.index, data=np.NaN)
 
     @property
     def valid(self):
@@ -313,7 +135,7 @@ class _Builder:
     def weights(self, weights: np.array) -> None:
         self.position = self._state.nav * weights / self.current_prices
 
-    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, _State], None, None]:
+    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.
@@ -340,6 +162,9 @@ class _Builder:
             self._state.risk_free_rate = self.risk_free_rate.loc[t]
             self._state.borrow_rate = self.borrow_rate.loc[t]
 
+            self.__borrow_fees[self._state.time] = self._state.borrow_fees
+            self.__cash_interest[self._state.time] = self._state.cash_interest
+
             self._state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
             }
@@ -354,7 +179,7 @@ class _Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        return self.stocks.loc[self._state.time]
+        return self.__stocks.loc[self._state.time]
 
     @position.setter
     def position(self, position: pd.Series) -> None:
@@ -364,18 +189,47 @@ class _Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self.stocks.loc[self._state.time, self._state.assets] = position
+        self.__stocks.loc[self._state.time, self._state.assets] = position
         self._state.position = position
+
+        self.__cash[self._state.time] = self._state.cash
+        self.__trading_costs[self._state.time] = self._state.trading_costs
+
+    @property
+    def cash(self):
+        return self.__cash
+
+    @property
+    def trading_costs(self):
+        return self.__trading_costs
+
+    @property
+    def cash_interest(self):
+        return self.__cash_interest
+
+    @property
+    def borrow_fees(self):
+        return self.__borrow_fees
 
     @property
     def cashposition(self):
         return self.position * self.current_prices
 
+    @property
+    def cashflow(self):
+        flow = self.cash.diff()
+        flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
+        return flow
+
+    @property
+    def stocks(self):
+        return self.__stocks
+
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
         self.position = cashposition / self.current_prices
 
-    def build(self, extra=0) -> EquityPortfolio:
+    def build(self) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 
@@ -391,6 +245,5 @@ class _Builder:
         return EquityPortfolio(
             prices=self.prices,
             stocks=self.stocks,
-            initial_cash=self.initial_cash,  # - (self.prices.iloc[0]*self.stocks.iloc[0]).sum(),
-            trading_cost_model=self.trading_cost_model,
+            cash=self.cash,
         )

@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from cvx.simulator.portfolio import EquityPortfolio
+from cvx.simulator.builder import Builder
 
 
 @pytest.fixture(scope="session", name="resource_dir")
@@ -27,4 +27,11 @@ def prices(resource_dir):
 def portfolio(prices):
     """portfolio fixture"""
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    return EquityPortfolio(prices, stocks=positions, initial_cash=1e6)
+    b = Builder(prices, initial_cash=1e6)
+
+    for t, state in b:
+        b.position = positions.loc[t[-1]]
+
+    return b.build()
+
+    # return EquityPortfolio(prices, stocks=positions, initial_cash=1e6)

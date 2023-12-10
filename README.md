@@ -28,12 +28,6 @@ Our approach follows a rather common pattern:
 We demonstrate those steps with somewhat silly policies.
 They are never good strategies, but are always valid ones.
 
-Of course, some users may know prices and weights in advance.
-In that case, the building procedure can be bypassed.
-We discuss this in
-
-* [Bypassing the builder](#bypassing-the-builder)
-
 ### Create the builder object
 
 The user defines a builder object by loading prices
@@ -44,7 +38,7 @@ import pandas as pd
 from cvx.simulator.builder import builder
 
 prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True, header=0)
-b = builder(prices=prices, initial_cash=1e6)
+b = Builder(prices=prices, initial_cash=1e6)
 ```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
@@ -105,27 +99,6 @@ Once finished it is possible to build the portfolio object
 
 ```python
 portfolio = b.build()
-```
-
-### Bypassing the builder
-
-Some may know the positions the portfolio shall enter for eternity.
-Running through a loop is rather non-pythonic waste of time in such a case.
-It is possible to completely bypass this step by submitting
-a frame of positions together with a frame of prices when creating the
-portfolio object.
-
-```python
-from pathlib import Path
-
-import pandas as pd
-from cvx.simulator.portfolio import EquityPortfolio
-
-prices = pd.read_csv(Path("resources") / "price.csv",
-                     index_col=0, parse_dates=True, header=0).ffill()
-stocks = pd.read_csv(Path("resources") / "stock.csv",
-                     index_col=0, parse_dates=True, header=0)
-portfolio = EquityPortfolio(prices=prices, stocks=stocks, initial_cash=1e6)
 ```
 
 ## Analytics
