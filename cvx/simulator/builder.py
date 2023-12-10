@@ -120,6 +120,9 @@ class _State:
         if self.model is not None:
             self.cash -= self.model.eval(self.prices, trades=trades).sum()
 
+        # update the cash using the risk-free interest rate
+        # Note the the risk_free_rate is shifted
+        # e.g. we update our cash using the old risk_free_rate
         self.cash = self.cash * (self.risk_free_rate.loc[self.time] + 1) ** self.days
 
     def __getattr__(self, item):
