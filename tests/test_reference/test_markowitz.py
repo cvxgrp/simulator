@@ -26,8 +26,9 @@ def builder(prices, spreads, rf):
         prices=prices,
         initial_cash=1e6,
         risk_free_rate=rf,
-        borrow_rate=5 * rf,
+        borrow_rate=3 * rf,
         input_data={"spreads": spreads},
+        # trading_cost_model=SpreadModel(),
     )
 
 
@@ -55,6 +56,7 @@ def test_markowitz(builder, feasible, covariance, means):
             print(state.cash_interest)
             print(state.borrow_fees)
             print(state.cash)
+            #
             print(state.spreads)
             print(state.prices)
             print(state.weights)
@@ -75,21 +77,29 @@ def test_markowitz(builder, feasible, covariance, means):
             w, _ = basic_markowitz(_input)
 
             # update weights in builder
+            # also possible to update positions or cash-positions
             builder.weights = w
 
             # the builder keeps also track of the state
-            # some quanties are only post-trading interesting
+            # some quantities are only post-trading interesting
             print(state.trades)
+            # should trading costs be given per asset?
             print(state.trading_costs)
             print(state.cash)
-
-    print("**************************************************************")
-    print(builder.cash_interest)
-    print(builder.borrow_fees)
-    print(builder.trading_costs)
-    print(builder.cash)
-    print(builder.cashflow)
 
     # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()
+
+    print(portfolio.cash_interest)
+    print(portfolio.borrow_fees)
+    print(portfolio.trading_costs)
+    print(portfolio.cash)
+    print(portfolio.flow)
+    print(portfolio.borrow_rate)
+    print(portfolio.risk_free_rate)
+
+    # The portfolio object is exposing to numerous analytics via quantstats
+    portfolio.html(output="report.html")
+    portfolio.snapshot()
+    portfolio.nav.plot()

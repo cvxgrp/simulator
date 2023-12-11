@@ -13,6 +13,7 @@ python = ">=3.9,<3.12"
 numpy = "*"
 pandas = "*"
 quantstats = "*"
+# we need this awkward dependency for quantstats
 ipython = "*"
 
 [tool.poetry.group.test.dependencies]

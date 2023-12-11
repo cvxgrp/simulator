@@ -31,9 +31,7 @@ class Builder:
     trading_cost_model: TradingCostModel = None
     risk_free_rate: pd.Series = None
     borrow_rate: pd.Series = None
-
     initial_cash: float = 1e6
-    _state: State = field(default_factory=State)
     input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -61,8 +59,8 @@ class Builder:
             dtype=float,
         )
 
-        self._state.cash = self.initial_cash
-        self._state.model = self.trading_cost_model
+        # self._state.cash = self.initial_cash
+        # self._state.model = self.trading_cost_model
 
         if self.risk_free_rate is None:
             self.risk_free_rate = pd.Series(index=self.index, data=0.0)
@@ -82,6 +80,10 @@ class Builder:
         self.__trading_costs = pd.Series(index=self.index, data=np.NaN)
         self.__cash_interest = pd.Series(index=self.index, data=np.NaN)
         self.__borrow_fees = pd.Series(index=self.index, data=np.NaN)
+
+        self.__state = State()
+        self.__state.cash = self.initial_cash
+        self.__state.model = self.trading_cost_model
 
     @property
     def valid(self):
@@ -122,18 +124,18 @@ class Builder:
         """
         Get the current prices from the state
         """
-        return self._state.prices[self._state.assets].values
+        return self.__state.prices[self.__state.assets].values
 
     @property
     def weights(self) -> np.array:
         """
         Get the current weights from the state
         """
-        return self._state.weights[self._state.assets].values
+        return self.__state.weights[self.__state.assets].values
 
     @weights.setter
     def weights(self, weights: np.array) -> None:
-        self.position = self._state.nav * weights / self.current_prices
+        self.position = self.__state.nav * weights / self.current_prices
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
         """
@@ -152,24 +154,24 @@ class Builder:
         """
         for t in self.index:
             # valuation of the current position
-            self._state.prices = self.prices.loc[t]
+            self.__state.prices = self.prices.loc[t]
             try:
-                self._state.days = (t - self._state.time).days
+                self.__state.days = (t - self.__state.time).days
             except TypeError:
-                self._state.days = 0
+                self.__state.days = 0
 
-            self._state.time = t
-            self._state.risk_free_rate = self.risk_free_rate.loc[t]
-            self._state.borrow_rate = self.borrow_rate.loc[t]
+            self.__state.time = t
+            self.__state.risk_free_rate = self.risk_free_rate.loc[t]
+            self.__state.borrow_rate = self.borrow_rate.loc[t]
 
-            self.__borrow_fees[self._state.time] = self._state.borrow_fees
-            self.__cash_interest[self._state.time] = self._state.cash_interest
+            self.__borrow_fees[self.__state.time] = self.__state.borrow_fees
+            self.__cash_interest[self.__state.time] = self.__state.cash_interest
 
-            self._state.input_data = {
+            self.__state.input_data = {
                 key: data.loc[t] for key, data in self.input_data.items()
             }
 
-            yield self.index[self.index <= t], self._state
+            yield self.index[self.index <= t], self.__state
 
     @property
     def position(self) -> pd.Series:
@@ -179,7 +181,7 @@ class Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        return self.__stocks.loc[self._state.time]
+        return self.__stocks.loc[self.__state.time]
 
     @position.setter
     def position(self, position: pd.Series) -> None:
@@ -189,27 +191,15 @@ class Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self.__stocks.loc[self._state.time, self._state.assets] = position
-        self._state.position = position
+        self.__stocks.loc[self.__state.time, self.__state.assets] = position
+        self.__state.position = position
 
-        self.__cash[self._state.time] = self._state.cash
-        self.__trading_costs[self._state.time] = self._state.trading_costs
+        self.__cash[self.__state.time] = self.__state.cash
+        self.__trading_costs[self.__state.time] = self.__state.trading_costs.sum()
 
     @property
     def cash(self):
         return self.__cash
-
-    @property
-    def trading_costs(self):
-        return self.__trading_costs
-
-    @property
-    def cash_interest(self):
-        return self.__cash_interest
-
-    @property
-    def borrow_fees(self):
-        return self.__borrow_fees
 
     @property
     def cashposition(self):
@@ -242,8 +232,16 @@ class Builder:
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
-        return EquityPortfolio(
+        portfolio = EquityPortfolio(
             prices=self.prices,
             stocks=self.stocks,
             cash=self.cash,
+            trading_costs=self.__trading_costs,
+            borrow_fees=self.__borrow_fees,
+            borrow_rate=self.borrow_rate,
+            risk_free_rate=self.risk_free_rate,
+            cash_interest=self.__cash_interest,
+            flow=self.cashflow,
         )
+
+        return portfolio

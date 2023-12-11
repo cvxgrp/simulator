@@ -155,6 +155,8 @@ class State:
             ).sum()
 
             self.cash -= self.trading_costs.sum()
+        else:
+            self.__trading_costs = pd.Series(index=self.assets, data=0.0)
 
     def __getattr__(self, item):
         return self.input_data[item]
