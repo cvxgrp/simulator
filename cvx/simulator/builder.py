@@ -195,7 +195,7 @@ class Builder:
         self.__state.position = position
 
         self.__cash[self.__state.time] = self.__state.cash
-        self.__trading_costs[self.__state.time] = self.__state.trading_costs
+        self.__trading_costs[self.__state.time] = self.__state.trading_costs.sum()
 
     @property
     def cash(self):
@@ -248,14 +248,20 @@ class Builder:
             prices=self.prices,
             stocks=self.stocks,
             cash=self.cash,
+            trading_costs=self.__trading_costs,
+            borrow_fees=self.__borrow_fees,
+            borrow_rate=self.borrow_rate,
+            risk_free_rate=self.risk_free_rate,
+            cash_interest=self.__cash_interest,
+            flow=self.cashflow,
         )
 
-        portfolio.timeseries["trading_costs"] = self.trading_costs
-        portfolio.timeseries["flow"] = self.cashflow
-        portfolio.timeseries["borrow_fees"] = self.borrow_fees
-        portfolio.timeseries["cash_interest"] = self.cash_interest
-        portfolio.timeseries["cash"] = self.cash
-        portfolio.timeseries["borrow_rate"] = self.borrow_rate
-        portfolio.timeseries["risk_free_rate"] = self.risk_free_rate
+        # portfolio.timeseries["trading_costs"] = self.trading_costs
+        # portfolio.timeseries["flow"] = self.cashflow
+        # portfolio.timeseries["borrow_fees"] = self.borrow_fees
+        # portfolio.timeseries["cash_interest"] = self.cash_interest
+        # portfolio.timeseries["cash"] = self.cash
+        # portfolio.timeseries["borrow_rate"] = self.borrow_rate
+        # portfolio.timeseries["risk_free_rate"] = self.risk_free_rate
 
         return portfolio

@@ -33,5 +33,3 @@ def portfolio(prices):
         b.position = positions.loc[t[-1]]
 
     return b.build()
-
-    # return EquityPortfolio(prices, stocks=positions, initial_cash=1e6)
