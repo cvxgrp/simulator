@@ -64,15 +64,6 @@ Classes
    .. py:property:: cash
 
 
-   .. py:property:: trading_costs
-
-
-   .. py:property:: cash_interest
-
-
-   .. py:property:: borrow_fees
-
-
    .. py:property:: cashposition
 
 
@@ -105,11 +96,6 @@ Classes
    .. py:attribute:: initial_cash
       :type: float
       :value: 1000000.0
-
-      
-
-   .. py:attribute:: _state
-      :type: cvx.simulator.state.State
 
       
 

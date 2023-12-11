@@ -124,14 +124,9 @@
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.borrow_rate">[docs]</a>
     <span class="n">borrow_rate</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-
 <div class="viewcode-block" id="Builder.initial_cash">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.initial_cash">[docs]</a>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
-
-<div class="viewcode-block" id="Builder._state">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder._state">[docs]</a>
-    <span class="n">_state</span><span class="p">:</span> <span class="n">State</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">State</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Builder.input_data">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.input_data">[docs]</a>
@@ -165,8 +160,8 @@
             <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span>
+        <span class="c1"># self._state.cash = self.initial_cash</span>
+        <span class="c1"># self._state.model = self.trading_cost_model</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
@@ -185,7 +180,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span></div>
 
 
     <span class="nd">@property</span>
@@ -238,7 +237,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current prices from the state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
 
 
     <span class="nd">@property</span>
@@ -248,12 +247,12 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current weights from the state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
 
 
     <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 
 <div class="viewcode-block" id="Builder.__iter__">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.__iter__">[docs]</a>
@@ -274,24 +273,24 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
             <span class="c1"># valuation of the current position</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">borrow_fees</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash_interest</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">borrow_fees</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash_interest</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="p">}</span>
 
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span></div>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span></div>
 
 
     <span class="nd">@property</span>
@@ -304,7 +303,7 @@
 
 <span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span></div>
 
 
     <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
@@ -315,38 +314,17 @@
 
 <span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">trading_costs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Builder.cash">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.cash">[docs]</a>
     <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Builder.trading_costs">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.trading_costs">[docs]</a>
-    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Builder.cash_interest">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.cash_interest">[docs]</a>
-    <span class="k">def</span> <span class="nf">cash_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Builder.borrow_fees">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.borrow_fees">[docs]</a>
-    <span class="k">def</span> <span class="nf">borrow_fees</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span></div>
 
 
     <span class="nd">@property</span>
@@ -391,11 +369,19 @@
 <span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
+        <span class="n">portfolio</span> <span class="o">=</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
             <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
             <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
             <span class="n">cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="p">,</span>
-        <span class="p">)</span></div>
+            <span class="n">trading_costs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span><span class="p">,</span>
+            <span class="n">borrow_fees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span><span class="p">,</span>
+            <span class="n">borrow_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="p">,</span>
+            <span class="n">risk_free_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="p">,</span>
+            <span class="n">cash_interest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span><span class="p">,</span>
+            <span class="n">flow</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cashflow</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">portfolio</span></div>
 </div>
 
 </pre></div>
