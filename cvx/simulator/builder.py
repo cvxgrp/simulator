@@ -202,18 +202,6 @@ class Builder:
         return self.__cash
 
     @property
-    def trading_costs(self):
-        return self.__trading_costs
-
-    @property
-    def cash_interest(self):
-        return self.__cash_interest
-
-    @property
-    def borrow_fees(self):
-        return self.__borrow_fees
-
-    @property
     def cashposition(self):
         return self.position * self.current_prices
 
@@ -255,13 +243,5 @@ class Builder:
             cash_interest=self.__cash_interest,
             flow=self.cashflow,
         )
-
-        # portfolio.timeseries["trading_costs"] = self.trading_costs
-        # portfolio.timeseries["flow"] = self.cashflow
-        # portfolio.timeseries["borrow_fees"] = self.borrow_fees
-        # portfolio.timeseries["cash_interest"] = self.cash_interest
-        # portfolio.timeseries["cash"] = self.cash
-        # portfolio.timeseries["borrow_rate"] = self.borrow_rate
-        # portfolio.timeseries["risk_free_rate"] = self.risk_free_rate
 
         return portfolio
