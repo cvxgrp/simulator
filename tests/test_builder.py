@@ -9,7 +9,6 @@ import pytest
 
 from cvx.simulator.builder import Builder
 from cvx.simulator.interpolation import interpolate
-from cvx.simulator.trading_costs import LinearCostModel
 
 
 @pytest.fixture()
@@ -57,14 +56,6 @@ def test_index(builder, prices):
     assert set(builder.index) == set(prices.index)
 
 
-def test_trading_cost_model_is_none(builder):
-    """
-    Test that the trading cost model is None
-    :param builder: the builder object (fixture)
-    """
-    assert builder.trading_cost_model is None
-
-
 def test_stocks(builder):
     """
     Test that the stocks are all zero
@@ -72,16 +63,6 @@ def test_stocks(builder):
     :param prices: the prices frame (fixture)
     """
     pd.testing.assert_frame_equal(builder.stocks, np.NaN * builder.prices)
-
-
-def test_build_with_risk_free_rate(prices):
-    b = Builder(prices=prices, risk_free_rate=pd.Series(index=prices.index, data=0.01))
-    assert b.risk_free_rate.values[0] == 0.0
-
-
-def test_build_with_borrow_rate(prices):
-    b = Builder(prices=prices, borrow_rate=pd.Series(index=prices.index, data=0.01))
-    assert b.risk_free_rate.values[0] == 0.0
 
 
 def test_build_empty(builder, prices):
@@ -185,30 +166,6 @@ def test_set_position(prices):
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
-
-
-def test_with_costmodel(prices):
-    b = Builder(
-        prices=prices[["B", "C"]].head(5),
-        initial_cash=50000,
-        trading_cost_model=LinearCostModel(factor=0.0010),
-        input_data={"volume": prices[["B", "C"]].head(5)},
-    )
-
-    for times, state in b:
-        b.position = state.nav / (state.prices * 2)
-
-    portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49722.58492364325)
-
-
-def test_input_data(prices):
-    b = Builder(
-        prices=prices, initial_cash=50000, input_data={"volume": prices.ffill()}
-    )
-    for t, state in b:
-        print(state.volume)
-        pd.testing.assert_series_equal(state.prices, state.input_data["volume"])
 
 
 def test_weights_on_wrong_days(resource_dir):

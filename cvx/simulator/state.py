@@ -11,14 +11,13 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from cvx.simulator.trading_costs import TradingCostModel
+# from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass
@@ -42,12 +41,12 @@ class State:
     prices: pd.Series = None
     __position: pd.Series = None
     __trades: pd.Series = None
-    __trading_costs: pd.Series = None
-    risk_free_rate: float = 0.0
-    borrow_rate: float = 0.0
+    # __trading_costs: pd.Series = None
+    # risk_free_rate: float = 0.0
+    # borrow_rate: float = 0.0
     cash: float = 1e6
-    input_data: dict[str, Any] = field(default_factory=dict)
-    model: TradingCostModel = None
+    # input_data: dict[str, Any] = field(default_factory=dict)
+    # model: TradingCostModel = None
     time: datetime = None
     days: int = 1
 
@@ -116,26 +115,20 @@ class State:
         return self.__position
 
     @property
-    def cash_interest(self):
+    def gmv(self):
         """
-        How much interest do we get for the cash
+        gross market value, e.g. abs(short) + long
         """
-        return self.cash * (self.risk_free_rate + 1) ** self.days - self.cash
-
-    @property
-    def borrow_fees(self):
-        """
-        How much interest do we pay for the short position
-        """
-        return self.short * (self.borrow_rate + 1) ** self.days - self.short
+        return self.cashposition.abs().sum()
 
     @position.setter
     def position(self, position: np.array):
         # update the cash first using the risk-free interest rate
         # Note the risk_free_rate is shifted
         # e.g. we update our cash using the old risk_free_rate
-        for fee in [self.cash_interest, self.borrow_fees]:
-            self.cash += fee
+
+        # for fee in [self.borrow_fees]:
+        #    self.cash += fee
 
         # update the position
         position = pd.Series(index=self.assets, data=position)
@@ -149,21 +142,14 @@ class State:
         # cash is spent for shares or received for selling them
         self.cash -= self.gross.sum()
 
-        if self.model is not None:
-            self.__trading_costs = self.model.eval(
-                self.prices, trades=self.trades, **self.input_data
-            ).sum()
+        # if self.model is not None:
+        #    self.__trading_costs = self.model.eval(
+        #        self.prices, trades=self.trades, **self.input_data
+        #    ).sum()
 
-            self.cash -= self.trading_costs.sum()
-        else:
-            self.__trading_costs = pd.Series(index=self.assets, data=0.0)
-
-    def __getattr__(self, item):
-        return self.input_data[item]
-
-    @property
-    def trading_costs(self):
-        return self.__trading_costs
+        #    self.cash -= self.trading_costs.sum()
+        # else:
+        #    self.__trading_costs = pd.Series(index=self.assets, data=0.0)
 
     @property
     def trades(self):

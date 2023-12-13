@@ -13,8 +13,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Generator
+from dataclasses import dataclass
+from typing import Generator
 
 import numpy as np
 import pandas as pd
@@ -22,17 +22,18 @@ import pandas as pd
 from cvx.simulator.interpolation import valid
 from cvx.simulator.portfolio import EquityPortfolio
 from cvx.simulator.state import State
-from cvx.simulator.trading_costs import TradingCostModel
+
+# from cvx.simulator.trading_costs import TradingCostModel
 
 
 @dataclass
 class Builder:
     prices: pd.DataFrame
-    trading_cost_model: TradingCostModel = None
-    risk_free_rate: pd.Series = None
-    borrow_rate: pd.Series = None
+    # trading_cost_model: TradingCostModel = None
+    # risk_free_rate: pd.Series = None
+    # borrow_rate: pd.Series = None
     initial_cash: float = 1e6
-    input_data: dict[str, Any] = field(default_factory=dict)
+    # input_data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         """
@@ -59,31 +60,10 @@ class Builder:
             dtype=float,
         )
 
-        # self._state.cash = self.initial_cash
-        # self._state.model = self.trading_cost_model
-
-        if self.risk_free_rate is None:
-            self.risk_free_rate = pd.Series(index=self.index, data=0.0)
-        else:
-            # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
-            self.risk_free_rate = (
-                self.risk_free_rate.loc[self.index].shift(1).fillna(0.0)
-            )
-
-        if self.borrow_rate is None:
-            self.borrow_rate = pd.Series(index=self.index, data=0.0)
-        else:
-            # We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1
-            self.borrow_rate = self.borrow_rate.loc[self.index].shift(1).fillna(0.0)
-
         self.__cash = pd.Series(index=self.index, data=np.NaN)
-        self.__trading_costs = pd.Series(index=self.index, data=np.NaN)
-        self.__cash_interest = pd.Series(index=self.index, data=np.NaN)
-        self.__borrow_fees = pd.Series(index=self.index, data=np.NaN)
-
         self.__state = State()
         self.__state.cash = self.initial_cash
-        self.__state.model = self.trading_cost_model
+        # self.__state.model = self.trading_cost_model
 
     @property
     def valid(self):
@@ -161,15 +141,15 @@ class Builder:
                 self.__state.days = 0
 
             self.__state.time = t
-            self.__state.risk_free_rate = self.risk_free_rate.loc[t]
-            self.__state.borrow_rate = self.borrow_rate.loc[t]
+            # self.__state.risk_free_rate = self.risk_free_rate.loc[t]
+            # self.__state.borrow_rate = self.borrow_rate.loc[t]
 
-            self.__borrow_fees[self.__state.time] = self.__state.borrow_fees
-            self.__cash_interest[self.__state.time] = self.__state.cash_interest
+            # self.__borrow_fees[self.__state.time] = self.__state.borrow_fees
+            # self.__cash_interest[self.__state.time] = self.__state.cash_interest
 
-            self.__state.input_data = {
-                key: data.loc[t] for key, data in self.input_data.items()
-            }
+            # self.__state.input_data = {
+            #    key: data.loc[t] for key, data in self.input_data.items()
+            # }
 
             yield self.index[self.index <= t], self.__state
 
@@ -195,7 +175,7 @@ class Builder:
         self.__state.position = position
 
         self.__cash[self.__state.time] = self.__state.cash
-        self.__trading_costs[self.__state.time] = self.__state.trading_costs.sum()
+        # self.__trading_costs[self.__state.time] = self.__state.trading_costs.sum()
 
     @property
     def cash(self):
@@ -236,11 +216,6 @@ class Builder:
             prices=self.prices,
             stocks=self.stocks,
             cash=self.cash,
-            trading_costs=self.__trading_costs,
-            borrow_fees=self.__borrow_fees,
-            borrow_rate=self.borrow_rate,
-            risk_free_rate=self.risk_free_rate,
-            cash_interest=self.__cash_interest,
             flow=self.cashflow,
         )
 

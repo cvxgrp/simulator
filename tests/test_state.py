@@ -5,7 +5,7 @@ from cvx.simulator.state import State
 
 
 def test_trade(prices):
-    s = State(prices=prices[["A", "B", "C"]].iloc[0], risk_free_rate=0.0)
+    s = State(prices=prices[["A", "B", "C"]].iloc[0])
     s.time = prices.index[0]
     print(s.assets)
 
@@ -31,6 +31,7 @@ def test_update(prices):
     assert s.cash == 1206047.2
     assert s.value == -206047.2
     assert s.nav == 1e6
+    assert s.gmv == 1670455.8
 
 
 def test_state():
