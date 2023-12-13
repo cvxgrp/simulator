@@ -5,14 +5,14 @@ from cvx.simulator.state import State
 
 
 def test_trade(prices):
-    s = State(prices=prices[["A", "B", "C"]].iloc[0], risk_free_rate=0.0)
+    s = State(prices=prices[["A", "B", "C"]].iloc[0])
     s.time = prices.index[0]
     print(s.assets)
 
     s.position = np.array([10, 20, -10])
     print(s.position)
 
-    x = s._trade(pd.Series({"B": 25, "C": -15, "D": 40}))
+    x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(s.position, fill_value=0)
     pd.testing.assert_series_equal(
         x, pd.Series({"A": -10.0, "B": 5.0, "C": -5.0, "D": 40.0})
     )
@@ -20,7 +20,7 @@ def test_trade(prices):
 
 def test_trade_no_init_pos(prices):
     s = State(prices=prices.iloc[0])
-    x = s._trade(pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
+    x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(s.position, fill_value=0)
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
@@ -31,6 +31,7 @@ def test_update(prices):
     assert s.cash == 1206047.2
     assert s.value == -206047.2
     assert s.nav == 1e6
+    assert s.gmv == 1670455.8
 
 
 def test_state():

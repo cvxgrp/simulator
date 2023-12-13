@@ -21,14 +21,10 @@ def means(prices):
 
 
 @pytest.fixture()
-def builder(prices, spreads, rf):
+def builder(prices):
     return Builder(
         prices=prices,
         initial_cash=1e6,
-        risk_free_rate=rf,
-        borrow_rate=3 * rf,
-        input_data={"spreads": spreads},
-        # trading_cost_model=SpreadModel(),
     )
 
 
@@ -44,7 +40,7 @@ def covariance(prices):
     return {day: covariance_df.loc[day] for day in returns.index}
 
 
-def test_markowitz(builder, feasible, covariance, means):
+def test_markowitz(builder, feasible, covariance, means, spreads):
     """
     Test the markowitz portfolio complete with interest on cash and borrowing fees.
     """
@@ -53,11 +49,7 @@ def test_markowitz(builder, feasible, covariance, means):
         # the very first and the very last elements are ignored
         if t[-1] in feasible:
             # State is exposing numerous quantities
-            print(state.cash_interest)
-            print(state.borrow_fees)
             print(state.cash)
-            #
-            print(state.spreads)
             print(state.prices)
             print(state.weights)
             print(state.cashposition)
@@ -65,6 +57,15 @@ def test_markowitz(builder, feasible, covariance, means):
             print(state.leverage)
             print(state.nav)
             print(state.assets)
+            print(state.short)
+
+            r = 0.02
+
+            # earn interest rate on the existing cash
+            state.cash = (1 + r / 365) ** state.days * state.cash
+
+            # pay fee on gmv to the broker
+            state.cash -= 0.0025 / 365 * state.gmv
 
             # We define the input needed for the optimizer
             _input = OptimizationInput(
@@ -84,20 +85,18 @@ def test_markowitz(builder, feasible, covariance, means):
             # some quantities are only post-trading interesting
             print(state.trades)
             # should trading costs be given per asset?
-            print(state.trading_costs)
             print(state.cash)
+
+            state.cash -= (
+                state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)
+            ).sum()
 
     # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()
 
-    print(portfolio.cash_interest)
-    print(portfolio.borrow_fees)
-    print(portfolio.trading_costs)
     print(portfolio.cash)
     print(portfolio.flow)
-    print(portfolio.borrow_rate)
-    print(portfolio.risk_free_rate)
 
     # The portfolio object is exposing to numerous analytics via quantstats
     portfolio.html(output="report.html")

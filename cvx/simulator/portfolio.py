@@ -76,11 +76,6 @@ class EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
     cash: pd.Series
-    trading_costs: pd.Series
-    borrow_fees: pd.Series
-    borrow_rate: pd.Series
-    risk_free_rate: pd.Series
-    cash_interest: pd.Series
     flow: pd.Series
 
     # timeseries: dict[str, pd.Series] = field(default_factory=dict)
