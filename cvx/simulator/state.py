@@ -17,8 +17,6 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-# from cvx.simulator.trading_costs import TradingCostModel
-
 
 @dataclass
 class State:
@@ -126,7 +124,7 @@ class State:
         position = pd.Series(index=self.assets, data=position)
 
         # compute the trades (can be fractional)
-        self.__trades = self._trade(target_pos=position)
+        self.__trades = position.subtract(self.position, fill_value=0.0)
 
         # update only now as otherwise the trades would be wrong
         self.__position = position
@@ -145,9 +143,3 @@ class State:
     @property
     def assets(self) -> pd.Index:
         return self.prices.dropna().index
-
-    def _trade(self, target_pos: pd.Series) -> pd.Series:
-        """
-        Compute the trade vector given a target position
-        """
-        return target_pos.subtract(self.position, fill_value=0.0)
