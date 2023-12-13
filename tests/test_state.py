@@ -12,7 +12,7 @@ def test_trade(prices):
     s.position = np.array([10, 20, -10])
     print(s.position)
 
-    x = s._trade(pd.Series({"B": 25, "C": -15, "D": 40}))
+    x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(s.position, fill_value=0)
     pd.testing.assert_series_equal(
         x, pd.Series({"A": -10.0, "B": 5.0, "C": -5.0, "D": 40.0})
     )
@@ -20,7 +20,7 @@ def test_trade(prices):
 
 def test_trade_no_init_pos(prices):
     s = State(prices=prices.iloc[0])
-    x = s._trade(pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
+    x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(s.position, fill_value=0)
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 

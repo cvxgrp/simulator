@@ -57,6 +57,7 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             print(state.leverage)
             print(state.nav)
             print(state.assets)
+            print(state.short)
 
             r = 0.02
 
