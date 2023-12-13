@@ -78,29 +78,9 @@ Classes
 
       
 
-   .. py:attribute:: trading_cost_model
-      :type: cvx.simulator.trading_costs.TradingCostModel
-
-      
-
-   .. py:attribute:: risk_free_rate
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: borrow_rate
-      :type: pandas.Series
-
-      
-
    .. py:attribute:: initial_cash
       :type: float
       :value: 1000000.0
-
-      
-
-   .. py:attribute:: input_data
-      :type: dict[str, Any]
 
       
 

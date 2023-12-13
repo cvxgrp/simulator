@@ -81,16 +81,9 @@ Classes
    .. py:property:: position
 
 
-   .. py:property:: cash_interest
+   .. py:property:: gmv
 
-      How much interest do we get for the cash
-
-   .. py:property:: borrow_fees
-
-      How much interest do we pay for the short position
-
-   .. py:property:: trading_costs
-
+      gross market value, e.g. abs(short) + long
 
    .. py:property:: trades
 
@@ -117,36 +110,9 @@ Classes
 
       
 
-   .. py:attribute:: __trading_costs
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: risk_free_rate
-      :type: float
-      :value: 0.0
-
-      
-
-   .. py:attribute:: borrow_rate
-      :type: float
-      :value: 0.0
-
-      
-
    .. py:attribute:: cash
       :type: float
       :value: 1000000.0
-
-      
-
-   .. py:attribute:: input_data
-      :type: dict[str, Any]
-
-      
-
-   .. py:attribute:: model
-      :type: cvx.simulator.trading_costs.TradingCostModel
 
       
 
@@ -160,13 +126,5 @@ Classes
       :value: 1
 
       
-
-   .. py:method:: __getattr__(item)
-
-
-   .. py:method:: _trade(target_pos: pandas.Series) -> pandas.Series
-
-      Compute the trade vector given a target position
-
 
 

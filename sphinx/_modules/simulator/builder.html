@@ -92,8 +92,8 @@
 <span class="c1">#    limitations under the License.</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -101,7 +101,6 @@
 <span class="kn">from</span> <span class="nn">cvx.simulator.interpolation</span> <span class="kn">import</span> <span class="n">valid</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.state</span> <span class="kn">import</span> <span class="n">State</span>
-<span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
 
 
 <span class="nd">@dataclass</span>
@@ -112,25 +111,9 @@
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.prices">[docs]</a>
     <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
 
-<div class="viewcode-block" id="Builder.trading_cost_model">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.trading_cost_model">[docs]</a>
-    <span class="n">trading_cost_model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="Builder.risk_free_rate">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.risk_free_rate">[docs]</a>
-    <span class="n">risk_free_rate</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="Builder.borrow_rate">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.borrow_rate">[docs]</a>
-    <span class="n">borrow_rate</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
-
 <div class="viewcode-block" id="Builder.initial_cash">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.initial_cash">[docs]</a>
     <span class="n">initial_cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
-
-<div class="viewcode-block" id="Builder.input_data">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.input_data">[docs]</a>
-    <span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Builder.__post_init__">
@@ -160,31 +143,9 @@
             <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># self._state.cash = self.initial_cash</span>
-        <span class="c1"># self._state.model = self.trading_cost_model</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># We shift the risk_free rate to make sure on day t we access the risk_free rate of day t-1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">__state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_cost_model</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span></div>
 
 
     <span class="nd">@property</span>
@@ -280,15 +241,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">borrow_fees</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash_interest</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">}</span>
 
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span></div>
 
@@ -318,7 +270,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">cash</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Builder.cash">
@@ -373,11 +324,6 @@
             <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
             <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
             <span class="n">cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="p">,</span>
-            <span class="n">trading_costs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span><span class="p">,</span>
-            <span class="n">borrow_fees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__borrow_fees</span><span class="p">,</span>
-            <span class="n">borrow_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span><span class="p">,</span>
-            <span class="n">risk_free_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span><span class="p">,</span>
-            <span class="n">cash_interest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cash_interest</span><span class="p">,</span>
             <span class="n">flow</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cashflow</span><span class="p">,</span>
         <span class="p">)</span>
 

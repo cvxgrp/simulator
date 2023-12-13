@@ -323,31 +323,6 @@ Classes
 
       
 
-   .. py:attribute:: trading_costs
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: borrow_fees
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: borrow_rate
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: risk_free_rate
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: cash_interest
-      :type: pandas.Series
-
-      
-
    .. py:attribute:: flow
       :type: pandas.Series
 

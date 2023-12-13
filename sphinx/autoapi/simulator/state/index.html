@@ -175,21 +175,10 @@ which is the amount of cash in the portfolio as a fraction of the total portfoli
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="simulator.state.State.cash_interest">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash_interest</span></span><a class="reference internal" href="../../../_modules/simulator/state.html#State.cash_interest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.cash_interest" title="Link to this definition"></a></dt>
-<dd><p>How much interest do we get for the cash</p>
+<dt class="sig sig-object py" id="simulator.state.State.gmv">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gmv</span></span><a class="reference internal" href="../../../_modules/simulator/state.html#State.gmv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.gmv" title="Link to this definition"></a></dt>
+<dd><p>gross market value, e.g. abs(short) + long</p>
 </dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="simulator.state.State.borrow_fees">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">borrow_fees</span></span><a class="reference internal" href="../../../_modules/simulator/state.html#State.borrow_fees"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.borrow_fees" title="Link to this definition"></a></dt>
-<dd><p>How much interest do we pay for the short position</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="simulator.state.State.trading_costs">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trading_costs</span></span><a class="reference internal" href="../../../_modules/simulator/state.html#State.trading_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.trading_costs" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator.state.State.trades">
@@ -222,33 +211,8 @@ which is the amount of cash in the portfolio as a fraction of the total portfoli
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.state.State.__trading_costs">
-<span class="sig-name descname"><span class="pre">__trading_costs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.__trading_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.__trading_costs" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.state.State.risk_free_rate">
-<span class="sig-name descname"><span class="pre">risk_free_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.risk_free_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.risk_free_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.state.State.borrow_rate">
-<span class="sig-name descname"><span class="pre">borrow_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.borrow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.borrow_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.state.State.cash">
 <span class="sig-name descname"><span class="pre">cash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.cash" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.state.State.input_data">
-<span class="sig-name descname"><span class="pre">input_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.input_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.input_data" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="simulator.state.State.model">
-<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">cvx.simulator.trading_costs.TradingCostModel</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.model" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -260,17 +224,6 @@ which is the amount of cash in the portfolio as a fraction of the total portfoli
 <dt class="sig sig-object py" id="simulator.state.State.days">
 <span class="sig-name descname"><span class="pre">days</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference internal" href="../../../_modules/simulator/state.html#State.days"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.days" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.state.State.__getattr__">
-<span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/simulator/state.html#State.__getattr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State.__getattr__" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="simulator.state.State._trade">
-<span class="sig-name descname"><span class="pre">_trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../../_modules/simulator/state.html#State._trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.state.State._trade" title="Link to this definition"></a></dt>
-<dd><p>Compute the trade vector given a target position</p>
-</dd></dl>
 
 </dd></dl>
 

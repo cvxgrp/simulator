@@ -90,14 +90,11 @@
 <span class="c1">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1">#    See the License for the specific language governing permissions and</span>
 <span class="c1">#    limitations under the License.</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="kn">from</span> <span class="nn">cvx.simulator.trading_costs</span> <span class="kn">import</span> <span class="n">TradingCostModel</span>
 
 
 <span class="nd">@dataclass</span>
@@ -132,29 +129,9 @@
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__trades">[docs]</a>
     <span class="n">__trades</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="State.__trading_costs">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__trading_costs">[docs]</a>
-    <span class="n">__trading_costs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="State.risk_free_rate">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.risk_free_rate">[docs]</a>
-    <span class="n">risk_free_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
-
-<div class="viewcode-block" id="State.borrow_rate">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.borrow_rate">[docs]</a>
-    <span class="n">borrow_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
-
 <div class="viewcode-block" id="State.cash">
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.cash">[docs]</a>
     <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
-
-<div class="viewcode-block" id="State.input_data">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.input_data">[docs]</a>
-    <span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="State.model">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.model">[docs]</a>
-    <span class="n">model</span><span class="p">:</span> <span class="n">TradingCostModel</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="State.time">
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.time">[docs]</a>
@@ -251,23 +228,13 @@
 
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="State.cash_interest">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.cash_interest">[docs]</a>
-    <span class="k">def</span> <span class="nf">cash_interest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="State.gmv">
+<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.gmv">[docs]</a>
+    <span class="k">def</span> <span class="nf">gmv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        How much interest do we get for the cash</span>
+<span class="sd">        gross market value, e.g. abs(short) + long</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">risk_free_rate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">days</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="State.borrow_fees">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.borrow_fees">[docs]</a>
-    <span class="k">def</span> <span class="nf">borrow_fees</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        How much interest do we pay for the short position</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">short</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">borrow_rate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">days</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">short</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
 
     <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
@@ -275,42 +242,18 @@
         <span class="c1"># update the cash first using the risk-free interest rate</span>
         <span class="c1"># Note the risk_free_rate is shifted</span>
         <span class="c1"># e.g. we update our cash using the old risk_free_rate</span>
-        <span class="k">for</span> <span class="n">fee</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cash_interest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_fees</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">+=</span> <span class="n">fee</span>
 
         <span class="c1"># update the position</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
 
         <span class="c1"># compute the trades (can be fractional)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__trades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trade</span><span class="p">(</span><span class="n">target_pos</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__trades</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
         <span class="c1"># update only now as otherwise the trades would be wrong</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__position</span> <span class="o">=</span> <span class="n">position</span>
 
         <span class="c1"># cash is spent for shares or received for selling them</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gross</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">trades</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trades</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">input_data</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">cash</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trading_costs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-
-<div class="viewcode-block" id="State.__getattr__">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.__getattr__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="State.trading_costs">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.trading_costs">[docs]</a>
-    <span class="k">def</span> <span class="nf">trading_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trading_costs</span></div>
-
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="State.trades">
@@ -331,15 +274,6 @@
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.assets">[docs]</a>
     <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span></div>
-
-
-<div class="viewcode-block" id="State._trade">
-<a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State._trade">[docs]</a>
-    <span class="k">def</span> <span class="nf">_trade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the trade vector given a target position</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
