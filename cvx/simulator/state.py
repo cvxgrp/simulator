@@ -41,12 +41,7 @@ class State:
     prices: pd.Series = None
     __position: pd.Series = None
     __trades: pd.Series = None
-    # __trading_costs: pd.Series = None
-    # risk_free_rate: float = 0.0
-    # borrow_rate: float = 0.0
     cash: float = 1e6
-    # input_data: dict[str, Any] = field(default_factory=dict)
-    # model: TradingCostModel = None
     time: datetime = None
     days: int = 1
 
@@ -127,9 +122,6 @@ class State:
         # Note the risk_free_rate is shifted
         # e.g. we update our cash using the old risk_free_rate
 
-        # for fee in [self.borrow_fees]:
-        #    self.cash += fee
-
         # update the position
         position = pd.Series(index=self.assets, data=position)
 
@@ -141,15 +133,6 @@ class State:
 
         # cash is spent for shares or received for selling them
         self.cash -= self.gross.sum()
-
-        # if self.model is not None:
-        #    self.__trading_costs = self.model.eval(
-        #        self.prices, trades=self.trades, **self.input_data
-        #    ).sum()
-
-        #    self.cash -= self.trading_costs.sum()
-        # else:
-        #    self.__trading_costs = pd.Series(index=self.assets, data=0.0)
 
     @property
     def trades(self):

@@ -110,25 +110,6 @@ def test_iteration_state(builder):
         )
 
 
-# def test_build(builder_weights):
-#     """
-#     Test that the portfolio is built correctly
-#     :param builder_weights: the builder with 1/n weights (fixture)
-#     """
-#     # build the portfolio directly
-#     portfolio = builder_weights.build()
-#
-#     # loop and set the weights explicitly
-#     for t, state in builder_weights:
-#         builder_weights.weights = np.ones(7) / 7
-#
-#     # build again
-#     portfolio2 = builder_weights.build()
-#
-#     # verify both methods give the same result
-#     pd.testing.assert_series_equal(portfolio.nav, portfolio2.nav)
-
-
 def test_set_weights(prices):
     """
     Test that the weights are set correctly
