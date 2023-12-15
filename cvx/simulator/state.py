@@ -32,6 +32,8 @@ class State:
 
     cash: the amount of cash available in the portfolio.
 
+    time: the current time of the portfolio
+
     By default, prices and position are set to None, while cash is set to 1 million.
     These attributes can be updated and accessed through setter and getter methods
     """
@@ -116,10 +118,10 @@ class State:
 
     @position.setter
     def position(self, position: np.array):
-        # update the cash first using the risk-free interest rate
-        # Note the risk_free_rate is shifted
-        # e.g. we update our cash using the old risk_free_rate
-
+        """
+        Update the position of the state. Computes the required trades
+        and updates the cash balance accordingly.
+        """
         # update the position
         position = pd.Series(index=self.assets, data=position)
 
@@ -134,6 +136,11 @@ class State:
 
     @property
     def trades(self):
+        """
+        The trades property returns the trades currently needed to reach the position.
+        Most helpful when computing the trading costs following the move to
+        a new position.
+        """
         return self.__trades
 
     @property
@@ -142,4 +149,7 @@ class State:
 
     @property
     def assets(self) -> pd.Index:
+        """
+        The assets property returns the assets currently in the portfolio.
+        """
         return self.prices.dropna().index

@@ -19,8 +19,8 @@ from typing import Generator
 import numpy as np
 import pandas as pd
 
+from cvx.simulator.equity.portfolio import EquityPortfolio
 from cvx.simulator.interpolation import valid
-from cvx.simulator.portfolio import EquityPortfolio
 from cvx.simulator.state import State
 
 
@@ -108,33 +108,41 @@ class Builder:
 
     @weights.setter
     def weights(self, weights: np.array) -> None:
+        """
+        The weights property sets the current weights of the portfolio.
+        We convert the weights to positions using the current prices and the NAV
+        """
         self.position = self.__state.nav * weights / self.current_prices
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.
-        The method yields a list of dates seen so far
-        (excluding the first date) and returns a tuple
+        The method yields a list of dates seen so far and returns a tuple
         containing the list of dates and the current portfolio state.
 
         Yield:
 
-        interval: a pandas DatetimeIndex object containing the dates seen so far.
-
+        time: a pandas DatetimeIndex object containing the dates seen so far.
         state: the current state of the portfolio,
+
         taking into account the stock prices at each interval.
         """
         for t in self.index:
-            # valuation of the current position
+            # update the current prices for the portfolio
             self.__state.prices = self.prices.loc[t]
+
             try:
                 self.__state.days = (t - self.__state.time).days
             except TypeError:
+                # self.__state.time might be still None, so we set gap to the
+                # previous time to 0
                 self.__state.days = 0
 
+            # update the current time for the state
             self.__state.time = t
 
+            # yield the vector of times seen so far and the current state
             yield self.index[self.index <= t], self.__state
 
     @property
@@ -162,24 +170,31 @@ class Builder:
 
     @property
     def cash(self):
+        """
+        The cash property returns the current cash available in the portfolio.
+        """
         return self.__cash
 
     @property
     def cashposition(self):
+        """
+        The cashposition property returns the current cash position of the portfolio.
+        """
         return self.position * self.current_prices
 
     @property
-    def cashflow(self):
-        flow = self.cash.diff()
-        flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
-        return flow
-
-    @property
     def stocks(self):
+        """
+        The units property returns the frame of holdings of the portfolio.
+        Useful mainly for testing
+        """
         return self.__stocks
 
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
+        """
+        The cashposition property sets the current cash position of the portfolio.
+        """
         self.position = cashposition / self.current_prices
 
     def build(self) -> EquityPortfolio:
@@ -187,19 +202,16 @@ class Builder:
         class based on the internal state of the Portfolio builder object.
 
         Returns: EquityPortfolio: A new instance of the EquityPortfolio class
-        with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+        with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.
 
         Notes: The function simply creates a new instance of the EquityPortfolio
-        class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+        class with the attributes (prices, units, initial_cash, trading_cost_model) equal
         to the corresponding attributes in the Portfolio builder object.
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
         portfolio = EquityPortfolio(
-            prices=self.prices,
-            stocks=self.stocks,
-            cash=self.cash,
-            flow=self.cashflow,
+            prices=self.prices, units=self.stocks, cash=self.cash
         )
 
         return portfolio

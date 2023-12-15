@@ -48,7 +48,7 @@ def test_case(columns, index, prices):
     # build the portfolio
     portfolio = b.build()
 
-    # 1) first buy 10 of B  2) buy 10 of A and sell 5 of B  3) do nothing 4) your stocks in B are now worthless
+    # 1) first buy 10 of B  2) buy 10 of A and sell 5 of B  3) do nothing 4) your units in B are now worthless
     stocks = pd.DataFrame(
         index=index,
         columns=columns,
@@ -56,7 +56,7 @@ def test_case(columns, index, prices):
     )
     pd.testing.assert_frame_equal(stocks, b.stocks)
 
-    # equity is the value of your stocks,
+    # equity is the value of your units,
     # 1) 2000 in B 2) 1000 in A and 1000 in B 3) 1000 in A and 1000 in B 4) 1000 in A, B worthless
     equity = pd.DataFrame(
         index=index,

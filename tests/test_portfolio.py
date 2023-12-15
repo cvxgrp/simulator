@@ -50,11 +50,11 @@ def test_get(portfolio):
 
 def test_stocks(portfolio):
     """
-    Test that the stocks of the portfolio have all been set to 1.0
+    Test that the units of the portfolio have all been set to 1.0
     :param portfolio: the portfolio object (fixture)
     """
     stocks = pd.DataFrame(index=portfolio.index, columns=portfolio.assets, data=1.0)
-    pd.testing.assert_frame_equal(portfolio.stocks, stocks)
+    pd.testing.assert_frame_equal(portfolio.units, stocks)
 
 
 def test_weights(portfolio):
@@ -103,7 +103,7 @@ def test_iter(prices):
     s = pd.Series(index=portfolio.index, data=0.0)
     s[s.index[0]] = 1.0
 
-    # trades can either be measured in stocks or in currency units
+    # trades can either be measured in units or in currency units
     pd.testing.assert_series_equal(portfolio.trades_stocks["A"], s, check_names=False)
     pd.testing.assert_series_equal(
         portfolio.trades_currency["A"], s * portfolio.prices["A"], check_names=False
@@ -186,7 +186,7 @@ def test_portfolio(prices):
     portfolio = b.build()
 
     pd.testing.assert_frame_equal(
-        portfolio.stocks,
+        portfolio.units,
         pd.DataFrame(index=prices.index, columns=prices.keys(), data=1000.0),
     )
 

@@ -1,11 +1,8 @@
 from dataclasses import dataclass
-from typing import Any
 
 import cvxpy as cp
 import numpy as np
 import pandas as pd
-
-from cvx.simulator.trading_costs import TradingCostModel
 
 
 def synthetic_returns(
@@ -68,11 +65,3 @@ def basic_markowitz(inputs: OptimizationInput) -> np.ndarray:
     problem.solve()
     assert problem.status in {cp.OPTIMAL, cp.OPTIMAL_INACCURATE}, problem.status
     return w.value, c.value
-
-
-class SpreadModel(TradingCostModel):
-    def eval(self, prices: pd.Series, trades: pd.Series, **kwargs: Any) -> pd.Series:
-        assert "spreads" in kwargs, "spreads must be provided"
-        spreads = kwargs["spreads"]
-
-        return trades.abs() * (prices * spreads / 2)

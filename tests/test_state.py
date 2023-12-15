@@ -40,7 +40,7 @@ def test_state():
     cash = 400
     state = State(cash=cash, prices=prices)
     state.position = positions
-    # value is the money in stocks
+    # value is the money in units
     assert state.value == 1100.0
     # nav is the value plus the cash
     assert state.nav == 400.0
