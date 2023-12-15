@@ -76,7 +76,7 @@ class EquityPortfolio:
     prices: pd.DataFrame
     stocks: pd.DataFrame
     cash: pd.Series
-    flow: pd.Series
+    # flow: pd.Series
 
     # timeseries: dict[str, pd.Series] = field(default_factory=dict)
 

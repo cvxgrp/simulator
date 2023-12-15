@@ -96,7 +96,6 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     portfolio.snapshot()
 
     print(portfolio.cash)
-    print(portfolio.flow)
 
     # The portfolio object is exposing to numerous analytics via quantstats
     portfolio.html(output="report.html")

@@ -213,8 +213,8 @@ class Builder:
         portfolio = EquityPortfolio(
             prices=self.prices,
             stocks=self.stocks,
-            cash=self.cash,
-            flow=self.cashflow,
+            cash=self.cash
+            # flow=self.cashflow,
         )
 
         return portfolio
