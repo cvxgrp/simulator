@@ -59,7 +59,7 @@ class Portfolio:
     @property
     @abstractmethod
     def nav(self):
-        pass
+        """A function that returns a pandas series representing the NAV"""
 
     @property
     def highwater(self) -> pd.Series:
