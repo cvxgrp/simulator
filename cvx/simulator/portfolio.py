@@ -15,36 +15,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from typing import Any
 
 import pandas as pd
 import quantstats as qs
 
+from cvx.simulator.plot import Plot
+
 qs.extend_pandas()
-
-
-class Plot(Enum):
-    DAILY_RETURNS = 1
-    DISTRIBUTION = 2
-    DRAWDOWN = 3
-    DRAWDOWNS_PERIODS = 4
-    EARNINGS = 5
-    HISTOGRAM = 6
-    LOG_RETURNS = 7
-    MONTHLY_HEATMAP = 8
-    # see issue: https://github.com/ranaroussi/quantstats/issues/276
-    MONTHLY_RETURNS = 9
-    RETURNS = 10
-    ROLLING_BETA = 11
-    ROLLING_SHARPE = 12
-    ROLLING_SORTINO = 13
-    ROLLING_VOLATILITY = 14
-    YEARLY_RETURNS = 15
-
-    def plot(self, returns: pd.DataFrame, **kwargs: Any) -> Any:
-        func = getattr(qs.plots, self.name.lower())
-        return func(returns=returns, **kwargs)
 
 
 @dataclass(frozen=True)
@@ -151,7 +129,7 @@ class EquityPortfolio:
         The cashflow property returns the cash flow of the portfolio.
         """
         flow = self.cash.diff()
-        flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
+        flow.iloc[0] = -self.cash.iloc[0]  # - self.initial_cash
         return flow
 
     def __getitem__(self, time: datetime) -> pd.Series:

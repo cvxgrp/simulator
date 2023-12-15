@@ -83,9 +83,9 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
 
             # the builder keeps also track of the state
             # some quantities are only post-trading interesting
-            print(state.trades)
+            # print(state.trades)
             # should trading costs be given per asset?
-            print(state.cash)
+            # print(state.cash)
 
             state.cash -= (
                 state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)
@@ -101,3 +101,4 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     portfolio.html(output="report.html")
     portfolio.snapshot()
     portfolio.nav.plot()
+    print(portfolio.cashflow)
