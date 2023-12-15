@@ -19,8 +19,8 @@ from typing import Generator
 import numpy as np
 import pandas as pd
 
+from cvx.simulator.equity.portfolio import EquityPortfolio
 from cvx.simulator.interpolation import valid
-from cvx.simulator.portfolio import EquityPortfolio
 from cvx.simulator.state import State
 
 
@@ -211,10 +211,7 @@ class Builder:
         """
 
         portfolio = EquityPortfolio(
-            prices=self.prices,
-            stocks=self.stocks,
-            cash=self.cash
-            # flow=self.cashflow,
+            prices=self.prices, stocks=self.stocks, cash=self.cash
         )
 
         return portfolio
