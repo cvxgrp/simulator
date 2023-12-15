@@ -1,7 +1,13 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 from cvx.simulator.state import State
+
+
+@pytest.fixture()
+def state(prices):
+    return State(prices=prices.iloc[0])
 
 
 def test_trade(prices):
@@ -18,20 +24,41 @@ def test_trade(prices):
     )
 
 
-def test_trade_no_init_pos(prices):
-    s = State(prices=prices.iloc[0])
-    x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(s.position, fill_value=0)
+def test_trade_no_init_pos(state):
+    x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(state.position, fill_value=0)
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
-def test_update(prices):
-    s = State(prices=prices.iloc[0])
-    assert s.cash == 1e6
-    s.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
-    assert s.cash == 1206047.2
-    assert s.value == -206047.2
-    assert s.nav == 1e6
-    assert s.gmv == 1670455.8
+def test_cash(state):
+    assert state.cash == 1e6
+
+
+def test_nav(state):
+    assert state.nav == 1e6
+
+
+def test_gmv(state):
+    assert state.gmv == 0.0
+
+
+def test_cash_position(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.cash == 1206047.2
+
+
+def test_value_position(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.value == -206047.2
+
+
+def test_nav_position(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.nav == 1e6
+
+
+def test_gmv_position(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.gmv == 1670455.8
 
 
 def test_state():
@@ -42,6 +69,7 @@ def test_state():
     state.position = positions
     # value is the money in units
     assert state.value == 1100.0
+    assert state.cash == -700.0
     # nav is the value plus the cash
     assert state.nav == 400.0
     # weights are the positions divided by the value
