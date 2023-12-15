@@ -58,7 +58,7 @@ def test_index(builder, prices):
 
 def test_stocks(builder):
     """
-    Test that the stocks are all zero
+    Test that the units are all zero
     :param builder: the builder object (fixture)
     :param prices: the prices frame (fixture)
     """
@@ -73,7 +73,7 @@ def test_build_empty(builder, prices):
     """
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices.ffill())
-    pd.testing.assert_frame_equal(portfolio.stocks, np.NaN * prices.ffill())
+    pd.testing.assert_frame_equal(portfolio.units, np.NaN * prices.ffill())
     pd.testing.assert_series_equal(
         portfolio.profit, pd.Series(index=prices.index[1:], data=0.0)
     )

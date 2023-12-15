@@ -19,8 +19,6 @@ from typing import Any
 import pandas as pd
 import quantstats as qs
 
-# qs.extend_pandas()
-
 
 class Plot(Enum):
     DAILY_RETURNS = 1

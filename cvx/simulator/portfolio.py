@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -28,7 +29,29 @@ qs.extend_pandas()
 @dataclass(frozen=True)
 class Portfolio:
     prices: pd.DataFrame
-    stocks: pd.DataFrame
+    units: pd.DataFrame
+
+    def __post_init__(self) -> None:
+        """A class method that performs input validation after object initialization.
+        Notes: The post_init method is called after an instance of the Portfolio
+        class has been initialized, and performs a series of input validation
+        checks to ensure that the prices and units dataframes are in the
+        expected format with no duplicates or missing data,
+        and that the units dataframe represents valid equity positions
+        for the assets held in the portfolio.
+        Specifically, the method checks that both the prices and units dataframes
+        have a monotonic increasing and unique index,
+        and that the index and columns of the units dataframe are subsets
+        of the index and columns of the prices dataframe, respectively.
+        If any of these checks fail, an assertion error will be raised."""
+
+        assert self.prices.index.is_monotonic_increasing
+        assert self.prices.index.is_unique
+        assert self.units.index.is_monotonic_increasing
+        assert self.units.index.is_unique
+
+        assert set(self.units.index).issubset(set(self.prices.index))
+        assert set(self.units.columns).issubset(set(self.prices.columns))
 
     @property
     def index(self) -> pd.DatetimeIndex:
@@ -60,6 +83,23 @@ class Portfolio:
     @abstractmethod
     def nav(self):
         """A function that returns a pandas series representing the NAV"""
+
+    @property
+    def profit(self) -> pd.Series:
+        """A property that returns a pandas series representing the
+        profit gained or lost in the portfolio based on changes in asset prices.
+
+        Returns: pd.Series: A pandas series representing the profit
+        gained or lost in the portfolio based on changes in asset prices.
+
+        Notes: The calculation is based on the difference between
+        the previous and current prices of the assets in the portfolio,
+        multiplied by the number of units in each asset previously held.
+        """
+
+        price_changes = self.prices.ffill().diff()
+        previous_units = self.units.shift(1).fillna(0.0)
+        return (previous_units * price_changes).dropna(axis=0, how="all").sum(axis=1)
 
     @property
     def highwater(self) -> pd.Series:
@@ -94,6 +134,36 @@ class Portfolio:
         less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
         """
         return 1.0 - self.nav / self.highwater
+
+    def __getitem__(self, time: datetime) -> pd.Series:
+        """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
+        It returns the stock data for that time.
+
+        The method takes one input parameter:
+        - `time`: the time index for which to retrieve the stock data
+
+        Returns:
+        - stock data for the input time
+
+        Note that the input time must be in the index of the dataframe,
+        otherwise a KeyError will be raised."""
+        return self.units.loc[time]
+
+    @property
+    def equity(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe
+        representing the equity positions of the portfolio,
+        which is the value of each asset held by the portfolio.
+        Returns: pd.DataFrame: A pandas dataframe representing
+        the equity positions of the portfolio.
+
+        Notes: The function calculates the equity of the portfolio
+        by multiplying the current prices of each asset
+        by the number of shares held by the portfolio.
+        The equity dataframe will have the same dimensions
+        as the prices and units dataframes."""
+
+        return self.prices * self.units
 
     def metrics(
         self,

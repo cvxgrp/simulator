@@ -185,7 +185,7 @@ class Builder:
     @property
     def stocks(self):
         """
-        The stocks property returns the frame of holdings of the portfolio.
+        The units property returns the frame of holdings of the portfolio.
         Useful mainly for testing
         """
         return self.__stocks
@@ -202,16 +202,16 @@ class Builder:
         class based on the internal state of the Portfolio builder object.
 
         Returns: EquityPortfolio: A new instance of the EquityPortfolio class
-        with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+        with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.
 
         Notes: The function simply creates a new instance of the EquityPortfolio
-        class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+        class with the attributes (prices, units, initial_cash, trading_cost_model) equal
         to the corresponding attributes in the Portfolio builder object.
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
         portfolio = EquityPortfolio(
-            prices=self.prices, stocks=self.stocks, cash=self.cash
+            prices=self.prices, units=self.stocks, cash=self.cash
         )
 
         return portfolio
