@@ -12,156 +12,13 @@ Classes
 
 .. autoapisummary::
 
-   simulator.portfolio.Plot
-   simulator.portfolio.EquityPortfolio
+   simulator.portfolio.Portfolio
 
 
 
 
-.. py:class:: Plot
+.. py:class:: Portfolio
 
-
-   Bases: :py:obj:`enum.Enum`
-
-   Generic enumeration.
-
-   Derive from this class to define new enumerations.
-
-   .. py:attribute:: DAILY_RETURNS
-      :value: 1
-
-      
-
-   .. py:attribute:: DISTRIBUTION
-      :value: 2
-
-      
-
-   .. py:attribute:: DRAWDOWN
-      :value: 3
-
-      
-
-   .. py:attribute:: DRAWDOWNS_PERIODS
-      :value: 4
-
-      
-
-   .. py:attribute:: EARNINGS
-      :value: 5
-
-      
-
-   .. py:attribute:: HISTOGRAM
-      :value: 6
-
-      
-
-   .. py:attribute:: LOG_RETURNS
-      :value: 7
-
-      
-
-   .. py:attribute:: MONTHLY_HEATMAP
-      :value: 8
-
-      
-
-   .. py:attribute:: MONTHLY_RETURNS
-      :value: 9
-
-      
-
-   .. py:attribute:: RETURNS
-      :value: 10
-
-      
-
-   .. py:attribute:: ROLLING_BETA
-      :value: 11
-
-      
-
-   .. py:attribute:: ROLLING_SHARPE
-      :value: 12
-
-      
-
-   .. py:attribute:: ROLLING_SORTINO
-      :value: 13
-
-      
-
-   .. py:attribute:: ROLLING_VOLATILITY
-      :value: 14
-
-      
-
-   .. py:attribute:: YEARLY_RETURNS
-      :value: 15
-
-      
-
-   .. py:method:: plot(returns: pandas.DataFrame, **kwargs: Any) -> Any
-
-
-
-.. py:class:: EquityPortfolio
-
-
-   A class that represents an equity portfolio
-   and contains dataframes for prices and stock holdings,
-   as well as optional parameters for trading cost models
-   and initial cash values.
-
-   .. attribute:: prices
-
-      A pandas dataframe representing
-
-      :type: pd.DataFrame
-
-   .. attribute:: the prices of various assets held by the portfolio over time.
-
-      
-
-   .. attribute:: stocks
-
-      A pandas dataframe representing the number of shares
-
-      :type: pd.DataFrame
-
-   .. attribute:: held for each asset in the portfolio over time.
-
-      
-
-   .. attribute:: trading_cost_model
-
-      An optional trading cost model
-
-      :type: TradingCostModel
-
-   .. attribute:: to use when trading assets in the portfolio.
-
-      
-
-   .. attribute:: initial_cash
-
-      An optional scalar float representing the initial
-
-      :type: float
-
-   .. attribute:: cash value available for the portfolio.
-
-      
-
-   Notes: The EquityPortfolio class is designed to represent
-   a portfolio of assets where only equity positions are held.
-   The prices and stocks dataframes are assumed to have the same
-   index object representing the available time periods for which data is available.
-   If no trading cost model is provided, the trading_cost_model attribute
-   will be set to None by default.
-   If no initial cash value is provided, the initial_cash attribute
-   will be set to a default value of 1,000,000.
 
    .. py:property:: index
       :type: pandas.DatetimeIndex
@@ -188,80 +45,10 @@ Classes
       which correspond to the assets held by the EquityPortfolio object.
       The resulting list will contain the names of all assets held by the portfolio, without any duplicates.
 
-   .. py:property:: weights
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe representing
-      the weights of various assets in the portfolio.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the weights
-      of various assets in the portfolio.
-
-      Notes: The function calculates the weights of various assets
-      in the portfolio by dividing the equity positions
-      for each asset (as represented in the equity dataframe)
-      by the total portfolio value (as represented in the nav dataframe).
-      Both dataframes are assumed to have the same dimensions.
-      The resulting dataframe will show the relative weight
-      of each asset in the portfolio at each point in time.
-
-   .. py:property:: equity
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe
-      representing the equity positions of the portfolio,
-      which is the value of each asset held by the portfolio.
-      Returns: pd.DataFrame: A pandas dataframe representing
-      the equity positions of the portfolio.
-
-      Notes: The function calculates the equity of the portfolio
-      by multiplying the current prices of each asset
-      by the number of shares held by the portfolio.
-      The resulting values are filled forward to account
-      for any missing data or NaN values.
-      The equity dataframe will have the same dimensions
-      as the prices and stocks dataframes.
-
-   .. py:property:: trades_stocks
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe representing the trades made in the portfolio in terms of stocks.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of stocks.
-
-      Notes: The function calculates the trades made by the portfolio by taking
-      the difference between the current and previous values of the stocks dataframe.
-      The resulting values will represent the number of shares of each asset
-      bought or sold by the portfolio at each point in time.
-      The resulting dataframe will have the same dimensions
-      as the stocks dataframe, with NaN values filled with zeros.
-
-   .. py:property:: trades_currency
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe representing
-      the trades made in the portfolio in terms of currency.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
-
-      Notes: The function calculates the trades made in currency by multiplying
-      the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
-      with the current prices of each asset (as represented in the prices dataframe).
-      Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
-      The resulting dataframe will have the same dimensions as the stocks and prices dataframes.
-
-   .. py:property:: turnover
-      :type: pandas.DataFrame
-
-
    .. py:property:: nav
-      :type: pandas.Series
+      :abstractmethod:
 
-      Returns a pandas series representing the total value
-      of the portfolio's investments and cash.
-
-      Returns: pd.Series: A pandas series representing the
-                          total value of the portfolio's investments and cash.
+      A function that returns a pandas series representing the NAV
 
    .. py:property:: profit
       :type: pandas.Series
@@ -274,7 +61,7 @@ Classes
 
       Notes: The calculation is based on the difference between
       the previous and current prices of the assets in the portfolio,
-      multiplied by the number of stocks in each asset previously held.
+      multiplied by the number of units in each asset previously held.
 
    .. py:property:: highwater
       :type: pandas.Series
@@ -308,38 +95,43 @@ Classes
       A positive drawdown means the portfolio is currently worth
       less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
 
+   .. py:property:: equity
+      :type: pandas.DataFrame
+
+      A property that returns a pandas dataframe
+      representing the equity positions of the portfolio,
+      which is the value of each asset held by the portfolio.
+      Returns: pd.DataFrame: A pandas dataframe representing
+      the equity positions of the portfolio.
+
+      Notes: The function calculates the equity of the portfolio
+      by multiplying the current prices of each asset
+      by the number of shares held by the portfolio.
+      The equity dataframe will have the same dimensions
+      as the prices and units dataframes.
+
    .. py:attribute:: prices
       :type: pandas.DataFrame
 
       
 
-   .. py:attribute:: stocks
+   .. py:attribute:: units
       :type: pandas.DataFrame
-
-      
-
-   .. py:attribute:: cash
-      :type: pandas.Series
-
-      
-
-   .. py:attribute:: flow
-      :type: pandas.Series
 
       
 
    .. py:method:: __post_init__() -> None
 
       A class method that performs input validation after object initialization.
-      Notes: The post_init method is called after an instance of the EquityPortfolio class has been initialized,
-      and performs a series of input validation checks to ensure that the prices
-      and stocks dataframes are in the expected format
-      with no duplicates or missing data,
-      and that the stocks dataframe represents valid equity positions
+      Notes: The post_init method is called after an instance of the Portfolio
+      class has been initialized, and performs a series of input validation
+      checks to ensure that the prices and units dataframes are in the
+      expected format with no duplicates or missing data,
+      and that the units dataframe represents valid equity positions
       for the assets held in the portfolio.
-      Specifically, the method checks that both the prices and stocks dataframes
+      Specifically, the method checks that both the prices and units dataframes
       have a monotonic increasing and unique index,
-      and that the index and columns of the stocks dataframe are subsets
+      and that the index and columns of the units dataframe are subsets
       of the index and columns of the prices dataframe, respectively.
       If any of these checks fail, an assertion error will be raised.
 
@@ -370,7 +162,7 @@ Classes
    .. py:method:: plots(benchmark: Any = None, grayscale: bool = False, figsize: tuple[int, int] = (8, 5), mode: str = 'basic', compounded: bool = True, periods_per_year: int = 252, prepare_returns: bool = True, match_dates: bool = True, **kwargs: Any) -> Any
 
 
-   .. py:method:: plot(kind: Plot, **kwargs: Any) -> Any
+   .. py:method:: plot(kind: cvx.simulator.plot.Plot, **kwargs: Any) -> Any
 
 
    .. py:method:: html(benchmark: Any = None, rf: float = 0.0, grayscale: bool = False, title: str = 'Strategy Tearsheet', output: Any = None, compounded: bool = True, periods_per_year: int = 252, download_filename: str = 'quantstats-tearsheet.html', figfmt: str = 'svg', template_path: Any = None, match_dates: bool = True, **kwargs: Any) -> Any

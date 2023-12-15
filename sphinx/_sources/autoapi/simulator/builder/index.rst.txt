@@ -63,15 +63,16 @@ Classes
 
    .. py:property:: cash
 
+      The cash property returns the current cash available in the portfolio.
 
    .. py:property:: cashposition
 
-
-   .. py:property:: cashflow
-
+      The cashposition property returns the current cash position of the portfolio.
 
    .. py:property:: stocks
 
+      The units property returns the frame of holdings of the portfolio.
+      Useful mainly for testing
 
    .. py:attribute:: prices
       :type: pandas.DataFrame
@@ -102,28 +103,27 @@ Classes
 
       The __iter__ method allows the object to be iterated over in a for loop,
       yielding time and the current state of the portfolio.
-      The method yields a list of dates seen so far
-      (excluding the first date) and returns a tuple
+      The method yields a list of dates seen so far and returns a tuple
       containing the list of dates and the current portfolio state.
 
       Yield:
 
-      interval: a pandas DatetimeIndex object containing the dates seen so far.
-
+      time: a pandas DatetimeIndex object containing the dates seen so far.
       state: the current state of the portfolio,
+
       taking into account the stock prices at each interval.
 
 
-   .. py:method:: build() -> cvx.simulator.portfolio.EquityPortfolio
+   .. py:method:: build() -> cvx.simulator.equity.portfolio.EquityPortfolio
 
       A function that creates a new instance of the EquityPortfolio
       class based on the internal state of the Portfolio builder object.
 
       Returns: EquityPortfolio: A new instance of the EquityPortfolio class
-      with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+      with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.
 
       Notes: The function simply creates a new instance of the EquityPortfolio
-      class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+      class with the attributes (prices, units, initial_cash, trading_cost_model) equal
       to the corresponding attributes in the Portfolio builder object.
       The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
 

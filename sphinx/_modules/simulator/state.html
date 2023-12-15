@@ -113,6 +113,8 @@
 
 <span class="sd">    cash: the amount of cash available in the portfolio.</span>
 
+<span class="sd">    time: the current time of the portfolio</span>
+
 <span class="sd">    By default, prices and position are set to None, while cash is set to 1 million.</span>
 <span class="sd">    These attributes can be updated and accessed through setter and getter methods</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -239,10 +241,10 @@
 
     <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-        <span class="c1"># update the cash first using the risk-free interest rate</span>
-        <span class="c1"># Note the risk_free_rate is shifted</span>
-        <span class="c1"># e.g. we update our cash using the old risk_free_rate</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the position of the state. Computes the required trades</span>
+<span class="sd">        and updates the cash balance accordingly.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># update the position</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
 
@@ -259,6 +261,11 @@
 <div class="viewcode-block" id="State.trades">
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.trades">[docs]</a>
     <span class="k">def</span> <span class="nf">trades</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The trades property returns the trades currently needed to reach the position.</span>
+<span class="sd">        Most helpful when computing the trading costs following the move to</span>
+<span class="sd">        a new position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__trades</span></div>
 
 
@@ -273,6 +280,9 @@
 <div class="viewcode-block" id="State.assets">
 <a class="viewcode-back" href="../../autoapi/simulator/state/index.html#simulator.state.State.assets">[docs]</a>
     <span class="k">def</span> <span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The assets property returns the assets currently in the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span></div>
 </div>
 

@@ -32,6 +32,8 @@ Classes
 
    cash: the amount of cash available in the portfolio.
 
+   time: the current time of the portfolio
+
    By default, prices and position are set to None, while cash is set to 1 million.
    These attributes can be updated and accessed through setter and getter methods
 
@@ -87,6 +89,9 @@ Classes
 
    .. py:property:: trades
 
+      The trades property returns the trades currently needed to reach the position.
+      Most helpful when computing the trading costs following the move to
+      a new position.
 
    .. py:property:: gross
 
@@ -94,6 +99,7 @@ Classes
    .. py:property:: assets
       :type: pandas.Index
 
+      The assets property returns the assets currently in the portfolio.
 
    .. py:attribute:: prices
       :type: pandas.Series

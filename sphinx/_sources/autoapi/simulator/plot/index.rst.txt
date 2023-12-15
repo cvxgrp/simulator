@@ -1,0 +1,107 @@
+:py:mod:`simulator.plot`
+========================
+
+.. py:module:: simulator.plot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.plot.Plot
+
+
+
+
+.. py:class:: Plot
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: DAILY_RETURNS
+      :value: 1
+
+      
+
+   .. py:attribute:: DISTRIBUTION
+      :value: 2
+
+      
+
+   .. py:attribute:: DRAWDOWN
+      :value: 3
+
+      
+
+   .. py:attribute:: DRAWDOWNS_PERIODS
+      :value: 4
+
+      
+
+   .. py:attribute:: EARNINGS
+      :value: 5
+
+      
+
+   .. py:attribute:: HISTOGRAM
+      :value: 6
+
+      
+
+   .. py:attribute:: LOG_RETURNS
+      :value: 7
+
+      
+
+   .. py:attribute:: MONTHLY_HEATMAP
+      :value: 8
+
+      
+
+   .. py:attribute:: MONTHLY_RETURNS
+      :value: 9
+
+      
+
+   .. py:attribute:: RETURNS
+      :value: 10
+
+      
+
+   .. py:attribute:: ROLLING_BETA
+      :value: 11
+
+      
+
+   .. py:attribute:: ROLLING_SHARPE
+      :value: 12
+
+      
+
+   .. py:attribute:: ROLLING_SORTINO
+      :value: 13
+
+      
+
+   .. py:attribute:: ROLLING_VOLATILITY
+      :value: 14
+
+      
+
+   .. py:attribute:: YEARLY_RETURNS
+      :value: 15
+
+      
+
+   .. py:method:: plot(returns: pandas.DataFrame, **kwargs: Any) -> Any
+
+
+

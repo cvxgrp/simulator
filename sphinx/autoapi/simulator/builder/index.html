@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="simulator.grid" href="../grid/index.html" />
-    <link rel="prev" title="simulator" href="../index.html" /> 
+    <link rel="prev" title="simulator.futures" href="../futures/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,13 +54,14 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../grid/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.grid</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../interpolation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.interpolation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.plot</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../portfolio/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.portfolio</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.state</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../trading_costs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.trading_costs</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -160,22 +161,21 @@ It returns a pandas Series object containing the current position of the portfol
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder.Builder.cash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.cash" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The cash property returns the current cash available in the portfolio.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder.Builder.cashposition">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.cashposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.cashposition" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="simulator.builder.Builder.cashflow">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashflow</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.cashflow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.cashflow" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The cashposition property returns the current cash position of the portfolio.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder.Builder.stocks">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stocks</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.stocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.stocks" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The units property returns the frame of holdings of the portfolio.
+Useful mainly for testing</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder.Builder.prices">
@@ -205,24 +205,23 @@ is called automatically after the object initialization.</p>
 <span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DatetimeIndex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">cvx.simulator.state.State</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.__iter__" title="Link to this definition"></a></dt>
 <dd><p>The __iter__ method allows the object to be iterated over in a for loop,
 yielding time and the current state of the portfolio.
-The method yields a list of dates seen so far
-(excluding the first date) and returns a tuple
+The method yields a list of dates seen so far and returns a tuple
 containing the list of dates and the current portfolio state.</p>
 <p>Yield:</p>
-<p>interval: a pandas DatetimeIndex object containing the dates seen so far.</p>
-<p>state: the current state of the portfolio,
-taking into account the stock prices at each interval.</p>
+<p>time: a pandas DatetimeIndex object containing the dates seen so far.
+state: the current state of the portfolio,</p>
+<p>taking into account the stock prices at each interval.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder.Builder.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cvx.simulator.portfolio.EquityPortfolio</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.build" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">cvx.simulator.equity.portfolio.EquityPortfolio</span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.build" title="Link to this definition"></a></dt>
 <dd><p>A function that creates a new instance of the EquityPortfolio
 class based on the internal state of the Portfolio builder object.</p>
 <p>Returns: EquityPortfolio: A new instance of the EquityPortfolio class
-with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.</p>
+with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.</p>
 <p>Notes: The function simply creates a new instance of the EquityPortfolio
-class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal
+class with the attributes (prices, units, initial_cash, trading_cost_model) equal
 to the corresponding attributes in the Portfolio builder object.
 The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</p>
 </dd></dl>
@@ -237,7 +236,7 @@ The resulting EquityPortfolio object will have the same state as the Portfolio b
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../futures/index.html" class="btn btn-neutral float-left" title="simulator.futures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../grid/index.html" class="btn btn-neutral float-right" title="simulator.grid" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

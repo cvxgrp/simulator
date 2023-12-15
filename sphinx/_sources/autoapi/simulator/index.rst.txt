@@ -4,6 +4,16 @@
 .. py:module:: simulator
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   equity/index.rst
+   futures/index.rst
+
+
 Submodules
 ----------
 .. toctree::
@@ -13,8 +23,8 @@ Submodules
    builder/index.rst
    grid/index.rst
    interpolation/index.rst
+   plot/index.rst
    portfolio/index.rst
    state/index.rst
-   trading_costs/index.rst
 
 

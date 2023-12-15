@@ -98,8 +98,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">cvx.simulator.equity.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.interpolation</span> <span class="kn">import</span> <span class="n">valid</span>
-<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">EquityPortfolio</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.state</span> <span class="kn">import</span> <span class="n">State</span>
 
 
@@ -213,6 +213,10 @@
 
     <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The weights property sets the current weights of the portfolio.</span>
+<span class="sd">        We convert the weights to positions using the current prices and the NAV</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 
 <div class="viewcode-block" id="Builder.__iter__">
@@ -221,27 +225,31 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The __iter__ method allows the object to be iterated over in a for loop,</span>
 <span class="sd">        yielding time and the current state of the portfolio.</span>
-<span class="sd">        The method yields a list of dates seen so far</span>
-<span class="sd">        (excluding the first date) and returns a tuple</span>
+<span class="sd">        The method yields a list of dates seen so far and returns a tuple</span>
 <span class="sd">        containing the list of dates and the current portfolio state.</span>
 
 <span class="sd">        Yield:</span>
 
-<span class="sd">        interval: a pandas DatetimeIndex object containing the dates seen so far.</span>
-
+<span class="sd">        time: a pandas DatetimeIndex object containing the dates seen so far.</span>
 <span class="sd">        state: the current state of the portfolio,</span>
+
 <span class="sd">        taking into account the stock prices at each interval.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
-            <span class="c1"># valuation of the current position</span>
+            <span class="c1"># update the current prices for the portfolio</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="c1"># self.__state.time might be still None, so we set gap to the</span>
+                <span class="c1"># previous time to 0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">days</span> <span class="o">=</span> <span class="mi">0</span>
 
+            <span class="c1"># update the current time for the state</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__state</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
 
+            <span class="c1"># yield the vector of times seen so far and the current state</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__state</span></div>
 
 
@@ -275,6 +283,9 @@
 <div class="viewcode-block" id="Builder.cash">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.cash">[docs]</a>
     <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cash property returns the current cash available in the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cash</span></div>
 
 
@@ -282,27 +293,28 @@
 <div class="viewcode-block" id="Builder.cashposition">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.cashposition">[docs]</a>
     <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cashposition property returns the current cash position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Builder.cashflow">
-<a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.cashflow">[docs]</a>
-    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
-        <span class="n">flow</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_cash</span>
-        <span class="k">return</span> <span class="n">flow</span></div>
 
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Builder.stocks">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.stocks">[docs]</a>
     <span class="k">def</span> <span class="nf">stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The units property returns the frame of holdings of the portfolio.</span>
+<span class="sd">        Useful mainly for testing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stocks</span></div>
 
 
     <span class="nd">@cashposition</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cashposition property sets the current cash position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 
 <div class="viewcode-block" id="Builder.build">
@@ -312,19 +324,16 @@
 <span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 
 <span class="sd">        Returns: EquityPortfolio: A new instance of the EquityPortfolio class</span>
-<span class="sd">        with the attributes (prices, stocks, initial_cash, trading_cost_model) as specified in the Portfolio builder.</span>
+<span class="sd">        with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.</span>
 
 <span class="sd">        Notes: The function simply creates a new instance of the EquityPortfolio</span>
-<span class="sd">        class with the attributes (prices, stocks, initial_cash, trading_cost_model) equal</span>
+<span class="sd">        class with the attributes (prices, units, initial_cash, trading_cost_model) equal</span>
 <span class="sd">        to the corresponding attributes in the Portfolio builder object.</span>
 <span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">portfolio</span> <span class="o">=</span> <span class="n">EquityPortfolio</span><span class="p">(</span>
-            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span>
-            <span class="n">stocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span>
-            <span class="n">cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="p">,</span>
-            <span class="n">flow</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cashflow</span><span class="p">,</span>
+            <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stocks</span><span class="p">,</span> <span class="n">cash</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">portfolio</span></div>

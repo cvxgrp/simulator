@@ -1,0 +1,15 @@
+:py:mod:`simulator.equity`
+==========================
+
+.. py:module:: simulator.equity
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   portfolio/index.rst
+
+
