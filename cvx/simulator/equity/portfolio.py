@@ -32,10 +32,6 @@ class EquityPortfolio(Portfolio):
         the prices of various assets held by the portfolio over time.
         units (pd.DataFrame): A pandas dataframe representing the number of shares
         held for each asset in the portfolio over time.
-        trading_cost_model (TradingCostModel): An optional trading cost model
-        to use when trading assets in the portfolio.
-        initial_cash (float): An optional scalar float representing the initial
-        cash value available for the portfolio.
 
     Notes: The EquityPortfolio class is designed to represent
     a portfolio of assets where only equity positions are held.
