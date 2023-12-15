@@ -132,13 +132,6 @@ class Builder:
             # update the current prices for the portfolio
             self.__state.prices = self.prices.loc[t]
 
-            try:
-                self.__state.days = (t - self.__state.time).days
-            except TypeError:
-                # self.__state.time might be still None, so we set gap to the
-                # previous time to 0
-                self.__state.days = 0
-
             # update the current time for the state
             self.__state.time = t
 
@@ -210,8 +203,4 @@ class Builder:
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
-        portfolio = EquityPortfolio(
-            prices=self.prices, units=self.stocks, cash=self.cash
-        )
-
-        return portfolio
+        return EquityPortfolio(prices=self.prices, units=self.stocks, cash=self.cash)

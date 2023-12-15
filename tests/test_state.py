@@ -13,10 +13,7 @@ def state(prices):
 def test_trade(prices):
     s = State(prices=prices[["A", "B", "C"]].iloc[0])
     s.time = prices.index[0]
-    print(s.assets)
-
     s.position = np.array([10, 20, -10])
-    print(s.position)
 
     x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(s.position, fill_value=0)
     pd.testing.assert_series_equal(
@@ -27,6 +24,15 @@ def test_trade(prices):
 def test_trade_no_init_pos(state):
     x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(state.position, fill_value=0)
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
+
+
+def test_gap(prices):
+    state = State(prices=prices.iloc[0])
+    assert state.days == 0
+    state.time = prices.index[0]
+    assert state.days == 0
+    state.time = prices.index[1]
+    assert state.days == 1
 
 
 def test_cash(state):
@@ -59,6 +65,12 @@ def test_nav_position(state):
 def test_gmv_position(state):
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
     assert state.gmv == 1670455.8
+
+
+def test_short(state, prices):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.short == -938251.5
+    assert state.short == -15.0 * prices["C"].iloc[0]
 
 
 def test_state():

@@ -42,8 +42,8 @@ class State:
     __position: pd.Series = None
     __trades: pd.Series = None
     cash: float = 1e6
-    time: datetime = None
-    days: int = 1
+    __time: datetime = None
+    __days: int = 0
 
     @property
     def value(self) -> float:
@@ -133,6 +133,23 @@ class State:
 
         # cash is spent for shares or received for selling them
         self.cash -= self.gross.sum()
+
+    @property
+    def time(self):
+        return self.__time
+
+    @time.setter
+    def time(self, time: datetime):
+        if self.time is None:
+            self.__days = 0
+            self.__time = time
+        else:
+            self.__days = (time - self.time).days
+            self.__time = time
+
+    @property
+    def days(self):
+        return self.__days
 
     @property
     def trades(self):
