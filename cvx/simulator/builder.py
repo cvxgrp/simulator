@@ -176,7 +176,7 @@ class Builder:
         return self.position * self.current_prices
 
     @property
-    def stocks(self):
+    def units(self):
         """
         The units property returns the frame of holdings of the portfolio.
         Useful mainly for testing
@@ -203,4 +203,4 @@ class Builder:
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
-        return EquityPortfolio(prices=self.prices, units=self.stocks, cash=self.cash)
+        return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)

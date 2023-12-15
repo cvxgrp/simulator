@@ -35,7 +35,7 @@ class EquityPortfolio(Portfolio):
 
     Notes: The EquityPortfolio class is designed to represent
     a portfolio of assets where only equity positions are held.
-    The prices and stocks dataframes are assumed to have the same
+    The prices and units dataframes are assumed to have the same
     index object representing the available time periods for which data is available.
     If no trading cost model is provided, the trading_cost_model attribute
     will be set to None by default.
@@ -45,23 +45,6 @@ class EquityPortfolio(Portfolio):
     cash: pd.Series
 
     @property
-    def weights(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the weights of various assets in the portfolio.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the weights
-        of various assets in the portfolio.
-
-        Notes: The function calculates the weights of various assets
-        in the portfolio by dividing the equity positions
-        for each asset (as represented in the equity dataframe)
-        by the total portfolio value (as represented in the nav dataframe).
-        Both dataframes are assumed to have the same dimensions.
-        The resulting dataframe will show the relative weight
-        of each asset in the portfolio at each point in time."""
-        return self.equity.apply(lambda x: x / self.nav)
-
-    @property
     def cashflow(self):
         """
         The cashflow property returns the cash flow of the portfolio.
@@ -69,41 +52,6 @@ class EquityPortfolio(Portfolio):
         flow = self.cash.diff()
         flow.iloc[0] = -self.cash.iloc[0]  # - self.initial_cash
         return flow
-
-    @property
-    def trades_stocks(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.
-
-        Notes: The function calculates the trades made by the portfolio by taking
-        the difference between the current and previous values of the units dataframe.
-        The resulting values will represent the number of shares of each asset
-        bought or sold by the portfolio at each point in time.
-        The resulting dataframe will have the same dimensions
-        as the units dataframe, with NaN values filled with zeros."""
-        t = self.units.fillna(0.0).diff()
-        t.loc[self.index[0]] = self.units.loc[self.index[0]]
-        return t.fillna(0.0)
-
-    @property
-    def trades_currency(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the trades made in the portfolio in terms of currency.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
-
-        Notes: The function calculates the trades made in currency by multiplying
-        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
-        with the current prices of each asset (as represented in the prices dataframe).
-        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
-        The resulting dataframe will have the same dimensions as the units and prices dataframes.
-        """
-        return self.trades_stocks * self.prices
-
-    @property
-    def turnover(self) -> pd.DataFrame:
-        return self.trades_currency.abs()
 
     @property
     def nav(self) -> pd.Series:

@@ -91,15 +91,8 @@ class Portfolio:
 
         Returns: pd.Series: A pandas series representing the profit
         gained or lost in the portfolio based on changes in asset prices.
-
-        Notes: The calculation is based on the difference between
-        the previous and current prices of the assets in the portfolio,
-        multiplied by the number of units in each asset previously held.
         """
-
-        price_changes = self.prices.ffill().diff()
-        previous_units = self.units.shift(1).fillna(0.0)
-        return (previous_units * price_changes).dropna(axis=0, how="all").sum(axis=1)
+        return (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
 
     @property
     def highwater(self) -> pd.Series:
@@ -134,6 +127,68 @@ class Portfolio:
         less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
         """
         return 1.0 - self.nav / self.highwater
+
+    @property
+    def cashposition(self):
+        return self.prices * self.units
+
+    @property
+    def returns(self):
+        """
+        The returns property exposes the returns of the individual assets
+        """
+        return self.prices.pct_change()
+
+    @property
+    def weights(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing
+        the weights of various assets in the portfolio.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the weights
+        of various assets in the portfolio.
+
+        Notes: The function calculates the weights of various assets
+        in the portfolio by dividing the equity positions
+        for each asset (as represented in the equity dataframe)
+        by the total portfolio value (as represented in the nav dataframe).
+        Both dataframes are assumed to have the same dimensions.
+        The resulting dataframe will show the relative weight
+        of each asset in the portfolio at each point in time."""
+        return self.equity.apply(lambda x: x / self.nav)
+
+    @property
+    def trades_units(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.
+
+        Notes: The function calculates the trades made by the portfolio by taking
+        the difference between the current and previous values of the units dataframe.
+        The resulting values will represent the number of shares of each asset
+        bought or sold by the portfolio at each point in time.
+        The resulting dataframe will have the same dimensions
+        as the units dataframe, with NaN values filled with zeros."""
+        t = self.units.fillna(0.0).diff()
+        t.loc[self.index[0]] = self.units.loc[self.index[0]]
+        return t.fillna(0.0)
+
+    @property
+    def trades_currency(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing
+        the trades made in the portfolio in terms of currency.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
+
+        Notes: The function calculates the trades made in currency by multiplying
+        the number of shares of each asset bought or sold (as represented in the trades_units dataframe)
+        with the current prices of each asset (as represented in the prices dataframe).
+        The resulting dataframe will have the same dimensions as the units and prices dataframes.
+        """
+        return self.trades_units * self.prices
+
+    @property
+    def turnover(self) -> pd.DataFrame:
+        return self.trades_currency.abs()
 
     def __getitem__(self, time: datetime) -> pd.Series:
         """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.

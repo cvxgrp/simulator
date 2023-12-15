@@ -37,7 +37,7 @@ def test_prices(portfolio, prices):
 
 
 def test_turnover(portfolio):
-    v = portfolio.trades_stocks * portfolio.prices.ffill()
+    v = portfolio.trades_units * portfolio.prices.ffill()
     pd.testing.assert_frame_equal(v, portfolio.trades_currency)
     pd.testing.assert_frame_equal(v.abs(), portfolio.turnover)
 
@@ -104,7 +104,7 @@ def test_iter(prices):
     s[s.index[0]] = 1.0
 
     # trades can either be measured in units or in currency units
-    pd.testing.assert_series_equal(portfolio.trades_stocks["A"], s, check_names=False)
+    pd.testing.assert_series_equal(portfolio.trades_units["A"], s, check_names=False)
     pd.testing.assert_series_equal(
         portfolio.trades_currency["A"], s * portfolio.prices["A"], check_names=False
     )
@@ -138,7 +138,7 @@ def test_long_only(prices, resource_dir):
     )
 
     # the (absolute) profit is the difference between nav and initial cash
-    profit = (portfolio.nav - portfolio.cash).diff().dropna()
+    profit = (portfolio.nav - portfolio.cash).diff().fillna(0.0)
 
     # We don't need to set the initial cash to estimate the (absolute) profit
     # The daily profit is also the change in valuation of the previous position
@@ -244,7 +244,7 @@ def test_profit(portfolio):
     Test that the profit is computed correctly
     :param portfolio: the portfolio object (fixture)
     """
-    assert portfolio.profit.mean() == pytest.approx(-5.810981697171386)
-    assert portfolio.profit.std() == pytest.approx(840.5615726803527)
+    assert portfolio.profit.mean() == pytest.approx(-5.801328903654639)
+    assert portfolio.profit.std() == pytest.approx(839.8620124674756)
     assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
-    assert portfolio.profit.sharpe() == pytest.approx(-0.10974386369939439)
+    assert portfolio.profit.sharpe() == pytest.approx(-0.10965282385614909)

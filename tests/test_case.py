@@ -54,7 +54,7 @@ def test_case(columns, index, prices):
         columns=columns,
         data=([np.nan, 10.0], [10.0, 5.0], [10.0, 5.0], [10.0, np.nan]),
     )
-    pd.testing.assert_frame_equal(stocks, b.stocks)
+    pd.testing.assert_frame_equal(stocks, b.units)
 
     # equity is the value of your units,
     # 1) 2000 in B 2) 1000 in A and 1000 in B 3) 1000 in A and 1000 in B 4) 1000 in A, B worthless

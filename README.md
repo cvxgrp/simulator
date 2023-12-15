@@ -61,10 +61,10 @@ for t, state in b:
     # pick two assets at random
     pair = np.random.choice(state.assets, 2, replace=False)
     # compute the pair
-    stocks = pd.Series(index=state.assets, data=0.0)
-    stocks[pair] = [state.nav, -state.nav] / state.prices[pair].values
+    units = pd.Series(index=state.assets, data=0.0)
+    units[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position
-    b.position = 0.1 * stocks
+    b.position = 0.1 * units
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
@@ -84,7 +84,7 @@ for t, state in b:
 ```
 
 Note that we update the position at the last element in the t list
-using a series of actual stocks rather than weights or cashpositions.
+using a series of actual units rather than weights or cashpositions.
 The builder class also exposes setters for such alternative conventions.
 
 ```python
