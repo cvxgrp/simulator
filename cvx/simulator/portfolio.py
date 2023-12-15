@@ -145,6 +145,15 @@ class EquityPortfolio:
         of each asset in the portfolio at each point in time."""
         return self.equity.apply(lambda x: x / self.nav)
 
+    @property
+    def cashflow(self):
+        """
+        The cashflow property returns the cash flow of the portfolio.
+        """
+        flow = self.cash.diff()
+        flow.iloc[1] = self.cash.iloc[0] - self.initial_cash
+        return flow
+
     def __getitem__(self, time: datetime) -> pd.Series:
         """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
         It returns the stock data for that time.
