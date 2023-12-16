@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from cvx.simulator._abc.interpolation import interpolate, valid
+from cvx.simulator.utils.interpolation import interpolate, valid
 
 
 def test_interpolate():

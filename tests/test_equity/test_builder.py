@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator import EquityBuilder
-from cvx.simulator._abc.interpolation import interpolate
+from cvx.simulator.utils.interpolation import interpolate
 
 # from cvx.simulator.interpolation import interpolate
 
