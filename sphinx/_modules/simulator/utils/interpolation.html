@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>simulator._abc.interpolation &mdash; cvxsimulator Documentation</title>
+  <title>simulator.utils.interpolation &mdash; cvxsimulator Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
@@ -67,7 +67,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">simulator._abc.interpolation</li>
+      <li class="breadcrumb-item active">simulator.utils.interpolation</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -76,7 +76,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for simulator._abc.interpolation</h1><div class="highlight"><pre>
+  <h1>Source code for simulator.utils.interpolation</h1><div class="highlight"><pre>
 <span></span><span class="c1">#    Copyright 2023 Stanford University Convex Optimization Group</span>
 <span class="c1">#</span>
 <span class="c1">#    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -93,7 +93,7 @@
 
 
 <div class="viewcode-block" id="interpolate">
-<a class="viewcode-back" href="../../../autoapi/simulator/_abc/interpolation/index.html#simulator._abc.interpolation.interpolate">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/simulator/utils/interpolation/index.html#simulator.utils.interpolation.interpolate">[docs]</a>
 <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;interpolate&quot;&quot;&quot;</span>
     <span class="n">first</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">()</span>
@@ -105,7 +105,7 @@
 
 
 <div class="viewcode-block" id="valid">
-<a class="viewcode-back" href="../../../autoapi/simulator/_abc/interpolation/index.html#simulator._abc.interpolation.valid">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/simulator/utils/interpolation/index.html#simulator.utils.interpolation.valid">[docs]</a>
 <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
     <span class="c1"># check the two series are identical</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>

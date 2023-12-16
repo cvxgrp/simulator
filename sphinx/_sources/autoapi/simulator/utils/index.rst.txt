@@ -11,5 +11,7 @@ Submodules
    :maxdepth: 1
 
    grid/index.rst
+   interpolation/index.rst
+   month/index.rst
 
 
