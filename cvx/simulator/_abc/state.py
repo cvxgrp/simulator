@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class State(ABC):
     prices: pd.Series = None
 

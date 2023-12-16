@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from cvx.simulator.grid import iron_frame
+from cvx.simulator.utils.grid import iron_frame
 
 
 def test_iron_frame(prices):
