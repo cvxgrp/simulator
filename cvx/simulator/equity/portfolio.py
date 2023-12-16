@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from cvx.simulator.portfolio import Portfolio
+from .._abc.portfolio import Portfolio
 
 
 @dataclass(frozen=True)
@@ -32,21 +32,34 @@ class EquityPortfolio(Portfolio):
         the prices of various assets held by the portfolio over time.
         units (pd.DataFrame): A pandas dataframe representing the number of shares
         held for each asset in the portfolio over time.
-        trading_cost_model (TradingCostModel): An optional trading cost model
-        to use when trading assets in the portfolio.
-        initial_cash (float): An optional scalar float representing the initial
-        cash value available for the portfolio.
 
     Notes: The EquityPortfolio class is designed to represent
     a portfolio of assets where only equity positions are held.
-    The prices and stocks dataframes are assumed to have the same
+    The prices and units dataframes are assumed to have the same
     index object representing the available time periods for which data is available.
-    If no trading cost model is provided, the trading_cost_model attribute
-    will be set to None by default.
     If no initial cash value is provided, the initial_cash attribute
     will be set to a default value of 1,000,000."""
 
     cash: pd.Series
+
+    @property
+    def cashflow(self):
+        """
+        The cashflow property returns the cash flow of the portfolio.
+        """
+        flow = self.cash.diff()
+        flow.iloc[0] = -self.cash.iloc[0]  # - self.initial_cash
+        return flow
+
+    @property
+    def nav(self) -> pd.Series:
+        """Returns a pandas series representing the total value
+        of the portfolio's investments and cash.
+
+        Returns: pd.Series: A pandas series representing the
+                            total value of the portfolio's investments and cash.
+        """
+        return self.equity.sum(axis=1) + self.cash
 
     @property
     def weights(self) -> pd.DataFrame:
@@ -64,57 +77,3 @@ class EquityPortfolio(Portfolio):
         The resulting dataframe will show the relative weight
         of each asset in the portfolio at each point in time."""
         return self.equity.apply(lambda x: x / self.nav)
-
-    @property
-    def cashflow(self):
-        """
-        The cashflow property returns the cash flow of the portfolio.
-        """
-        flow = self.cash.diff()
-        flow.iloc[0] = -self.cash.iloc[0]  # - self.initial_cash
-        return flow
-
-    @property
-    def trades_stocks(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.
-
-        Notes: The function calculates the trades made by the portfolio by taking
-        the difference between the current and previous values of the units dataframe.
-        The resulting values will represent the number of shares of each asset
-        bought or sold by the portfolio at each point in time.
-        The resulting dataframe will have the same dimensions
-        as the units dataframe, with NaN values filled with zeros."""
-        t = self.units.fillna(0.0).diff()
-        t.loc[self.index[0]] = self.units.loc[self.index[0]]
-        return t.fillna(0.0)
-
-    @property
-    def trades_currency(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the trades made in the portfolio in terms of currency.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
-
-        Notes: The function calculates the trades made in currency by multiplying
-        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
-        with the current prices of each asset (as represented in the prices dataframe).
-        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
-        The resulting dataframe will have the same dimensions as the units and prices dataframes.
-        """
-        return self.trades_stocks * self.prices
-
-    @property
-    def turnover(self) -> pd.DataFrame:
-        return self.trades_currency.abs()
-
-    @property
-    def nav(self) -> pd.Series:
-        """Returns a pandas series representing the total value
-        of the portfolio's investments and cash.
-
-        Returns: pd.Series: A pandas series representing the
-                            total value of the portfolio's investments and cash.
-        """
-        return self.equity.sum(axis=1) + self.cash
