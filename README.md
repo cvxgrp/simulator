@@ -35,10 +35,10 @@ and initialize the amount of cash used in an experiment:
 
 ```python
 import pandas as pd
-from cvx.simulator.builder import builder
+from cvx.simulator import EquityBuilder
 
 prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True, header=0)
-b = Builder(prices=prices, initial_cash=1e6)
+b = EquityBuilder(prices=prices, initial_cash=1e6)
 ```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
