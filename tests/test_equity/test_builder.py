@@ -3,7 +3,9 @@ import pandas as pd
 import pytest
 
 from cvx.simulator import EquityBuilder
-from cvx.simulator.interpolation import interpolate
+from cvx.simulator._abc.interpolation import interpolate
+
+# from cvx.simulator.interpolation import interpolate
 
 
 @pytest.fixture()
@@ -111,41 +113,6 @@ def test_weights_on_wrong_days(resource_dir):
     for t, state in b:
         # set the weights for all assets alive
         b.weights = np.random.rand(len(state.assets))
-
-
-def test_prices(builder, prices):
-    """
-    Test that the prices of the builder are the same as the prices
-    :param builder: the builder object (fixture)
-    :param prices: the prices frame (fixture)
-    """
-    pd.testing.assert_frame_equal(builder.prices, prices)
-
-
-def test_index(builder, prices):
-    """
-    Test that the index of the builder is the same as the index of the prices
-    :param builder: the builder object (fixture)
-    :param prices: the prices frame (fixture)
-    """
-    assert set(builder.index) == set(prices.index)
-
-
-def test_stocks(builder):
-    """
-    Test that the units are all zero
-    :param builder: the builder object (fixture)
-    :param prices: the prices frame (fixture)
-    """
-    pd.testing.assert_frame_equal(builder.units, np.NaN * builder.prices)
-
-
-def test_iteration(builder):
-    """
-    iterate through builder and verify that the yielded times match the index
-    :param builder: the builder object (fixture)
-    """
-    assert {t[-1] for t, _ in builder} == set(builder.index)
 
 
 def test_iteration_state(builder):

@@ -20,8 +20,8 @@ from typing import Generator
 import numpy as np
 import pandas as pd
 
+from cvx.simulator._abc.interpolation import valid
 from cvx.simulator._abc.state import State
-from cvx.simulator.interpolation import valid
 
 
 @dataclass

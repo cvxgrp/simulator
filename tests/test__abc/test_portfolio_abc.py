@@ -1,12 +1,12 @@
 import os
 from dataclasses import dataclass
+from pathlib import Path
 
 import pandas as pd
 import pytest
 
 from cvx.simulator._abc.plot import Plot
-
-from .._abc.portfolio import Portfolio
+from cvx.simulator._abc.portfolio import Portfolio
 
 
 @dataclass(frozen=True)
@@ -14,7 +14,10 @@ class TestPortfolio(Portfolio):
     @property
     def nav(self):
         return pd.read_csv(
-            "resources/nav.csv", index_col=0, parse_dates=True, header=0
+            Path(__file__).parent.parent / "resources" / "nav.csv",
+            index_col=0,
+            parse_dates=True,
+            header=0,
         ).squeeze()
 
 

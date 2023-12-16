@@ -9,8 +9,8 @@ from cvx.simulator._abc.state import State
 @dataclass
 class TestState(State):
     @State.position.setter
-    def position(self):
-        pass
+    def position(self, position):
+        self._position = position
 
 
 @pytest.fixture()
@@ -44,3 +44,23 @@ def test_gap(prices):
 
 def test_gmv(state):
     assert state.gmv == 0.0
+
+
+def test_trades(state):
+    state._trades = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    pd.testing.assert_series_equal(
+        state.trades, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    )
+    assert state.gross.sum() == -206047.2
+
+
+def test_set_position(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    pd.testing.assert_series_equal(
+        state.position, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    )
+
+
+def test_value(state):
+    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    assert state.value == pytest.approx(-206047.2)
