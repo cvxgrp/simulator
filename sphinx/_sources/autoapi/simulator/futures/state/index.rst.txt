@@ -1,0 +1,25 @@
+:py:mod:`simulator.futures.state`
+=================================
+
+.. py:module:: simulator.futures.state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.futures.state.FuturesState
+
+
+
+
+.. py:class:: FuturesState
+
+
+   Bases: :py:obj:`simulator._abc.state.State`
+
+

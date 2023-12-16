@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulator._abc.builder &mdash; cvxsimulator Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=c267ad58" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/logo.jpeg"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cvxsimulator
+              <img src="../../../_static/logo.jpeg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cvxsimulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">simulator._abc.builder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for simulator._abc.builder</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    Copyright 2023 Stanford University Convex Optimization Group</span>
+<span class="c1">#</span>
+<span class="c1">#    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#    you may not use this file except in compliance with the License.</span>
+<span class="c1">#    You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#        http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#    Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#    See the License for the specific language governing permissions and</span>
+<span class="c1">#    limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">cvx.simulator._abc.interpolation</span> <span class="kn">import</span> <span class="n">valid</span>
+<span class="kn">from</span> <span class="nn">cvx.simulator._abc.state</span> <span class="kn">import</span> <span class="n">State</span>
+
+
+<span class="nd">@dataclass</span>
+<div class="viewcode-block" id="Builder">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder">[docs]</a>
+<span class="k">class</span> <span class="nc">Builder</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="Builder.prices">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.prices">[docs]</a>
+    <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
+
+<div class="viewcode-block" id="Builder._state">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder._state">[docs]</a>
+    <span class="n">_state</span><span class="p">:</span> <span class="n">State</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Builder._units">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder._units">[docs]</a>
+    <span class="n">_units</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Builder.__post_init__">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.__post_init__">[docs]</a>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The __post_init__ method is a special method of initialized instances</span>
+<span class="sd">        of the _Builder class and is called after initialization.</span>
+<span class="sd">        It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.</span>
+
+<span class="sd">        The method takes no input parameter. It initializes the cash attribute in the internal</span>
+<span class="sd">        _State object with the initial amount of cash in the portfolio, self.initial_cash.</span>
+
+<span class="sd">        Note that this method is often used in Python classes for additional initialization routines</span>
+<span class="sd">        that can only be performed after the object is fully initialized. __post_init__</span>
+<span class="sd">        is called automatically after the object initialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># assert isinstance(self.prices, pd.DataFrame)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_units</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.valid">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyse the validity of the data</span>
+<span class="sd">        Do it column by column of the prices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.intervals">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.intervals">[docs]</a>
+    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find for each column the first and the last valid index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">ts</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;first&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">(),</span> <span class="s2">&quot;last&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">last_valid_index</span><span class="p">()}</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.index">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.index">[docs]</a>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
+<span class="sd">        which is the time period for which the portfolio data is available.</span>
+
+<span class="sd">        Returns: pd.Index: A pandas index representing the</span>
+<span class="sd">        time period for which the portfolio data is available.</span>
+
+<span class="sd">        Notes: The function extracts the index of the prices dataframe,</span>
+<span class="sd">        which represents the time periods for which data is available for the portfolio.</span>
+<span class="sd">        The resulting index will be a pandas index object</span>
+<span class="sd">        with the same length as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.current_prices">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.current_prices">[docs]</a>
+    <span class="k">def</span> <span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current prices from the state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="Builder.__iter__">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.__iter__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">State</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The __iter__ method allows the object to be iterated over in a for loop,</span>
+<span class="sd">        yielding time and the current state of the portfolio.</span>
+<span class="sd">        The method yields a list of dates seen so far and returns a tuple</span>
+<span class="sd">        containing the list of dates and the current portfolio state.</span>
+
+<span class="sd">        Yield:</span>
+
+<span class="sd">        time: a pandas DatetimeIndex object containing the dates seen so far.</span>
+<span class="sd">        state: the current state of the portfolio,</span>
+
+<span class="sd">        taking into account the stock prices at each interval.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="c1"># update the current prices for the portfolio</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+            <span class="c1"># update the current time for the state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="c1"># yield the vector of times seen so far and the current state</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.position">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.position">[docs]</a>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The position property returns the current position of the portfolio.</span>
+<span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
+
+<span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span></div>
+
+
+    <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The position property returns the current position of the portfolio.</span>
+<span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
+
+<span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.cashposition">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.cashposition">[docs]</a>
+    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cashposition property returns the current cash position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.units">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.units">[docs]</a>
+    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The units property returns the frame of holdings of the portfolio.</span>
+<span class="sd">        Useful mainly for testing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span></div>
+
+
+    <span class="nd">@cashposition</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cashposition property sets the current cash position of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Builder.build">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.build">[docs]</a>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
+<span class="sd">        class based on the internal state of the Portfolio builder object.</span>
+
+<span class="sd">        Returns: EquityPortfolio: A new instance of the EquityPortfolio class</span>
+<span class="sd">        with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.</span>
+
+<span class="sd">        Notes: The function simply creates a new instance of the EquityPortfolio</span>
+<span class="sd">        class with the attributes (prices, units, initial_cash, trading_cost_model) equal</span>
+<span class="sd">        to the corresponding attributes in the Portfolio builder object.</span>
+<span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+</div>
+
+
+        <span class="c1"># return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

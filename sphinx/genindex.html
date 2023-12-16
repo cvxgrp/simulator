@@ -85,6 +85,7 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -104,23 +105,45 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.__getitem__">__getitem__() (simulator.portfolio.Portfolio method)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.__getitem__">__getitem__() (simulator._abc.portfolio.Portfolio method)</a>
 </li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.__iter__">__iter__() (simulator.builder.Builder method)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.__iter__">__iter__() (simulator._abc.builder.Builder method)</a>
 </li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.__position">__position (simulator.state.State attribute)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.__post_init__">__post_init__() (simulator._abc.builder.Builder method)</a>
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.__post_init__">(simulator._abc.portfolio.Portfolio method)</a>
+</li>
+        <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder.__post_init__">(simulator.equity.builder.EquityBuilder method)</a>
+</li>
+        <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.__post_init__">(simulator.futures.builder.FuturesBuilder method)</a>
+</li>
+      </ul></li>
+      <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder._cash">_cash (simulator.equity.builder.EquityBuilder attribute)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State._days">_days (simulator._abc.state.State attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.__post_init__">__post_init__() (simulator.builder.Builder method)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State._position">_position (simulator._abc.state.State attribute)</a>
+</li>
+      <li><a href="autoapi/simulator/utils/grid/index.html#simulator.utils.grid._project_frame_to_grid">_project_frame_to_grid() (in module simulator.utils.grid)</a>
+</li>
+      <li><a href="autoapi/simulator/futures/utils/index.html#simulator.futures.utils._rescale">_rescale() (in module simulator.futures.utils)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder._state">_state (simulator._abc.builder.Builder attribute)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.__post_init__">(simulator.portfolio.Portfolio method)</a>
+        <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder._state">(simulator.equity.builder.EquityBuilder attribute)</a>
+</li>
+        <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder._state">(simulator.futures.builder.FuturesBuilder attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.__trades">__trades (simulator.state.State attribute)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State._time">_time (simulator._abc.state.State attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/grid/index.html#simulator.grid._project_frame_to_grid">_project_frame_to_grid() (in module simulator.grid)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State._trades">_trades (simulator._abc.state.State attribute)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder._units">_units (simulator._abc.builder.Builder attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -128,10 +151,18 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.assets">assets (simulator.portfolio.Portfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.assets">assets (simulator._abc.portfolio.Portfolio property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.assets">(simulator.state.State property)</a>
+        <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.assets">(simulator._abc.state.State property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.aum">aum (simulator.futures.builder.FuturesBuilder attribute)</a>
+
+      <ul>
+        <li><a href="autoapi/simulator/futures/portfolio/index.html#simulator.futures.portfolio.FuturesPortfolio.aum">(simulator.futures.portfolio.FuturesPortfolio attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -140,11 +171,17 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.build">build() (simulator.builder.Builder method)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.build">build() (simulator._abc.builder.Builder method)</a>
+
+      <ul>
+        <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder.build">(simulator.equity.builder.EquityBuilder method)</a>
 </li>
+        <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.build">(simulator.futures.builder.FuturesBuilder method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder">Builder (class in simulator.builder)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder">Builder (class in simulator._abc.builder)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -152,25 +189,27 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.cash">cash (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder.cash">cash (simulator.equity.builder.EquityBuilder property)</a>
 
       <ul>
         <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.cash">(simulator.equity.portfolio.EquityPortfolio attribute)</a>
 </li>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.cash">(simulator.state.State attribute)</a>
+        <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState.cash">(simulator.equity.state.EquityState attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.cashflow">cashflow (simulator.equity.portfolio.EquityPortfolio property)</a>
 </li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.cashposition">cashposition (simulator.builder.Builder property)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.cashposition">cashposition (simulator._abc.builder.Builder property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.cashposition">(simulator.state.State property)</a>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.cashposition">(simulator._abc.portfolio.Portfolio property)</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.cashposition">(simulator._abc.state.State property)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.current_prices">current_prices (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.current_prices">current_prices (simulator._abc.builder.Builder property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -178,19 +217,19 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.DAILY_RETURNS">DAILY_RETURNS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.DAILY_RETURNS">DAILY_RETURNS (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.days">days (simulator.state.State attribute)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.days">days (simulator._abc.state.State property)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.DISTRIBUTION">DISTRIBUTION (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.DISTRIBUTION">DISTRIBUTION (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.DRAWDOWN">DRAWDOWN (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.DRAWDOWN">DRAWDOWN (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.drawdown">drawdown (simulator.portfolio.Portfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.drawdown">drawdown (simulator._abc.portfolio.Portfolio property)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.DRAWDOWNS_PERIODS">DRAWDOWNS_PERIODS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.DRAWDOWNS_PERIODS">DRAWDOWNS_PERIODS (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -198,13 +237,33 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.EARNINGS">EARNINGS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.EARNINGS">EARNINGS (simulator._abc.plot.Plot attribute)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.equity">equity (simulator._abc.portfolio.Portfolio property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.equity">equity (simulator.portfolio.Portfolio property)</a>
+      <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder">EquityBuilder (class in simulator.equity.builder)</a>
 </li>
       <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio">EquityPortfolio (class in simulator.equity.portfolio)</a>
+</li>
+      <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState">EquityState (class in simulator.equity.state)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.from_returns">from_returns() (simulator.futures.builder.FuturesBuilder class method)</a>
+</li>
+      <li><a href="autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder">FuturesBuilder (class in simulator.futures.builder)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autoapi/simulator/futures/portfolio/index.html#simulator.futures.portfolio.FuturesPortfolio">FuturesPortfolio (class in simulator.futures.portfolio)</a>
+</li>
+      <li><a href="autoapi/simulator/futures/state/index.html#simulator.futures.state.FuturesState">FuturesState (class in simulator.futures.state)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -212,11 +271,11 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.gmv">gmv (simulator.state.State property)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.gmv">gmv (simulator._abc.state.State property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.gross">gross (simulator.state.State property)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.gross">gross (simulator._abc.state.State property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -224,13 +283,13 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.highwater">highwater (simulator.portfolio.Portfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.highwater">highwater (simulator._abc.portfolio.Portfolio property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.HISTOGRAM">HISTOGRAM (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.HISTOGRAM">HISTOGRAM (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.html">html() (simulator.portfolio.Portfolio method)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.html">html() (simulator._abc.portfolio.Portfolio method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -238,25 +297,21 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.index">index (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.index">index (simulator._abc.builder.Builder property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.index">(simulator.portfolio.Portfolio property)</a>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.index">(simulator._abc.portfolio.Portfolio property)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.initial_cash">initial_cash (simulator.builder.Builder attribute)</a>
-
-      <ul>
-        <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.initial_cash">(simulator.equity.portfolio.EquityPortfolio attribute)</a>
+      <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder.initial_cash">initial_cash (simulator.equity.builder.EquityBuilder attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/interpolation/index.html#simulator.interpolation.interpolate">interpolate() (in module simulator.interpolation)</a>
+      <li><a href="autoapi/simulator/_abc/interpolation/index.html#simulator._abc.interpolation.interpolate">interpolate() (in module simulator._abc.interpolation)</a>
 </li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.intervals">intervals (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.intervals">intervals (simulator._abc.builder.Builder property)</a>
 </li>
-      <li><a href="autoapi/simulator/grid/index.html#simulator.grid.iron_frame">iron_frame() (in module simulator.grid)</a>
+      <li><a href="autoapi/simulator/utils/grid/index.html#simulator.utils.grid.iron_frame">iron_frame() (in module simulator.utils.grid)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -264,11 +319,11 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.leverage">leverage (simulator.state.State property)</a>
+      <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState.leverage">leverage (simulator.equity.state.EquityState property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.LOG_RETURNS">LOG_RETURNS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.LOG_RETURNS">LOG_RETURNS (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -276,7 +331,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.metrics">metrics() (simulator.portfolio.Portfolio method)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.metrics">metrics() (simulator._abc.portfolio.Portfolio method)</a>
 </li>
       <li>
     module
@@ -284,30 +339,46 @@
       <ul>
         <li><a href="autoapi/simulator/index.html#module-simulator">simulator</a>
 </li>
-        <li><a href="autoapi/simulator/builder/index.html#module-simulator.builder">simulator.builder</a>
+        <li><a href="autoapi/simulator/_abc/index.html#module-simulator._abc">simulator._abc</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/builder/index.html#module-simulator._abc.builder">simulator._abc.builder</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/interpolation/index.html#module-simulator._abc.interpolation">simulator._abc.interpolation</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/plot/index.html#module-simulator._abc.plot">simulator._abc.plot</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#module-simulator._abc.portfolio">simulator._abc.portfolio</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/state/index.html#module-simulator._abc.state">simulator._abc.state</a>
 </li>
         <li><a href="autoapi/simulator/equity/index.html#module-simulator.equity">simulator.equity</a>
 </li>
+        <li><a href="autoapi/simulator/equity/builder/index.html#module-simulator.equity.builder">simulator.equity.builder</a>
+</li>
         <li><a href="autoapi/simulator/equity/portfolio/index.html#module-simulator.equity.portfolio">simulator.equity.portfolio</a>
+</li>
+        <li><a href="autoapi/simulator/equity/state/index.html#module-simulator.equity.state">simulator.equity.state</a>
 </li>
         <li><a href="autoapi/simulator/futures/index.html#module-simulator.futures">simulator.futures</a>
 </li>
-        <li><a href="autoapi/simulator/grid/index.html#module-simulator.grid">simulator.grid</a>
+        <li><a href="autoapi/simulator/futures/builder/index.html#module-simulator.futures.builder">simulator.futures.builder</a>
 </li>
-        <li><a href="autoapi/simulator/interpolation/index.html#module-simulator.interpolation">simulator.interpolation</a>
+        <li><a href="autoapi/simulator/futures/portfolio/index.html#module-simulator.futures.portfolio">simulator.futures.portfolio</a>
 </li>
-        <li><a href="autoapi/simulator/plot/index.html#module-simulator.plot">simulator.plot</a>
+        <li><a href="autoapi/simulator/futures/state/index.html#module-simulator.futures.state">simulator.futures.state</a>
 </li>
-        <li><a href="autoapi/simulator/portfolio/index.html#module-simulator.portfolio">simulator.portfolio</a>
+        <li><a href="autoapi/simulator/futures/utils/index.html#module-simulator.futures.utils">simulator.futures.utils</a>
 </li>
-        <li><a href="autoapi/simulator/state/index.html#module-simulator.state">simulator.state</a>
+        <li><a href="autoapi/simulator/utils/index.html#module-simulator.utils">simulator.utils</a>
+</li>
+        <li><a href="autoapi/simulator/utils/grid/index.html#module-simulator.utils.grid">simulator.utils.grid</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.MONTHLY_HEATMAP">MONTHLY_HEATMAP (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.MONTHLY_HEATMAP">MONTHLY_HEATMAP (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.MONTHLY_RETURNS">MONTHLY_RETURNS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.MONTHLY_RETURNS">MONTHLY_RETURNS (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -315,12 +386,14 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.nav">nav (simulator.equity.portfolio.EquityPortfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.nav">nav (simulator._abc.portfolio.Portfolio property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.nav">(simulator.portfolio.Portfolio property)</a>
+        <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.nav">(simulator.equity.portfolio.EquityPortfolio property)</a>
 </li>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.nav">(simulator.state.State property)</a>
+        <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState.nav">(simulator.equity.state.EquityState property)</a>
+</li>
+        <li><a href="autoapi/simulator/futures/portfolio/index.html#simulator.futures.portfolio.FuturesPortfolio.nav">(simulator.futures.portfolio.FuturesPortfolio property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -329,37 +402,37 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot">Plot (class in simulator.plot)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot">Plot (class in simulator._abc.plot)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.plot">plot() (simulator.plot.Plot method)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.plot">plot() (simulator._abc.plot.Plot method)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.plot">(simulator.portfolio.Portfolio method)</a>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.plot">(simulator._abc.portfolio.Portfolio method)</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.plots">plots() (simulator.portfolio.Portfolio method)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.plots">plots() (simulator._abc.portfolio.Portfolio method)</a>
 </li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio">Portfolio (class in simulator.portfolio)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio">Portfolio (class in simulator._abc.portfolio)</a>
 </li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.position">position (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.position">position (simulator._abc.builder.Builder property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.position">(simulator.state.State property)</a>
+        <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.position">(simulator._abc.state.State property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.prices">prices (simulator.builder.Builder attribute)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.prices">prices (simulator._abc.builder.Builder attribute)</a>
 
       <ul>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.prices">(simulator._abc.portfolio.Portfolio attribute)</a>
+</li>
+        <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.prices">(simulator._abc.state.State attribute)</a>
+</li>
         <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.prices">(simulator.equity.portfolio.EquityPortfolio attribute)</a>
 </li>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.prices">(simulator.portfolio.Portfolio attribute)</a>
-</li>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.prices">(simulator.state.State attribute)</a>
-</li>
       </ul></li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.profit">profit (simulator.portfolio.Portfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.profit">profit (simulator._abc.portfolio.Portfolio property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -367,19 +440,23 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/grid/index.html#simulator.grid.resample_index">resample_index() (in module simulator.grid)</a>
+      <li><a href="autoapi/simulator/utils/grid/index.html#simulator.utils.grid.resample_index">resample_index() (in module simulator.utils.grid)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.RETURNS">RETURNS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.RETURNS">RETURNS (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.ROLLING_BETA">ROLLING_BETA (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.returns">returns (simulator._abc.portfolio.Portfolio property)</a>
+</li>
+      <li><a href="autoapi/simulator/futures/utils/index.html#simulator.futures.utils.returns2prices">returns2prices() (in module simulator.futures.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.ROLLING_SHARPE">ROLLING_SHARPE (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.ROLLING_BETA">ROLLING_BETA (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.ROLLING_SORTINO">ROLLING_SORTINO (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.ROLLING_SHARPE">ROLLING_SHARPE (simulator._abc.plot.Plot attribute)</a>
 </li>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.ROLLING_VOLATILITY">ROLLING_VOLATILITY (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.ROLLING_SORTINO">ROLLING_SORTINO (simulator._abc.plot.Plot attribute)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.ROLLING_VOLATILITY">ROLLING_VOLATILITY (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -387,7 +464,7 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.short">short (simulator.state.State property)</a>
+      <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState.short">short (simulator.equity.state.EquityState property)</a>
 </li>
       <li>
     simulator
@@ -397,10 +474,45 @@
 </li>
       </ul></li>
       <li>
-    simulator.builder
+    simulator._abc
 
       <ul>
-        <li><a href="autoapi/simulator/builder/index.html#module-simulator.builder">module</a>
+        <li><a href="autoapi/simulator/_abc/index.html#module-simulator._abc">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator._abc.builder
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/builder/index.html#module-simulator._abc.builder">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator._abc.interpolation
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/interpolation/index.html#module-simulator._abc.interpolation">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator._abc.plot
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/plot/index.html#module-simulator._abc.plot">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator._abc.portfolio
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#module-simulator._abc.portfolio">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator._abc.state
+
+      <ul>
+        <li><a href="autoapi/simulator/_abc/state/index.html#module-simulator._abc.state">module</a>
 </li>
       </ul></li>
       <li>
@@ -411,10 +523,26 @@
 </li>
       </ul></li>
       <li>
+    simulator.equity.builder
+
+      <ul>
+        <li><a href="autoapi/simulator/equity/builder/index.html#module-simulator.equity.builder">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     simulator.equity.portfolio
 
       <ul>
         <li><a href="autoapi/simulator/equity/portfolio/index.html#module-simulator.equity.portfolio">module</a>
+</li>
+      </ul></li>
+      <li>
+    simulator.equity.state
+
+      <ul>
+        <li><a href="autoapi/simulator/equity/state/index.html#module-simulator.equity.state">module</a>
 </li>
       </ul></li>
       <li>
@@ -425,47 +553,50 @@
 </li>
       </ul></li>
       <li>
-    simulator.grid
+    simulator.futures.builder
 
       <ul>
-        <li><a href="autoapi/simulator/grid/index.html#module-simulator.grid">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    simulator.interpolation
-
-      <ul>
-        <li><a href="autoapi/simulator/interpolation/index.html#module-simulator.interpolation">module</a>
+        <li><a href="autoapi/simulator/futures/builder/index.html#module-simulator.futures.builder">module</a>
 </li>
       </ul></li>
       <li>
-    simulator.plot
+    simulator.futures.portfolio
 
       <ul>
-        <li><a href="autoapi/simulator/plot/index.html#module-simulator.plot">module</a>
+        <li><a href="autoapi/simulator/futures/portfolio/index.html#module-simulator.futures.portfolio">module</a>
 </li>
       </ul></li>
       <li>
-    simulator.portfolio
+    simulator.futures.state
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#module-simulator.portfolio">module</a>
+        <li><a href="autoapi/simulator/futures/state/index.html#module-simulator.futures.state">module</a>
 </li>
       </ul></li>
       <li>
-    simulator.state
+    simulator.futures.utils
 
       <ul>
-        <li><a href="autoapi/simulator/state/index.html#module-simulator.state">module</a>
+        <li><a href="autoapi/simulator/futures/utils/index.html#module-simulator.futures.utils">module</a>
 </li>
       </ul></li>
-      <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.snapshot">snapshot() (simulator.portfolio.Portfolio method)</a>
+      <li>
+    simulator.utils
+
+      <ul>
+        <li><a href="autoapi/simulator/utils/index.html#module-simulator.utils">module</a>
 </li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State">State (class in simulator.state)</a>
+      </ul></li>
+      <li>
+    simulator.utils.grid
+
+      <ul>
+        <li><a href="autoapi/simulator/utils/grid/index.html#module-simulator.utils.grid">module</a>
 </li>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.stocks">stocks (simulator.builder.Builder property)</a>
+      </ul></li>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.snapshot">snapshot() (simulator._abc.portfolio.Portfolio method)</a>
+</li>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State">State (class in simulator._abc.state)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -473,19 +604,17 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.time">time (simulator.state.State attribute)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.time">time (simulator._abc.state.State property)</a>
 </li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.trades">trades (simulator.state.State property)</a>
-</li>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.trades_currency">trades_currency (simulator.equity.portfolio.EquityPortfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.trades">trades (simulator._abc.state.State property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.trades_stocks">trades_stocks (simulator.equity.portfolio.EquityPortfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.trades_currency">trades_currency (simulator._abc.portfolio.Portfolio property)</a>
 </li>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.trading_cost_model">trading_cost_model (simulator.equity.portfolio.EquityPortfolio attribute)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.trades_units">trades_units (simulator._abc.portfolio.Portfolio property)</a>
 </li>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.turnover">turnover (simulator.equity.portfolio.EquityPortfolio property)</a>
+      <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.turnover">turnover (simulator._abc.portfolio.Portfolio property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -493,10 +622,12 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.units">units (simulator.equity.portfolio.EquityPortfolio attribute)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.units">units (simulator._abc.builder.Builder property)</a>
 
       <ul>
-        <li><a href="autoapi/simulator/portfolio/index.html#simulator.portfolio.Portfolio.units">(simulator.portfolio.Portfolio attribute)</a>
+        <li><a href="autoapi/simulator/_abc/portfolio/index.html#simulator._abc.portfolio.Portfolio.units">(simulator._abc.portfolio.Portfolio attribute)</a>
+</li>
+        <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.units">(simulator.equity.portfolio.EquityPortfolio attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -505,13 +636,13 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.valid">valid (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.valid">valid (simulator._abc.builder.Builder property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/interpolation/index.html#simulator.interpolation.valid">valid() (in module simulator.interpolation)</a>
+      <li><a href="autoapi/simulator/_abc/interpolation/index.html#simulator._abc.interpolation.valid">valid() (in module simulator._abc.interpolation)</a>
 </li>
-      <li><a href="autoapi/simulator/state/index.html#simulator.state.State.value">value (simulator.state.State property)</a>
+      <li><a href="autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.value">value (simulator._abc.state.State property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -519,12 +650,12 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/builder/index.html#simulator.builder.Builder.weights">weights (simulator.builder.Builder property)</a>
+      <li><a href="autoapi/simulator/equity/builder/index.html#simulator.equity.builder.EquityBuilder.weights">weights (simulator.equity.builder.EquityBuilder property)</a>
 
       <ul>
         <li><a href="autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.weights">(simulator.equity.portfolio.EquityPortfolio property)</a>
 </li>
-        <li><a href="autoapi/simulator/state/index.html#simulator.state.State.weights">(simulator.state.State property)</a>
+        <li><a href="autoapi/simulator/equity/state/index.html#simulator.equity.state.EquityState.weights">(simulator.equity.state.EquityState property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -533,7 +664,7 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/simulator/plot/index.html#simulator.plot.Plot.YEARLY_RETURNS">YEARLY_RETURNS (simulator.plot.Plot attribute)</a>
+      <li><a href="autoapi/simulator/_abc/plot/index.html#simulator._abc.plot.Plot.YEARLY_RETURNS">YEARLY_RETURNS (simulator._abc.plot.Plot attribute)</a>
 </li>
   </ul></td>
 </tr></table>

@@ -96,7 +96,7 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">cvx.simulator.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+<span class="kn">from</span> <span class="nn">.._abc.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -109,33 +109,46 @@
 <span class="sd">    and initial cash values.</span>
 
 <span class="sd">    Attributes:</span>
-<div class="viewcode-block" id="EquityPortfolio.prices">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.prices">[docs]</a>
-<span class="sd">        prices (pd.DataFrame): A pandas dataframe representing</span></div>
-
-<div class="viewcode-block" id="EquityPortfolio.units">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.units">[docs]</a>
-<span class="sd">        the prices of various assets held by the portfolio over time.</span></div>
-
+<span class="sd">        prices (pd.DataFrame): A pandas dataframe representing</span>
+<span class="sd">        the prices of various assets held by the portfolio over time.</span>
 <span class="sd">        units (pd.DataFrame): A pandas dataframe representing the number of shares</span>
 <span class="sd">        held for each asset in the portfolio over time.</span>
-<span class="sd">        trading_cost_model (TradingCostModel): An optional trading cost model</span>
-<span class="sd">        to use when trading assets in the portfolio.</span>
-<span class="sd">        initial_cash (float): An optional scalar float representing the initial</span>
-<span class="sd">        cash value available for the portfolio.</span>
 
 <span class="sd">    Notes: The EquityPortfolio class is designed to represent</span>
 <span class="sd">    a portfolio of assets where only equity positions are held.</span>
-<span class="sd">    The prices and stocks dataframes are assumed to have the same</span>
+<span class="sd">    The prices and units dataframes are assumed to have the same</span>
 <span class="sd">    index object representing the available time periods for which data is available.</span>
-<span class="sd">    If no trading cost model is provided, the trading_cost_model attribute</span>
-<span class="sd">    will be set to None by default.</span>
 <span class="sd">    If no initial cash value is provided, the initial_cash attribute</span>
 <span class="sd">    will be set to a default value of 1,000,000.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EquityPortfolio.cash">
 <a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.cash">[docs]</a>
     <span class="n">cash</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.cashflow">
+<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.cashflow">[docs]</a>
+    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cashflow property returns the cash flow of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">flow</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># - self.initial_cash</span>
+        <span class="k">return</span> <span class="n">flow</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EquityPortfolio.nav">
+<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.nav">[docs]</a>
+    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a pandas series representing the total value</span>
+<span class="sd">        of the portfolio&#39;s investments and cash.</span>
+
+<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
+<span class="sd">                            total value of the portfolio&#39;s investments and cash.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 
 
     <span class="nd">@property</span>
@@ -156,75 +169,6 @@
 <span class="sd">        The resulting dataframe will show the relative weight</span>
 <span class="sd">        of each asset in the portfolio at each point in time.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="p">)</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.cashflow">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.cashflow">[docs]</a>
-    <span class="k">def</span> <span class="nf">cashflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The cashflow property returns the cash flow of the portfolio.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
-        <span class="n">flow</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">cash</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># - self.initial_cash</span>
-        <span class="k">return</span> <span class="n">flow</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.trades_stocks">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.trades_stocks">[docs]</a>
-    <span class="k">def</span> <span class="nf">trades_stocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.</span>
-
-<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.</span>
-
-<span class="sd">        Notes: The function calculates the trades made by the portfolio by taking</span>
-<span class="sd">        the difference between the current and previous values of the units dataframe.</span>
-<span class="sd">        The resulting values will represent the number of shares of each asset</span>
-<span class="sd">        bought or sold by the portfolio at each point in time.</span>
-<span class="sd">        The resulting dataframe will have the same dimensions</span>
-<span class="sd">        as the units dataframe, with NaN values filled with zeros.&quot;&quot;&quot;</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.trades_currency">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.trades_currency">[docs]</a>
-    <span class="k">def</span> <span class="nf">trades_currency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns a pandas dataframe representing</span>
-<span class="sd">        the trades made in the portfolio in terms of currency.</span>
-
-<span class="sd">        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.</span>
-
-<span class="sd">        Notes: The function calculates the trades made in currency by multiplying</span>
-<span class="sd">        the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)</span>
-<span class="sd">        with the current prices of each asset (as represented in the prices dataframe).</span>
-<span class="sd">        Uses pandas ffill() method to forward fill NaN values in the prices dataframe.</span>
-<span class="sd">        The resulting dataframe will have the same dimensions as the units and prices dataframes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_stocks</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.turnover">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.turnover">[docs]</a>
-    <span class="k">def</span> <span class="nf">turnover</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades_currency</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span></div>
-
-
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="EquityPortfolio.nav">
-<a class="viewcode-back" href="../../../autoapi/simulator/equity/portfolio/index.html#simulator.equity.portfolio.EquityPortfolio.nav">[docs]</a>
-    <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a pandas series representing the total value</span>
-<span class="sd">        of the portfolio&#39;s investments and cash.</span>
-
-<span class="sd">        Returns: pd.Series: A pandas series representing the</span>
-<span class="sd">                            total value of the portfolio&#39;s investments and cash.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">equity</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cash</span></div>
 </div>
 
 </pre></div>

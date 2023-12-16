@@ -1,0 +1,61 @@
+:py:mod:`simulator.futures.builder`
+===================================
+
+.. py:module:: simulator.futures.builder
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.futures.builder.FuturesBuilder
+
+
+
+
+.. py:class:: FuturesBuilder
+
+
+   Bases: :py:obj:`simulator._abc.builder.Builder`
+
+   .. py:attribute:: aum
+      :type: float
+      :value: 1000000.0
+
+      
+
+   .. py:attribute:: _state
+      :type: cvx.simulator.futures.state.FuturesState
+
+      
+
+   .. py:method:: build()
+
+      Build Futures Portfolio
+
+
+   .. py:method:: __post_init__() -> None
+
+      The __post_init__ method is a special method of initialized instances
+      of the _Builder class and is called after initialization.
+      It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.
+
+      The method takes no input parameter. It initializes the cash attribute in the internal
+      _State object with the initial amount of cash in the portfolio, self.initial_cash.
+
+      Note that this method is often used in Python classes for additional initialization routines
+      that can only be performed after the object is fully initialized. __post_init__
+      is called automatically after the object initialization.
+
+
+   .. py:method:: from_returns(returns)
+      :classmethod:
+
+      Build Futures Portfolio from returns
+
+
+

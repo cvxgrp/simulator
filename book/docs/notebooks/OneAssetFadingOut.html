@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/OneAssetFadingOut';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Portfolio difference" href="difference.html" />
+    <link rel="next" title="Monkey portfolios" href="monkey.html" />
     <link rel="prev" title="Notebooks" href="../nb.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -166,7 +166,6 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../nb.html">Notebooks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">One asset fading out</a></li>
-<li class="toctree-l2"><a class="reference internal" href="difference.html">Portfolio difference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="monkey.html">Monkey portfolios</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pairs.html">Almost pairs trading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantstats.html">With quantstats</a></li>
@@ -388,19 +387,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">cvx.simulator.builder</span> <span class="kn">import</span> <span class="n">builder</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">cvx.simulator.builder</span> <span class="kn">import</span> <span class="n">builder</span>
-
-<span class="ne">ImportError</span>: cannot import name &#39;builder&#39; from &#39;cvx.simulator.builder&#39; (/home/runner/work/simulator/simulator/cvx/simulator/builder.py)
+<span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">EquityBuilder</span>
 </pre></div>
 </div>
 </div>
@@ -472,7 +459,7 @@ document.write(`
 <h2>Iterate<a class="headerlink" href="#iterate" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">builder</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">EquityBuilder</span><span class="p">(</span>
     <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span>
     <span class="n">initial_cash</span><span class="o">=</span><span class="mi">2000</span>
 <span class="p">)</span>
@@ -486,7 +473,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">stocks</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">units</span>
 </pre></div>
 </div>
 </div>
@@ -787,11 +774,11 @@ dtype: float64
       </div>
     </a>
     <a class="right-next"
-       href="difference.html"
+       href="monkey.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Portfolio difference</p>
+        <p class="prev-next-title">Monkey portfolios</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

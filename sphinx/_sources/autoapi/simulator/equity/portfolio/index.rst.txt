@@ -20,7 +20,7 @@ Classes
 .. py:class:: EquityPortfolio
 
 
-   Bases: :py:obj:`cvx.simulator.portfolio.Portfolio`
+   Bases: :py:obj:`simulator._abc.portfolio.Portfolio`
 
    A class that represents an equity portfolio
    and contains dataframes for prices and stock holdings,
@@ -47,34 +47,25 @@ Classes
 
       
 
-   .. attribute:: trading_cost_model
-
-      An optional trading cost model
-
-      :type: TradingCostModel
-
-   .. attribute:: to use when trading assets in the portfolio.
-
-      
-
-   .. attribute:: initial_cash
-
-      An optional scalar float representing the initial
-
-      :type: float
-
-   .. attribute:: cash value available for the portfolio.
-
-      
-
    Notes: The EquityPortfolio class is designed to represent
    a portfolio of assets where only equity positions are held.
-   The prices and stocks dataframes are assumed to have the same
+   The prices and units dataframes are assumed to have the same
    index object representing the available time periods for which data is available.
-   If no trading cost model is provided, the trading_cost_model attribute
-   will be set to None by default.
    If no initial cash value is provided, the initial_cash attribute
    will be set to a default value of 1,000,000.
+
+   .. py:property:: cashflow
+
+      The cashflow property returns the cash flow of the portfolio.
+
+   .. py:property:: nav
+      :type: pandas.Series
+
+      Returns a pandas series representing the total value
+      of the portfolio's investments and cash.
+
+      Returns: pd.Series: A pandas series representing the
+                          total value of the portfolio's investments and cash.
 
    .. py:property:: weights
       :type: pandas.DataFrame
@@ -92,51 +83,6 @@ Classes
       Both dataframes are assumed to have the same dimensions.
       The resulting dataframe will show the relative weight
       of each asset in the portfolio at each point in time.
-
-   .. py:property:: cashflow
-
-      The cashflow property returns the cash flow of the portfolio.
-
-   .. py:property:: trades_stocks
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.
-
-      Notes: The function calculates the trades made by the portfolio by taking
-      the difference between the current and previous values of the units dataframe.
-      The resulting values will represent the number of shares of each asset
-      bought or sold by the portfolio at each point in time.
-      The resulting dataframe will have the same dimensions
-      as the units dataframe, with NaN values filled with zeros.
-
-   .. py:property:: trades_currency
-      :type: pandas.DataFrame
-
-      A property that returns a pandas dataframe representing
-      the trades made in the portfolio in terms of currency.
-
-      Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
-
-      Notes: The function calculates the trades made in currency by multiplying
-      the number of shares of each asset bought or sold (as represented in the trades_stocks dataframe)
-      with the current prices of each asset (as represented in the prices dataframe).
-      Uses pandas ffill() method to forward fill NaN values in the prices dataframe.
-      The resulting dataframe will have the same dimensions as the units and prices dataframes.
-
-   .. py:property:: turnover
-      :type: pandas.DataFrame
-
-
-   .. py:property:: nav
-      :type: pandas.Series
-
-      Returns a pandas series representing the total value
-      of the portfolio's investments and cash.
-
-      Returns: pd.Series: A pandas series representing the
-                          total value of the portfolio's investments and cash.
 
    .. py:attribute:: cash
       :type: pandas.Series

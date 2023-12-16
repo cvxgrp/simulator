@@ -1,0 +1,78 @@
+:py:mod:`simulator.equity.state`
+================================
+
+.. py:module:: simulator.equity.state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.equity.state.EquityState
+
+
+
+
+.. py:class:: EquityState
+
+
+   Bases: :py:obj:`simulator._abc.state.State`
+
+   The _State class defines a state object used to keep track of the current
+   state of the portfolio.
+
+   Attributes:
+
+   prices: a pandas Series object containing the stock prices of the current
+   portfolio state
+
+   position: a pandas Series object containing the current holdings of the portfolio
+
+   cash: the amount of cash available in the portfolio.
+
+   time: the current time of the portfolio
+
+   By default, prices and position are set to None, while cash is set to 1 million.
+   These attributes can be updated and accessed through setter and getter methods
+
+   .. py:property:: nav
+      :type: float
+
+      The nav property computes the net asset value (NAV) of the portfolio,
+      which is the sum of the current value of the
+      portfolio as determined by the value property,
+      and the current amount of cash available in the portfolio.
+
+   .. py:property:: weights
+      :type: pandas.Series
+
+      The weights property computes the weighting of each asset in the current
+      portfolio as a fraction of the total portfolio value (nav).
+
+      Returns:
+
+      a pandas series object containing the weighting of each asset as a
+      fraction of the total portfolio value. If the positions are still
+      missing, then a series of zeroes is returned.
+
+   .. py:property:: leverage
+      :type: float
+
+      The `leverage` property computes the leverage of the portfolio,
+      which is the sum of the absolute values of the portfolio weights.
+
+   .. py:property:: short
+
+      How short are we at this stage in USD
+
+   .. py:attribute:: cash
+      :type: float
+      :value: 1000000.0
+
+      
+
+

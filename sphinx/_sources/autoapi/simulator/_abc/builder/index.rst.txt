@@ -1,0 +1,132 @@
+:py:mod:`simulator._abc.builder`
+================================
+
+.. py:module:: simulator._abc.builder
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator._abc.builder.Builder
+
+
+
+
+.. py:class:: Builder
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: valid
+
+      Analyse the validity of the data
+      Do it column by column of the prices
+
+   .. py:property:: intervals
+
+      Find for each column the first and the last valid index
+
+   .. py:property:: index
+      :type: pandas.DatetimeIndex
+
+      A property that returns the index of the portfolio,
+      which is the time period for which the portfolio data is available.
+
+      Returns: pd.Index: A pandas index representing the
+      time period for which the portfolio data is available.
+
+      Notes: The function extracts the index of the prices dataframe,
+      which represents the time periods for which data is available for the portfolio.
+      The resulting index will be a pandas index object
+      with the same length as the number of rows in the prices dataframe.
+
+   .. py:property:: current_prices
+      :type: numpy.array
+
+      Get the current prices from the state
+
+   .. py:property:: position
+      :type: pandas.Series
+
+      The position property returns the current position of the portfolio.
+      It returns a pandas Series object containing the current position of the portfolio.
+
+      Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
+
+   .. py:property:: cashposition
+
+      The cashposition property returns the current cash position of the portfolio.
+
+   .. py:property:: units
+
+      The units property returns the frame of holdings of the portfolio.
+      Useful mainly for testing
+
+   .. py:attribute:: prices
+      :type: pandas.DataFrame
+
+      
+
+   .. py:attribute:: _state
+      :type: cvx.simulator._abc.state.State
+
+      
+
+   .. py:attribute:: _units
+      :type: pandas.DataFrame
+
+      
+
+   .. py:method:: __post_init__() -> None
+
+      The __post_init__ method is a special method of initialized instances
+      of the _Builder class and is called after initialization.
+      It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.
+
+      The method takes no input parameter. It initializes the cash attribute in the internal
+      _State object with the initial amount of cash in the portfolio, self.initial_cash.
+
+      Note that this method is often used in Python classes for additional initialization routines
+      that can only be performed after the object is fully initialized. __post_init__
+      is called automatically after the object initialization.
+
+
+   .. py:method:: __iter__() -> Generator[tuple[pandas.DatetimeIndex, cvx.simulator._abc.state.State], None, None]
+
+      The __iter__ method allows the object to be iterated over in a for loop,
+      yielding time and the current state of the portfolio.
+      The method yields a list of dates seen so far and returns a tuple
+      containing the list of dates and the current portfolio state.
+
+      Yield:
+
+      time: a pandas DatetimeIndex object containing the dates seen so far.
+      state: the current state of the portfolio,
+
+      taking into account the stock prices at each interval.
+
+
+   .. py:method:: build()
+      :abstractmethod:
+
+      A function that creates a new instance of the EquityPortfolio
+      class based on the internal state of the Portfolio builder object.
+
+      Returns: EquityPortfolio: A new instance of the EquityPortfolio class
+      with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+
+      Notes: The function simply creates a new instance of the EquityPortfolio
+      class with the attributes (prices, units, initial_cash, trading_cost_model) equal
+      to the corresponding attributes in the Portfolio builder object.
+      The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
+
+
+

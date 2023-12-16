@@ -1,0 +1,33 @@
+:py:mod:`simulator.futures.portfolio`
+=====================================
+
+.. py:module:: simulator.futures.portfolio
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulator.futures.portfolio.FuturesPortfolio
+
+
+
+
+.. py:class:: FuturesPortfolio
+
+
+   Bases: :py:obj:`simulator._abc.portfolio.Portfolio`
+
+   .. py:property:: nav
+
+
+   .. py:attribute:: aum
+      :type: float
+
+      
+
+
