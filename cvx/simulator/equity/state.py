@@ -19,7 +19,7 @@ import pandas as pd
 from .._abc.state import State
 
 
-@dataclass(kw_only=True)
+@dataclass
 class EquityState(State):
 
     """The _State class defines a state object used to keep track of the current
