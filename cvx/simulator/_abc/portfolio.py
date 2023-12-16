@@ -13,7 +13,7 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -21,13 +21,13 @@ from typing import Any
 import pandas as pd
 import quantstats as qs
 
-from cvx.simulator.plot import Plot
+from .plot import Plot
 
 qs.extend_pandas()
 
 
 @dataclass(frozen=True)
-class Portfolio:
+class Portfolio(ABC):
     prices: pd.DataFrame
     units: pd.DataFrame
 
@@ -140,23 +140,6 @@ class Portfolio:
         return self.prices.pct_change()
 
     @property
-    def weights(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the weights of various assets in the portfolio.
-
-        Returns: pd.DataFrame: A pandas dataframe representing the weights
-        of various assets in the portfolio.
-
-        Notes: The function calculates the weights of various assets
-        in the portfolio by dividing the equity positions
-        for each asset (as represented in the equity dataframe)
-        by the total portfolio value (as represented in the nav dataframe).
-        Both dataframes are assumed to have the same dimensions.
-        The resulting dataframe will show the relative weight
-        of each asset in the portfolio at each point in time."""
-        return self.equity.apply(lambda x: x / self.nav)
-
-    @property
     def trades_units(self) -> pd.DataFrame:
         """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
 
@@ -218,7 +201,7 @@ class Portfolio:
         The equity dataframe will have the same dimensions
         as the prices and units dataframes."""
 
-        return self.prices * self.units
+        return self.cashposition
 
     def metrics(
         self,

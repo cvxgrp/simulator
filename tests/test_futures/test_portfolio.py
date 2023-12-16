@@ -1,17 +1,17 @@
 import pandas as pd
 
-from cvx.simulator.builder import Builder
-from cvx.simulator.futures.portfolio import FuturesPortfolioCumulated
+from cvx.simulator.equity.builder import EquityBuilder
+from cvx.simulator.futures.portfolio import FuturesPortfolio
 
 
 def test_portfolio_cumulated(prices):
-    builder = Builder(prices=prices[["A", "B"]], initial_cash=1e6)
+    builder = EquityBuilder(prices=prices[["A", "B"]], initial_cash=1e6)
 
     for _, _ in builder:
         # hold one share in both assets
         builder.cashposition = [1e5, 4e5]
 
-    portfolio = FuturesPortfolioCumulated(
+    portfolio = FuturesPortfolio(
         aum=1e6, prices=prices[["A", "B"]], units=builder.units
     )
 

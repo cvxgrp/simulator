@@ -12,14 +12,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from dataclasses import dataclass
-from datetime import datetime
 
 import numpy as np
 import pandas as pd
 
+from .._abc.state import State
 
-@dataclass
-class State:
+
+@dataclass(kw_only=True)
+class EquityState(State):
+
     """The _State class defines a state object used to keep track of the current
     state of the portfolio.
 
@@ -38,22 +40,7 @@ class State:
     These attributes can be updated and accessed through setter and getter methods
     """
 
-    prices: pd.Series = None
-    __position: pd.Series = None
-    __trades: pd.Series = None
     cash: float = 1e6
-    __time: datetime = None
-    __days: int = 0
-
-    @property
-    def value(self) -> float:
-        """
-        The value property computes the value of the portfolio at the current
-        time taking into account the current holdings and current stock prices.
-        If the value cannot be computed due to missing positions
-        (they might be still None), zero is returned instead.
-        """
-        return self.cashposition.sum()
 
     @property
     def nav(self) -> float:
@@ -88,35 +75,13 @@ class State:
         return float(self.weights.abs().sum())
 
     @property
-    def cashposition(self):
-        """
-        The `cashposition` property computes the cash position of the portfolio,
-        which is the amount of cash in the portfolio as a fraction of the total portfolio value.
-        """
-        return self.prices * self.position
-
-    @property
     def short(self):
         """
         How short are we at this stage in USD
         """
         return self.cashposition[self.cashposition < 0].sum()
 
-    @property
-    def position(self):
-        if self.__position is None:
-            return pd.Series(dtype=float)
-
-        return self.__position
-
-    @property
-    def gmv(self):
-        """
-        gross market value, e.g. abs(short) + long
-        """
-        return self.cashposition.abs().sum()
-
-    @position.setter
+    @State.position.setter
     def position(self, position: np.array):
         """
         Update the position of the state. Computes the required trades
@@ -126,47 +91,10 @@ class State:
         position = pd.Series(index=self.assets, data=position)
 
         # compute the trades (can be fractional)
-        self.__trades = position.subtract(self.position, fill_value=0.0)
+        self._trades = position.subtract(self.position, fill_value=0.0)
 
         # update only now as otherwise the trades would be wrong
-        self.__position = position
+        self._position = position
 
         # cash is spent for shares or received for selling them
         self.cash -= self.gross.sum()
-
-    @property
-    def time(self):
-        return self.__time
-
-    @time.setter
-    def time(self, time: datetime):
-        if self.time is None:
-            self.__days = 0
-            self.__time = time
-        else:
-            self.__days = (time - self.time).days
-            self.__time = time
-
-    @property
-    def days(self):
-        return self.__days
-
-    @property
-    def trades(self):
-        """
-        The trades property returns the trades currently needed to reach the position.
-        Most helpful when computing the trading costs following the move to
-        a new position.
-        """
-        return self.__trades
-
-    @property
-    def gross(self):
-        return self.trades * self.prices
-
-    @property
-    def assets(self) -> pd.Index:
-        """
-        The assets property returns the assets currently in the portfolio.
-        """
-        return self.prices.dropna().index

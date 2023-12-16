@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from cvx.simulator.portfolio import Portfolio
+from .._abc.portfolio import Portfolio
 
 
 @dataclass(frozen=True)
@@ -37,8 +37,6 @@ class EquityPortfolio(Portfolio):
     a portfolio of assets where only equity positions are held.
     The prices and units dataframes are assumed to have the same
     index object representing the available time periods for which data is available.
-    If no trading cost model is provided, the trading_cost_model attribute
-    will be set to None by default.
     If no initial cash value is provided, the initial_cash attribute
     will be set to a default value of 1,000,000."""
 
@@ -62,3 +60,20 @@ class EquityPortfolio(Portfolio):
                             total value of the portfolio's investments and cash.
         """
         return self.equity.sum(axis=1) + self.cash
+
+    @property
+    def weights(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing
+        the weights of various assets in the portfolio.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the weights
+        of various assets in the portfolio.
+
+        Notes: The function calculates the weights of various assets
+        in the portfolio by dividing the equity positions
+        for each asset (as represented in the equity dataframe)
+        by the total portfolio value (as represented in the nav dataframe).
+        Both dataframes are assumed to have the same dimensions.
+        The resulting dataframe will show the relative weight
+        of each asset in the portfolio at each point in time."""
+        return self.equity.apply(lambda x: x / self.nav)

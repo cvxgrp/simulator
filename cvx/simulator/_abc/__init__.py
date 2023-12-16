@@ -11,19 +11,3 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-from .._abc.portfolio import Portfolio
-
-
-@dataclass(frozen=True)
-class FuturesPortfolio(Portfolio):
-    aum: float
-
-    @property
-    def nav(self):
-        profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
-
-        return profit.cumsum() + self.aum

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.state import State
+from cvx.simulator.equity.state import EquityState as State
 
 
 @pytest.fixture()
@@ -11,11 +11,10 @@ def state(prices):
 
 
 def test_trade(prices):
-    s = State(prices=prices[["A", "B", "C"]].iloc[0])
-    s.time = prices.index[0]
-    s.position = np.array([10, 20, -10])
+    state = State(prices=prices[["A", "B", "C"]].iloc[0])
+    state.position = np.array([10, 20, -10])
 
-    x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(s.position, fill_value=0)
+    x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(state.position, fill_value=0)
     pd.testing.assert_series_equal(
         x, pd.Series({"A": -10.0, "B": 5.0, "C": -5.0, "D": 40.0})
     )
@@ -26,25 +25,12 @@ def test_trade_no_init_pos(state):
     pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
-def test_gap(prices):
-    state = State(prices=prices.iloc[0])
-    assert state.days == 0
-    state.time = prices.index[0]
-    assert state.days == 0
-    state.time = prices.index[1]
-    assert state.days == 1
-
-
 def test_cash(state):
     assert state.cash == 1e6
 
 
 def test_nav(state):
     assert state.nav == 1e6
-
-
-def test_gmv(state):
-    assert state.gmv == 0.0
 
 
 def test_cash_position(state):

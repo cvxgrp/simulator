@@ -11,19 +11,27 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from __future__ import annotations
-
 from dataclasses import dataclass
 
-from .._abc.portfolio import Portfolio
+import numpy as np
+import pandas as pd
+
+from .._abc.state import State
 
 
-@dataclass(frozen=True)
-class FuturesPortfolio(Portfolio):
-    aum: float
+@dataclass
+class FuturesState(State):
+    @State.position.setter
+    def position(self, position: np.array) -> None:
+        """
+        Update the position of the state. Computes the required trades
+        and but does not update the cash balance.
+        """
+        # update the position
+        position = pd.Series(index=self.assets, data=position)
 
-    @property
-    def nav(self):
-        profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
+        # compute the trades (can be fractional)
+        self._trades = position.subtract(self.position, fill_value=0.0)
 
-        return profit.cumsum() + self.aum
+        # update only now as otherwise the trades would be wrong
+        self._position = position

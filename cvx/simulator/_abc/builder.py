@@ -13,21 +13,22 @@
 #    limitations under the License.
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generator
 
 import numpy as np
 import pandas as pd
 
-from cvx.simulator.equity.portfolio import EquityPortfolio
+from cvx.simulator._abc.state import State
 from cvx.simulator.interpolation import valid
-from cvx.simulator.state import State
 
 
 @dataclass
-class Builder:
+class Builder(ABC):
     prices: pd.DataFrame
-    initial_cash: float = 1e6
+    _state: State = None
+    _units: pd.DataFrame = None
 
     def __post_init__(self) -> None:
         """
@@ -47,16 +48,12 @@ class Builder:
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
 
-        self.__stocks = pd.DataFrame(
+        self._units = pd.DataFrame(
             index=self.prices.index,
             columns=self.prices.columns,
             data=np.NaN,
             dtype=float,
         )
-
-        self.__cash = pd.Series(index=self.index, data=np.NaN)
-        self.__state = State()
-        self.__state.cash = self.initial_cash
 
     @property
     def valid(self):
@@ -97,22 +94,7 @@ class Builder:
         """
         Get the current prices from the state
         """
-        return self.__state.prices[self.__state.assets].values
-
-    @property
-    def weights(self) -> np.array:
-        """
-        Get the current weights from the state
-        """
-        return self.__state.weights[self.__state.assets].values
-
-    @weights.setter
-    def weights(self, weights: np.array) -> None:
-        """
-        The weights property sets the current weights of the portfolio.
-        We convert the weights to positions using the current prices and the NAV
-        """
-        self.position = self.__state.nav * weights / self.current_prices
+        return self._state.prices[self._state.assets].values
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
         """
@@ -130,13 +112,13 @@ class Builder:
         """
         for t in self.index:
             # update the current prices for the portfolio
-            self.__state.prices = self.prices.loc[t]
+            self._state.prices = self.prices.loc[t]
 
             # update the current time for the state
-            self.__state.time = t
+            self._state.time = t
 
             # yield the vector of times seen so far and the current state
-            yield self.index[self.index <= t], self.__state
+            yield self.index[self.index <= t], self._state
 
     @property
     def position(self) -> pd.Series:
@@ -146,9 +128,10 @@ class Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        return self.__stocks.loc[self.__state.time]
+        return self._units.loc[self._state.time]
 
     @position.setter
+    @abstractmethod
     def position(self, position: pd.Series) -> None:
         """
         The position property returns the current position of the portfolio.
@@ -156,17 +139,6 @@ class Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self.__stocks.loc[self.__state.time, self.__state.assets] = position
-        self.__state.position = position
-
-        self.__cash[self.__state.time] = self.__state.cash
-
-    @property
-    def cash(self):
-        """
-        The cash property returns the current cash available in the portfolio.
-        """
-        return self.__cash
 
     @property
     def cashposition(self):
@@ -181,7 +153,7 @@ class Builder:
         The units property returns the frame of holdings of the portfolio.
         Useful mainly for testing
         """
-        return self.__stocks
+        return self._units
 
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
@@ -190,7 +162,8 @@ class Builder:
         """
         self.position = cashposition / self.current_prices
 
-    def build(self) -> EquityPortfolio:
+    @abstractmethod
+    def build(self):
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
 
@@ -203,4 +176,4 @@ class Builder:
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
-        return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)
+        # return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)
