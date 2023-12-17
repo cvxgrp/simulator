@@ -25,6 +25,7 @@ def test_set_cashposition(builder):
     """
     for time, state in builder:
         # set the cashposition for each future to 100k
+        # builder.cashposition = pd.Series(index=state.assets, data=1e5 * np.ones(len(state.assets)))
         builder.cashposition = 1e5 * np.ones(len(state.assets))
 
     portfolio = builder.build()
@@ -36,3 +37,5 @@ def test_set_cashposition(builder):
     # check the computation of our nav is correct
     profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
     pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum)
+
+    # pd.testing.assert_series_equal(portfolio.nav, portfolio2.nav)
