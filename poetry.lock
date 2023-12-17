@@ -1850,6 +1850,20 @@ files = [
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
+name = "tinycta"
+version = "0.7.0"
+description = "..."
+optional = false
+python-versions = ">=3.9.0,<3.13"
+files = [
+    {file = "tinycta-0.7.0-py3-none-any.whl", hash = "sha256:eda484894aff17fae7a3a5353f13c65223de233c1fac64391c1c6e04fb7d95f4"},
+    {file = "tinycta-0.7.0.tar.gz", hash = "sha256:b29f36fc99394a65d73de2b2c533e81b69af740898b892090f21f049afcc394c"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -2011,4 +2025,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "7afe377f3a5e1fbb559d4742c849bf49ed2b259c74c1c83b6ba9255ff2445940"
+content-hash = "f362986cba966ee8bb74de102c0dadeadc21bf356075564e1f79ae85ac36c8c6"
