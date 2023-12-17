@@ -15,7 +15,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import pandas as pd
+
 from .._abc.portfolio import Portfolio
+from .utils import returns2prices
 
 
 @dataclass(frozen=True)
@@ -27,3 +30,22 @@ class FuturesPortfolio(Portfolio):
         profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
 
         return profit.cumsum() + self.aum
+
+    @classmethod
+    def from_cashpos_prices(
+        cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float
+    ):
+        """Build Futures Portfolio from cashposition"""
+        units = cashposition.div(prices, fill_value=0.0)
+        return cls(prices=prices, units=units, aum=aum)
+
+    @classmethod
+    def from_cashpos_returns(
+        cls, returns: pd.DataFrame, cashposition: pd.DataFrame, aum: float
+    ):
+        """Build Futures Portfolio from cashposition"""
+        prices = returns2prices(returns)
+        return cls.from_cashpos_prices(prices, cashposition, aum)
+
+        # units = cashposition.div(prices, fill_value=0.0)
+        # return cls(prices=prices, units=units, aum=aum)
