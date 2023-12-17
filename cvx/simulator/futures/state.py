@@ -25,7 +25,7 @@ class FuturesState(State):
     def position(self, position: np.array) -> None:
         """
         Update the position of the state. Computes the required trades
-        and but does not update the cash balance.
+        but does not update the cash balance.
         """
         # update the position
         position = pd.Series(index=self.assets, data=position)

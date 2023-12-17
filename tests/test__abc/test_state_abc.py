@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -64,3 +65,11 @@ def test_set_position(state):
 def test_value(state):
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
     assert state.value == pytest.approx(-206047.2)
+
+
+def test_mask():
+    state = TestState(prices=pd.Series({"A": 1.0, "B": 2.0, "C": np.NaN}))
+    np.testing.assert_array_equal(state.mask, np.array([True, True, False]))
+
+    # state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    # assert state.mask.sum() == 3

@@ -104,3 +104,14 @@ class State(ABC):
     @property
     def gross(self):
         return self.trades * self.prices
+
+    @property
+    def mask(self):
+        """construct true/false mask for assets with missing prices"""
+        return np.isfinite(self.prices.values)
+
+
+# if __name__ == '__main__':
+#    mask = np.isfinite([np.infty, 2.0, np.NaN, 3.0])
+#    x = np.array([1,2,3,4])
+#    print(x[mask])
