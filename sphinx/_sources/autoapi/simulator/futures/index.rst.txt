@@ -13,6 +13,5 @@ Submodules
    builder/index.rst
    portfolio/index.rst
    state/index.rst
-   utils/index.rst
 
 

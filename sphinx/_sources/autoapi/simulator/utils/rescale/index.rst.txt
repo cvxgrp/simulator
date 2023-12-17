@@ -1,7 +1,7 @@
-:py:mod:`simulator.futures.utils`
+:py:mod:`simulator.utils.rescale`
 =================================
 
-.. py:module:: simulator.futures.utils
+.. py:module:: simulator.utils.rescale
 
 
 Module Contents
@@ -13,8 +13,8 @@ Functions
 
 .. autoapisummary::
 
-   simulator.futures.utils._rescale
-   simulator.futures.utils.returns2prices
+   simulator.utils.rescale._rescale
+   simulator.utils.rescale.returns2prices
 
 
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>simulator.futures.utils &mdash; cvxsimulator Documentation</title>
+  <title>simulator.utils.rescale &mdash; cvxsimulator Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
@@ -67,7 +67,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">simulator.futures.utils</li>
+      <li class="breadcrumb-item active">simulator.utils.rescale</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -76,7 +76,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for simulator.futures.utils</h1><div class="highlight"><pre>
+  <h1>Source code for simulator.utils.rescale</h1><div class="highlight"><pre>
 <span></span><span class="c1">#    Copyright 2023 Stanford University Convex Optimization Group</span>
 <span class="c1">#</span>
 <span class="c1">#    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -94,7 +94,7 @@
 
 
 <div class="viewcode-block" id="_rescale">
-<a class="viewcode-back" href="../../../autoapi/simulator/futures/utils/index.html#simulator.futures.utils._rescale">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/simulator/utils/rescale/index.html#simulator.utils.rescale._rescale">[docs]</a>
 <span class="k">def</span> <span class="nf">_rescale</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rescale a time series to start at 1</span>
@@ -106,7 +106,7 @@
 
 
 <div class="viewcode-block" id="returns2prices">
-<a class="viewcode-back" href="../../../autoapi/simulator/futures/utils/index.html#simulator.futures.utils.returns2prices">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/simulator/utils/rescale/index.html#simulator.utils.rescale.returns2prices">[docs]</a>
 <span class="k">def</span> <span class="nf">returns2prices</span><span class="p">(</span><span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert returns to prices</span>
@@ -114,12 +114,6 @@
     <span class="n">prices</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_rescale</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">prices</span></div>
 
-
-
-<span class="c1"># if __name__ == &#39;__main__&#39;:</span>
-<span class="c1">#    returns = pd.Series(data=[.05, .1, 0.09, 0.01])</span>
-<span class="c1">#    p = _rescale(returns)</span>
-<span class="c1">#    print(p)</span>
 </pre></div>
 
            </div>

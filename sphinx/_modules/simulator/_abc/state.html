@@ -226,8 +226,22 @@
 <a class="viewcode-back" href="../../../autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.gross">[docs]</a>
     <span class="k">def</span> <span class="nf">gross</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trades</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="State.mask">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/state/index.html#simulator._abc.state.State.mask">[docs]</a>
+    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;construct true/false mask for assets with missing prices&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
 </div>
 
+
+
+<span class="c1"># if __name__ == &#39;__main__&#39;:</span>
+<span class="c1">#    mask = np.isfinite([np.infty, 2.0, np.NaN, 3.0])</span>
+<span class="c1">#    x = np.array([1,2,3,4])</span>
+<span class="c1">#    print(x[mask])</span>
 </pre></div>
 
            </div>

@@ -13,5 +13,6 @@ Submodules
    grid/index.rst
    interpolation/index.rst
    month/index.rst
+   rescale/index.rst
 
 

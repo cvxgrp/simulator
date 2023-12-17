@@ -65,6 +65,10 @@ Classes
    .. py:property:: gross
 
 
+   .. py:property:: mask
+
+      construct true/false mask for assets with missing prices
+
    .. py:attribute:: prices
       :type: pandas.Series
 

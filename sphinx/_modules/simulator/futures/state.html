@@ -106,7 +106,7 @@
     <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the position of the state. Computes the required trades</span>
-<span class="sd">        and but does not update the cash balance.</span>
+<span class="sd">        but does not update the cash balance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># update the position</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
