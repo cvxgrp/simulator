@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator import FuturesBuilder, FuturesPortfolio
 
 
 @pytest.fixture()
@@ -29,6 +29,9 @@ def test_set_cashposition(builder):
         builder.cashposition = 1e5 * np.ones(len(state.assets))
 
     portfolio = builder.build()
+
+    assert isinstance(portfolio, FuturesPortfolio)
+
     pd.testing.assert_frame_equal(
         portfolio.cashposition,
         pd.DataFrame(index=portfolio.index, columns=portfolio.assets, data=1e5),

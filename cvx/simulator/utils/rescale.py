@@ -29,9 +29,3 @@ def returns2prices(returns: pd.DataFrame):
     """
     prices = returns.apply(_rescale, axis=0)
     return prices
-
-
-# if __name__ == '__main__':
-#    returns = pd.Series(data=[.05, .1, 0.09, 0.01])
-#    p = _rescale(returns)
-#    print(p)

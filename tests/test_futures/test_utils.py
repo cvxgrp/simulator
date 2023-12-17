@@ -1,6 +1,6 @@
 import pandas as pd
 
-from cvx.simulator.futures.utils import returns2prices
+from cvx.simulator.utils.rescale import returns2prices
 
 
 def test_prices(prices):
