@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import EquityBuilder
-from cvx.simulator.utils.interpolation import interpolate
+from cvx.simulator import EquityBuilder, EquityPortfolio, interpolate
 
 # from cvx.simulator.interpolation import interpolate
 
@@ -46,6 +45,8 @@ def test_set_position(prices):
         assert np.allclose(b.position, state.nav / (state.prices * 2))
 
     portfolio = b.build()
+    assert isinstance(portfolio, EquityPortfolio)
+
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
 

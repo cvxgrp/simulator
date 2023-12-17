@@ -17,7 +17,7 @@ import pandas as pd
 
 from cvx.simulator.futures.portfolio import FuturesPortfolio
 from cvx.simulator.futures.state import FuturesState
-from cvx.simulator.futures.utils import returns2prices
+from cvx.simulator.utils.rescale import returns2prices
 
 from .._abc.builder import Builder
 

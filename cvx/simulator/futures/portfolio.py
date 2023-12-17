@@ -17,8 +17,9 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from cvx.simulator.utils.rescale import returns2prices
+
 from .._abc.portfolio import Portfolio
-from .utils import returns2prices
 
 
 @dataclass(frozen=True)
