@@ -30,4 +30,16 @@ Classes
 
       
 
+   .. py:method:: from_cashpos_prices(prices: pandas.DataFrame, cashposition: pandas.DataFrame, aum: float)
+      :classmethod:
+
+      Build Futures Portfolio from cashposition
+
+
+   .. py:method:: from_cashpos_returns(returns: pandas.DataFrame, cashposition: pandas.DataFrame, aum: float)
+      :classmethod:
+
+      Build Futures Portfolio from cashposition
+
+
 

@@ -94,7 +94,10 @@
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
 <span class="kn">from</span> <span class="nn">.._abc.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">returns2prices</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -113,8 +116,33 @@
         <span class="n">profit</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">profit</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="FuturesPortfolio.from_cashpos_prices">
+<a class="viewcode-back" href="../../../autoapi/simulator/futures/portfolio/index.html#simulator.futures.portfolio.FuturesPortfolio.from_cashpos_prices">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_cashpos_prices</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">aum</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from cashposition&quot;&quot;&quot;</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">cashposition</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span> <span class="n">aum</span><span class="o">=</span><span class="n">aum</span><span class="p">)</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="FuturesPortfolio.from_cashpos_returns">
+<a class="viewcode-back" href="../../../autoapi/simulator/futures/portfolio/index.html#simulator.futures.portfolio.FuturesPortfolio.from_cashpos_returns">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_cashpos_returns</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">aum</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from cashposition&quot;&quot;&quot;</span>
+        <span class="n">prices</span> <span class="o">=</span> <span class="n">returns2prices</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_cashpos_prices</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">,</span> <span class="n">aum</span><span class="p">)</span></div>
 </div>
 
+
+        <span class="c1"># units = cashposition.div(prices, fill_value=0.0)</span>
+        <span class="c1"># return cls(prices=prices, units=units, aum=aum)</span>
 </pre></div>
 
            </div>
