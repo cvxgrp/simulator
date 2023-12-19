@@ -40,7 +40,7 @@ class EquityState(State):
     These attributes can be updated and accessed through setter and getter methods
     """
 
-    cash: float = 1e6
+    # cash: float = 1e6
 
     @property
     def nav(self) -> float:
@@ -52,34 +52,34 @@ class EquityState(State):
         """
         return self.value + self.cash
 
-    @property
-    def weights(self) -> pd.Series:
-        """
-        The weights property computes the weighting of each asset in the current
-        portfolio as a fraction of the total portfolio value (nav).
+    # @property
+    # def weights(self) -> pd.Series:
+    #     """
+    #     The weights property computes the weighting of each asset in the current
+    #     portfolio as a fraction of the total portfolio value (nav).
+    #
+    #     Returns:
+    #
+    #     a pandas series object containing the weighting of each asset as a
+    #     fraction of the total portfolio value. If the positions are still
+    #     missing, then a series of zeroes is returned.
+    #     """
+    #     return self.cashposition / self.nav
+    #
+    # @property
+    # def leverage(self) -> float:
+    #     """
+    #     The `leverage` property computes the leverage of the portfolio,
+    #     which is the sum of the absolute values of the portfolio weights.
+    #     """
+    #     return float(self.weights.abs().sum())
 
-        Returns:
-
-        a pandas series object containing the weighting of each asset as a
-        fraction of the total portfolio value. If the positions are still
-        missing, then a series of zeroes is returned.
-        """
-        return self.cashposition / self.nav
-
-    @property
-    def leverage(self) -> float:
-        """
-        The `leverage` property computes the leverage of the portfolio,
-        which is the sum of the absolute values of the portfolio weights.
-        """
-        return float(self.weights.abs().sum())
-
-    @property
-    def short(self):
-        """
-        How short are we at this stage in USD
-        """
-        return self.cashposition[self.cashposition < 0].sum()
+    # @property
+    # def short(self):
+    #     """
+    #     How short are we at this stage in USD
+    #     """
+    #     return self.cashposition[self.cashposition < 0].sum()
 
     @State.position.setter
     def position(self, position: np.array):

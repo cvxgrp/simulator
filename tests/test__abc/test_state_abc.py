@@ -78,6 +78,8 @@ def test_init(prices):
     assert state.nav == 1e4
     assert state.value == 0.0
     assert state.profit == 0.0
+    assert state.gmv == 0.0
+    assert state.leverage == 0.0
 
     state.prices = prices.iloc[0]
 
@@ -86,6 +88,8 @@ def test_init(prices):
     assert state.nav == 1e4
     assert state.value == 0.0
     assert state.profit == 0.0
+    assert state.gmv == 0.0
+    assert state.leverage == 0.0
 
     # update position and weights
     state.position = np.ones(len(state.assets))

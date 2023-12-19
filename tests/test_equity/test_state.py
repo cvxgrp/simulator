@@ -56,17 +56,12 @@ def test_gmv_position(state):
     assert state.gmv == 1670455.8
 
 
-def test_short(state, prices):
-    state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
-    assert state.short == -938251.5
-    assert state.short == -15.0 * prices["C"].iloc[0]
-
-
 def test_state():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
     cash = 400
-    state = State(cash=cash)
+    state = State()
+    state.cash = cash
     state.prices = prices
     state.position = positions
     # value is the money in units
