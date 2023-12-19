@@ -11,7 +11,6 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -20,7 +19,7 @@ import pandas as pd
 
 
 @dataclass()
-class State(ABC):
+class State:
     prices: pd.Series = None
 
     _position: pd.Series = None
@@ -54,12 +53,19 @@ class State(ABC):
         return self._position
 
     @position.setter
-    @abstractmethod
     def position(self, position: np.array):
         """
         Update the position of the state. Computes the required trades
         and updates other quantities (e.g. cash) accordingly.
         """
+        # update the position
+        position = pd.Series(index=self.assets, data=position)
+
+        # compute the trades (can be fractional)
+        self._trades = position.subtract(self.position, fill_value=0.0)
+
+        # update only now as otherwise the trades would be wrong
+        self._position = position
 
     @property
     def gmv(self):
@@ -109,9 +115,3 @@ class State(ABC):
     def mask(self):
         """construct true/false mask for assets with missing prices"""
         return np.isfinite(self.prices.values)
-
-
-# if __name__ == '__main__':
-#    mask = np.isfinite([np.infty, 2.0, np.NaN, 3.0])
-#    x = np.array([1,2,3,4])
-#    print(x[mask])

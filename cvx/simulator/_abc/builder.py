@@ -48,6 +48,8 @@ class Builder(ABC):
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
 
+        self._state = State()
+
         self._units = pd.DataFrame(
             index=self.prices.index,
             columns=self.prices.columns,
