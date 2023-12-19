@@ -90,6 +90,8 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
                 state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)
             ).sum()
 
+            builder.cash = state.cash
+
     # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()

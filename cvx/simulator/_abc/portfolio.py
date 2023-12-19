@@ -203,6 +203,23 @@ class Portfolio(ABC):
 
         return self.cashposition
 
+    @property
+    def weights(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing
+        the weights of various assets in the portfolio.
+
+        Returns: pd.DataFrame: A pandas dataframe representing the weights
+        of various assets in the portfolio.
+
+        Notes: The function calculates the weights of various assets
+        in the portfolio by dividing the equity positions
+        for each asset (as represented in the equity dataframe)
+        by the total portfolio value (as represented in the nav dataframe).
+        Both dataframes are assumed to have the same dimensions.
+        The resulting dataframe will show the relative weight
+        of each asset in the portfolio at each point in time."""
+        return self.equity.apply(lambda x: x / self.nav)
+
     def metrics(
         self,
         benchmark: Any = None,

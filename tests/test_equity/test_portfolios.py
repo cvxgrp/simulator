@@ -14,6 +14,7 @@ def portfolio(prices):
 
     for t, state in b:
         b.position = positions.loc[t[-1]]
+        b.cash = state.cash
 
     return b.build()
 
@@ -28,9 +29,10 @@ def test_weights(portfolio):
 def test_portfolio_small(prices):
     builder = EquityBuilder(prices=prices[["A", "B"]], initial_cash=1e6)
 
-    for _, _ in builder:
+    for _, state in builder:
         # hold one share in both assets
         builder.position = [1, 1]
+        builder.cash = state.cash
 
     portfolio = builder.build()
 
@@ -52,9 +54,10 @@ def test_iter(prices):
     b = EquityBuilder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
-    for times, _ in b:
+    for times, state in b:
         # we set the position of A to 1.0
         b.position = pd.Series({"A": 1.0})
+        b.cash = state.cash
 
     # we build the portfolio
     portfolio = b.build()
@@ -85,9 +88,10 @@ def test_long_only(prices, resource_dir):
     b = EquityBuilder(prices=prices[["A", "B"]], initial_cash=100000)
 
     # We now iterate through the underlying timestamps of the portfolio
-    for times, _ in b:
+    for times, state in b:
         # we set the position of A to 2.0 and B to 4.0
         b.position = pd.Series({"A": 2.0, "B": 4.0})
+        b.cash = state.cash
 
     portfolio = b.build()
 

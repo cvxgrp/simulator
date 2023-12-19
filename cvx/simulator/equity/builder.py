@@ -56,8 +56,8 @@ class EquityBuilder(Builder):
         """
         Builder.position.__set__(self, position)
 
+        # update the cash...
         self._state.cash -= self._state.gross.sum()
-        self._cash[self._state.time] = self._state.cash
 
     @property
     def cash(self):
@@ -65,6 +65,14 @@ class EquityBuilder(Builder):
         The cash property returns the current cash available in the portfolio.
         """
         return self._cash
+
+    @cash.setter
+    def cash(self, cash: float) -> None:
+        """
+        The cash property returns the current cash available in the portfolio.
+        """
+        self._cash[self._state.time] = cash
+        self._state.cash = cash
 
     def build(self) -> EquityPortfolio:
         """A function that creates a new instance of the EquityPortfolio
