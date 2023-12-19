@@ -22,11 +22,6 @@ Classes
 
    Bases: :py:obj:`simulator._abc.builder.Builder`
 
-   .. py:property:: weights
-      :type: numpy.array
-
-      Get the current weights from the state
-
    .. py:property:: cash
 
       The cash property returns the current cash available in the portfolio.
@@ -34,11 +29,6 @@ Classes
    .. py:attribute:: initial_cash
       :type: float
       :value: 1000000.0
-
-      
-
-   .. py:attribute:: _state
-      :type: simulator.equity.state.EquityState
 
       
 

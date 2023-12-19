@@ -140,6 +140,8 @@
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_monotonic_increasing</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_units</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
             <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
@@ -242,7 +244,6 @@
 
 
     <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
-    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The position property returns the current position of the portfolio.</span>
@@ -250,6 +251,8 @@
 
 <span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Builder.cashposition">
@@ -294,10 +297,28 @@
 <span class="sd">        to the corresponding attributes in the Portfolio builder object.</span>
 <span class="sd">        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
-</div>
 
 
         <span class="c1"># return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Builder.weights">
+<a class="viewcode-back" href="../../../autoapi/simulator/_abc/builder/index.html#simulator._abc.builder.Builder.weights">[docs]</a>
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current weights from the state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+
+
+    <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The weights property sets the current weights of the portfolio.</span>
+<span class="sd">        We convert the weights to positions using the current prices and the NAV</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span></div>
+
 </pre></div>
 
            </div>

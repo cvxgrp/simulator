@@ -103,16 +103,27 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator._abc.state.State" title="simulator._abc.state.State"><code class="xref py py-obj docutils literal notranslate"><span class="pre">State</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="simulator._abc.state.State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator._abc.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.cash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.cash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.nav">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.nav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.nav" title="Link to this definition"></a></dt>
+<dd><p>The nav property computes the net asset value (NAV) of the portfolio,
+which is the sum of the current value of the
+portfolio as determined by the value property,
+and the current amount of cash available in the portfolio.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._abc.state.State.value">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.value" title="Link to this definition"></a></dt>
@@ -175,9 +186,42 @@ a new position.</p>
 <dd><p>construct true/false mask for assets with missing prices</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py property">
 <dt class="sig sig-object py" id="simulator._abc.state.State.prices">
-<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.prices" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prices</span></span><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.prices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.profit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.profit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.aum">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aum</span></span><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.aum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.weights" title="Link to this definition"></a></dt>
+<dd><p>The weights property computes the weighting of each asset in the current
+portfolio as a fraction of the total portfolio value (nav).</p>
+<p>Returns:</p>
+<p>a pandas series object containing the weighting of each asset as a
+fraction of the total portfolio value. If the positions are still
+missing, then a series of zeroes is returned.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator._abc.state.State.leverage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leverage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State.leverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State.leverage" title="Link to this definition"></a></dt>
+<dd><p>The <cite>leverage</cite> property computes the leverage of the portfolio,
+which is the sum of the absolute values of the portfolio weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator._abc.state.State._prices">
+<span class="sig-name descname"><span class="pre">_prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State._prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State._prices" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -198,6 +242,21 @@ a new position.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator._abc.state.State._days">
 <span class="sig-name descname"><span class="pre">_days</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State._days"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State._days" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator._abc.state.State._profit">
+<span class="sig-name descname"><span class="pre">_profit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State._profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State._profit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator._abc.state.State._aum">
+<span class="sig-name descname"><span class="pre">_aum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State._aum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State._aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator._abc.state.State._cash">
+<span class="sig-name descname"><span class="pre">_cash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="reference internal" href="../../../../_modules/simulator/_abc/state.html#State._cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._abc.state.State._cash" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

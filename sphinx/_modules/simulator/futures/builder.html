@@ -92,10 +92,7 @@
 <span class="c1">#    limitations under the License.</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
 <span class="kn">from</span> <span class="nn">cvx.simulator.futures.portfolio</span> <span class="kn">import</span> <span class="n">FuturesPortfolio</span>
-<span class="kn">from</span> <span class="nn">cvx.simulator.futures.state</span> <span class="kn">import</span> <span class="n">FuturesState</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator.utils.rescale</span> <span class="kn">import</span> <span class="n">returns2prices</span>
 
 <span class="kn">from</span> <span class="nn">.._abc.builder</span> <span class="kn">import</span> <span class="n">Builder</span>
@@ -105,40 +102,23 @@
 <div class="viewcode-block" id="FuturesBuilder">
 <a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder">[docs]</a>
 <span class="k">class</span> <span class="nc">FuturesBuilder</span><span class="p">(</span><span class="n">Builder</span><span class="p">):</span>
+<div class="viewcode-block" id="FuturesBuilder.aum">
+<a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.aum">[docs]</a>
+    <span class="n">aum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+
+<div class="viewcode-block" id="FuturesBuilder.__post_init__">
+<a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.__post_init__">[docs]</a>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">cash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span></div>
+
+
 <div class="viewcode-block" id="FuturesBuilder.build">
 <a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.build">[docs]</a>
     <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">FuturesPortfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span> <span class="n">aum</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aum</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="FuturesBuilder.aum">
-<a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.aum">[docs]</a>
-    <span class="n">aum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span></div>
-
-<div class="viewcode-block" id="FuturesBuilder._state">
-<a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder._state">[docs]</a>
-    <span class="n">_state</span><span class="p">:</span> <span class="n">FuturesState</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="FuturesBuilder.__post_init__">
-<a class="viewcode-back" href="../../../autoapi/simulator/futures/builder/index.html#simulator.futures.builder.FuturesBuilder.__post_init__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The __post_init__ method is a special method of initialized instances</span>
-<span class="sd">        of the _Builder class and is called after initialization.</span>
-<span class="sd">        It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.</span>
-
-<span class="sd">        The method takes no input parameter. It initializes the cash attribute in the internal</span>
-<span class="sd">        _State object with the initial amount of cash in the portfolio, self.initial_cash.</span>
-
-<span class="sd">        Note that this method is often used in Python classes for additional initialization routines</span>
-<span class="sd">        that can only be performed after the object is fully initialized. __post_init__</span>
-<span class="sd">        is called automatically after the object initialization.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FuturesState</span><span class="p">()</span></div>
 
 
     <span class="nd">@classmethod</span>
@@ -150,18 +130,7 @@
 
         <span class="n">prices</span> <span class="o">=</span> <span class="n">returns2prices</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">)</span></div>
-
-
-    <span class="nd">@Builder</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The position property returns the current position of the portfolio.</span>
-<span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
-
-<span class="sd">        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span></div>
+</div>
 
 </pre></div>
 

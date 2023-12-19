@@ -20,10 +20,16 @@ Classes
 .. py:class:: State
 
 
-   Bases: :py:obj:`abc.ABC`
+   .. py:property:: cash
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+
+   .. py:property:: nav
+      :type: float
+
+      The nav property computes the net asset value (NAV) of the portfolio,
+      which is the sum of the current value of the
+      portfolio as determined by the value property,
+      and the current amount of cash available in the portfolio.
 
    .. py:property:: value
       :type: float
@@ -69,7 +75,34 @@ Classes
 
       construct true/false mask for assets with missing prices
 
-   .. py:attribute:: prices
+   .. py:property:: prices
+
+
+   .. py:property:: profit
+
+
+   .. py:property:: aum
+
+
+   .. py:property:: weights
+      :type: pandas.Series
+
+      The weights property computes the weighting of each asset in the current
+      portfolio as a fraction of the total portfolio value (nav).
+
+      Returns:
+
+      a pandas series object containing the weighting of each asset as a
+      fraction of the total portfolio value. If the positions are still
+      missing, then a series of zeroes is returned.
+
+   .. py:property:: leverage
+      :type: float
+
+      The `leverage` property computes the leverage of the portfolio,
+      which is the sum of the absolute values of the portfolio weights.
+
+   .. py:attribute:: _prices
       :type: pandas.Series
 
       
@@ -92,6 +125,24 @@ Classes
    .. py:attribute:: _days
       :type: int
       :value: 0
+
+      
+
+   .. py:attribute:: _profit
+      :type: float
+      :value: 0.0
+
+      
+
+   .. py:attribute:: _aum
+      :type: float
+      :value: 0.0
+
+      
+
+   .. py:attribute:: _cash
+      :type: float
+      :value: 1000000.0
 
       
 

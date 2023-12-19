@@ -70,6 +70,11 @@ Classes
       The units property returns the frame of holdings of the portfolio.
       Useful mainly for testing
 
+   .. py:property:: weights
+      :type: numpy.array
+
+      Get the current weights from the state
+
    .. py:attribute:: prices
       :type: pandas.DataFrame
 
