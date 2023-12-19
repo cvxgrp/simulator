@@ -5,35 +5,10 @@ import pandas as pd
 import pytest
 
 from cvx.simulator._abc.builder import Builder
-from cvx.simulator._abc.state import State
-
-
-@dataclass
-class TestState(State):
-    @State.position.setter
-    def position(self):
-        pass
 
 
 @dataclass
 class TestBuilder(Builder):
-    def __post_init__(self) -> None:
-        """
-        The __post_init__ method is a special method of initialized instances
-        of the _Builder class and is called after initialization.
-        It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.
-
-        The method takes no input parameter. It initializes the cash attribute in the internal
-        _State object with the initial amount of cash in the portfolio, self.initial_cash.
-
-        Note that this method is often used in Python classes for additional initialization routines
-        that can only be performed after the object is fully initialized. __post_init__
-        is called automatically after the object initialization.
-        """
-
-        super().__post_init__()
-        self._state = TestState()
-
     @Builder.position.setter
     def position(self, position):
         print(position)
@@ -47,7 +22,9 @@ class TestBuilder(Builder):
 @pytest.fixture()
 def builder(prices):
     builder = TestBuilder(prices=prices)
-    builder._state = TestState(prices=prices.iloc[0])
+    builder._state.prices = prices.iloc[0]
+
+    #    State(prices=prices.iloc[0]))
     return builder
 
 

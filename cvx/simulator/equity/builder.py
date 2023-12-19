@@ -20,13 +20,11 @@ import pandas as pd
 
 from .._abc.builder import Builder
 from .portfolio import EquityPortfolio
-from .state import EquityState
 
 
 @dataclass
 class EquityBuilder(Builder):
     initial_cash: float = 1e6
-    _state: EquityState = None
     _cash: pd.Series = None
 
     def __post_init__(self) -> None:
@@ -46,23 +44,7 @@ class EquityBuilder(Builder):
         super().__post_init__()
 
         self._cash = pd.Series(index=self.index, data=np.NaN)
-        self._state = EquityState()
         self._state.cash = self.initial_cash
-
-    @property
-    def weights(self) -> np.array:
-        """
-        Get the current weights from the state
-        """
-        return self._state.weights[self._state.assets].values
-
-    @weights.setter
-    def weights(self, weights: np.array) -> None:
-        """
-        The weights property sets the current weights of the portfolio.
-        We convert the weights to positions using the current prices and the NAV
-        """
-        self.position = self._state.nav * weights / self.current_prices
 
     @Builder.position.setter
     def position(self, position: pd.Series) -> None:
@@ -72,9 +54,9 @@ class EquityBuilder(Builder):
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self._units.loc[self._state.time, self._state.assets] = position
-        self._state.position = position
+        Builder.position.__set__(self, position)
 
+        self._state.cash -= self._state.gross.sum()
         self._cash[self._state.time] = self._state.cash
 
     @property

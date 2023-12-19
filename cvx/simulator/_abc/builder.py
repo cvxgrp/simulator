@@ -48,6 +48,8 @@ class Builder(ABC):
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
 
+        self._state = State()
+
         self._units = pd.DataFrame(
             index=self.prices.index,
             columns=self.prices.columns,
@@ -131,7 +133,6 @@ class Builder(ABC):
         return self._units.loc[self._state.time]
 
     @position.setter
-    @abstractmethod
     def position(self, position: pd.Series) -> None:
         """
         The position property returns the current position of the portfolio.
@@ -139,6 +140,8 @@ class Builder(ABC):
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
+        self._units.loc[self._state.time, self._state.assets] = position
+        self._state.position = position
 
     @property
     def cashposition(self):
@@ -177,3 +180,18 @@ class Builder(ABC):
         """
 
         # return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)
+
+    @property
+    def weights(self) -> np.array:
+        """
+        Get the current weights from the state
+        """
+        return self._state.weights[self._state.assets].values
+
+    @weights.setter
+    def weights(self, weights: np.array) -> None:
+        """
+        The weights property sets the current weights of the portfolio.
+        We convert the weights to positions using the current prices and the NAV
+        """
+        self.position = self._state.nav * weights / self.current_prices

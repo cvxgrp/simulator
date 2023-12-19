@@ -4,8 +4,6 @@ import pytest
 
 from cvx.simulator import EquityBuilder, EquityPortfolio, interpolate
 
-# from cvx.simulator.interpolation import interpolate
-
 
 @pytest.fixture()
 def builder(prices):
