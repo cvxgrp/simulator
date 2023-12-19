@@ -7,11 +7,14 @@ from cvx.simulator.equity.state import EquityState as State
 
 @pytest.fixture()
 def state(prices):
-    return State(prices=prices.iloc[0])
+    state = State()
+    state.prices = prices.iloc[0]
+    return state
 
 
 def test_trade(prices):
-    state = State(prices=prices[["A", "B", "C"]].iloc[0])
+    state = State()
+    state.prices = prices[["A", "B", "C"]].iloc[0]
     state.position = np.array([10, 20, -10])
 
     x = pd.Series({"B": 25, "C": -15, "D": 40}).sub(state.position, fill_value=0)
@@ -63,7 +66,8 @@ def test_state():
     prices = pd.Series(data=[2.0, 3.0])
     positions = pd.Series(data=[100, 300])
     cash = 400
-    state = State(cash=cash, prices=prices)
+    state = State(cash=cash)
+    state.prices = prices
     state.position = positions
     # value is the money in units
     assert state.value == 1100.0

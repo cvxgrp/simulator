@@ -133,7 +133,6 @@ class Builder(ABC):
         return self._units.loc[self._state.time]
 
     @position.setter
-    @abstractmethod
     def position(self, position: pd.Series) -> None:
         """
         The position property returns the current position of the portfolio.
@@ -141,6 +140,8 @@ class Builder(ABC):
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
+        self._units.loc[self._state.time, self._state.assets] = position
+        self._state.position = position
 
     @property
     def cashposition(self):

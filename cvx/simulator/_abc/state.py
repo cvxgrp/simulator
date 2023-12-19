@@ -20,12 +20,35 @@ import pandas as pd
 
 @dataclass()
 class State:
-    prices: pd.Series = None
-
+    _prices: pd.Series = None
     _position: pd.Series = None
     _trades: pd.Series = None
     _time: datetime = None
     _days: int = 0
+    _profit: float = 0.0
+    _aum: float = 0.0
+    _cash: float = 1e6
+
+    @property
+    def cash(self):
+        return self._cash
+
+    @cash.setter
+    def cash(self, cash: float):
+        self._cash = cash
+        self.aum = cash + self.value
+
+    @property
+    def nav(self) -> float:
+        """
+        The nav property computes the net asset value (NAV) of the portfolio,
+        which is the sum of the current value of the
+        portfolio as determined by the value property,
+        and the current amount of cash available in the portfolio.
+        """
+        # assert np.isclose(self.value + self.cash, self.aum), f"{self.value + self.cash} != {self.aum}"
+        # return self.value + self.cash
+        return self.aum
 
     @property
     def value(self) -> float:
@@ -115,3 +138,51 @@ class State:
     def mask(self):
         """construct true/false mask for assets with missing prices"""
         return np.isfinite(self.prices.values)
+
+    @property
+    def prices(self):
+        return self._prices
+
+    @prices.setter
+    def prices(self, prices):
+        value_before = (self.prices * self.position).sum()  # self.cashposition.sum()
+        value_after = (prices * self.position).sum()
+
+        self._prices = prices
+        self._profit = value_after - value_before
+        self.aum += self.profit
+
+    @property
+    def profit(self):
+        return self._profit
+
+    @property
+    def aum(self):
+        return self._aum
+
+    @aum.setter
+    def aum(self, aum):
+        self._aum = aum
+
+    @property
+    def weights(self) -> pd.Series:
+        """
+        The weights property computes the weighting of each asset in the current
+        portfolio as a fraction of the total portfolio value (nav).
+
+        Returns:
+
+        a pandas series object containing the weighting of each asset as a
+        fraction of the total portfolio value. If the positions are still
+        missing, then a series of zeroes is returned.
+        """
+        assert np.isclose(self.nav, self.aum), f"{self.nav} != {self.aum}"
+        return self.cashposition / self.nav
+
+    @property
+    def leverage(self) -> float:
+        """
+        The `leverage` property computes the leverage of the portfolio,
+        which is the sum of the absolute values of the portfolio weights.
+        """
+        return float(self.weights.abs().sum())
