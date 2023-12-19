@@ -20,13 +20,11 @@ import pandas as pd
 
 from .._abc.builder import Builder
 from .portfolio import EquityPortfolio
-from .state import EquityState
 
 
 @dataclass
 class EquityBuilder(Builder):
     initial_cash: float = 1e6
-    _state: EquityState = None
     _cash: pd.Series = None
 
     def __post_init__(self) -> None:
@@ -46,7 +44,6 @@ class EquityBuilder(Builder):
         super().__post_init__()
 
         self._cash = pd.Series(index=self.index, data=np.NaN)
-        self._state = EquityState()
         self._state.cash = self.initial_cash
 
     @property
@@ -75,6 +72,7 @@ class EquityBuilder(Builder):
         self._units.loc[self._state.time, self._state.assets] = position
         self._state.position = position
 
+        self._state.cash -= self._state.gross.sum()
         self._cash[self._state.time] = self._state.cash
 
     @property

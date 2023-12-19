@@ -2,13 +2,14 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.equity.state import EquityState as State
+from cvx.simulator._abc.state import State
 
 
 @pytest.fixture()
 def state(prices):
     state = State()
     state.prices = prices.iloc[0]
+    state.cash = 1e6
     return state
 
 
@@ -38,6 +39,7 @@ def test_nav(state):
 
 def test_cash_position(state):
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    state.cash -= state.gross.sum()
     assert state.cash == 1206047.2
 
 
@@ -48,6 +50,7 @@ def test_value_position(state):
 
 def test_nav_position(state):
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    state.cash -= state.gross.sum()
     assert state.nav == 1e6
 
 
@@ -64,6 +67,7 @@ def test_state():
     state.cash = cash
     state.prices = prices
     state.position = positions
+    state.cash -= state.gross.sum()
     # value is the money in units
     assert state.value == 1100.0
     assert state.cash == -700.0
