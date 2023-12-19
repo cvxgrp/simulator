@@ -54,8 +54,7 @@ class EquityBuilder(Builder):
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
-        self._units.loc[self._state.time, self._state.assets] = position
-        self._state.position = position
+        Builder.position.__set__(self, position)
 
         self._state.cash -= self._state.gross.sum()
         self._cash[self._state.time] = self._state.cash

@@ -23,6 +23,10 @@ from .._abc.builder import Builder
 class FuturesBuilder(Builder):
     aum: float = 1e6
 
+    def __post_init__(self):
+        super().__post_init__()
+        self._state.cash = self.aum
+
     def build(self):
         """Build Futures Portfolio"""
         return FuturesPortfolio(prices=self.prices, units=self.units, aum=self.aum)
