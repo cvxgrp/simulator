@@ -34,14 +34,3 @@ class FuturesBuilder(Builder):
 
         prices = returns2prices(returns)
         return cls(prices=prices)
-
-    # @Builder.position.setter
-    # def position(self, position: pd.Series) -> None:
-    #     """
-    #     The position property returns the current position of the portfolio.
-    #     It returns a pandas Series object containing the current position of the portfolio.
-    #
-    #     Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
-    #     """
-    #     self._units.loc[self._state.time, self._state.assets] = position
-    #     self._state.position = position

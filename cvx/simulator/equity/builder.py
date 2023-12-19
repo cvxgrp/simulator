@@ -46,21 +46,6 @@ class EquityBuilder(Builder):
         self._cash = pd.Series(index=self.index, data=np.NaN)
         self._state.cash = self.initial_cash
 
-    @property
-    def weights(self) -> np.array:
-        """
-        Get the current weights from the state
-        """
-        return self._state.weights[self._state.assets].values
-
-    @weights.setter
-    def weights(self, weights: np.array) -> None:
-        """
-        The weights property sets the current weights of the portfolio.
-        We convert the weights to positions using the current prices and the NAV
-        """
-        self.position = self._state.nav * weights / self.current_prices
-
     @Builder.position.setter
     def position(self, position: pd.Series) -> None:
         """
