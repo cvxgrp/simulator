@@ -186,10 +186,13 @@
     <span class="k">def</span> <span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a pandas series representing the NAV&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aum</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span>
+            <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">profit</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">profit</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span></div>
+            <span class="n">series</span> <span class="o">=</span> <span class="n">profit</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">aum</span>
+
+        <span class="n">series</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;NAV&quot;</span>
+        <span class="k">return</span> <span class="n">series</span></div>
 
 
     <span class="nd">@property</span>
@@ -202,7 +205,9 @@
 <span class="sd">        Returns: pd.Series: A pandas series representing the profit</span>
 <span class="sd">        gained or lost in the portfolio based on changes in asset prices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="n">series</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cashposition</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Profit&quot;</span>
+        <span class="k">return</span> <span class="n">series</span></div>
 
 
     <span class="nd">@property</span>
@@ -222,7 +227,9 @@
 <span class="sd">        Min_periods argument is set to 1 to include the minimum period of one day.</span>
 <span class="sd">        The resulting series will show the highest value the portfolio has reached at each point in time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">expanding</span><span class="p">(</span><span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span></div>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">expanding</span><span class="p">(</span><span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Highwater&quot;</span>
+        <span class="k">return</span> <span class="n">series</span></div>
 
 
     <span class="nd">@property</span>
@@ -242,7 +249,9 @@
 <span class="sd">        A positive drawdown means the portfolio is currently worth</span>
 <span class="sd">        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span></div>
+        <span class="n">series</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">highwater</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Drawdown&quot;</span>
+        <span class="k">return</span> <span class="n">series</span></div>
 
 
     <span class="nd">@property</span>
