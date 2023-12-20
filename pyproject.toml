@@ -24,7 +24,6 @@ pre-commit = "*"
 [tool.poetry.group.dev.dependencies]
 plotly = "*"
 loguru = "*"
-cvxpy = "*"
 tinycta = "0.7.0"
 
 [build-system]
