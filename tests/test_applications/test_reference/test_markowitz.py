@@ -1,7 +1,7 @@
 import pytest
 
 from cvx.simulator.builder import Builder
-from tests.test_reference.markowitz import (
+from test_applications.test_reference.markowitz import (
     OptimizationInput,
     basic_markowitz,
     synthetic_returns,
@@ -57,6 +57,10 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             print(state.leverage)
             print(state.nav)
             print(state.assets)
+            print(state.profit)
+            print(state.gmv)
+            print(state.value)
+            print(state.aum)
 
             r = 0.02
 
@@ -82,25 +86,16 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
 
             # the builder keeps also track of the state
             # some quantities are only post-trading interesting
-            # print(state.trades)
-            # should trading costs be given per asset?
-            # print(state.cash)
 
-            # state.cash -= (
             costs = (state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)).sum()
 
             # builder.cash = state.cash - (state.trades * state.prices).sum()
             builder.aum = state.aum - costs
 
-    # todo: fix this test
-    # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()
 
-    # print(portfolio.cash)
-
     # The portfolio object is exposing to numerous analytics via quantstats
-    portfolio.html(output="report.html")
     portfolio.snapshot()
     portfolio.nav.plot()
 
