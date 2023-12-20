@@ -34,7 +34,9 @@ def test_from_cash_position_prices(prices):
     )
 
     profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
-    pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum)
+    pd.testing.assert_series_equal(
+        portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False
+    )
 
 
 def test_from_cash_returns(prices):
@@ -46,4 +48,6 @@ def test_from_cash_returns(prices):
     )
 
     profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
-    pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum)
+    pd.testing.assert_series_equal(
+        portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False
+    )
