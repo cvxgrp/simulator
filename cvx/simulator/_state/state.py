@@ -27,15 +27,14 @@ class State:
     _days: int = 0
     _profit: float = 0.0
     _aum: float = 0.0
-    _cash: float = 1e6
 
     @property
     def cash(self):
-        return self._cash
+        return self.nav - self.value
 
     @cash.setter
     def cash(self, cash: float):
-        self._cash = cash
+        # self._cash = cash
         self.aum = cash + self.value
 
     @property
@@ -129,10 +128,6 @@ class State:
         a new position.
         """
         return self._trades
-
-    @property
-    def gross(self):
-        return self.trades * self.prices
 
     @property
     def mask(self):
