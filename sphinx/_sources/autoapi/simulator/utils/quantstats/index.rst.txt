@@ -1,0 +1,15 @@
+:py:mod:`simulator.utils.quantstats`
+====================================
+
+.. py:module:: simulator.utils.quantstats
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   plot/index.rst
+
+

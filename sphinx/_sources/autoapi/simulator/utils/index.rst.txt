@@ -4,6 +4,15 @@
 .. py:module:: simulator.utils
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   quantstats/index.rst
+
+
 Submodules
 ----------
 .. toctree::
