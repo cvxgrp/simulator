@@ -48,29 +48,15 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     for t, state in builder:
         # the very first and the very last elements are ignored
         if t[-1] in feasible:
-            # State is exposing numerous quantities
-            print(state.cash)
-            print(state.prices)
-            print(state.weights)
-            print(state.cashposition)
-            print(state.position)
-            print(state.leverage)
-            print(state.nav)
-            print(state.assets)
-            print(state.profit)
-            print(state.gmv)
-            print(state.value)
-            print(state.aum)
-
-            r = 0.02
-
             # earn interest rate on the existing cash
+            r = 0.02
             state.cash = (1 + r / 365) ** state.days * state.cash
 
             # pay fee on gmv to the broker
-            state.cash -= 0.0025 / 365 * state.gmv
+            # alternate the model here...
+            state.cash -= (1 + 0.0025 / 365) ** state.days * state.gmv - state.gmv
 
-            # We define the input needed for the optimizer
+            # define the input needed for the optimizer
             _input = OptimizationInput(
                 mean=means.loc[t[-1]],
                 covariance=covariance[t[-1]],
@@ -81,22 +67,22 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             w, _ = basic_markowitz(_input)
 
             # update weights in builder
-            # also possible to update positions or cash-positions
             builder.weights = w
 
             # the builder keeps also track of the state
             # some quantities are only post-trading interesting
-
             costs = (state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)).sum()
 
-            # builder.cash = state.cash - (state.trades * state.prices).sum()
+            # reduce the aum by the costs paid...
             builder.aum = state.aum - costs
 
+    # build the portfolio
     portfolio = builder.build()
-    portfolio.snapshot()
+
+    portfolio.snapshot(title="Markowitz Portfolio")
 
     # The portfolio object is exposing to numerous analytics via quantstats
-    portfolio.snapshot()
     portfolio.nav.plot()
-
-    # print(portfolio.cashflow)
+    portfolio.metrics()
+    m = portfolio.metrics(display=False)
+    print(m)
