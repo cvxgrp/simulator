@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from cvx.simulator import FuturesBuilder, interpolate
+from cvx.simulator import interpolate
+from cvx.simulator.builder import Builder
 from cvx.simulator.utils.grid import resample_index
 
 if __name__ == "__main__":
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     grid = resample_index(prices.index, "W")
 
     # construct the portfolio using a Builder
-    builder = FuturesBuilder(prices=prices, aum=1e6)
+    builder = Builder(prices=prices, initial_aum=1e6)
 
     # iterate
     for t, state in builder:
