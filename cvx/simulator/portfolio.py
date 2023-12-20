@@ -85,10 +85,13 @@ class Portfolio(ABC):
     def nav(self):
         """Return a pandas series representing the NAV"""
         if isinstance(self.aum, pd.Series):
-            return self.aum
+            series = self.aum
         else:
             profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
-            return profit.cumsum() + self.aum
+            series = profit.cumsum() + self.aum
+
+        series.name = "NAV"
+        return series
 
     @property
     def profit(self) -> pd.Series:
