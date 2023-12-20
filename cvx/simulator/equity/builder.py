@@ -26,6 +26,7 @@ from .portfolio import EquityPortfolio
 class EquityBuilder(Builder):
     initial_cash: float = 1e6
     _cash: pd.Series = None
+    _costs: pd.Series = None
 
     def __post_init__(self) -> None:
         """
@@ -45,19 +46,6 @@ class EquityBuilder(Builder):
 
         self._cash = pd.Series(index=self.index, data=np.NaN)
         self._state.cash = self.initial_cash
-
-    @Builder.position.setter
-    def position(self, position: pd.Series) -> None:
-        """
-        The position property returns the current position of the portfolio.
-        It returns a pandas Series object containing the current position of the portfolio.
-
-        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
-        """
-        Builder.position.__set__(self, position)
-
-        # update the cash...
-        self._state.cash -= self._state.gross.sum()
 
     @property
     def cash(self):

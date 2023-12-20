@@ -32,7 +32,7 @@ def test_portfolio(prices):
     mu = np.tanh(returns_adj.cumsum().apply(osc)).values
     vo = prices.pct_change().ewm(com=vola, min_periods=vola).std().values
 
-    builder = FuturesBuilder(prices=prices, aum=1e8)
+    builder = FuturesBuilder(prices=prices, initial_aum=1e8)
 
     for n, (t, state) in enumerate(builder):
         mask = state.mask
@@ -41,6 +41,8 @@ def test_portfolio(prices):
         expected_vo = np.nan_to_num(vo[n][mask])
         risk_position = solve(matrix, expected_mu) / inv_a_norm(expected_mu, matrix)
         builder.cashposition = risk_position / expected_vo
+        # you could correct here with trading costs
+        builder.aum = state.aum
 
     portfolio = builder.build()
 

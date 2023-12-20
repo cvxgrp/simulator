@@ -32,16 +32,16 @@ def test_portfolio_small(prices):
     for _, state in builder:
         # hold one share in both assets
         builder.position = [1, 1]
-        builder.cash = state.cash
+
+        # costs are 5 bps of the traded value
+        costs = 0.0005 * (state.trades.abs() * state.prices).sum()
+
+        # net income/costs from trading positions
+        builder.cash = state.cash - (state.trades * state.prices).sum() - costs
 
     portfolio = builder.build()
 
-    pd.testing.assert_series_equal(
-        portfolio.nav,
-        prices[["A", "B"]].sum(axis=1) + 1e6 - prices[["A", "B"]].iloc[0].sum(),
-    )
-
-    portfolio.cashflow.iloc[0] = pytest.approx(-975014.24)
+    assert portfolio.cashflow.iloc[0] == pytest.approx(-975001.74712)
 
 
 def test_iter(prices):

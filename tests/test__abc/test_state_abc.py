@@ -94,6 +94,7 @@ def test_init(prices):
     # update position and weights
     state.position = np.ones(len(state.assets))
     state.cash -= state.gross.sum()
+    state.costs = 0.0
 
     assert state.cash == 1e4 - prices.iloc[0].sum()
     assert state.aum == 1e4

@@ -41,7 +41,7 @@ def test_set_position(prices):
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
-        b.cash = state.cash
+        b.cash = state.cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
     assert isinstance(portfolio, EquityPortfolio)
@@ -59,7 +59,7 @@ def test_set_weights(prices):
         b.weights = np.array([0.5, 0.5])
         assert np.allclose(b.weights, np.array([0.5, 0.5]))
         assert np.allclose(state.weights.values, np.array([0.5, 0.5]))
-        b.cash = state.cash
+        b.cash = state.cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -74,7 +74,7 @@ def test_set_cashpositions(prices):
     for times, state in b:
         b.cashposition = np.ones(2) * state.nav / 2
         assert np.allclose(b.cashposition, np.ones(2) * state.nav / 2)
-        b.cash = state.cash
+        b.cash = state.cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -85,7 +85,7 @@ def test_set_position_again(prices):
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
-        b.cash = state.cash
+        b.cash = state.cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)

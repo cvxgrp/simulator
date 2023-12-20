@@ -27,8 +27,11 @@ from cvx.simulator.utils.interpolation import valid
 @dataclass
 class Builder(ABC):
     prices: pd.DataFrame
+    initial_aum: float = 1e6
+
     _state: State = None
     _units: pd.DataFrame = None
+    _aum: pd.Series = None
 
     def __post_init__(self) -> None:
         """
@@ -56,6 +59,10 @@ class Builder(ABC):
             data=np.NaN,
             dtype=float,
         )
+
+        self._aum = pd.Series(index=self.prices.index, dtype=float)
+
+        self._state.aum = self.initial_aum
 
     @property
     def valid(self):
@@ -195,3 +202,18 @@ class Builder(ABC):
         We convert the weights to positions using the current prices and the NAV
         """
         self.position = self._state.nav * weights / self.current_prices
+
+    @property
+    def aum(self):
+        """
+        The aum property returns the current AUM of the portfolio.
+        """
+        return self._aum
+
+    @aum.setter
+    def aum(self, aum):
+        """
+        The aum property sets the current AUM of the portfolio.
+        """
+        self._aum[self._state.time] = aum
+        self._state.aum = aum

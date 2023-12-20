@@ -21,11 +21,12 @@ def position(resource_dir):
 
 @pytest.fixture()
 def portfolio(prices_interpolated, position):
-    builder = FuturesBuilder(prices=prices_interpolated, aum=1e7)
+    builder = FuturesBuilder(prices=prices_interpolated, initial_aum=1e7)
 
     for t, state in builder:
         pos = position[state.assets].loc[t[-1]].fillna(0.0)
         builder.cashposition = pos
+        builder.aum = state.aum
 
     portfolio = builder.build()
     return portfolio

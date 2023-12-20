@@ -24,13 +24,15 @@ from .._abc.portfolio import Portfolio
 
 @dataclass(frozen=True)
 class FuturesPortfolio(Portfolio):
-    aum: float
+    aum: float | pd.Series
 
     @property
     def nav(self):
-        profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
-
-        return profit.cumsum() + self.aum
+        if isinstance(self.aum, pd.Series):
+            return self.aum
+        else:
+            profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
+            return profit.cumsum() + self.aum
 
     @classmethod
     def from_cashpos_prices(

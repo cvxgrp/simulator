@@ -1,23 +1,29 @@
 import pandas as pd
+import pytest
 
 from cvx.simulator.futures.builder import FuturesBuilder
 from cvx.simulator.futures.portfolio import FuturesPortfolio
 
 
 def test_portfolio_cumulated(prices):
-    builder = FuturesBuilder(prices=prices[["A", "B"]], aum=1e6)
+    builder = FuturesBuilder(prices=prices[["A", "B"]].tail(10), initial_aum=1e6)
 
-    for _, _ in builder:
+    for t, state in builder:
         # hold one share in both assets
         builder.cashposition = [1e5, 4e5]
 
-    portfolio = FuturesPortfolio(
-        aum=1e6, prices=prices[["A", "B"]], units=builder.units
-    )
+        # costs are 5 bps of the traded value
+        costs = 0.0005 * (state.trades.abs() * state.prices).sum()
 
-    # shift the cashposition forward such that we multiply the returns with the previous cashposition
-    profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
-    pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum)
+        # reduce the available aum by the costs
+        builder.aum = state.aum - costs
+
+    portfolio = builder.build()
+
+    pd.testing.assert_series_equal(portfolio.nav, builder.aum)
+
+    assert portfolio.nav.sharpe() == pytest.approx(3.891806571531769, abs=1e-3)
+    assert portfolio.nav.iloc[-1] == pytest.approx(1015576.0104632963, abs=1e-3)
 
 
 def test_from_cash_position_prices(prices):

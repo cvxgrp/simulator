@@ -44,7 +44,7 @@ def test_case(columns, index, prices):
     # run a 1/n portfolio on those prices
     for t, state in b:
         b.weights = f(n=len(state.assets))
-        b.cash = state.cash
+        b.cash = state.cash - (state.trades * state.prices).sum()
 
     # build the portfolio
     portfolio = b.build()
