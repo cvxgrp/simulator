@@ -35,10 +35,10 @@ and initialize the amount of cash used in an experiment:
 
 ```python
 import pandas as pd
-from cvx.simulator import EquityBuilder
+from cvx.simulator import Builder
 
 prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True, header=0)
-b = EquityBuilder(prices=prices, initial_cash=1e6)
+b = Builder(prices=prices, initial_cash=1e6)
 ```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
@@ -65,6 +65,8 @@ for t, state in b:
     units[pair] = [state.nav, -state.nav] / state.prices[pair].values
     # update the position
     b.position = 0.1 * units
+    # Do not apply trading costs
+    b.aum = state.aum
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
@@ -81,6 +83,7 @@ implemenent the popular $1/n$ strategy.
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
     b.position = 0.25 * state.nav / state.prices
+    b.aum = state.aum
 ```
 
 Note that we update the position at the last element in the t list
@@ -91,6 +94,7 @@ The builder class also exposes setters for such alternative conventions.
 for t, state in b:
     # each day we invest a quarter of the capital in the assets
     b.weights = np.ones(4)*0.25
+    b.aum = state.aum
 ```
 
 ### Build the portfolio
