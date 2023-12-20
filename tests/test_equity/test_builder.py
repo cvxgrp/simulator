@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import EquityBuilder, EquityPortfolio, interpolate
+from cvx.simulator import FuturesBuilder, FuturesPortfolio, interpolate
 
 
 @pytest.fixture()
@@ -11,7 +11,7 @@ def builder(prices):
     Fixture for the builder
     :param prices: the prices frame (fixture)
     """
-    return EquityBuilder(prices=prices)
+    return FuturesBuilder(prices=prices)
 
 
 def test_initial_cash(builder):
@@ -19,7 +19,7 @@ def test_initial_cash(builder):
     Test that the initial cash is 1e6
     :param builder: the builder object (fixture)
     """
-    assert builder.initial_cash == 1e6
+    assert builder.initial_aum == 1e6
 
 
 def test_build_empty(builder, prices):
@@ -37,14 +37,15 @@ def test_build_empty(builder, prices):
 
 
 def test_set_position(prices):
-    b = EquityBuilder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
-        b.cash = state.cash - (state.trades * state.prices).sum()
+        # b.cash = state.cash - (state.trades * state.prices).sum()
+        b.aum = state.aum
 
     portfolio = b.build()
-    assert isinstance(portfolio, EquityPortfolio)
+    assert isinstance(portfolio, FuturesPortfolio)
 
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
@@ -54,12 +55,12 @@ def test_set_weights(prices):
     Test that the weights are set correctly
     :param prices: the prices frame (fixture)
     """
-    b = EquityBuilder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.weights = np.array([0.5, 0.5])
         assert np.allclose(b.weights, np.array([0.5, 0.5]))
         assert np.allclose(state.weights.values, np.array([0.5, 0.5]))
-        b.cash = state.cash - (state.trades * state.prices).sum()
+        b.aum = state.aum  # cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -70,22 +71,24 @@ def test_set_cashpositions(prices):
     Test that the cashpositions are set correctly
     :param prices: the prices frame (fixture)
     """
-    b = EquityBuilder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.cashposition = np.ones(2) * state.nav / 2
         assert np.allclose(b.cashposition, np.ones(2) * state.nav / 2)
-        b.cash = state.cash - (state.trades * state.prices).sum()
+        # b.cash = state.cash - (state.trades * state.prices).sum()
+        b.aum = state.aum
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
 
 def test_set_position_again(prices):
-    b = EquityBuilder(prices=prices[["B", "C"]].head(5), initial_cash=50000)
+    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
-        b.cash = state.cash - (state.trades * state.prices).sum()
+        # b.cash = state.cash - (state.trades * state.prices).sum()
+        b.aum = state.aum
 
     portfolio = b.build()
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
@@ -98,7 +101,7 @@ def test_weights_on_wrong_days(resource_dir):
 
     # there are no inner NaNs
 
-    b = EquityBuilder(prices=prices, initial_cash=50000)
+    b = FuturesBuilder(prices=prices, initial_aum=50000)
     t = prices.index
 
     for t, state in b:

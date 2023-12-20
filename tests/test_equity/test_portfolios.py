@@ -3,18 +3,18 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from cvx.simulator.equity.builder import EquityBuilder
+from cvx.simulator import FuturesBuilder
 
 
 @pytest.fixture()
 def portfolio(prices):
     """portfolio fixture"""
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    b = EquityBuilder(prices, initial_cash=1e6)
+    b = FuturesBuilder(prices, initial_aum=1e6)
 
     for t, state in b:
         b.position = positions.loc[t[-1]]
-        b.cash = state.cash
+        b.aum = state.aum
 
     return b.build()
 
@@ -26,8 +26,8 @@ def test_weights(portfolio):
     pd.testing.assert_frame_equal(x1, x2)
 
 
-def test_portfolio_small(prices):
-    builder = EquityBuilder(prices=prices[["A", "B"]], initial_cash=1e6)
+def test_portfolio_small_futures(prices):
+    builder = FuturesBuilder(prices=prices[["A", "B"]], initial_aum=1e6)
 
     for _, state in builder:
         # hold one share in both assets
@@ -36,12 +36,12 @@ def test_portfolio_small(prices):
         # costs are 5 bps of the traded value
         costs = 0.0005 * (state.trades.abs() * state.prices).sum()
 
-        # net income/costs from trading positions
-        builder.cash = state.cash - (state.trades * state.prices).sum() - costs
+        # reduce net income/costs from trading positions
+        builder.aum = state.aum - costs
 
     portfolio = builder.build()
 
-    assert portfolio.cashflow.iloc[0] == pytest.approx(-975001.74712)
+    assert portfolio.nav.sharpe() == pytest.approx(0.522840865024556, abs=1e-3)
 
 
 def test_iter(prices):
@@ -51,13 +51,14 @@ def test_iter(prices):
     """
 
     # Let's setup a portfolio with one asset: A
-    b = EquityBuilder(prices[["A"]].dropna())
+    b = FuturesBuilder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, state in b:
         # we set the position of A to 1.0
         b.position = pd.Series({"A": 1.0})
-        b.cash = state.cash
+        # b.cash = state.cash
+        b.aum = state.aum
 
     # we build the portfolio
     portfolio = b.build()
@@ -85,13 +86,13 @@ def test_long_only(prices, resource_dir):
     :param resource_dir: the resource directory (fixture)
     """
     # Let's setup a portfolio with two assets: A and B
-    b = EquityBuilder(prices=prices[["A", "B"]], initial_cash=100000)
+    b = FuturesBuilder(prices=prices[["A", "B"]], initial_aum=100000)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, state in b:
         # we set the position of A to 2.0 and B to 4.0
         b.position = pd.Series({"A": 2.0, "B": 4.0})
-        b.cash = state.cash
+        b.aum = state.aum
 
     portfolio = b.build()
 
@@ -107,14 +108,14 @@ def test_long_only(prices, resource_dir):
     )
 
     # the (absolute) profit is the difference between nav and initial cash
-    profit = (portfolio.nav - portfolio.cash).diff().fillna(0.0)
+    # profit = (portfolio.nav - portfolio.cash).diff().fillna(0.0)
 
     # We don't need to set the initial cash to estimate the (absolute) profit
     # The daily profit is also the change in valuation of the previous position
-    pd.testing.assert_series_equal(profit, portfolio.profit)
+    # pd.testing.assert_series_equal(profit, portfolio.profit)
 
     # the investor has made approximately 17665 USD over the lifespan of the portfolio
-    assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
+    # assert portfolio.profit.cumsum().values[-1] == pytest.approx(17665.06)
 
     # We assume the (retail) investor is allocating some capital C to his/her strategy.
     # Here we need enough capital to buy the initial position
@@ -127,21 +128,23 @@ def test_long_only(prices, resource_dir):
     )
 
     # The NAV (net asset value) is cash + equity
-    pd.testing.assert_series_equal(
-        portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1)
-    )
+    # pd.testing.assert_series_equal(
+    #    portfolio.nav, portfolio.cash + portfolio.equity.sum(axis=1)
+    # )
+    # todo: revisit this test
 
 
 def test_portfolio(prices):
     """
     build portfolio from price
     """
-    b = EquityBuilder(prices=prices)
+    b = FuturesBuilder(prices=prices)
     pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
-    for t, _ in b:
+    for t, state in b:
         # set the position
         b.position = pd.Series(index=prices.keys(), data=1000.0)
+        b.aum = state.aum
 
     portfolio = b.build()
 

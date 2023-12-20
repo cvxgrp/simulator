@@ -1,6 +1,6 @@
 import pytest
 
-from cvx.simulator.equity.builder import EquityBuilder
+from cvx.simulator import FuturesBuilder
 from tests.test_reference.markowitz import (
     OptimizationInput,
     basic_markowitz,
@@ -22,9 +22,9 @@ def means(prices):
 
 @pytest.fixture()
 def builder(prices):
-    return EquityBuilder(
+    return FuturesBuilder(
         prices=prices,
-        initial_cash=1e6,
+        initial_aum=1e6,
     )
 
 
@@ -86,12 +86,13 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             # should trading costs be given per asset?
             # print(state.cash)
 
-            state.cash -= (
-                state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)
-            ).sum()
+            # state.cash -= (
+            costs = (state.trades.abs() * (state.prices * spreads.loc[t[-1]] / 2)).sum()
 
-            builder.cash = state.cash - (state.trades * state.prices).sum()
+            # builder.cash = state.cash - (state.trades * state.prices).sum()
+            builder.aum = state.aum - costs
 
+    # todo: fix this test
     # build the portfolio
     portfolio = builder.build()
     portfolio.snapshot()
@@ -102,4 +103,5 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     portfolio.html(output="report.html")
     portfolio.snapshot()
     portfolio.nav.plot()
-    print(portfolio.cashflow)
+
+    # print(portfolio.cashflow)

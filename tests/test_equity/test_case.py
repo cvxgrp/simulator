@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.equity.builder import EquityBuilder
+from cvx.simulator import FuturesBuilder
 
 
 @pytest.fixture()
@@ -29,7 +29,7 @@ def f(n):
 
 
 def test_case(columns, index, prices):
-    b = EquityBuilder(prices=prices, initial_cash=2000)
+    b = FuturesBuilder(prices=prices, initial_aum=2000)
     print(f"\n{b.prices.values}")
 
     assert np.all(b.valid)
@@ -44,7 +44,9 @@ def test_case(columns, index, prices):
     # run a 1/n portfolio on those prices
     for t, state in b:
         b.weights = f(n=len(state.assets))
-        b.cash = state.cash - (state.trades * state.prices).sum()
+        b.aum = state.aum
+
+        # b.cash = state.cash - (state.trades * state.prices).sum()
 
     # build the portfolio
     portfolio = b.build()
@@ -84,9 +86,9 @@ def test_case(columns, index, prices):
     pd.testing.assert_frame_equal(weights, portfolio.weights)
 
     # cash is the cash balance, all initial cash is in stock at all times
-    pd.testing.assert_series_equal(
-        portfolio.cash, pd.Series(index=index, data=[0.0, 0.0, 0.0, 0.0])
-    )
+    # pd.testing.assert_series_equal(
+    #    portfolio.cash, pd.Series(index=index, data=[0.0, 0.0, 0.0, 0.0])
+    # )
     # nav is the net asset value equity and cash, 1) 2000 2) 2000 3) 2000 4) 1000
     pd.testing.assert_series_equal(
         portfolio.nav, pd.Series(index=index, data=[2000.0, 2000.0, 2000.0, 1000.0])

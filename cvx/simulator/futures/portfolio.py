@@ -34,6 +34,10 @@ class FuturesPortfolio(Portfolio):
             profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
             return profit.cumsum() + self.aum
 
+    @property
+    def cash(self):
+        return self.nav - self.cashposition.sum(axis=1)
+
     @classmethod
     def from_cashpos_prices(
         cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float
