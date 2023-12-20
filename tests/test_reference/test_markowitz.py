@@ -1,6 +1,6 @@
 import pytest
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator.builder import Builder
 from tests.test_reference.markowitz import (
     OptimizationInput,
     basic_markowitz,
@@ -22,7 +22,7 @@ def means(prices):
 
 @pytest.fixture()
 def builder(prices):
-    return FuturesBuilder(
+    return Builder(
         prices=prices,
         initial_aum=1e6,
     )
@@ -97,7 +97,7 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     portfolio = builder.build()
     portfolio.snapshot()
 
-    print(portfolio.cash)
+    # print(portfolio.cash)
 
     # The portfolio object is exposing to numerous analytics via quantstats
     portfolio.html(output="report.html")

@@ -6,7 +6,7 @@ import pytest
 from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import osc, returns_adjust, shrink2id
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator.builder import Builder
 
 correlation = 200
 
@@ -32,7 +32,7 @@ def test_portfolio(prices):
     mu = np.tanh(returns_adj.cumsum().apply(osc)).values
     vo = prices.pct_change().ewm(com=vola, min_periods=vola).std().values
 
-    builder = FuturesBuilder(prices=prices, initial_aum=1e8)
+    builder = Builder(prices=prices, initial_aum=1e8)
 
     for n, (t, state) in enumerate(builder):
         mask = state.mask

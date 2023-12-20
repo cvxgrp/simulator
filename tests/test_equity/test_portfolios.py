@@ -3,14 +3,14 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator.builder import Builder
 
 
 @pytest.fixture()
 def portfolio(prices):
     """portfolio fixture"""
     positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    b = FuturesBuilder(prices, initial_aum=1e6)
+    b = Builder(prices, initial_aum=1e6)
 
     for t, state in b:
         b.position = positions.loc[t[-1]]
@@ -27,7 +27,7 @@ def test_weights(portfolio):
 
 
 def test_portfolio_small_futures(prices):
-    builder = FuturesBuilder(prices=prices[["A", "B"]], initial_aum=1e6)
+    builder = Builder(prices=prices[["A", "B"]], initial_aum=1e6)
 
     for _, state in builder:
         # hold one share in both assets
@@ -51,7 +51,7 @@ def test_iter(prices):
     """
 
     # Let's setup a portfolio with one asset: A
-    b = FuturesBuilder(prices[["A"]].dropna())
+    b = Builder(prices[["A"]].dropna())
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, state in b:
@@ -86,7 +86,7 @@ def test_long_only(prices, resource_dir):
     :param resource_dir: the resource directory (fixture)
     """
     # Let's setup a portfolio with two assets: A and B
-    b = FuturesBuilder(prices=prices[["A", "B"]], initial_aum=100000)
+    b = Builder(prices=prices[["A", "B"]], initial_aum=100000)
 
     # We now iterate through the underlying timestamps of the portfolio
     for times, state in b:
@@ -138,7 +138,7 @@ def test_portfolio(prices):
     """
     build portfolio from price
     """
-    b = FuturesBuilder(prices=prices)
+    b = Builder(prices=prices)
     pd.testing.assert_frame_equal(b.prices, prices.ffill())
 
     for t, state in b:

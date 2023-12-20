@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator.builder import Builder
 
 
 @pytest.fixture()
@@ -29,7 +29,7 @@ def f(n):
 
 
 def test_case(columns, index, prices):
-    b = FuturesBuilder(prices=prices, initial_aum=2000)
+    b = Builder(prices=prices, initial_aum=2000)
     print(f"\n{b.prices.values}")
 
     assert np.all(b.valid)

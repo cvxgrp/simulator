@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from cvx.simulator import FuturesBuilder
+from cvx.simulator.builder import Builder
 from cvx.simulator.utils.interpolation import interpolate
 
 
@@ -21,7 +21,7 @@ def position(resource_dir):
 
 @pytest.fixture()
 def portfolio(prices_interpolated, position):
-    builder = FuturesBuilder(prices=prices_interpolated, initial_aum=1e7)
+    builder = Builder(prices=prices_interpolated, initial_aum=1e7)
 
     for t, state in builder:
         pos = position[state.assets].loc[t[-1]].fillna(0.0)

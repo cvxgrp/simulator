@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvx.simulator import FuturesPortfolio
+from cvx.simulator.portfolio import Portfolio
 
 
 # take two moving averages and apply the sign-function, adjust by volatility
@@ -25,7 +25,7 @@ def test_portfolio(prices):
     Args:
         prices: adjusted prices of futures
     """
-    portfolio = FuturesPortfolio.from_cashpos_prices(
+    portfolio = Portfolio.from_cashpos_prices(
         prices=prices, cashposition=1e6 * f(prices), aum=1e8
     )
     assert portfolio.nav.pct_change().sharpe() == pytest.approx(0.6132089020623962)

@@ -1,33 +1,30 @@
 import os
-from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
 import pytest
 
-from cvx.simulator._abc.plot import Plot
-from cvx.simulator._abc.portfolio import Portfolio
-
-
-@dataclass(frozen=True)
-class TestPortfolio(Portfolio):
-    @property
-    def nav(self):
-        return pd.read_csv(
-            Path(__file__).parent.parent / "resources" / "nav.csv",
-            index_col=0,
-            parse_dates=True,
-            header=0,
-        ).squeeze()
+from cvx.simulator.portfolio import Portfolio
+from cvx.simulator.utils.quantstats.plot import Plot
 
 
 @pytest.fixture()
-def portfolio(prices):
+def nav():
+    return pd.read_csv(
+        Path(__file__).parent / "resources" / "nav.csv",
+        index_col=0,
+        parse_dates=True,
+        header=0,
+    ).squeeze()
+
+
+@pytest.fixture()
+def portfolio(prices, nav):
     """portfolio fixture"""
 
     units = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
 
-    return TestPortfolio(prices=prices, units=units)
+    return Portfolio(prices=prices, units=units, aum=nav)
 
     # positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
     # b = EquityBuilder(prices, initial_cash=1e6)
@@ -123,7 +120,7 @@ def test_monotonic():
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
-        TestPortfolio(prices=prices, units=prices)
+        Portfolio(prices=prices, units=prices, aum=1e6)
 
 
 def test_quantstats(portfolio):

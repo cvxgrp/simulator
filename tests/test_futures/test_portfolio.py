@@ -1,12 +1,12 @@
 import pandas as pd
 import pytest
 
-from cvx.simulator.futures.builder import FuturesBuilder
-from cvx.simulator.futures.portfolio import FuturesPortfolio
+from cvx.simulator.builder import Builder
+from cvx.simulator.portfolio import Portfolio
 
 
 def test_portfolio_cumulated(prices):
-    builder = FuturesBuilder(prices=prices[["A", "B"]].tail(10), initial_aum=1e6)
+    builder = Builder(prices=prices[["A", "B"]].tail(10), initial_aum=1e6)
 
     for t, state in builder:
         # hold one share in both assets
@@ -29,7 +29,7 @@ def test_portfolio_cumulated(prices):
 def test_from_cash_position_prices(prices):
     cashpos = pd.DataFrame(index=prices.index, columns=prices.columns, data=1e5)
 
-    portfolio = FuturesPortfolio.from_cashpos_prices(
+    portfolio = Portfolio.from_cashpos_prices(
         prices=prices, cashposition=cashpos, aum=1e6
     )
 
@@ -41,7 +41,7 @@ def test_from_cash_returns(prices):
     returns = prices.pct_change().fillna(0.0)
     cashpos = pd.DataFrame(index=prices.index, columns=prices.columns, data=1e5)
 
-    portfolio = FuturesPortfolio.from_cashpos_returns(
+    portfolio = Portfolio.from_cashpos_returns(
         returns=returns, cashposition=cashpos, aum=1e6
     )
 

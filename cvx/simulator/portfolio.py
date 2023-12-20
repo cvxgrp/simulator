@@ -13,7 +13,7 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -21,7 +21,8 @@ from typing import Any
 import pandas as pd
 import quantstats as qs
 
-from .plot import Plot
+from cvx.simulator.utils.quantstats.plot import Plot
+from cvx.simulator.utils.rescale import returns2prices
 
 qs.extend_pandas()
 
@@ -30,6 +31,7 @@ qs.extend_pandas()
 class Portfolio(ABC):
     prices: pd.DataFrame
     units: pd.DataFrame
+    aum: float | pd.Series
 
     def __post_init__(self) -> None:
         """A class method that performs input validation after object initialization.
@@ -80,9 +82,13 @@ class Portfolio(ABC):
         return self.prices.columns
 
     @property
-    @abstractmethod
     def nav(self):
-        """A function that returns a pandas series representing the NAV"""
+        """Return a pandas series representing the NAV"""
+        if isinstance(self.aum, pd.Series):
+            return self.aum
+        else:
+            profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
+            return profit.cumsum() + self.aum
 
     @property
     def profit(self) -> pd.Series:
@@ -356,3 +362,19 @@ class Portfolio(ABC):
             log_scale=log_scale,
             **kwargs,
         )
+
+    @classmethod
+    def from_cashpos_prices(
+        cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float
+    ):
+        """Build Futures Portfolio from cashposition"""
+        units = cashposition.div(prices, fill_value=0.0)
+        return cls(prices=prices, units=units, aum=aum)
+
+    @classmethod
+    def from_cashpos_returns(
+        cls, returns: pd.DataFrame, cashposition: pd.DataFrame, aum: float
+    ):
+        """Build Futures Portfolio from cashposition"""
+        prices = returns2prices(returns)
+        return cls.from_cashpos_prices(prices, cashposition, aum)

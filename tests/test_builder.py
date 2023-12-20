@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import FuturesBuilder, FuturesPortfolio, interpolate
+from cvx.simulator import interpolate
+from cvx.simulator.builder import Builder
+from cvx.simulator.portfolio import Portfolio
 
 
 @pytest.fixture()
@@ -11,7 +13,7 @@ def builder(prices):
     Fixture for the builder
     :param prices: the prices frame (fixture)
     """
-    return FuturesBuilder(prices=prices)
+    return Builder(prices=prices, initial_aum=1e6)
 
 
 def test_initial_cash(builder):
@@ -37,7 +39,7 @@ def test_build_empty(builder, prices):
 
 
 def test_set_position(prices):
-    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
+    b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
@@ -45,7 +47,7 @@ def test_set_position(prices):
         b.aum = state.aum
 
     portfolio = b.build()
-    assert isinstance(portfolio, FuturesPortfolio)
+    assert isinstance(portfolio, Portfolio)
 
     assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
 
@@ -55,7 +57,7 @@ def test_set_weights(prices):
     Test that the weights are set correctly
     :param prices: the prices frame (fixture)
     """
-    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
+    b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.weights = np.array([0.5, 0.5])
         assert np.allclose(b.weights, np.array([0.5, 0.5]))
@@ -71,7 +73,7 @@ def test_set_cashpositions(prices):
     Test that the cashpositions are set correctly
     :param prices: the prices frame (fixture)
     """
-    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
+    b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.cashposition = np.ones(2) * state.nav / 2
         assert np.allclose(b.cashposition, np.ones(2) * state.nav / 2)
@@ -83,7 +85,7 @@ def test_set_cashpositions(prices):
 
 
 def test_set_position_again(prices):
-    b = FuturesBuilder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
+    b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
@@ -101,7 +103,7 @@ def test_weights_on_wrong_days(resource_dir):
 
     # there are no inner NaNs
 
-    b = FuturesBuilder(prices=prices, initial_aum=50000)
+    b = Builder(prices=prices, initial_aum=50000)
     t = prices.index
 
     for t, state in b:
@@ -138,3 +140,22 @@ def test_iteration_state(builder):
             pd.Series(index=state.assets, data=np.NaN),
             check_names=False,
         )
+
+
+def test_init_from_returns(prices):
+    # the rescaled prices start at 1.0...
+    returns = prices.pct_change().fillna(0.0)
+    # create the builder from the returns
+    builder = Builder.from_returns(returns)
+
+    pd.testing.assert_series_equal(builder.prices["A"] * 1673.78, prices["A"])
+
+
+def test_valid(builder):
+    """Verify all assets are valid"""
+    assert np.all(builder.valid)
+
+
+def test_intervals(builder):
+    x = builder.intervals
+    assert x["last"].loc["G"] == pd.Timestamp("2015-04-22")

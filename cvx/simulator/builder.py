@@ -13,19 +13,21 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generator
 
 import numpy as np
 import pandas as pd
 
-from cvx.simulator._abc.state import State
+from cvx.simulator.portfolio import Portfolio
 from cvx.simulator.utils.interpolation import valid
+from cvx.simulator.utils.rescale import returns2prices
+
+from ._state.state import State
 
 
 @dataclass
-class Builder(ABC):
+class Builder:
     prices: pd.DataFrame
     initial_aum: float = 1e6
 
@@ -172,7 +174,6 @@ class Builder(ABC):
         """
         self.position = cashposition / self.current_prices
 
-    @abstractmethod
     def build(self):
         """A function that creates a new instance of the EquityPortfolio
         class based on the internal state of the Portfolio builder object.
@@ -186,7 +187,7 @@ class Builder(ABC):
         The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
         """
 
-        # return EquityPortfolio(prices=self.prices, units=self.units, cash=self.cash)
+        return Portfolio(prices=self.prices, units=self.units, aum=self.aum)
 
     @property
     def weights(self) -> np.array:
@@ -217,3 +218,11 @@ class Builder(ABC):
         """
         self._aum[self._state.time] = aum
         self._state.aum = aum
+
+    @classmethod
+    def from_returns(cls, returns):
+        """Build Futures Portfolio from returns"""
+        # compute artificial prices (but scaled such their returns are correct)
+
+        prices = returns2prices(returns)
+        return cls(prices=prices)
