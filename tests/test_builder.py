@@ -2,9 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator import interpolate
-from cvx.simulator.builder import Builder
-from cvx.simulator.portfolio import Portfolio
+from cvx.simulator import Builder, Portfolio, interpolate
 
 
 @pytest.fixture()

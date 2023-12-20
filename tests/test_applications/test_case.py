@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator.builder import Builder
+from cvx.simulator import Builder
 
 
 @pytest.fixture()
