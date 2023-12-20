@@ -85,10 +85,13 @@ class Portfolio(ABC):
     def nav(self):
         """Return a pandas series representing the NAV"""
         if isinstance(self.aum, pd.Series):
-            return self.aum
+            series = self.aum
         else:
             profit = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
-            return profit.cumsum() + self.aum
+            series = profit.cumsum() + self.aum
+
+        series.name = "NAV"
+        return series
 
     @property
     def profit(self) -> pd.Series:
@@ -98,7 +101,9 @@ class Portfolio(ABC):
         Returns: pd.Series: A pandas series representing the profit
         gained or lost in the portfolio based on changes in asset prices.
         """
-        return (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
+        series = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
+        series.name = "Profit"
+        return series
 
     @property
     def highwater(self) -> pd.Series:
@@ -115,7 +120,9 @@ class Portfolio(ABC):
         Min_periods argument is set to 1 to include the minimum period of one day.
         The resulting series will show the highest value the portfolio has reached at each point in time.
         """
-        return self.nav.expanding(min_periods=1).max()
+        series = self.nav.expanding(min_periods=1).max()
+        series.name = "Highwater"
+        return series
 
     @property
     def drawdown(self) -> pd.Series:
@@ -132,7 +139,9 @@ class Portfolio(ABC):
         A positive drawdown means the portfolio is currently worth
         less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
         """
-        return 1.0 - self.nav / self.highwater
+        series = 1.0 - self.nav / self.highwater
+        series.name = "Drawdown"
+        return series
 
     @property
     def cashposition(self):

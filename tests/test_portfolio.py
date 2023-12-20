@@ -26,14 +26,6 @@ def portfolio(prices, nav):
 
     return Portfolio(prices=prices, units=units, aum=nav)
 
-    # positions = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
-    # b = EquityBuilder(prices, initial_cash=1e6)
-
-    # for t, state in b:
-    #    b.position = positions.loc[t[-1]]
-
-    # return b.build()
-
 
 def test_assets(portfolio, prices):
     """
@@ -107,11 +99,13 @@ def test_drawdown(portfolio):
     :param portfolio: the portfolio object (fixture)
     """
     pd.testing.assert_series_equal(
-        portfolio.highwater, portfolio.nav.expanding(min_periods=1).max()
+        portfolio.highwater,
+        portfolio.nav.expanding(min_periods=1).max(),
+        check_names=False,
     )
 
     drawdown = 1.0 - portfolio.nav / portfolio.highwater
-    pd.testing.assert_series_equal(portfolio.drawdown, drawdown)
+    pd.testing.assert_series_equal(portfolio.drawdown, drawdown, check_names=False)
 
 
 def test_monotonic():
@@ -176,7 +170,9 @@ def test_profit(portfolio):
     :param portfolio: the portfolio object (fixture)
     """
     pd.testing.assert_series_equal(
-        portfolio.profit, portfolio.equity.sum(axis=1).diff().fillna(0.0)
+        portfolio.profit,
+        portfolio.equity.sum(axis=1).diff().fillna(0.0),
+        check_names=False,
     )
 
 

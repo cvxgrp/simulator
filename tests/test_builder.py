@@ -32,7 +32,7 @@ def test_build_empty(builder, prices):
     pd.testing.assert_frame_equal(portfolio.prices, prices)
     pd.testing.assert_frame_equal(portfolio.units, np.NaN * prices)
     pd.testing.assert_series_equal(
-        portfolio.profit, pd.Series(index=prices.index, data=0.0)
+        portfolio.profit, pd.Series(index=prices.index, data=0.0, name="Profit")
     )
 
 

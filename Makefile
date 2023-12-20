@@ -47,11 +47,5 @@ jupyter: install ## Run jupyter lab
 	@poetry run jupyter lab
 
 .PHONY: marimo
-marimo: install ## Run jupyter lab
+marimo: install ## Install Marimo
 	@poetry run pip install marimo
-	@poetry run marimo edit
-
-.PHONY: boil
-boil: ## Update the boilerplate code
-	@poetry run pip install cvxcooker
-	@poetry run cook pyproject.toml

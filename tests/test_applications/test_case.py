@@ -91,5 +91,6 @@ def test_case(columns, index, prices):
     # )
     # nav is the net asset value equity and cash, 1) 2000 2) 2000 3) 2000 4) 1000
     pd.testing.assert_series_equal(
-        portfolio.nav, pd.Series(index=index, data=[2000.0, 2000.0, 2000.0, 1000.0])
+        portfolio.nav,
+        pd.Series(index=index, data=[2000.0, 2000.0, 2000.0, 1000.0], name="NAV"),
     )
