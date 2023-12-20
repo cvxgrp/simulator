@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator._abc.state import State
+from cvx.simulator._state.state import State
 
 
 @pytest.fixture()
@@ -39,18 +39,6 @@ def test_gap(prices):
     assert state.days == 1
 
 
-def test_gmv(state):
-    assert state.gmv == 0.0
-
-
-def test_trades(state):
-    state._trades = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
-    pd.testing.assert_series_equal(
-        state.trades, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
-    )
-    assert state.gross.sum() == -206047.2
-
-
 def test_set_position(state):
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
     pd.testing.assert_series_equal(
@@ -71,7 +59,7 @@ def test_mask():
 
 def test_init(prices):
     state = State()
-    state.cash = 1e4
+    state.aum = 1e4
 
     assert state.cash == 1e4
     assert state.aum == 1e4
@@ -93,8 +81,6 @@ def test_init(prices):
 
     # update position and weights
     state.position = np.ones(len(state.assets))
-    state.cash -= state.gross.sum()
-    state.costs = 0.0
 
     assert state.cash == 1e4 - prices.iloc[0].sum()
     assert state.aum == 1e4
@@ -108,8 +94,6 @@ def test_init(prices):
 
     assert state.leverage == pytest.approx(state.weights.abs().sum())
 
-    # assert False
-
     # update prices
     state.prices = prices.iloc[1]
     assert state.profit == 13.119999999995343
@@ -117,3 +101,7 @@ def test_init(prices):
     assert state.aum == 1e4 + state.profit
     assert state.nav == 1e4 + state.profit
     assert state.value == prices.iloc[1].sum()
+
+    # update cash
+    state.cash = 1.01 * state.cash
+    assert state.cash == 1.01 * (1e4 - prices.iloc[0].sum())
