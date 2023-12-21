@@ -37,7 +37,9 @@ def test_assets_full(state, prices):
 
 def test_trade_no_init_pos(state):
     x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(state.position, fill_value=0)
-    pd.testing.assert_series_equal(x, pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
+    pd.testing.assert_series_equal(
+        x.dropna(), pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
+    )
 
 
 def test_gap(state, prices):
@@ -110,3 +112,64 @@ def test_init(prices):
     # update cash
     state.cash = 1.01 * state.cash
     assert state.cash == 1.01 * (1e4 - prices.iloc[0].sum())
+
+
+def test_cash_set_aum(state):
+    state.aum = 1e6
+    assert state.aum == 1e6
+    assert state.cash == 1e6
+    assert state.nav == 1e6
+
+
+def test_cash_set_cash(state):
+    state.cash = 1e6
+    assert state.aum == 1e6
+    assert state.cash == 1e6
+    assert state.nav == 1e6
+
+
+def test_before_price():
+    state = State()
+    pd.testing.assert_index_equal(state.assets, pd.Index([], dtype=str))
+    np.testing.assert_array_equal(state.mask, np.array([]))
+    pd.testing.assert_series_equal(state.prices, pd.Series(dtype=float))
+    pd.testing.assert_series_equal(state.weights, pd.Series(dtype=float))
+    pd.testing.assert_series_equal(
+        state.position, pd.Series(dtype=float), check_index_type=False
+    )
+    pd.testing.assert_series_equal(state.cashposition, pd.Series(dtype=float))
+    assert state.value == 0.0
+    assert state.aum == 0.0
+    assert state.cash == 0.0
+    assert state.leverage == 0.0
+    assert state.days == 0
+    assert state.time is None
+    assert state.gmv == 0.0
+    assert state.nav == 0.0
+
+
+def test_after_price(prices):
+    state = State()
+    state.prices = prices.iloc[0]
+    state.time = prices.index[0]
+
+    pd.testing.assert_index_equal(
+        state.assets, pd.Index(["A", "B", "C", "D"], dtype=str)
+    )
+    np.testing.assert_array_equal(state.mask, np.array([True, True, True, True]))
+    pd.testing.assert_series_equal(state.prices, prices.iloc[0])
+    pd.testing.assert_series_equal(state.weights, pd.Series(index=["A", "B", "C", "D"]))
+    pd.testing.assert_series_equal(
+        state.position, pd.Series(index=["A", "B", "C", "D"])
+    )
+    pd.testing.assert_series_equal(
+        state.cashposition, pd.Series(index=["A", "B", "C", "D"])
+    )
+    assert state.value == 0.0
+    assert state.aum == 0.0
+    assert state.cash == 0.0
+    assert state.leverage == 0.0
+    assert state.days == 0
+    assert state.time == prices.index[0]
+    assert state.gmv == 0.0
+    assert state.nav == 0.0
