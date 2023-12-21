@@ -23,6 +23,7 @@ class State:
     """
     The state class represents the current state of a portfolio.
     It is updated within in a loop by the builder class.
+    It has setter functions only for the aum, the cash, the position and the prices
     """
 
     _prices: pd.Series = None
@@ -155,7 +156,7 @@ class State:
     @property
     def mask(self):
         """construct true/false mask for assets with missing prices"""
-        if self.prices is None:
+        if self._prices is None:
             return np.array([])
 
         return np.isfinite(self.prices.values)

@@ -28,6 +28,18 @@ from ._state.state import State
 
 @dataclass
 class Builder:
+    """
+    The Builder is an auxiliary class used to build portfolios.
+    It overloads the __iter__ method to allow the class to iterate over
+    the timestamps for which the portfolio data is available.
+
+    In each iteration we can update the portfolio by setting either
+    the weights, the position or the cash position.
+
+    After the iteration has been completed we build a Portfolio object
+    by calling the build method.
+    """
+
     prices: pd.DataFrame
     initial_aum: float = 1e6
 
@@ -88,16 +100,11 @@ class Builder:
     @property
     def index(self) -> pd.DatetimeIndex:
         """A property that returns the index of the portfolio,
-        which is the time period for which the portfolio data is available.
+        which are the timestamps for which the portfolio data is available.
 
         Returns: pd.Index: A pandas index representing the
         time period for which the portfolio data is available.
-
-        Notes: The function extracts the index of the prices dataframe,
-        which represents the time periods for which data is available for the portfolio.
-        The resulting index will be a pandas index object
-        with the same length as the number of rows in the prices dataframe."""
-
+        """
         return pd.DatetimeIndex(self.prices.index)
 
     @property

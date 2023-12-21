@@ -13,7 +13,6 @@
 #    limitations under the License.
 from __future__ import annotations
 
-from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -28,7 +27,7 @@ qs.extend_pandas()
 
 
 @dataclass(frozen=True)
-class Portfolio(ABC):
+class Portfolio:
     prices: pd.DataFrame
     units: pd.DataFrame
     aum: float | pd.Series
