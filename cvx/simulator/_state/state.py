@@ -20,6 +20,12 @@ import pandas as pd
 
 @dataclass()
 class State:
+    """
+    The state class represents the current state of a portfolio.
+    It is updated within in a loop by the builder class.
+    It has setter functions only for the aum, the cash, the position and the prices
+    """
+
     _prices: pd.Series = None
     _position: pd.Series = None
     _trades: pd.Series = None
@@ -30,11 +36,16 @@ class State:
 
     @property
     def cash(self):
+        """
+        The cash property returns the current amount of cash available in the portfolio.
+        """
         return self.nav - self.value
 
     @cash.setter
     def cash(self, cash: float):
-        # self._cash = cash
+        """
+        The cash property updates the amount of cash available in the portfolio.
+        """
         self.aum = cash + self.value
 
     @property
@@ -69,8 +80,9 @@ class State:
 
     @property
     def position(self):
+        """Get the current position. If the position is not yet set, then return an empty series."""
         if self._position is None:
-            return pd.Series(dtype=float)
+            return pd.Series(index=self.assets, dtype=float)
 
         return self._position
 
@@ -98,10 +110,17 @@ class State:
 
     @property
     def time(self):
+        """
+        The time property returns the current time of the state.
+        """
         return self._time
 
     @time.setter
     def time(self, time: datetime):
+        """
+        Update the time of the state. Computes the number of days between
+        the new and the previous time.
+        """
         if self.time is None:
             self._days = 0
             self._time = time
@@ -111,6 +130,8 @@ class State:
 
     @property
     def days(self):
+        """Number of days between the current and the previous time. Most useful
+        for computing the interest when holding cash."""
         return self._days
 
     @property
@@ -118,6 +139,9 @@ class State:
         """
         The assets property returns the assets currently in the portfolio.
         """
+        if self._prices is None:
+            return pd.Index(data=[], dtype=str)
+
         return self.prices.dropna().index
 
     @property
@@ -132,14 +156,24 @@ class State:
     @property
     def mask(self):
         """construct true/false mask for assets with missing prices"""
+        if self._prices is None:
+            return np.array([])
+
         return np.isfinite(self.prices.values)
 
     @property
     def prices(self):
+        """Get the current prices"""
+        if self._prices is None:
+            return pd.Series(dtype=float)
         return self._prices
 
     @prices.setter
     def prices(self, prices):
+        """
+        The prices property updates the prices of the assets in the portfolio.
+        Also updates the aum of the portfolio by the profit achieved.
+        """
         value_before = (self.prices * self.position).sum()  # self.cashposition.sum()
         value_after = (prices * self.position).sum()
 
@@ -149,14 +183,24 @@ class State:
 
     @property
     def profit(self):
+        """
+        Following the price update the state updates the profit achieved
+        between the previous and the current prices.
+        """
         return self._profit
 
     @property
     def aum(self):
+        """
+        The aum property returns the current assets under management (AUM) of the portfolio.
+        """
         return self._aum
 
     @aum.setter
     def aum(self, aum):
+        """
+        Setter for the aum property. It updates the aum property.
+        """
         self._aum = aum
 
     @property

@@ -41,7 +41,6 @@ def test_set_position(prices):
     for times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
-        # b.cash = state.cash - (state.trades * state.prices).sum()
         b.aum = state.aum
 
     portfolio = b.build()
