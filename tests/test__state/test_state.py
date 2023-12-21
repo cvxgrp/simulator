@@ -129,6 +129,9 @@ def test_cash_set_cash(state):
 
 
 def test_before_price():
+    """
+    Test an empty state before the prices are set.
+    """
     state = State()
     pd.testing.assert_index_equal(state.assets, pd.Index([], dtype=str))
     np.testing.assert_array_equal(state.mask, np.array([]))
@@ -149,6 +152,9 @@ def test_before_price():
 
 
 def test_after_price(prices):
+    """
+    Test a state after the first prices are set.
+    """
     state = State()
     state.prices = prices.iloc[0]
     state.time = prices.index[0]
