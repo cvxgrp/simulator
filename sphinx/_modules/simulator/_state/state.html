@@ -101,6 +101,12 @@
 <div class="viewcode-block" id="State">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State">[docs]</a>
 <span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The state class represents the current state of a portfolio.</span>
+<span class="sd">    It is updated within in a loop by the builder class.</span>
+<span class="sd">    It has setter functions only for the aum, the cash, the position and the prices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="State._prices">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State._prices">[docs]</a>
     <span class="n">_prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span></div>
@@ -134,12 +140,17 @@
 <div class="viewcode-block" id="State.cash">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.cash">[docs]</a>
     <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cash property returns the current amount of cash available in the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span></div>
 
 
     <span class="nd">@cash</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">cash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cash</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="c1"># self._cash = cash</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cash property updates the amount of cash available in the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">cash</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
@@ -185,8 +196,9 @@
 <div class="viewcode-block" id="State.position">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.position">[docs]</a>
     <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current position. If the position is not yet set, then return an empty series.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span></div>
 
@@ -220,11 +232,18 @@
 <div class="viewcode-block" id="State.time">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.time">[docs]</a>
     <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The time property returns the current time of the state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span></div>
 
 
     <span class="nd">@time</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the time of the state. Computes the number of days between</span>
+<span class="sd">        the new and the previous time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_days</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
@@ -236,6 +255,8 @@
 <div class="viewcode-block" id="State.days">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.days">[docs]</a>
     <span class="k">def</span> <span class="nf">days</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of days between the current and the previous time. Most useful</span>
+<span class="sd">        for computing the interest when holding cash.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_days</span></div>
 
 
@@ -246,6 +267,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The assets property returns the assets currently in the portfolio.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span></div>
 
 
@@ -266,6 +290,9 @@
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.mask">[docs]</a>
     <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;construct true/false mask for assets with missing prices&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
 
 
@@ -273,11 +300,18 @@
 <div class="viewcode-block" id="State.prices">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.prices">[docs]</a>
     <span class="k">def</span> <span class="nf">prices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current prices&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prices</span></div>
 
 
     <span class="nd">@prices</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The prices property updates the prices of the assets in the portfolio.</span>
+<span class="sd">        Also updates the aum of the portfolio by the profit achieved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value_before</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># self.cashposition.sum()</span>
         <span class="n">value_after</span> <span class="o">=</span> <span class="p">(</span><span class="n">prices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
@@ -289,6 +323,10 @@
 <div class="viewcode-block" id="State.profit">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.profit">[docs]</a>
     <span class="k">def</span> <span class="nf">profit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Following the price update the state updates the profit achieved</span>
+<span class="sd">        between the previous and the current prices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_profit</span></div>
 
 
@@ -296,11 +334,17 @@
 <div class="viewcode-block" id="State.aum">
 <a class="viewcode-back" href="../../../autoapi/simulator/_state/state/index.html#simulator._state.state.State.aum">[docs]</a>
     <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The aum property returns the current assets under management (AUM) of the portfolio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aum</span></div>
 
 
     <span class="nd">@aum</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aum</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Setter for the aum property. It updates the aum property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_aum</span> <span class="o">=</span> <span class="n">aum</span>
 
     <span class="nd">@property</span>

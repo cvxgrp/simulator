@@ -109,6 +109,18 @@
 <div class="viewcode-block" id="Builder">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder">[docs]</a>
 <span class="k">class</span> <span class="nc">Builder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Builder is an auxiliary class used to build portfolios.</span>
+<span class="sd">    It overloads the __iter__ method to allow the class to iterate over</span>
+<span class="sd">    the timestamps for which the portfolio data is available.</span>
+
+<span class="sd">    In each iteration we can update the portfolio by setting either</span>
+<span class="sd">    the weights, the position or the cash position.</span>
+
+<span class="sd">    After the iteration has been completed we build a Portfolio object</span>
+<span class="sd">    by calling the build method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Builder.prices">
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.prices">[docs]</a>
     <span class="n">prices</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></div>
@@ -195,16 +207,11 @@
 <a class="viewcode-back" href="../../autoapi/simulator/builder/index.html#simulator.builder.Builder.index">[docs]</a>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
-<span class="sd">        which is the time period for which the portfolio data is available.</span>
+<span class="sd">        which are the timestamps for which the portfolio data is available.</span>
 
 <span class="sd">        Returns: pd.Index: A pandas index representing the</span>
 <span class="sd">        time period for which the portfolio data is available.</span>
-
-<span class="sd">        Notes: The function extracts the index of the prices dataframe,</span>
-<span class="sd">        which represents the time periods for which data is available for the portfolio.</span>
-<span class="sd">        The resulting index will be a pandas index object</span>
-<span class="sd">        with the same length as the number of rows in the prices dataframe.&quot;&quot;&quot;</span>
-
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
 
 

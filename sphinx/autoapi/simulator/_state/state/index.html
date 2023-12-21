@@ -102,17 +102,21 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator._state.state.State" title="simulator._state.state.State"><code class="xref py py-obj docutils literal notranslate"><span class="pre">State</span></code></a></p></td>
-<td><p></p></td>
+<td><p>The state class represents the current state of a portfolio.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="simulator._state.state.State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator._state.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State" title="Link to this definition"></a></dt>
-<dd><dl class="py property">
+<dd><p>The state class represents the current state of a portfolio.
+It is updated within in a loop by the builder class.
+It has setter functions only for the aum, the cash, the position and the prices</p>
+<dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.cash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.cash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.cash" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The cash property returns the current amount of cash available in the portfolio.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.nav">
@@ -142,7 +146,8 @@ which is the amount of cash in the portfolio as a fraction of the total portfoli
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.position">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.position" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the current position. If the position is not yet set, then return an empty series.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.gmv">
@@ -153,12 +158,15 @@ which is the amount of cash in the portfolio as a fraction of the total portfoli
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.time">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.time" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The time property returns the current time of the state.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.days">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">days</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.days"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.days" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Number of days between the current and the previous time. Most useful
+for computing the interest when holding cash.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.assets">
@@ -183,17 +191,21 @@ a new position.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.prices">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prices</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.prices" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the current prices</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.profit">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.profit" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Following the price update the state updates the profit achieved
+between the previous and the current prices.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.aum">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aum</span></span><a class="reference internal" href="../../../../_modules/simulator/_state/state.html#State.aum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator._state.state.State.aum" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The aum property returns the current assets under management (AUM) of the portfolio.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="simulator._state.state.State.weights">

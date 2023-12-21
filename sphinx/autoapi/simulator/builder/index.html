@@ -101,14 +101,21 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simulator.builder.Builder" title="simulator.builder.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Builder</span></code></a></p></td>
-<td><p></p></td>
+<td><p>The Builder is an auxiliary class used to build portfolios.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="simulator.builder.Builder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.builder.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder" title="Link to this definition"></a></dt>
-<dd><dl class="py property">
+<dd><p>The Builder is an auxiliary class used to build portfolios.
+It overloads the __iter__ method to allow the class to iterate over
+the timestamps for which the portfolio data is available.</p>
+<p>In each iteration we can update the portfolio by setting either
+the weights, the position or the cash position.</p>
+<p>After the iteration has been completed we build a Portfolio object
+by calling the build method.</p>
+<dl class="py property">
 <dt class="sig sig-object py" id="simulator.builder.Builder.valid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid</span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.valid" title="Link to this definition"></a></dt>
 <dd><p>Analyse the validity of the data
@@ -125,13 +132,9 @@ Do it column by column of the prices</p>
 <dt class="sig sig-object py" id="simulator.builder.Builder.index">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DatetimeIndex</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.index" title="Link to this definition"></a></dt>
 <dd><p>A property that returns the index of the portfolio,
-which is the time period for which the portfolio data is available.</p>
+which are the timestamps for which the portfolio data is available.</p>
 <p>Returns: pd.Index: A pandas index representing the
 time period for which the portfolio data is available.</p>
-<p>Notes: The function extracts the index of the prices dataframe,
-which represents the time periods for which data is available for the portfolio.
-The resulting index will be a pandas index object
-with the same length as the number of rows in the prices dataframe.</p>
 </dd></dl>
 
 <dl class="py property">

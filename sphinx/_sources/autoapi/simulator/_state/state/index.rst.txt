@@ -20,8 +20,13 @@ Classes
 .. py:class:: State
 
 
+   The state class represents the current state of a portfolio.
+   It is updated within in a loop by the builder class.
+   It has setter functions only for the aum, the cash, the position and the prices
+
    .. py:property:: cash
 
+      The cash property returns the current amount of cash available in the portfolio.
 
    .. py:property:: nav
       :type: float
@@ -46,6 +51,7 @@ Classes
 
    .. py:property:: position
 
+      Get the current position. If the position is not yet set, then return an empty series.
 
    .. py:property:: gmv
 
@@ -53,9 +59,12 @@ Classes
 
    .. py:property:: time
 
+      The time property returns the current time of the state.
 
    .. py:property:: days
 
+      Number of days between the current and the previous time. Most useful
+      for computing the interest when holding cash.
 
    .. py:property:: assets
       :type: pandas.Index
@@ -74,12 +83,16 @@ Classes
 
    .. py:property:: prices
 
+      Get the current prices
 
    .. py:property:: profit
 
+      Following the price update the state updates the profit achieved
+      between the previous and the current prices.
 
    .. py:property:: aum
 
+      The aum property returns the current assets under management (AUM) of the portfolio.
 
    .. py:property:: weights
       :type: pandas.Series
