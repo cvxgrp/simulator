@@ -20,10 +20,9 @@ import numpy as np
 import pandas as pd
 
 from cvx.simulator.portfolio import Portfolio
+from cvx.simulator.state import State
 from cvx.simulator.utils.interpolation import valid
 from cvx.simulator.utils.rescale import returns2prices
-
-from ._state.state import State
 
 
 @dataclass

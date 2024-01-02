@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cvx.simulator._state.state import State
+from cvx.simulator import State
 
 
 @pytest.fixture()
