@@ -1856,13 +1856,13 @@ doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
 name = "tinycta"
-version = "0.7.0"
+version = "0.7.1"
 description = "..."
 optional = false
-python-versions = ">=3.9.0,<3.13"
+python-versions = ">=3.9.0"
 files = [
-    {file = "tinycta-0.7.0-py3-none-any.whl", hash = "sha256:eda484894aff17fae7a3a5353f13c65223de233c1fac64391c1c6e04fb7d95f4"},
-    {file = "tinycta-0.7.0.tar.gz", hash = "sha256:b29f36fc99394a65d73de2b2c533e81b69af740898b892090f21f049afcc394c"},
+    {file = "tinycta-0.7.1-py3-none-any.whl", hash = "sha256:9bd6ead1990c67ac55b3686bb235336c3117c9648cf767506552c11c31ec6c48"},
+    {file = "tinycta-0.7.1.tar.gz", hash = "sha256:4b178fffb83ce201c81d38b30a778058d0f6d0b6e0c3f26b453f05fc85735b9a"},
 ]
 
 [package.dependencies]
@@ -2029,5 +2029,5 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.9,<3.13"
-content-hash = "f362986cba966ee8bb74de102c0dadeadc21bf356075564e1f79ae85ac36c8c6"
+python-versions = ">=3.9"
+content-hash = "33163fd2abfa1fa3bf1a5293013fdd55aa91bdbea6422e770d76784a5d9b50c1"
