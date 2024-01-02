@@ -9,7 +9,7 @@ packages = [{include = "cvx"}]
 homepage = "https://www.cvxgrp.org/simulator"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.9"
 numpy = "*"
 pandas = "*"
 quantstats = "*"
@@ -25,7 +25,7 @@ pre-commit = "*"
 plotly = "*"
 loguru = "*"
 cvxpy = "*"
-tinycta = "0.7.0"
+tinycta = "0.7.1"
 
 [build-system]
 requires = ["poetry>=1.6.0"]
