@@ -91,7 +91,7 @@ Classes
       
 
    .. py:attribute:: _state
-      :type: simulator._state.state.State
+      :type: cvx.simulator.state.State
 
       
 
@@ -119,7 +119,7 @@ Classes
       is called automatically after the object initialization.
 
 
-   .. py:method:: __iter__() -> Generator[tuple[pandas.DatetimeIndex, simulator._state.state.State], None, None]
+   .. py:method:: __iter__() -> Generator[tuple[pandas.DatetimeIndex, cvx.simulator.state.State], None, None]
 
       The __iter__ method allows the object to be iterated over in a for loop,
       yielding time and the current state of the portfolio.

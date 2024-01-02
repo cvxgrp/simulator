@@ -58,6 +58,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.builder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../portfolio/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.portfolio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator.state</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -188,7 +189,7 @@ Useful mainly for testing</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="simulator.builder.Builder._state">
-<span class="sig-name descname"><span class="pre">_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../_state/state/index.html#simulator._state.state.State" title="simulator._state.state.State"><span class="pre">simulator._state.state.State</span></a></em><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder._state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder._state" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">cvx.simulator.state.State</span></em><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder._state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder._state" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -216,7 +217,7 @@ is called automatically after the object initialization.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="simulator.builder.Builder.__iter__">
-<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DatetimeIndex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../_state/state/index.html#simulator._state.state.State" title="simulator._state.state.State"><span class="pre">simulator._state.state.State</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.__iter__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DatetimeIndex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">cvx.simulator.state.State</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/simulator/builder.html#Builder.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.builder.Builder.__iter__" title="Link to this definition"></a></dt>
 <dd><p>The __iter__ method allows the object to be iterated over in a for loop,
 yielding time and the current state of the portfolio.
 The method yields a list of dates seen so far and returns a tuple

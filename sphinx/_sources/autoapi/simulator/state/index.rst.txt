@@ -1,7 +1,7 @@
-:py:mod:`simulator._state.state`
-================================
+:py:mod:`simulator.state`
+=========================
 
-.. py:module:: simulator._state.state
+.. py:module:: simulator.state
 
 
 Module Contents
@@ -12,7 +12,7 @@ Classes
 
 .. autoapisummary::
 
-   simulator._state.state.State
+   simulator.state.State
 
 
 

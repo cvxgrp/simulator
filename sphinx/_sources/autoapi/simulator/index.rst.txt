@@ -10,7 +10,6 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
-   _state/index.rst
    utils/index.rst
 
 
@@ -22,5 +21,6 @@ Submodules
 
    builder/index.rst
    portfolio/index.rst
+   state/index.rst
 
 
