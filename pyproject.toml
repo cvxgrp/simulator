@@ -12,9 +12,6 @@ homepage = "https://www.cvxgrp.org/simulator"
 python = ">=3.9"
 numpy = "*"
 pandas = "*"
-# quantstats = "*"
-# we need this awkward dependency for quantstats
-# ipython = "*"
 quantstats = {path = "quantstats-main"}
 
 [tool.poetry.group.test.dependencies]
