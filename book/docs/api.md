@@ -1,5 +1,5 @@
 # API
 
-## Sphinx
+## pdoc
 
-[API](https://www.cvxgrp.org/simulator/sphinx/)
+[API](https://www.cvxgrp.org/simulator/pdoc/)
