@@ -51,7 +51,7 @@ setup(
     platforms=["any"],
     keywords="""quant algotrading algorithmic-trading quantitative-trading
                 quantitative-analysis algo-trading visualization plotting""",
-    packages=find_packages(exclude=["contrib", "docs", "tests", "examples"]),
+    packages=find_packages(exclude=["docs", "tests"]),
     install_requires=requirements,
     include_package_data=True,
     package_data={"static": ["quantstats/report.html"]},
