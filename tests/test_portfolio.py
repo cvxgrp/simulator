@@ -138,6 +138,7 @@ def test_plot(portfolio):
 
 def test_html(portfolio, tmp_path):
     portfolio.html(output=tmp_path / "test.html")
+
     assert os.path.exists(tmp_path / "test.html")
 
 

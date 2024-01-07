@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -310,6 +311,9 @@ class Portfolio:
         match_dates: bool = True,
         **kwargs: Any,
     ) -> Any:
+        if template_path is None:
+            template_path = Path(__file__).parent / "templates" / "report.html"
+
         return qs.reports.html(
             returns=self.nav.pct_change().dropna(),
             benchmark=benchmark,
