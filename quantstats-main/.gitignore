@@ -1,11 +1,3 @@
-*.pyc
-.idea
-__pycache__/*
-quantstats/__pycache__/*
 dist
 /build
 QuantStats.egg-info
-Icon
-/tests
-.vscode
-Icon
