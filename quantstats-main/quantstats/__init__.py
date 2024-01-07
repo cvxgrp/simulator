@@ -17,9 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import version
-
-__version__ = version.version
 __author__ = "Ran Aroussi"
 
 from . import stats, utils, plots, reports

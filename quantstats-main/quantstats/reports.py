@@ -29,7 +29,6 @@ import pandas as _pd
 from dateutil.relativedelta import relativedelta
 from tabulate import tabulate as _tabulate
 
-from . import __version__
 from . import plots as _plots
 from . import stats as _stats
 from . import utils as _utils
