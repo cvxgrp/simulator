@@ -13,26 +13,26 @@ from os import path
 from setuptools import find_packages, setup
 
 # --- get version ---
-version = "unknown"
-with open("quantstats/version.py") as f:
-    line = f.read().strip()
-    version = line.replace("version = ", "").replace('"', "")
+# version = "unknown"
+# with open("quantstats/version.py") as f:
+#    line = f.read().strip()
+#    version = line.replace("version = ", "").replace('"', "")
 # --- /get version ---
 
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, "README.rst"), encoding="utf-8") as f:
-    long_description = f.read()
+# with open(path.join(here, "README.rst"), encoding="utf-8") as f:
+#    long_description = f.read()
 
 with open(path.join(here, "requirements.txt"), encoding="utf-8") as f:
     requirements = [line.rstrip() for line in f]
 
 setup(
     name="QuantStats",
-    version=version,
+    # version=version,
     description="Portfolio analytics for quants",
-    long_description=long_description,
+    # long_description=long_description,
     url="https://github.com/ranaroussi/quantstats",
     author="Ran Aroussi",
     author_email="ran@aroussi.com",
@@ -66,12 +66,12 @@ setup(
                 quantitative-analysis algo-trading visualization plotting""",
     packages=find_packages(exclude=["contrib", "docs", "tests", "examples"]),
     install_requires=requirements,
-    entry_points={
-        "console_scripts": [
-            "sample=sample:main",
-        ],
-    },
-    include_package_data=True,
+    # entry_points={
+    #    "console_scripts": [
+    #        "sample=sample:main",
+    #    ],
+    # },
+    # include_package_data=True,
     # package_data={
     #     'static': 'quantstats/report.html*'
     # },
