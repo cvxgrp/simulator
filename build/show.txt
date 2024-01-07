@@ -1,24 +1,4 @@
-ipython 8.18.1 IPython: Productive Interactive Computing
-├── colorama *
-├── decorator *
-├── exceptiongroup *
-├── jedi >=0.16
-│   └── parso >=0.8.3,<0.9.0 
-├── matplotlib-inline *
-│   └── traitlets * 
-├── pexpect >4.3
-│   └── ptyprocess >=0.5 
-├── prompt-toolkit >=3.0.41,<3.1.0
-│   └── wcwidth * 
-├── pygments >=2.4.0
-├── stack-data *
-│   ├── asttokens >=2.1.0 
-│   │   └── six >=1.12.0 
-│   ├── executing >=1.2.0 
-│   └── pure-eval * 
-├── traitlets >=5
-└── typing-extensions *
-numpy 1.26.2 Fundamental package for array computing in Python
+numpy 1.26.3 Fundamental package for array computing in Python
 pandas 2.1.4 Powerful data structures for data analysis, time series, and statistics
 ├── numpy >=1.22.4,<2
 ├── numpy >=1.23.2,<2
@@ -27,7 +7,27 @@ pandas 2.1.4 Powerful data structures for data analysis, time series, and statis
 │   └── six >=1.5 
 ├── pytz >=2020.1
 └── tzdata >=2022.1
-quantstats 0.0.62 Portfolio analytics for quants
+QuantStats 0.0.62 Portfolio analytics for quants
+├── ipython >=8.18.1
+│   ├── colorama * 
+│   ├── decorator * 
+│   ├── exceptiongroup * 
+│   ├── jedi >=0.16 
+│   │   └── parso >=0.8.3,<0.9.0 
+│   ├── matplotlib-inline * 
+│   │   └── traitlets * 
+│   ├── pexpect >4.3 
+│   │   └── ptyprocess >=0.5 
+│   ├── prompt-toolkit >=3.0.41,<3.1.0 
+│   │   └── wcwidth * 
+│   ├── pygments >=2.4.0 
+│   ├── stack-data * 
+│   │   ├── asttokens >=2.1.0 
+│   │   │   └── six >=1.12.0 
+│   │   ├── executing >=1.2.0 
+│   │   └── pure-eval * 
+│   ├── traitlets >=5 (circular dependency aborted here)
+│   └── typing-extensions * 
 ├── matplotlib >=3.0.0
 │   ├── contourpy >=1.0.1 
 │   │   └── numpy >=1.20,<2.0 
