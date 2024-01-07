@@ -117,7 +117,6 @@ def html(
     date_range = returns.index.strftime("%e %b, %Y")
     tpl = tpl.replace("{{date_range}}", date_range[0] + " - " + date_range[-1])
     tpl = tpl.replace("{{title}}", title)
-    tpl = tpl.replace("{{v}}", __version__)
 
     if benchmark is not None:
         benchmark.name = benchmark_title
