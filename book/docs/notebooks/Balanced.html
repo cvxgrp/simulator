@@ -378,8 +378,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#with-cvxpy">With cvxpy</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classic">Classic</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-entropy">With entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-euclidean-norm">Minimization of the Euclidean norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-infty-norm">Minimization of the <span class="math notranslate nohighlight">\(\infty\)</span> norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maximization-of-the-entropy">Maximization of the entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-tracking-error">Minimization of the tracking error</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#with-sparse-updates">With sparse updates</a></li>
@@ -397,8 +399,15 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="the-1-n-family">
 <h1>The 1/n family<a class="headerlink" href="#the-1-n-family" title="Permalink to this heading">#</a></h1>
 <p>We play with the <span class="math notranslate nohighlight">\(1/n\)</span> portfolio. We start with a vanilla implementation using daily rebalancing.
-Every portfolio should be the solution of a convex optimization problem, see <a class="reference external" href="https://www.linkedin.com/pulse/stock-picking-convex-programs-thomas-schmelzer">https://www.linkedin.com/pulse/stock-picking-convex-programs-thomas-schmelzer</a>. We do that and show two methods to construct the portfolio with the minimization of an Euclidean norm and the maximization of the Entropy of the underlying weights.</p>
+Every portfolio should be the solution of a convex optimization problem, see <a class="reference external" href="https://www.linkedin.com/pulse/stock-picking-convex-programs-thomas-schmelzer">https://www.linkedin.com/pulse/stock-picking-convex-programs-thomas-schmelzer</a>. We do that and show methods to construct the portfolio with</p>
+<ul class="simple">
+<li><p>the minimization of the Euclidean norm of the weights.</p></li>
+<li><p>the minimization of the <span class="math notranslate nohighlight">\(\infty\)</span> norm of the weights.</p></li>
+<li><p>and the maximization of the Entropy of the weights.</p></li>
+<li><p>the minimization of the tracking error to an <span class="math notranslate nohighlight">\(1/n\)</span> portfolio.</p></li>
+</ul>
 <p>We also play with sparse updates, e.g. rather than rebalancing daily, we act only once the deviation of our drifted portfolio got too large from the target <span class="math notranslate nohighlight">\(1/n\)</span> portfolio.</p>
+<p>This problem has been discussed <a class="reference external" href="https://www.linkedin.com/feed/update/urn:li:activity:7149432321388064768/">https://www.linkedin.com/feed/update/urn:li:activity:7149432321388064768/</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -410,7 +419,6 @@ Every portfolio should be the solution of a convex optimization problem, see <a 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;matplotlib.font_manager&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">Builder</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;plotly&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -465,8 +473,8 @@ more complex portfolios we are building</p>
 </div>
 </div>
 </div>
-<section id="classic">
-<h3>Classic<a class="headerlink" href="#classic" title="Permalink to this heading">#</a></h3>
+<section id="minimization-of-the-euclidean-norm">
+<h3>Minimization of the Euclidean norm<a class="headerlink" href="#minimization-of-the-euclidean-norm" title="Permalink to this heading">#</a></h3>
 <p>We minimize the Euclidean norm of the weight vector. Same results as above but with opten door to the world of convex paradise.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -494,14 +502,42 @@ more complex portfolios we are building</p>
 </div>
 </div>
 </section>
-<section id="with-entropy">
-<h3>With entropy<a class="headerlink" href="#with-entropy" title="Permalink to this heading">#</a></h3>
+<section id="minimization-of-the-infty-norm">
+<h3>Minimization of the <span class="math notranslate nohighlight">\(\infty\)</span> norm<a class="headerlink" href="#minimization-of-the-infty-norm" title="Permalink to this heading">#</a></h3>
+<p>Based on an idea by Vladimir Markov</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
+    <span class="n">assets</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">assets</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">objective</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">norm_inf</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">weights</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># we are using the new CLARABEL solver</span>
+    <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">),</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">CLARABEL</span><span class="p">)</span>
+    <span class="c1"># update weights &amp; aum as before</span>
+    <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
+
+<span class="n">portfolio</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/231774072de69bbfc241110352ea2f6d0a9e4b1f88267543f41f1e8b8367f9fb.png" src="../../_images/231774072de69bbfc241110352ea2f6d0a9e4b1f88267543f41f1e8b8367f9fb.png" />
+</div>
+</div>
+</section>
+<section id="maximization-of-the-entropy">
+<h3>Maximization of the entropy<a class="headerlink" href="#maximization-of-the-entropy" title="Permalink to this heading">#</a></h3>
 <p>One can also maximize the entropy to arrive at the same result</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
 
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
     <span class="n">assets</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">assets</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
@@ -523,6 +559,33 @@ more complex portfolios we are building</p>
 </div>
 </div>
 </section>
+<section id="minimization-of-the-tracking-error">
+<h3>Minimization of the tracking error<a class="headerlink" href="#minimization-of-the-tracking-error" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
+    <span class="n">assets</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">assets</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">objective</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">weights</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">weights</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">),</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">CLARABEL</span><span class="p">)</span>
+    <span class="c1"># update weights &amp; aum as before</span>
+    <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
+
+<span class="n">portfolio</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/231774072de69bbfc241110352ea2f6d0a9e4b1f88267543f41f1e8b8367f9fb.png" src="../../_images/231774072de69bbfc241110352ea2f6d0a9e4b1f88267543f41f1e8b8367f9fb.png" />
+</div>
+</div>
+</section>
 </section>
 <section id="with-sparse-updates">
 <h2>With sparse updates<a class="headerlink" href="#with-sparse-updates" title="Permalink to this heading">#</a></h2>
@@ -531,27 +594,39 @@ more complex portfolios we are building</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
 
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
+    <span class="c1"># assets currently alive, e.g. with a valid price</span>
     <span class="n">assets</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">assets</span>
+    <span class="c1"># number of assets currently alive</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
-    
-    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-    
-    <span class="c1"># todo: this should be state.drifted...</span>
-    <span class="n">drifted</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 
+    <span class="c1"># Assets may drop out...</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+
+    <span class="c1"># the drifted weights for all valid assets</span>
+    <span class="n">drifted</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c1"># the delta is the sum of absolute weight changes</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">drifted</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     
     <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mf">0.20</span><span class="p">:</span>
+        <span class="c1"># update the weights of the portfolio, e.g.</span>
+        <span class="c1"># rebalance it and set it all back to 1/n</span>
         <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">target</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># forward-fill the position </span>
         <span class="n">builder</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">position</span>
         <span class="c1"># or</span>
+        <span class="c1"># forward-fill the weights</span>
         <span class="c1"># builder.weights = drifted</span>
+        <span class="c1"># or</span>
+        <span class="c1"># forward-filil the cashposition</span>
         <span class="c1"># builider.cashposition = state.cashposition</span>
-    
+
+    <span class="c1"># update the aum. Before you do that, you have the chance to correct it </span>
+    <span class="c1"># using your estimated trading costs, etc.</span>
     <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
+
 
 <span class="n">portfolio</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
@@ -630,8 +705,10 @@ more complex portfolios we are building</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#with-cvxpy">With cvxpy</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classic">Classic</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-entropy">With entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-euclidean-norm">Minimization of the Euclidean norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-infty-norm">Minimization of the <span class="math notranslate nohighlight">\(\infty\)</span> norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maximization-of-the-entropy">Maximization of the entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-tracking-error">Minimization of the tracking error</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#with-sparse-updates">With sparse updates</a></li>
