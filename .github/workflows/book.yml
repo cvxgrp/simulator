@@ -7,10 +7,14 @@ on:
 
 
 jobs:
-  sphinx:
+  #sphinx:
+  #  runs-on: "ubuntu-latest"
+  #  steps:
+  #    - uses: cvxgrp/.github/actions/sphinx@main
+  pdoc:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/sphinx@main
+      - uses: cvxgrp/.github/actions/pdoc@main
 
   test:
     runs-on: "ubuntu-latest"
@@ -24,7 +28,7 @@ jobs:
 
   book:
     runs-on: "ubuntu-latest"
-    needs: [test, sphinx, jupyter]
+    needs: [test, pdoc, jupyter]
 
     permissions:
       contents: write
