@@ -71,8 +71,8 @@ setup(
     #        "sample=sample:main",
     #    ],
     # },
-    # include_package_data=True,
-    # package_data={
-    #     'static': 'quantstats/report.html*'
-    # },
+    include_package_data=True,
+    package_data={
+        'static': 'quantstats/report.html'
+    },
 )
