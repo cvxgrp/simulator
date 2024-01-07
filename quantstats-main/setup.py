@@ -7,14 +7,12 @@ portfolio managers to understand their performance better,
 by providing them with in-depth analytics and risk metrics.
 """
 
-# from codecs import open
-from os import path
-
+from pathlib import Path
 from setuptools import find_packages, setup
 
-here = path.abspath(path.dirname(__file__))
+here = Path(__file__).parent
 
-with open(path.join(here, "requirements.txt"), encoding="utf-8") as f:
+with open(here / "requirements.txt", encoding="utf-8") as f:
     requirements = [line.rstrip() for line in f]
 
 setup(
