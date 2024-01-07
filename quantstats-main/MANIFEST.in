@@ -1,5 +1,0 @@
-include requirements.txt
-include quantstats/report.html
-
-# Include the data files
-recursive-include data *
