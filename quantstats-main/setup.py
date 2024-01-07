@@ -28,6 +28,4 @@ setup(
     # packages=find_packages(exclude=["docs", "tests"]),
     packages=find_packages(include=["quantstats", "quantstats.*"]),
     install_requires=requirements,
-    include_package_data=True,
-    package_data={"static": ["quantstats/report.html"]},
 )

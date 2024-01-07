@@ -59,6 +59,7 @@ def _match_dates(returns, benchmark):
 
 def html(
     returns,
+    template_path,
     benchmark=None,
     rf=0.0,
     grayscale=False,
@@ -68,7 +69,7 @@ def html(
     periods_per_year=252,
     download_filename="quantstats-tearsheet.html",
     figfmt="svg",
-    template_path=None,
+    # template_path=None,
     match_dates=True,
     **kwargs,
 ):
@@ -80,10 +81,10 @@ def html(
 
     win_year, win_half_year = _get_trading_periods(periods_per_year)
 
-    tpl = ""
-    with open(template_path or __file__[:-4] + ".html") as f:
+    # tpl = ""
+    with open(template_path, encoding="utf-8") as f:
         tpl = f.read()
-        f.close()
+        # f.close()
 
     # prepare timeseries
     if match_dates:
