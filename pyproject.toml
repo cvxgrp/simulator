@@ -12,9 +12,10 @@ homepage = "https://www.cvxgrp.org/simulator"
 python = ">=3.9"
 numpy = "*"
 pandas = "*"
-quantstats = "*"
+# quantstats = "*"
 # we need this awkward dependency for quantstats
-ipython = "*"
+# ipython = "*"
+quantstats = {path = "quantstats-main"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -36,5 +37,6 @@ select = ["E", "F", "I"]
 line-length = 120
 target-version = "py310"
 exclude = [
-    "*__init__.py"
+    "*__init__.py",
+    "quantstats-main"
 ]
