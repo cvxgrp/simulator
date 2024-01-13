@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
@@ -153,7 +152,7 @@ def test_snapshot(portfolio):
     # You need to call show() to display it
     xxx = pd.Series(index=portfolio.index, data=0.0)
     portfolio.snapshot(benchmark=xxx)
-    plt.show()
+    # plt.show()
     # or
     # portfolio.snapshot(benchmark=xxx).show()
 
