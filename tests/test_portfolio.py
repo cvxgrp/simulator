@@ -60,6 +60,11 @@ def test_turnover(portfolio):
     pd.testing.assert_frame_equal(v.abs(), portfolio.turnover)
 
 
+def test_turnover_relative(portfolio):
+    v = portfolio.trades_units * portfolio.prices
+    pd.testing.assert_frame_equal(v.div(portfolio.nav, 0), portfolio.turnover_relative)
+
+
 def test_get(portfolio):
     for time in portfolio.index:
         w = portfolio[time]

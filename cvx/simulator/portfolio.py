@@ -145,6 +145,9 @@ class Portfolio:
 
     @property
     def cashposition(self):
+        """
+        Return a pandas dataframe representing the cash position
+        """
         return self.prices * self.units
 
     @property
@@ -183,6 +186,12 @@ class Portfolio:
         The resulting dataframe will have the same dimensions as the units and prices dataframes.
         """
         return self.trades_units * self.prices
+
+    @property
+    def turnover_relative(self) -> pd.DataFrame:
+        """A property that returns a pandas dataframe representing the turnover
+        relative to the NAV. Can be positive (if bought) or negative (if sold)."""
+        return self.trades_currency.div(self.nav, axis=0)
 
     @property
     def turnover(self) -> pd.DataFrame:
