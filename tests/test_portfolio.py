@@ -148,7 +148,13 @@ def test_html(portfolio, tmp_path):
 
 
 def test_snapshot(portfolio):
-    portfolio.snapshot(show=False, fontname=None)
+    # snapshot returns a matplotlib figure
+    # You need to call show() to display it
+    xxx = pd.Series(index=portfolio.index, data=0.0)
+    # fig = portfolio.snapshot(benchmark=xxx)
+    # fig.show()
+    # or
+    portfolio.snapshot(benchmark=xxx).show()
 
 
 def test_plot_enum(portfolio):

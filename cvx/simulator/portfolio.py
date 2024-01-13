@@ -18,6 +18,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import matplotlib
 import pandas as pd
 import quantstats as qs
 
@@ -341,6 +342,7 @@ class Portfolio:
 
     def snapshot(
         self,
+        benchmark: Any = None,
         grayscale: bool = False,
         figsize: tuple[int, int] = (10, 8),
         title: str = "Portfolio Summary",
@@ -349,8 +351,10 @@ class Portfolio:
         mode: str = "comp",
         subtitle: bool = True,
         savefig: Any = None,
-        show: bool = True,
         log_scale: bool = False,
+        label_strategy: str = "Strategy",
+        label_benchmark: str = "Benchmark",
+        color_benchmark: str = "red",
         **kwargs: Any,
     ) -> Any:
         """
@@ -369,7 +373,7 @@ class Portfolio:
         :param kwargs:
         :return:
         """
-        return qs.plots.snapshot(
+        fig = qs.plots.snapshot(
             returns=self.nav.pct_change().dropna(),
             grayscale=grayscale,
             figsize=figsize,
@@ -379,10 +383,31 @@ class Portfolio:
             mode=mode,
             subtitle=subtitle,
             savefig=savefig,
-            show=show,
+            show=False,
             log_scale=log_scale,
             **kwargs,
         )
+
+        if benchmark is not None:
+            assert isinstance(fig, matplotlib.figure.Figure)
+
+            # get the first axes, e.g. the top plot
+            ax = fig.axes[0]
+
+            # give the NAV line a name
+            ax.get_lines()[0].set_label(label_strategy)
+
+            ax.plot(
+                benchmark.index,
+                benchmark.values,
+                color=color_benchmark,
+                label=label_benchmark,
+            )
+
+            # display the labels
+            ax.legend()
+
+        return fig
 
     @classmethod
     def from_cashpos_prices(
