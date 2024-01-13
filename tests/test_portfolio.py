@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
@@ -151,10 +152,10 @@ def test_snapshot(portfolio):
     # snapshot returns a matplotlib figure
     # You need to call show() to display it
     xxx = pd.Series(index=portfolio.index, data=0.0)
-    # fig = portfolio.snapshot(benchmark=xxx)
-    # fig.show()
+    portfolio.snapshot(benchmark=xxx)
+    plt.show()
     # or
-    portfolio.snapshot(benchmark=xxx).show()
+    # portfolio.snapshot(benchmark=xxx).show()
 
 
 def test_plot_enum(portfolio):
