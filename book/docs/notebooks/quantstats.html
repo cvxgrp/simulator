@@ -439,7 +439,44 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/8d6a74b4db01a87e9f58f24c3795089993181d355e48c582c2987fdc44641c48.png" src="../../_images/8d6a74b4db01a87e9f58f24c3795089993181d355e48c582c2987fdc44641c48.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;1/n portfolio&quot;</span><span class="p">,</span> <span class="n">fontname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nn">File ~/work/simulator/simulator/cvx/simulator/portfolio.py:376,</span> in <span class="ni">Portfolio.snapshot</span><span class="nt">(self, benchmark, grayscale, figsize, title, fontname, lw, mode, subtitle, savefig, log_scale, label_strategy, label_benchmark, color_benchmark, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">343</span> <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">344</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">345</span>     <span class="n">benchmark</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">358</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">359</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="sd">     The snapshot method creates a snapshot of the performance of an EquityPortfolio object.</span>
+<span class="g g-Whitespace">    </span><span class="mi">362</span><span class="sd"> </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span><span class="sd">     :return:</span>
+<span class="g g-Whitespace">    </span><span class="mi">375</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">376</span>     <span class="n">fig</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">377</span>         <span class="n">returns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nav</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+<span class="g g-Whitespace">    </span><span class="mi">378</span>         <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">379</span>         <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">380</span>         <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">381</span>         <span class="n">fontname</span><span class="o">=</span><span class="n">fontname</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">382</span>         <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">383</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">384</span>         <span class="n">subtitle</span><span class="o">=</span><span class="n">subtitle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">385</span>         <span class="n">savefig</span><span class="o">=</span><span class="n">savefig</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">387</span>         <span class="n">log_scale</span><span class="o">=</span><span class="n">log_scale</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">388</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span>     <span class="k">if</span> <span class="n">benchmark</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span>         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: quantstats._plotting.wrappers.snapshot() got multiple values for keyword argument &#39;show&#39;
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -518,11 +555,11 @@ Serenity Index      5.65
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/a13069q/github/simulator/.venv/lib/python3.11/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
   return reduction(axis=axis, out=out, **passkwargs)
-/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
+/Users/a13069q/github/simulator/.venv/lib/python3.11/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
   return reduction(axis=axis, out=out, **passkwargs)
-/home/runner/work/simulator/simulator/.venv/lib/python3.10/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
+/Users/a13069q/github/simulator/.venv/lib/python3.11/site-packages/numpy/core/fromnumeric.py:86: FutureWarning: The behavior of DataFrame.prod with axis=None is deprecated, in a future version this will reduce over both axes and return a scalar. To retain the old behavior, pass axis=0 (or do not pass axis)
   return reduction(axis=axis, out=out, **passkwargs)
 </pre></div>
 </div>
@@ -535,8 +572,8 @@ Serenity Index      5.65
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/71b97784d942af9fe716264b0e675d961d1fd30f2324e3b682c1bb56f367218a.png" src="../../_images/71b97784d942af9fe716264b0e675d961d1fd30f2324e3b682c1bb56f367218a.png" />
-<img alt="../../_images/e4d98a77838a29a090cf1b99267b69c9627f62258a56890c1e605df9bf123d16.png" src="../../_images/e4d98a77838a29a090cf1b99267b69c9627f62258a56890c1e605df9bf123d16.png" />
+<img alt="../../_images/88cb51c5da5dc20da189db6995770a59699b22fca7326068ab5a16e1d9d927db.png" src="../../_images/88cb51c5da5dc20da189db6995770a59699b22fca7326068ab5a16e1d9d927db.png" />
+<img alt="../../_images/5fc55ff86834792d8b391c875ae78f60b181e632feb79ab0ff2accfcceec3b2a.png" src="../../_images/5fc55ff86834792d8b391c875ae78f60b181e632feb79ab0ff2accfcceec3b2a.png" />
 </div>
 </div>
 </section>

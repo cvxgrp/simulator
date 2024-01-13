@@ -7,7 +7,7 @@ pandas 2.1.4 Powerful data structures for data analysis, time series, and statis
 │   └── six >=1.5 
 ├── pytz >=2020.1
 └── tzdata >=2022.1
-QuantStats 0.0.62 Portfolio analytics for quants
+QuantStats 0.0.0 Portfolio analytics for quants
 ├── ipython >=8.18.1
 │   ├── colorama * 
 │   ├── decorator * 
@@ -42,17 +42,6 @@ QuantStats 0.0.62 Portfolio analytics for quants
 │   ├── pyparsing >=2.3.1 
 │   └── python-dateutil >=2.7 
 │       └── six >=1.5 
-├── numpy >=1.16.5
-├── pandas >=0.24.0
-│   ├── numpy >=1.22.4,<2 
-│   ├── numpy >=1.23.2,<2 (circular dependency aborted here)
-│   ├── numpy >=1.26.0,<2 (circular dependency aborted here)
-│   ├── python-dateutil >=2.8.2 
-│   │   └── six >=1.5 
-│   ├── pytz >=2020.1 
-│   └── tzdata >=2022.1 
-├── python-dateutil >=2.0
-│   └── six >=1.5 
 ├── scipy >=1.2.0
 │   └── numpy >=1.21.6,<1.28.0 
 ├── seaborn >=0.9.0
