@@ -143,8 +143,10 @@ def test_plots(portfolio):
     portfolio.plots(mode="full", show=False)
 
 
-# def test_plot(portfolio):
-#    portfolio.plot(kind=Plot.DRAWDOWN, show=False)
+def test_plot(portfolio):
+    pass
+
+
 #    portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
 
 
@@ -162,6 +164,11 @@ def test_snapshot(portfolio):
     # plt.show()
     # or
     # portfolio.snapshot(benchmark=xxx).show()
+
+
+def test_plot_drawdown(portfolio):
+    fig = portfolio.plot_drawdown()
+    fig.show()
 
 
 def test_plot_enum(portfolio):

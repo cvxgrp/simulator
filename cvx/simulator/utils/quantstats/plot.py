@@ -24,11 +24,9 @@ import cvx.simulator.quantstats as qs
 class Plot(Enum):
     DAILY_RETURNS = 1
     DISTRIBUTION = 2
-    DRAWDOWN = 3
     DRAWDOWNS_PERIODS = 4
     EARNINGS = 5
     HISTOGRAM = 6
-    LOG_RETURNS = 7
     MONTHLY_HEATMAP = 8
     # see issue: https://github.com/ranaroussi/quantstats/issues/276
     MONTHLY_RETURNS = 9

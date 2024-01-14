@@ -126,12 +126,9 @@ def extend_pandas():
 
     # plotting methods
     _po.plot_earnings = plots.earnings
-    _po.plot_daily_returns = plots.daily_returns
     _po.plot_distribution = plots.distribution
-    _po.plot_drawdown = plots.drawdown
     _po.plot_drawdowns_periods = plots.drawdowns_periods
     _po.plot_histogram = plots.histogram
-    _po.plot_log_returns = plots.log_returns
     _po.plot_returns = plots.returns
     _po.plot_rolling_beta = plots.rolling_beta
     _po.plot_rolling_sharpe = plots.rolling_sharpe

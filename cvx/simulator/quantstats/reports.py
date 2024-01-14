@@ -230,19 +230,6 @@ def html(
     tpl = tpl.replace("{{returns}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
-    _plots.log_returns(
-        returns,
-        benchmark,
-        grayscale=grayscale,
-        figsize=(8, 4),
-        subtitle=False,
-        savefig={"fname": figfile, "format": figfmt},
-        show=False,
-        ylabel=False,
-        cumulative=compounded,
-        prepare_returns=False,
-    )
-    tpl = tpl.replace("{{log_returns}}", _embed_figure(figfile, figfmt))
 
     if benchmark is not None:
         figfile = _utils._file_stream()
@@ -292,18 +279,7 @@ def html(
     tpl = tpl.replace("{{monthly_dist}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
-    _plots.daily_returns(
-        returns,
-        benchmark,
-        grayscale=grayscale,
-        figsize=(8, 3),
-        subtitle=False,
-        savefig={"fname": figfile, "format": figfmt},
-        show=False,
-        ylabel=False,
-        prepare_returns=False,
-        active=active,
-    )
+
     tpl = tpl.replace("{{daily_returns}}", _embed_figure(figfile, figfmt))
 
     if benchmark is not None:
@@ -400,15 +376,6 @@ def html(
         tpl = tpl.replace("{{dd_periods}}", _embed_figure(embed, figfmt))
 
     figfile = _utils._file_stream()
-    _plots.drawdown(
-        returns,
-        grayscale=grayscale,
-        figsize=(8, 3),
-        subtitle=False,
-        savefig={"fname": figfile, "format": figfmt},
-        show=False,
-        ylabel=False,
-    )
     tpl = tpl.replace("{{dd_plot}}", _embed_figure(figfile, figfmt))
 
     figfile = _utils._file_stream()
@@ -1321,16 +1288,6 @@ def plots(
         prepare_returns=False,
     )
 
-    _plots.log_returns(
-        returns,
-        benchmark,
-        grayscale=grayscale,
-        figsize=(figsize[0], figsize[0] * 0.5),
-        show=True,
-        ylabel=False,
-        prepare_returns=False,
-    )
-
     if benchmark is not None:
         _plots.returns(
             returns,
@@ -1369,17 +1326,6 @@ def plots(
             figsize[0],
             figsize[0] * (0.33 * (len(returns.columns) * 0.66)),
         )
-
-    _plots.daily_returns(
-        returns,
-        benchmark,
-        grayscale=grayscale,
-        figsize=small_fig_size,
-        show=True,
-        ylabel=False,
-        prepare_returns=False,
-        active=active,
-    )
 
     if benchmark is not None:
         _plots.rolling_beta(
@@ -1442,14 +1388,6 @@ def plots(
                 title=col,
                 prepare_returns=False,
             )
-
-    _plots.drawdown(
-        returns,
-        grayscale=grayscale,
-        figsize=(figsize[0], figsize[0] * 0.4),
-        show=True,
-        ylabel=False,
-    )
 
     if isinstance(returns, _pd.Series):
         _plots.monthly_heatmap(

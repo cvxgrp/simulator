@@ -20,6 +20,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -341,6 +342,21 @@ class Portfolio:
             match_dates=match_dates,
             **kwargs,
         )
+
+    def plot_drawdown(self) -> Any:
+        self.drawdown.name = "Drawdown"
+        fig = px.area(
+            -self.drawdown,
+            y="Drawdown",
+            title="Underwater Plot",
+            color_discrete_sequence=["red"],
+        )
+
+        fig.update_layout(height=500)
+        return fig
+
+    def plot_log_returns(self) -> Any:
+        pass
 
     def snapshot(
         self,
