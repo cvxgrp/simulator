@@ -138,13 +138,8 @@ def test_quantstats(portfolio):
 
 
 def test_snapshot(portfolio):
-    # snapshot returns a matplotlib figure
-    # You need to call show() to display it
     xxx = pd.Series(index=portfolio.index, data=0.0)
     portfolio.snapshot(benchmark=xxx)
-    # plt.show()
-    # or
-    # portfolio.snapshot(benchmark=xxx).show()
 
 
 def test_equity(portfolio):
