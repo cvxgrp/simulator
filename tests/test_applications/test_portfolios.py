@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.builder import Builder
+from tests.test_applications.conftest import sharpe
 
 
 @pytest.fixture()
@@ -41,7 +42,9 @@ def test_portfolio_small_futures(prices):
 
     portfolio = builder.build()
 
-    assert portfolio.nav.sharpe() == pytest.approx(0.522840865024556, abs=1e-3)
+    assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(
+        0.522840865024556, abs=1e-3
+    )
 
 
 def test_iter(prices):

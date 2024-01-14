@@ -1,13 +1,12 @@
 """test portfolio"""
 from __future__ import annotations
 
-import os
-
 import numpy as np
 import pytest
 from tinycta.signal import osc, returns_adjust
 
 from cvx.simulator.portfolio import Portfolio
+from tests.test_applications.conftest import sharpe
 
 
 # take two moving averages and apply the sign-function, adjust by volatility
@@ -29,8 +28,7 @@ def test_portfolio(prices):
     Args:
         prices: adjusted prices of futures
     """
-    if os.getenv("CI"):
-        portfolio = Portfolio.from_cashpos_prices(
-            prices=prices, cashposition=1e6 * f(prices), aum=1e8
-        )
-        assert portfolio.nav.pct_change().sharpe() == pytest.approx(0.8999175950808607)
+    portfolio = Portfolio.from_cashpos_prices(
+        prices=prices, cashposition=1e6 * f(prices), aum=1e8
+    )
+    assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.8999500486718532)

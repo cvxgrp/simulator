@@ -1,10 +1,15 @@
 """global fixtures"""
 from __future__ import annotations
 
+from math import sqrt
 from pathlib import Path
 
 import pandas as pd
 import pytest
+
+
+def sharpe(x, n=252):
+    return x.mean() * sqrt(n) / x.std()
 
 
 @pytest.fixture(scope="session", name="resource_dir")

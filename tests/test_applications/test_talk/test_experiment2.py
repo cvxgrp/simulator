@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
+from tests.test_applications.conftest import sharpe
 
 
 # take two moving averages and apply the sign-function, adjust by volatility
@@ -28,4 +29,4 @@ def test_portfolio(prices):
     portfolio = Portfolio.from_cashpos_prices(
         prices=prices, cashposition=1e6 * f(prices), aum=1e8
     )
-    assert portfolio.nav.pct_change().sharpe() == pytest.approx(0.6132089020623962)
+    assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.6132309781658799)
