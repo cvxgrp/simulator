@@ -22,4 +22,4 @@ try:
 except ImportError:
     pass
 
-from quantstats._plotting.wrappers import *
+from ._plotting.wrappers import *
