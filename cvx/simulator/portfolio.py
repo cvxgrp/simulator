@@ -18,8 +18,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import matplotlib
+import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 import cvx.simulator.quantstats as qs
 from cvx.simulator.utils.quantstats.plot import Plot
@@ -343,69 +345,68 @@ class Portfolio:
     def snapshot(
         self,
         benchmark: Any = None,
-        grayscale: bool = False,
-        figsize: tuple[int, int] = (10, 8),
         title: str = "Portfolio Summary",
-        fontname: str = "Arial",
-        lw: float = 1.5,
-        mode: str = "comp",
-        subtitle: bool = True,
-        savefig: Any = None,
         log_scale: bool = False,
         label_strategy: str = "Strategy",
         label_benchmark: str = "Benchmark",
-        color_benchmark: str = "red",
-        **kwargs: Any,
     ) -> Any:
         """
-        The snapshot method creates a snapshot of the performance of an EquityPortfolio object.
-
-        :param grayscale:
-        :param figsize:
-        :param title:
-        :param fontname:
-        :param lw:
-        :param mode:
-        :param subtitle:
-        :param savefig:
-        :param show:
-        :param log_scale:
-        :param kwargs:
-        :return:
+        The snapshot method creates a snapshot of the performance of a Portfolio object.
         """
-        fig = qs.plots.snapshot(
-            returns=self.nav.pct_change().dropna(),
-            grayscale=grayscale,
-            figsize=figsize,
-            title=title,
-            fontname=fontname,
-            lw=lw,
-            mode=mode,
-            subtitle=subtitle,
-            savefig=savefig,
-            show=False,
-            log_scale=log_scale,
-            **kwargs,
+        fig = make_subplots(
+            rows=3,
+            cols=1,
+            shared_xaxes=True,
+            vertical_spacing=0.0,
+            row_heights=[0.6, 0.2, 0.2],
         )
 
+        # NAV
+        fig.add_trace(
+            go.Scatter(x=self.nav.index, y=self.nav, name=label_strategy), row=1, col=1
+        )
+
+        # change the title of the yaxis
+        fig.update_yaxes(title_text="Cumulative Return", row=1, col=1)
+
+        # change yaxis to log scale
+        if log_scale:
+            fig.update_yaxes(type="log", row=1, col=1)
+
+        # Drawdown data
+        fig.add_trace(
+            go.Scatter(
+                x=self.drawdown.index, y=-self.drawdown, name="Drawdown", fill="tozeroy"
+            ),
+            row=2,
+            col=1,
+        )
+        fig.update_yaxes(title_text="Drawdown", row=2, col=1)
+
+        # Daily Returns
+        returns = self.nav.pct_change()
+        fig.add_trace(
+            go.Bar(
+                x=returns.index,
+                y=returns,
+                marker_color=np.where(returns >= 0, "green", "red"),
+                name="Daily Returns",
+            ),
+            row=3,
+            col=1,
+        )
+
+        fig.update_yaxes(title_text="Daily Returns", row=3, col=1)
+
+        fig.update_traces(showlegend=True)
+        fig.update_layout(height=800, title_text=title)
+
         if benchmark is not None:
-            assert isinstance(fig, matplotlib.figure.Figure)
-
-            # get the first axes, e.g. the top plot
-            ax = fig.axes[0]
-
-            # give the NAV line a name
-            ax.get_lines()[0].set_label(label_strategy)
-
-            ax.plot(
-                benchmark.index,
-                benchmark.values,
-                color=color_benchmark,
-                label=label_benchmark,
+            fig.add_trace(
+                go.Scatter(x=benchmark.index, y=benchmark.values, name=label_benchmark),
+                row=1,
+                col=1,
             )
-
-            # display the labels
-            ax.legend()
 
         return fig
 

@@ -656,6 +656,7 @@ def basic(
     # prepare timeseries
     if match_dates:
         returns = returns.dropna()
+
     returns = _utils._prepare_returns(returns)
     if benchmark is not None:
         benchmark = _utils._prepare_benchmark(benchmark, returns.index, rf)

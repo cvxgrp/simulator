@@ -98,6 +98,13 @@ def test_cashposition(portfolio):
     )
 
 
+def test_plotly(portfolio):
+    benchmark = pd.Series(index=portfolio.index, data=1e6)
+
+    fig = portfolio.snapshot(benchmark=benchmark)
+    fig.show()
+
+
 def test_drawdown(portfolio):
     """
     Test that the drawdown of the portfolio is zero
@@ -132,8 +139,8 @@ def test_quantstats(portfolio):
     portfolio.metrics(mode="full")
 
 
-# def test_plots(portfolio):
-#    portfolio.plots(mode="full", show=False)
+def test_plots(portfolio):
+    portfolio.plots(mode="full", show=False)
 
 
 # def test_plot(portfolio):
