@@ -15,14 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__author__ = "Ran Aroussi"
+__author__ = "Ran Aroussi, Thomas Schmelzer"
 
 from . import stats, utils, reports
 
 __all__ = ["stats", "reports", "utils", "extend_pandas"]
-
-# try automatic matplotlib inline
-utils._in_notebook(matplotlib_inline=True)
 
 
 def extend_pandas():

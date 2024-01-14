@@ -240,25 +240,6 @@ def _file_stream():
     return _io.BytesIO()
 
 
-def _in_notebook(matplotlib_inline=False):
-    """Identify enviroment (notebook, terminal, etc)"""
-    try:
-        shell = get_ipython().__class__.__name__
-        if shell == "ZMQInteractiveShell":
-            # Jupyter notebook or qtconsole
-            if matplotlib_inline:
-                get_ipython().magic("matplotlib inline")
-            return True
-        if shell == "TerminalInteractiveShell":
-            # Terminal running IPython
-            return False
-        # Other type (?)
-        return False
-    except NameError:
-        # Probably standard Python interpreter
-        return False
-
-
 def _count_consecutive(data):
     """Counts consecutive data (like cumsum() with reset on zeroes)"""
 
