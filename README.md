@@ -115,25 +115,15 @@ portfolio.cash
 portfolio.equity
 ```
 
-We have also integrated the [quantstats](https://github.com/ranaroussi/quantstats)
-package for further analysis. Hence it is possible to perform
+It is possible to perform
 
 ```python
 portfolio.snapshot()
-portfolio.metrics()
-portfolio.plots()
-portfolio.html()
 ```
 
-We also added an enum
-
-```python
-portfolio.plot(kind=Plot.DRAWDOWN)
-```
-
-supporting all plots defined in quantstats.
-
-![quantstats](https://raw.githubusercontent.com/cvxgrp/simulator/main/portfolio.png)
+We have also integrated the [quantstats](https://github.com/ranaroussi/quantstats)
+package as an optional extra for further analysis. It is usually enough to inject
+the `portfolio.nav` into the many functions exposed by this package.
 
 ## Poetry
 
