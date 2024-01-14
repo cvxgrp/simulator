@@ -10,5 +10,3 @@ pandas 2.1.4 Powerful data structures for data analysis, time series, and statis
 plotly 5.18.0 An open-source, interactive data visualization library for Python
 ├── packaging *
 └── tenacity >=6.2.0
-scipy 1.11.4 Fundamental algorithms for scientific computing in Python
-└── numpy >=1.21.6,<1.28.0
