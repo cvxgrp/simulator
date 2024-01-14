@@ -17,7 +17,8 @@ from enum import Enum
 from typing import Any
 
 import pandas as pd
-import quantstats as qs
+
+import cvx.simulator.quantstats as qs
 
 
 class Plot(Enum):

@@ -20,7 +20,7 @@ tabulate = ">=0.8.0"
 yfinance = ">=0.1.70"
 ipython = ">=8.18.1"
 
-quantstats = {path = "quantstats-main"}
+#quantstats = {path = "quantstats-main"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -43,5 +43,5 @@ line-length = 120
 target-version = "py310"
 exclude = [
     "*__init__.py",
-    "quantstats-main"
+    "cvx/simulator/quantstats/*.py"
 ]

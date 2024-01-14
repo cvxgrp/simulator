@@ -1,8 +1,0 @@
-We took a copy of https://github.com/ranaroussi/quantstats/commit/fa0a91a42400978bcc95f5f2fb2cf20e6f7af56c
-
-A few simplifications have been made.
-
-* In requirements.txt we declared a dependency on IPython which was forgotten in the original project
-* We removed report.html from the quantstats folder. We have a template in cvx/simulator/templates
-* As a consequence we simplified the install process in setup.py and removed MANIFEST.in and setup.cfg
-* It is possible to adjust your own template
