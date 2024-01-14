@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # QuantStats: Portfolio analytics for quants
 # https://github.com/ranaroussi/quantstats
 #
@@ -16,3 +14,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+try:
+    from pandas.plotting import register_matplotlib_converters as _rmc
+
+    _rmc()
+except ImportError:
+    pass
+
+from ._plotting.wrappers import *

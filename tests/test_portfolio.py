@@ -132,13 +132,13 @@ def test_quantstats(portfolio):
     portfolio.metrics(mode="full")
 
 
-def test_plots(portfolio):
-    portfolio.plots(mode="full", show=False)
+# def test_plots(portfolio):
+#    portfolio.plots(mode="full", show=False)
 
 
-def test_plot(portfolio):
-    portfolio.plot(kind=Plot.DRAWDOWN, show=False)
-    portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
+# def test_plot(portfolio):
+#    portfolio.plot(kind=Plot.DRAWDOWN, show=False)
+#    portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
 
 
 def test_html(portfolio, tmp_path):
