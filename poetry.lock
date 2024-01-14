@@ -1630,27 +1630,6 @@ numpy = ">=1.7"
 scipy = ">=0.13.2"
 
 [[package]]
-name = "QuantStats"
-version = "0.0.0"
-description = "Portfolio analytics for quants"
-optional = false
-python-versions = "*"
-files = []
-develop = false
-
-[package.dependencies]
-ipython = ">=8.18.1"
-matplotlib = ">=3.0.0"
-scipy = ">=1.2.0"
-seaborn = ">=0.9.0"
-tabulate = ">=0.8.0"
-yfinance = ">=0.1.70"
-
-[package.source]
-type = "directory"
-url = "quantstats-main"
-
-[[package]]
 name = "requests"
 version = "2.31.0"
 description = "Python HTTP for Humans."
@@ -2032,4 +2011,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "cb0afe8031af4cc082ab3d5c8597a709651ce4843ddaf6ef4f274b62f94793c0"
+content-hash = "95f32974c19e54920bb12ecd0b26e3698fa4a6fc76821147edeabe10c60eaf22"

@@ -19,8 +19,7 @@ scipy = ">=1.2.0"
 tabulate = ">=0.8.0"
 yfinance = ">=0.1.70"
 ipython = ">=8.18.1"
-
-#quantstats = {path = "quantstats-main"}
+plotly = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -28,7 +27,6 @@ pytest-cov = "*"
 pre-commit = "*"
 
 [tool.poetry.group.dev.dependencies]
-plotly = "*"
 loguru = "*"
 cvxpy = "*"
 tinycta = "0.7.1"
