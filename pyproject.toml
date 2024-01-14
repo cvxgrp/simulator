@@ -12,7 +12,7 @@ homepage = "https://www.cvxgrp.org/simulator"
 python = ">=3.9"
 numpy = "*"
 pandas = "*"
-scipy = ">=1.2.0"
+#scipy = ">=1.2.0"
 plotly = "*"
 
 [tool.poetry.group.test.dependencies]

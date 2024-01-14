@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
+from tests.test_applications.conftest import sharpe
 
 
 # take two moving averages and apply sign-function
@@ -27,4 +28,6 @@ def test_portfolio(prices):
     portfolio = Portfolio.from_cashpos_prices(
         prices=prices, cashposition=1e6 * f(prices), aum=1e6
     )
-    assert portfolio.nav.pct_change().sharpe() == pytest.approx(0.5285048862923875)
+    assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(
+        0.5285239056785145
+    )

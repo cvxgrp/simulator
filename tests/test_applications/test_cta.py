@@ -5,6 +5,7 @@ import pytest
 
 from cvx.simulator.builder import Builder
 from cvx.simulator.utils.interpolation import interpolate
+from tests.test_applications.conftest import sharpe
 
 
 @pytest.fixture()
@@ -42,4 +43,4 @@ def test_nav(portfolio):
 
 def test_metrics(portfolio):
     assert portfolio.profit.kurtosis() == pytest.approx(30.54402394742987)
-    assert portfolio.profit.sharpe() == pytest.approx(0.5511187319241556)
+    assert sharpe(portfolio.profit) == pytest.approx(0.5511187319241556)

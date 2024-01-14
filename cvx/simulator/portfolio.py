@@ -22,10 +22,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-import cvx.simulator.quantstats as qs
 from cvx.simulator.utils.rescale import returns2prices
-
-qs.extend_pandas()
 
 
 @dataclass(frozen=True)
@@ -244,33 +241,6 @@ class Portfolio:
         The resulting dataframe will show the relative weight
         of each asset in the portfolio at each point in time."""
         return self.equity.apply(lambda x: x / self.nav)
-
-    def metrics(
-        self,
-        rf: float = 0.0,
-        mode: str = "basic",
-        compound: bool = True,
-        periods_per_year: int = 252,
-        prepare_returns: bool = True,
-        match_dates: bool = True,
-        **kwargs: Any,
-    ) -> pd.DataFrame:
-        """
-        The metrics method calculates the performance metrics of an EquityPortfolio object.
-
-        :param kwargs:
-        :return:
-        """
-        return qs.reports.metrics(
-            returns=self.nav.pct_change().dropna(),
-            rf=rf,
-            mode=mode,
-            compounded=compound,
-            periods_per_year=periods_per_year,
-            prepare_returns=prepare_returns,
-            match_dates=match_dates,
-            **kwargs,
-        )
 
     def snapshot(
         self,

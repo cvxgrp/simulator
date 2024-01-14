@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
+from tests.test_applications.conftest import sharpe
 
 
 @pytest.fixture()
@@ -127,16 +128,6 @@ def test_monotonic():
         Portfolio(prices=prices, units=prices, aum=1e6)
 
 
-def test_quantstats(portfolio):
-    """
-    Test quantstats
-    :param portfolio: the portfolio object (fixture)
-    """
-
-    portfolio.nav.sharpe()
-    portfolio.metrics(mode="full")
-
-
 def test_snapshot(portfolio):
     xxx = pd.Series(index=portfolio.index, data=0.0)
     portfolio.snapshot(benchmark=xxx)
@@ -170,4 +161,4 @@ def test_profit_metrics(portfolio):
     assert portfolio.profit.mean() == pytest.approx(-5.801328903654639)
     assert portfolio.profit.std() == pytest.approx(839.8620124674756)
     assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
-    assert portfolio.profit.sharpe() == pytest.approx(-0.10965282385614909)
+    assert sharpe(portfolio.profit, n=252) == pytest.approx(-0.10965282385614909)
