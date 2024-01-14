@@ -24,7 +24,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import cvx.simulator.quantstats as qs
-from cvx.simulator.utils.quantstats.plot import Plot
 from cvx.simulator.utils.rescale import returns2prices
 
 qs.extend_pandas()
@@ -304,9 +303,6 @@ class Portfolio:
             match_dates=match_dates,
             **kwargs,
         )
-
-    def plot(self, kind: Plot, **kwargs: Any) -> Any:
-        return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
 
     def html(
         self,

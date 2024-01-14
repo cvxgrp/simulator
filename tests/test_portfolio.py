@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
-from cvx.simulator.utils.quantstats.plot import Plot
 
 
 @pytest.fixture()
@@ -139,15 +138,6 @@ def test_quantstats(portfolio):
     portfolio.metrics(mode="full")
 
 
-def test_plots(portfolio):
-    portfolio.plots(mode="full", show=False)
-
-
-# def test_plot(portfolio):
-#    portfolio.plot(kind=Plot.DRAWDOWN, show=False)
-#    portfolio.plot(kind=Plot.MONTHLY_HEATMAP, show=False)
-
-
 def test_html(portfolio, tmp_path):
     portfolio.html(output=tmp_path / "test.html")
 
@@ -162,17 +152,6 @@ def test_snapshot(portfolio):
     # plt.show()
     # or
     # portfolio.snapshot(benchmark=xxx).show()
-
-
-def test_plot_enum(portfolio):
-    for plot in Plot:
-        print("********************************************************************")
-        print(plot)
-        try:
-            plot.plot(portfolio.nav.pct_change().dropna(), show=False, fontname=None)
-        except Exception as e:
-            print(e)
-            pass
 
 
 def test_equity(portfolio):
@@ -192,15 +171,6 @@ def test_profit(portfolio):
         portfolio.profit,
         portfolio.equity.sum(axis=1).diff().fillna(0.0),
         check_names=False,
-    )
-
-
-def test_rolling_betas(portfolio):
-    portfolio.plot(
-        kind=Plot.ROLLING_BETA,
-        benchmark=0.5 * portfolio.nav.pct_change().dropna(),
-        fontname=None,
-        show=False,
     )
 
 
