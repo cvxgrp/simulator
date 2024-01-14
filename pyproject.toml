@@ -12,8 +12,12 @@ homepage = "https://www.cvxgrp.org/simulator"
 python = ">=3.9"
 numpy = "*"
 pandas = "*"
-#scipy = ">=1.2.0"
 plotly = "*"
+ipython = { version = "*", optional = true }
+quantstats = { version = "*", optional = true }
+
+[tool.poetry.extras]
+quantstats = ["quantstats", "ipython"]
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
