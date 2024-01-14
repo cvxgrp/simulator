@@ -133,6 +133,17 @@ def test_snapshot(portfolio):
     portfolio.snapshot(benchmark=xxx)
 
 
+def test_snapshot_no_benchmark(portfolio):
+    fig = portfolio.snapshot()
+    fig.show()
+
+
+def test_snapshot_log_axis(portfolio):
+    xxx = pd.Series(index=portfolio.index, data=10.0)
+    fig = portfolio.snapshot(log_scale=True, benchmark=xxx)
+    fig.show()
+
+
 def test_equity(portfolio):
     """
     Test that the equity of the portfolio is the same as the prices * units
