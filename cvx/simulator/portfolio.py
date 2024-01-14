@@ -284,17 +284,13 @@ class Portfolio:
         )
         fig.update_yaxes(title_text="Drawdown", row=2, col=1)
 
-        # Daily Returns
-        returns = self.nav.pct_change().dropna().to_frame("returns")
-        print(returns)
-
-        # assert False
-
+        # Daily/Monthly Returns
         if aggregate:
             nav = self.nav.resample("M").last()
             returns = 100 * nav.pct_change().dropna()
 
             df = returns.to_frame("value").reset_index()
+            df["color"] = np.where(df["value"] >= 0, "green", "red")
 
             fig.add_trace(
                 go.Bar(
@@ -302,7 +298,7 @@ class Portfolio:
                     y=df["value"],
                     xperiod="M1",
                     xperiodalignment="middle",
-                    marker_color=np.where(df["value"] >= 0, "green", "red"),
+                    marker_color=df["color"],
                     name="Monthly Returns",
                 ),
                 row=3,
@@ -311,11 +307,16 @@ class Portfolio:
             fig.update_yaxes(title_text="Monthly Returns", row=3, col=1)
 
         else:
+            returns = 100 * self.nav.pct_change().dropna()
+
+            df = returns.to_frame("value").reset_index()
+            df["color"] = np.where(df["value"] >= 0, "green", "red")
+
             fig.add_trace(
                 go.Bar(
-                    x=returns.index,
-                    y=returns,
-                    marker_color=np.where(returns >= 0, "green", "red"),
+                    x=df["index"],
+                    y=df["value"],
+                    marker_color=df["color"],
                     name="Daily Returns",
                 ),
                 row=3,
