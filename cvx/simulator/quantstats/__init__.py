@@ -50,7 +50,6 @@ def extend_pandas():
     _po.implied_volatility = stats.implied_volatility
     _po.sharpe = stats.sharpe
     _po.smart_sharpe = stats.smart_sharpe
-    _po.rolling_sharpe = stats.rolling_sharpe
     _po.sortino = stats.sortino
     _po.smart_sortino = stats.smart_sortino
     _po.adjusted_sortino = stats.adjusted_sortino
@@ -63,7 +62,6 @@ def extend_pandas():
     _po.calmar = stats.calmar
     _po.ulcer_index = stats.ulcer_index
     _po.ulcer_performance_index = stats.ulcer_performance_index
-    _po.upi = stats.upi
     _po.serenity_index = stats.serenity_index
     _po.risk_of_ruin = stats.risk_of_ruin
     _po.ror = stats.ror
@@ -75,7 +73,6 @@ def extend_pandas():
     _po.tail_ratio = stats.tail_ratio
     _po.payoff_ratio = stats.payoff_ratio
     _po.win_loss_ratio = stats.win_loss_ratio
-    _po.profit_ratio = stats.profit_ratio
     _po.profit_factor = stats.profit_factor
     _po.gain_to_pain_ratio = stats.gain_to_pain_ratio
     _po.cpc_index = stats.cpc_index
@@ -87,39 +84,17 @@ def extend_pandas():
     _po.max_drawdown = stats.max_drawdown
     _po.to_drawdown_series = stats.to_drawdown_series
     _po.kelly_criterion = stats.kelly_criterion
-    _po.monthly_returns = stats.monthly_returns
-    _po.pct_rank = stats.pct_rank
-
-    _po.treynor_ratio = stats.treynor_ratio
     _po.probabilistic_sharpe_ratio = stats.probabilistic_sharpe_ratio
-    _po.probabilistic_sortino_ratio = stats.probabilistic_sortino_ratio
-    _po.probabilistic_adjusted_sortino_ratio = (
-        stats.probabilistic_adjusted_sortino_ratio
-    )
 
     # methods from utils
     _po.to_returns = utils.to_returns
     _po.to_prices = utils.to_prices
-    _po.to_log_returns = utils.to_log_returns
-    _po.log_returns = utils.log_returns
-    _po.exponential_stdev = utils.exponential_stdev
-    _po.rebase = utils.rebase
     _po.aggregate_returns = utils.aggregate_returns
-    _po.to_excess_returns = utils.to_excess_returns
-    _po.multi_shift = utils.multi_shift
     _po.curr_month = utils._pandas_current_month
     _po.date = utils._pandas_date
     _po.mtd = utils._mtd
     _po.qtd = utils._qtd
     _po.ytd = utils._ytd
-
-    # methods that requires benchmark stats
-    _po.r_squared = stats.r_squared
-    _po.r2 = stats.r2
-    _po.information_ratio = stats.information_ratio
-    _po.greeks = stats.greeks
-    _po.rolling_greeks = stats.rolling_greeks
-    _po.compare = stats.compare
 
     _po.metrics = reports.metrics
 

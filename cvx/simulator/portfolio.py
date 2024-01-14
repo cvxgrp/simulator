@@ -247,11 +247,8 @@ class Portfolio:
 
     def metrics(
         self,
-        benchmark: Any = None,
         rf: float = 0.0,
-        display: bool = True,
         mode: str = "basic",
-        sep: bool = False,
         compound: bool = True,
         periods_per_year: int = 252,
         prepare_returns: bool = True,
@@ -266,11 +263,8 @@ class Portfolio:
         """
         return qs.reports.metrics(
             returns=self.nav.pct_change().dropna(),
-            benchmark=benchmark,
             rf=rf,
-            display=display,
             mode=mode,
-            sep=sep,
             compounded=compound,
             periods_per_year=periods_per_year,
             prepare_returns=prepare_returns,

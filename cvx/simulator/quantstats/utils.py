@@ -16,7 +16,6 @@
 
 import datetime as _dt
 import inspect
-import io as _io
 
 import numpy as _np
 import pandas as _pd
@@ -52,17 +51,6 @@ def _pandas_current_month(df):
     return df[df.index.isin(daterange)]
 
 
-def multi_shift(df, shift=3):
-    """Get last N rows relative to another row in pandas"""
-    if isinstance(df, _pd.Series):
-        df = _pd.DataFrame(df)
-
-    dfs = [df.shift(i) for i in _np.arange(shift)]
-    for ix, dfi in enumerate(dfs[1:]):
-        dfs[ix + 1].columns = [str(col) for col in dfi.columns + str(ix + 1)]
-    return _pd.concat(dfs, 1, sort=True)
-
-
 def to_returns(prices, rf=0.0):
     """Calculates the simple arithmetic returns of a price series"""
     return _prepare_returns(prices, rf)
@@ -73,40 +61,6 @@ def to_prices(returns, base=1e5):
     returns = returns.copy().fillna(0).replace([_np.inf, -_np.inf], float("NaN"))
 
     return base + base * _stats.compsum(returns)
-
-
-def log_returns(returns, rf=0.0, nperiods=None):
-    """Shorthand for to_log_returns"""
-    return to_log_returns(returns, rf, nperiods)
-
-
-def to_log_returns(returns, rf=0.0, nperiods=None):
-    """Converts returns series to log returns"""
-    returns = _prepare_returns(returns, rf, nperiods)
-    try:
-        return _np.log(returns + 1).replace([_np.inf, -_np.inf], float("NaN"))
-    except Exception:
-        return 0.0
-
-
-def exponential_stdev(returns, window=30, is_halflife=False):
-    """Returns series representing exponential volatility of returns"""
-    returns = _prepare_returns(returns)
-    halflife = window if is_halflife else None
-    return returns.ewm(
-        com=None, span=window, halflife=halflife, min_periods=window
-    ).std()
-
-
-def rebase(prices, base=100.0):
-    """
-    Rebase all series to a given intial base.
-    This makes comparing/plotting different series together easier.
-    Args:
-        * prices: Expects a price series/dataframe
-        * base (number): starting value for all series.
-    """
-    return prices.dropna() / prices.dropna().iloc[0] * base
 
 
 def group_returns(returns, groupby, compounded=False):
@@ -154,32 +108,6 @@ def aggregate_returns(returns, period=None, compounded=True):
     return returns
 
 
-def to_excess_returns(returns, rf, nperiods=None):
-    """
-    Calculates excess returns by subtracting
-    risk-free returns from total returns
-
-    Args:
-        * returns (Series, DataFrame): Returns
-        * rf (float, Series, DataFrame): Risk-Free rate(s)
-        * nperiods (int): Optional. If provided, will convert rf to different
-            frequency using deannualize
-    Returns:
-        * excess_returns (Series, DataFrame): Returns - rf
-    """
-    if isinstance(rf, int):
-        rf = float(rf)
-
-    if not isinstance(rf, float):
-        rf = rf[rf.index.isin(returns.index)]
-
-    if nperiods is not None:
-        # deannualize
-        rf = _np.power(1 + rf, 1.0 / nperiods) - 1.0
-
-    return returns - rf
-
-
 def _prepare_prices(data, base=1.0):
     """Converts return data into prices + cleanup"""
     data = data.copy()
@@ -222,22 +150,7 @@ def _prepare_returns(data, rf=0.0, nperiods=None):
         "rolling_volatility",
     ]
 
-    if function not in unnecessary_function_calls:
-        if rf > 0:
-            return to_excess_returns(data, rf, nperiods)
     return data
-
-
-def _round_to_closest(val, res, decimals=None):
-    """Round to closest resolution"""
-    if decimals is None and "." in str(res):
-        decimals = len(str(res).split(".")[1])
-    return round(round(val / res) * res, decimals)
-
-
-def _file_stream():
-    """Returns a file stream"""
-    return _io.BytesIO()
 
 
 def _count_consecutive(data):
@@ -251,21 +164,3 @@ def _count_consecutive(data):
             data[col] = _count(data[col])
         return data
     return _count(data)
-
-
-def _score_str(val):
-    """Returns + sign for positive values (used in plots)"""
-    return ("" if "-" in val else "+") + str(val)
-
-
-def _flatten_dataframe(df, set_index=None):
-    """Dirty method for flattening multi-index dataframe"""
-    s_buf = _io.StringIO()
-    df.to_csv(s_buf)
-    s_buf.seek(0)
-
-    df = _pd.read_csv(s_buf)
-    if set_index is not None:
-        df.set_index(set_index, inplace=True)
-
-    return df
