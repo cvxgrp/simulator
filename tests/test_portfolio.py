@@ -97,7 +97,14 @@ def test_cashposition(portfolio):
     )
 
 
-def test_plotly(portfolio):
+def test_plotly_aggregate(portfolio):
+    benchmark = pd.Series(index=portfolio.index, data=1e6)
+
+    fig = portfolio.snapshot(benchmark=benchmark, aggregate=True)
+    fig.show()
+
+
+def test_plotly_no_aggregate(portfolio):
     benchmark = pd.Series(index=portfolio.index, data=1e6)
 
     fig = portfolio.snapshot(benchmark=benchmark)

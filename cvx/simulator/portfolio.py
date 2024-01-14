@@ -80,7 +80,7 @@ class Portfolio:
         return self.prices.columns
 
     @property
-    def nav(self):
+    def nav(self) -> pd.Series:
         """Return a pandas series representing the NAV"""
         if isinstance(self.aum, pd.Series):
             series = self.aum
@@ -246,6 +246,7 @@ class Portfolio:
         self,
         benchmark: Any = None,
         title: str = "Portfolio Summary",
+        aggregate: bool = False,
         log_scale: bool = False,
         label_strategy: str = "Strategy",
         label_benchmark: str = "Benchmark",
@@ -257,7 +258,7 @@ class Portfolio:
             rows=3,
             cols=1,
             shared_xaxes=True,
-            vertical_spacing=0.0,
+            vertical_spacing=0.01,
             row_heights=[0.6, 0.2, 0.2],
         )
 
@@ -283,20 +284,45 @@ class Portfolio:
         )
         fig.update_yaxes(title_text="Drawdown", row=2, col=1)
 
-        # Daily Returns
-        returns = self.nav.pct_change()
-        fig.add_trace(
-            go.Bar(
-                x=returns.index,
-                y=returns,
-                marker_color=np.where(returns >= 0, "green", "red"),
-                name="Daily Returns",
-            ),
-            row=3,
-            col=1,
-        )
+        # Daily/Monthly Returns
+        if aggregate:
+            nav = self.nav.resample("M").last()
+            returns = 100 * nav.pct_change().dropna()
 
-        fig.update_yaxes(title_text="Daily Returns", row=3, col=1)
+            df = returns.to_frame("value").reset_index()
+            df["color"] = np.where(df["value"] >= 0, "green", "red")
+
+            fig.add_trace(
+                go.Bar(
+                    x=df["index"],
+                    y=df["value"],
+                    xperiod="M1",
+                    xperiodalignment="middle",
+                    marker_color=df["color"],
+                    name="Monthly Returns",
+                ),
+                row=3,
+                col=1,
+            )
+            fig.update_yaxes(title_text="Monthly Returns", row=3, col=1)
+
+        else:
+            returns = 100 * self.nav.pct_change().dropna()
+
+            df = returns.to_frame("value").reset_index()
+            df["color"] = np.where(df["value"] >= 0, "green", "red")
+
+            fig.add_trace(
+                go.Bar(
+                    x=df["index"],
+                    y=df["value"],
+                    marker_color=df["color"],
+                    name="Daily Returns",
+                ),
+                row=3,
+                col=1,
+            )
+            fig.update_yaxes(title_text="Daily Returns", row=3, col=1)
 
         fig.update_traces(showlegend=True)
         fig.update_layout(height=800, title_text=title)
