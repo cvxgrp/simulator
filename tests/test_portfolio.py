@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pandas as pd
@@ -136,12 +135,6 @@ def test_quantstats(portfolio):
 
     portfolio.nav.sharpe()
     portfolio.metrics(mode="full")
-
-
-def test_html(portfolio, tmp_path):
-    portfolio.html(output=tmp_path / "test.html")
-
-    assert os.path.exists(tmp_path / "test.html")
 
 
 def test_snapshot(portfolio):

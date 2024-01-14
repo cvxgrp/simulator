@@ -22,7 +22,6 @@ from math import sqrt as _sqrt
 import numpy as _np
 import pandas as _pd
 from dateutil.relativedelta import relativedelta
-from tabulate import tabulate as _tabulate
 
 from . import stats as _stats
 from . import utils as _utils
@@ -46,9 +45,8 @@ def _match_dates(returns, benchmark):
 
 def metrics(
     returns,
-    benchmark=None,
     rf=0.0,
-    display=True,
+    display=False,
     mode="basic",
     sep=False,
     compounded=True,
@@ -64,15 +62,6 @@ def metrics(
 
     benchmark_colname = kwargs.get("benchmark_title", "Benchmark")
     strategy_colname = kwargs.get("strategy_title", "Strategy")
-
-    if benchmark is not None:
-        if isinstance(benchmark, str):
-            benchmark_colname = f"Benchmark ({benchmark.upper()})"
-        elif isinstance(benchmark, _pd.DataFrame) and len(benchmark.columns) > 1:
-            raise ValueError(
-                "`benchmark` must be a pandas Series, "
-                "but a multi-column DataFrame was passed"
-            )
 
     if isinstance(returns, _pd.DataFrame):
         if len(returns.columns) > 1:
@@ -99,19 +88,6 @@ def metrics(
                 for i, strategy_col in enumerate(returns.columns)
             }
         )
-
-    if benchmark is not None:
-        benchmark = _utils._prepare_benchmark(benchmark, returns.index, rf)
-        if match_dates is True:
-            returns, benchmark = _match_dates(returns, benchmark)
-        df["benchmark"] = benchmark
-        if isinstance(returns, _pd.Series):
-            blank = ["", ""]
-            df["returns"] = returns
-        elif isinstance(returns, _pd.DataFrame):
-            blank = [""] * len(returns.columns) + [""]
-            for i, strategy_col in enumerate(returns.columns):
-                df["returns_" + str(i + 1)] = returns[strategy_col]
 
     if isinstance(returns, _pd.Series):
         s_start = {"returns": df["returns"].index.strftime("%Y-%m-%d")[0]}
@@ -536,10 +512,6 @@ def metrics(
             [benchmark_colname]
             + [col for col in metrics.columns if col != benchmark_colname]
         ]
-
-    if display:
-        print(_tabulate(metrics, headers="keys", tablefmt="simple"))
-        return None
 
     if not sep:
         metrics = metrics[metrics.index != ""]
