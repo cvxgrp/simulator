@@ -22,6 +22,8 @@ try:
 except Exception:
     pass
 
+import plotly.graph_objects as go
+
 import matplotlib.dates as _mdates
 import numpy as _np
 import pandas as _pd

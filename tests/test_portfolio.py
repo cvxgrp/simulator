@@ -139,8 +139,8 @@ def test_quantstats(portfolio):
     portfolio.metrics(mode="full")
 
 
-# def test_plots(portfolio):
-#    portfolio.plots(mode="full", show=False)
+def test_plots(portfolio):
+    portfolio.plots(mode="full", show=False)
 
 
 # def test_plot(portfolio):
