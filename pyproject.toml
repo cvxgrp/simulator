@@ -12,13 +12,7 @@ homepage = "https://www.cvxgrp.org/simulator"
 python = ">=3.9"
 numpy = "*"
 pandas = "*"
-# ugly construction in quantstats, makes matplotlib plot and converts them to plotly
-seaborn = ">=0.9.0"
-matplotlib = ">=3.0.0"
 scipy = ">=1.2.0"
-tabulate = ">=0.8.0"
-yfinance = ">=0.1.70"
-ipython = ">=8.18.1"
 plotly = "*"
 
 [tool.poetry.group.test.dependencies]

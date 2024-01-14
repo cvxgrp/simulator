@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -24,7 +23,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import cvx.simulator.quantstats as qs
-from cvx.simulator.utils.quantstats.plot import Plot
 from cvx.simulator.utils.rescale import returns2prices
 
 qs.extend_pandas()
@@ -249,11 +247,8 @@ class Portfolio:
 
     def metrics(
         self,
-        benchmark: Any = None,
         rf: float = 0.0,
-        display: bool = True,
         mode: str = "basic",
-        sep: bool = False,
         compound: bool = True,
         periods_per_year: int = 252,
         prepare_returns: bool = True,
@@ -268,76 +263,11 @@ class Portfolio:
         """
         return qs.reports.metrics(
             returns=self.nav.pct_change().dropna(),
-            benchmark=benchmark,
             rf=rf,
-            display=display,
             mode=mode,
-            sep=sep,
             compounded=compound,
             periods_per_year=periods_per_year,
             prepare_returns=prepare_returns,
-            match_dates=match_dates,
-            **kwargs,
-        )
-
-    def plots(
-        self,
-        benchmark: Any = None,
-        grayscale: bool = False,
-        figsize: tuple[int, int] = (8, 5),
-        mode: str = "basic",
-        compounded: bool = True,
-        periods_per_year: int = 252,
-        prepare_returns: bool = True,
-        match_dates: bool = True,
-        **kwargs: Any,
-    ) -> Any:
-        return qs.reports.plots(
-            returns=self.nav.pct_change().dropna(),
-            benchmark=benchmark,
-            grayscale=grayscale,
-            figsize=figsize,
-            mode=mode,
-            compounded=compounded,
-            periods_per_year=periods_per_year,
-            prepare_returns=prepare_returns,
-            match_dates=match_dates,
-            **kwargs,
-        )
-
-    def plot(self, kind: Plot, **kwargs: Any) -> Any:
-        return kind.plot(returns=self.nav.pct_change().dropna(), **kwargs)
-
-    def html(
-        self,
-        benchmark: Any = None,
-        rf: float = 0.0,
-        grayscale: bool = False,
-        title: str = "Strategy Tearsheet",
-        output: Any = None,
-        compounded: bool = True,
-        periods_per_year: int = 252,
-        download_filename: str = "quantstats-tearsheet.html",
-        figfmt: str = "svg",
-        template_path: Any = None,
-        match_dates: bool = True,
-        **kwargs: Any,
-    ) -> Any:
-        if template_path is None:
-            template_path = Path(__file__).parent / "templates" / "report.html"
-
-        return qs.reports.html(
-            returns=self.nav.pct_change().dropna(),
-            benchmark=benchmark,
-            rf=rf,
-            grayscale=grayscale,
-            title=title,
-            output=output,
-            compounded=compounded,
-            periods_per_year=periods_per_year,
-            download_filename=download_filename,
-            figfmt=figfmt,
-            template_path=template_path,
             match_dates=match_dates,
             **kwargs,
         )
