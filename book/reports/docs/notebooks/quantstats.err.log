@@ -54,5 +54,5 @@ File [0;32m~/work/simulator/simulator/cvx/simulator/portfolio.py:376[0m, in [
 [1;32m    391[0m     [38;5;28;01mif[39;00m benchmark [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
 [1;32m    392[0m         [38;5;28;01massert[39;00m [38;5;28misinstance[39m(fig, matplotlib[38;5;241m.[39mfigure[38;5;241m.[39mFigure)
 
-[0;31mTypeError[0m: quantstats._plotting.wrappers.snapshot() got multiple values for keyword argument 'show'
+[0;31mTypeError[0m: cvx.simulator.quantstats._plotting.wrappers.snapshot() got multiple values for keyword argument 'show'
 
