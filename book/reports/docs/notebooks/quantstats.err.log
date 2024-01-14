@@ -24,35 +24,5 @@ portfolio.snapshot(title="1/n portfolio", fontname=None, show=True)
 Cell [0;32mIn[7], line 1[0m
 [0;32m----> 1[0m [43mportfolio[49m[38;5;241;43m.[39;49m[43msnapshot[49m[43m([49m[43mtitle[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43m1/n portfolio[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[43mfontname[49m[38;5;241;43m=[39;49m[38;5;28;43;01mNone[39;49;00m[43m,[49m[43m [49m[43mshow[49m[38;5;241;43m=[39;49m[38;5;28;43;01mTrue[39;49;00m[43m)[49m
 
-File [0;32m~/work/simulator/simulator/cvx/simulator/portfolio.py:376[0m, in [0;36mPortfolio.snapshot[0;34m(self, benchmark, grayscale, figsize, title, fontname, lw, mode, subtitle, savefig, log_scale, label_strategy, label_benchmark, color_benchmark, **kwargs)[0m
-[1;32m    343[0m [38;5;28;01mdef[39;00m [38;5;21msnapshot[39m(
-[1;32m    344[0m     [38;5;28mself[39m,
-[1;32m    345[0m     benchmark: Any [38;5;241m=[39m [38;5;28;01mNone[39;00m,
-[0;32m   (...)[0m
-[1;32m    358[0m     [38;5;241m*[39m[38;5;241m*[39mkwargs: Any,
-[1;32m    359[0m ) [38;5;241m-[39m[38;5;241m>[39m Any:
-[1;32m    360[0m [38;5;250m    [39m[38;5;124;03m"""[39;00m
-[1;32m    361[0m [38;5;124;03m    The snapshot method creates a snapshot of the performance of an EquityPortfolio object.[39;00m
-[1;32m    362[0m 
-[0;32m   (...)[0m
-[1;32m    374[0m [38;5;124;03m    :return:[39;00m
-[1;32m    375[0m [38;5;124;03m    """[39;00m
-[0;32m--> 376[0m     fig [38;5;241m=[39m qs[38;5;241m.[39mplots[38;5;241m.[39msnapshot(
-[1;32m    377[0m         returns[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mnav[38;5;241m.[39mpct_change()[38;5;241m.[39mdropna(),
-[1;32m    378[0m         grayscale[38;5;241m=[39mgrayscale,
-[1;32m    379[0m         figsize[38;5;241m=[39mfigsize,
-[1;32m    380[0m         title[38;5;241m=[39mtitle,
-[1;32m    381[0m         fontname[38;5;241m=[39mfontname,
-[1;32m    382[0m         lw[38;5;241m=[39mlw,
-[1;32m    383[0m         mode[38;5;241m=[39mmode,
-[1;32m    384[0m         subtitle[38;5;241m=[39msubtitle,
-[1;32m    385[0m         savefig[38;5;241m=[39msavefig,
-[1;32m    386[0m         show[38;5;241m=[39m[38;5;28;01mFalse[39;00m,
-[1;32m    387[0m         log_scale[38;5;241m=[39mlog_scale,
-[1;32m    388[0m         [38;5;241m*[39m[38;5;241m*[39mkwargs,
-[1;32m    389[0m     )
-[1;32m    391[0m     [38;5;28;01mif[39;00m benchmark [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
-[1;32m    392[0m         [38;5;28;01massert[39;00m [38;5;28misinstance[39m(fig, matplotlib[38;5;241m.[39mfigure[38;5;241m.[39mFigure)
-
-[0;31mTypeError[0m: cvx.simulator.quantstats._plotting.wrappers.snapshot() got multiple values for keyword argument 'show'
+[0;31mTypeError[0m: Portfolio.snapshot() got an unexpected keyword argument 'fontname'
 

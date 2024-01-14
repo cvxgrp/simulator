@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">212 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">107<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">105<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">105<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">107<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-14 07:25 +0000
+            created at 2024-01-14 11:38 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -360,9 +360,9 @@
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t"><span class="key">def</span> <span class="nam">_round_to_closest</span><span class="op">(</span><span class="nam">val</span><span class="op">,</span> <span class="nam">res</span><span class="op">,</span> <span class="nam">decimals</span><span class="op">=</span><span class="key">None</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="str">"""Round to closest resolution"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">if</span> <span class="nam">decimals</span> <span class="key">is</span> <span class="key">None</span> <span class="key">and</span> <span class="str">"."</span> <span class="key">in</span> <span class="nam">str</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">if</span> <span class="nam">decimals</span> <span class="key">is</span> <span class="key">None</span> <span class="key">and</span> <span class="str">"."</span> <span class="key">in</span> <span class="nam">str</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">        <span class="nam">decimals</span> <span class="op">=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">str</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="str">"."</span><span class="op">)</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">    <span class="key">return</span> <span class="nam">round</span><span class="op">(</span><span class="nam">round</span><span class="op">(</span><span class="nam">val</span> <span class="op">/</span> <span class="nam">res</span><span class="op">)</span> <span class="op">*</span> <span class="nam">res</span><span class="op">,</span> <span class="nam">decimals</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">    <span class="key">return</span> <span class="nam">round</span><span class="op">(</span><span class="nam">round</span><span class="op">(</span><span class="nam">val</span> <span class="op">/</span> <span class="nam">res</span><span class="op">)</span> <span class="op">*</span> <span class="nam">res</span><span class="op">,</span> <span class="nam">decimals</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t"><span class="key">def</span> <span class="nam">_file_stream</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -530,7 +530,7 @@
             <a id="nextFileLink" class="nav" href="d_f2b2744377fc7fb9_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-14 07:25 +0000
+            created at 2024-01-14 11:38 +0000
         </p>
     </div>
 </footer>
