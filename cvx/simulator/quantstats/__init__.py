@@ -125,7 +125,6 @@ def extend_pandas():
     _po.compare = stats.compare
 
     # plotting methods
-    _po.plot_snapshot = plots.snapshot
     _po.plot_earnings = plots.earnings
     _po.plot_daily_returns = plots.daily_returns
     _po.plot_distribution = plots.distribution
