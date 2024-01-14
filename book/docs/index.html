@@ -497,20 +497,13 @@ a number of properties, e.g.</p>
 <span class="n">portfolio</span><span class="o">.</span><span class="n">equity</span>
 </pre></div>
 </div>
-<p>We have also integrated the <a class="reference external" href="https://github.com/ranaroussi/quantstats">quantstats</a>
-package for further analysis. Hence it is possible to perform</p>
+<p>It is possible to perform</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">metrics</span><span class="p">()</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">plots</span><span class="p">()</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">html</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>We also added an enum</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">DRAWDOWN</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>supporting all plots defined in quantstats.</p>
-<p><img alt="quantstats" src="https://raw.githubusercontent.com/cvxgrp/simulator/main/portfolio.png" /></p>
+<p>We have also integrated the <a class="reference external" href="https://github.com/ranaroussi/quantstats">quantstats</a>
+package as an optional extra for further analysis. It is usually enough to inject
+the <code class="docutils literal notranslate"><span class="pre">portfolio.nav</span></code> into the many functions exposed by this package.</p>
 </section>
 <section id="poetry">
 <h2>Poetry<a class="headerlink" href="#poetry" title="Permalink to this heading">#</a></h2>
