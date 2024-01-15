@@ -303,15 +303,16 @@ class Portfolio:
 
         # Daily/Monthly Returns
         if aggregate:
+            self.nav.index.name = "date"
             nav = self.nav.resample("M").last()
             returns = 100 * nav.pct_change().dropna()
 
-            df = returns.to_frame("value").reset_index()
+            df = returns.to_frame("value")
             df["color"] = np.where(df["value"] >= 0, "green", "red")
 
             fig.add_trace(
                 go.Bar(
-                    x=df["index"],
+                    x=df.index,
                     y=df["value"],
                     xperiod="M1",
                     xperiodalignment="middle",
@@ -324,14 +325,15 @@ class Portfolio:
             fig.update_yaxes(title_text="Monthly Returns", row=4, col=1)
 
         else:
+            self.nav.index.name = "date"
             returns = 100 * self.nav.pct_change().dropna()
 
-            df = returns.to_frame("value").reset_index()
+            df = returns.to_frame("value")  # .reset_index()
             df["color"] = np.where(df["value"] >= 0, "green", "red")
 
             fig.add_trace(
                 go.Bar(
-                    x=df["index"],
+                    x=df.index,
                     y=df["value"],
                     marker_color=df["color"],
                     name="Daily Returns",
