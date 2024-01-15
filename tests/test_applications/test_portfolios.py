@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.builder import Builder
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 
 @pytest.fixture()

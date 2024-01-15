@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 
 @pytest.fixture()
@@ -137,7 +137,8 @@ def test_monotonic():
 
 def test_snapshot(portfolio):
     xxx = pd.Series(index=portfolio.index, data=0.0)
-    portfolio.snapshot(benchmark=xxx)
+    fig = portfolio.snapshot(benchmark=xxx)
+    fig.show()
 
 
 def test_snapshot_no_benchmark(portfolio):

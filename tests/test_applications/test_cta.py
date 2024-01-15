@@ -5,7 +5,7 @@ import pytest
 
 from cvx.simulator.builder import Builder
 from cvx.simulator.utils.interpolation import interpolate
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 
 @pytest.fixture()

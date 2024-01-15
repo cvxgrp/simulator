@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 
 # take two moving averages and apply sign-function

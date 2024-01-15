@@ -7,7 +7,7 @@ from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import osc, returns_adjust, shrink2id
 
 from cvx.simulator.builder import Builder
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 correlation = 200
 

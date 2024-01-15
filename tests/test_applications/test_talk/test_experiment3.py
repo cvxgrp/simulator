@@ -6,7 +6,7 @@ import pytest
 from tinycta.signal import osc, returns_adjust
 
 from cvx.simulator.portfolio import Portfolio
-from tests.test_applications.conftest import sharpe
+from cvx.simulator.utils.metric import sharpe
 
 
 # take two moving averages and apply the sign-function, adjust by volatility
