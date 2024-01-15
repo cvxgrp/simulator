@@ -44,21 +44,21 @@ Cell [0;32mIn[7], line 2[0m
 [1;32m      1[0m portfolio [38;5;241m=[39m b[38;5;241m.[39mbuild()
 [0;32m----> 2[0m [43mportfolio[49m[38;5;241;43m.[39;49m[43msnapshot[49m[43m([49m[43m)[49m
 
-File [0;32m~/work/simulator/simulator/cvx/simulator/portfolio.py:317[0m, in [0;36mPortfolio.snapshot[0;34m(self, benchmark, title, aggregate, log_scale, label_strategy, label_benchmark)[0m
-[1;32m    312[0m     df [38;5;241m=[39m returns[38;5;241m.[39mto_frame([38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m)[38;5;241m.[39mreset_index()
-[1;32m    313[0m     df[[38;5;124m"[39m[38;5;124mcolor[39m[38;5;124m"[39m] [38;5;241m=[39m np[38;5;241m.[39mwhere(df[[38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m] [38;5;241m>[39m[38;5;241m=[39m [38;5;241m0[39m, [38;5;124m"[39m[38;5;124mgreen[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mred[39m[38;5;124m"[39m)
-[1;32m    315[0m     fig[38;5;241m.[39madd_trace(
-[1;32m    316[0m         go[38;5;241m.[39mBar(
-[0;32m--> 317[0m             x[38;5;241m=[39m[43mdf[49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mindex[39;49m[38;5;124;43m"[39;49m[43m][49m,
-[1;32m    318[0m             y[38;5;241m=[39mdf[[38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m],
-[1;32m    319[0m             marker_color[38;5;241m=[39mdf[[38;5;124m"[39m[38;5;124mcolor[39m[38;5;124m"[39m],
-[1;32m    320[0m             name[38;5;241m=[39m[38;5;124m"[39m[38;5;124mDaily Returns[39m[38;5;124m"[39m,
-[1;32m    321[0m         ),
-[1;32m    322[0m         row[38;5;241m=[39m[38;5;241m3[39m,
-[1;32m    323[0m         col[38;5;241m=[39m[38;5;241m1[39m,
-[1;32m    324[0m     )
-[1;32m    325[0m     fig[38;5;241m.[39mupdate_yaxes(title_text[38;5;241m=[39m[38;5;124m"[39m[38;5;124mDaily Returns[39m[38;5;124m"[39m, row[38;5;241m=[39m[38;5;241m3[39m, col[38;5;241m=[39m[38;5;241m1[39m)
-[1;32m    327[0m fig[38;5;241m.[39mupdate_traces(showlegend[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
+File [0;32m~/work/simulator/simulator/cvx/simulator/portfolio.py:334[0m, in [0;36mPortfolio.snapshot[0;34m(self, benchmark, title, table, aggregate, log_scale, label_strategy, label_benchmark)[0m
+[1;32m    329[0m     df [38;5;241m=[39m returns[38;5;241m.[39mto_frame([38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m)[38;5;241m.[39mreset_index()
+[1;32m    330[0m     df[[38;5;124m"[39m[38;5;124mcolor[39m[38;5;124m"[39m] [38;5;241m=[39m np[38;5;241m.[39mwhere(df[[38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m] [38;5;241m>[39m[38;5;241m=[39m [38;5;241m0[39m, [38;5;124m"[39m[38;5;124mgreen[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mred[39m[38;5;124m"[39m)
+[1;32m    332[0m     fig[38;5;241m.[39madd_trace(
+[1;32m    333[0m         go[38;5;241m.[39mBar(
+[0;32m--> 334[0m             x[38;5;241m=[39m[43mdf[49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mindex[39;49m[38;5;124;43m"[39;49m[43m][49m,
+[1;32m    335[0m             y[38;5;241m=[39mdf[[38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m],
+[1;32m    336[0m             marker_color[38;5;241m=[39mdf[[38;5;124m"[39m[38;5;124mcolor[39m[38;5;124m"[39m],
+[1;32m    337[0m             name[38;5;241m=[39m[38;5;124m"[39m[38;5;124mDaily Returns[39m[38;5;124m"[39m,
+[1;32m    338[0m         ),
+[1;32m    339[0m         row[38;5;241m=[39m[38;5;241m4[39m,
+[1;32m    340[0m         col[38;5;241m=[39m[38;5;241m1[39m,
+[1;32m    341[0m     )
+[1;32m    342[0m     fig[38;5;241m.[39mupdate_yaxes(title_text[38;5;241m=[39m[38;5;124m"[39m[38;5;124mDaily Returns[39m[38;5;124m"[39m, row[38;5;241m=[39m[38;5;241m4[39m, col[38;5;241m=[39m[38;5;241m1[39m)
+[1;32m    344[0m fig[38;5;241m.[39mupdate_traces(showlegend[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
 
 File [0;32m~/work/simulator/simulator/.venv/lib/python3.10/site-packages/pandas/core/frame.py:3893[0m, in [0;36mDataFrame.__getitem__[0;34m(self, key)[0m
 [1;32m   3891[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mcolumns[38;5;241m.[39mnlevels [38;5;241m>[39m [38;5;241m1[39m:
