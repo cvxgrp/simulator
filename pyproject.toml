@@ -11,7 +11,7 @@ homepage = "https://www.cvxgrp.org/simulator"
 [tool.poetry.dependencies]
 python = ">=3.9"
 numpy = "*"
-pandas = "*"
+pandas = ">=2.2.0"
 plotly = "*"
 ipython = { version = "*", optional = true }
 quantstats = { version = "*", optional = true }
