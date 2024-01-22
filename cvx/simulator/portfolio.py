@@ -304,7 +304,7 @@ class Portfolio:
         # Daily/Monthly Returns
         if aggregate:
             self.nav.index.name = "date"
-            nav = self.nav.resample("M").last()
+            nav = self.nav.resample("ME").last()
             returns = 100 * nav.pct_change().dropna()
 
             df = returns.to_frame("value")
@@ -360,13 +360,13 @@ class Portfolio:
             )
             table.index.name = "Portfolio"
 
-            table["start"][label_strategy] = self.nav.index[0].strftime("%Y-%m-%d")
-            table["end"][label_strategy] = self.nav.index[-1].strftime("%Y-%m-%d")
+            table.loc[label_strategy, "start"] = self.nav.index[0].strftime("%Y-%m-%d")
+            table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
             # table["start"][label_benchmark] = benchmark.index[0].strftime("%Y-%m-%d")
             # table["end"][label_benchmark] = benchmark.index[-1].strftime("%Y-%m-%d")
-            table["# assets"][label_strategy] = len(self.assets)
+            table.loc[label_strategy, "# assets"] = len(self.assets)
             # table['# assets'][label_benchmark] =
-            table["Sharpe ratio"][label_strategy] = sharpe(
+            table.loc[label_strategy, "Sharpe ratio"] = sharpe(
                 self.nav.pct_change().dropna()
             )
             # table["Sharpe ratio"][label_benchmark] = sharpe(benchmark.pct_change().dropna())
@@ -376,23 +376,20 @@ class Portfolio:
                     index=[label_benchmark],
                     columns=["start", "end", "# assets", "Sharpe ratio"],
                 )
-                table_bench["start"][label_benchmark] = benchmark.index[0].strftime(
+                table_bench.loc[label_benchmark, "start"] = benchmark.index[0].strftime(
                     "%Y-%m-%d"
                 )
-                table_bench["end"][label_benchmark] = benchmark.index[-1].strftime(
+                table_bench.loc[label_benchmark, "end"] = benchmark.index[-1].strftime(
                     "%Y-%m-%d"
                 )
-                table_bench["# assets"][label_benchmark] = ""
-                table_bench["Sharpe ratio"][label_benchmark] = sharpe(
+                table_bench.loc[label_benchmark, "# assets"] = ""
+                table_bench.loc[label_benchmark, "Sharpe ratio"] = sharpe(
                     benchmark.pct_change().dropna()
                 )
 
                 table = pd.concat([table, table_bench], axis=0)
 
             table = table.reset_index()
-
-        # print(table)
-        # assert False
 
         # if table is not None:
         fig.add_trace(
