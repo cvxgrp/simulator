@@ -19,14 +19,14 @@ ipython 8.18.1 IPython: Productive Interactive Computing
 ├── traitlets >=5
 └── typing-extensions *
 numpy 1.26.3 Fundamental package for array computing in Python
-pandas 2.1.4 Powerful data structures for data analysis, time series, and statistics
+pandas 2.2.0 Powerful data structures for data analysis, time series, and statistics
 ├── numpy >=1.22.4,<2
 ├── numpy >=1.23.2,<2
 ├── numpy >=1.26.0,<2
 ├── python-dateutil >=2.8.2
 │   └── six >=1.5 
 ├── pytz >=2020.1
-└── tzdata >=2022.1
+└── tzdata >=2022.7
 plotly 5.18.0 An open-source, interactive data visualization library for Python
 ├── packaging *
 └── tenacity >=6.2.0
@@ -53,11 +53,11 @@ quantstats 0.0.62 Portfolio analytics for quants
 │   ├── python-dateutil >=2.8.2 
 │   │   └── six >=1.5 
 │   ├── pytz >=2020.1 
-│   └── tzdata >=2022.1 
+│   └── tzdata >=2022.7 
 ├── python-dateutil >=2.0
 │   └── six >=1.5 
 ├── scipy >=1.2.0
-│   └── numpy >=1.21.6,<1.28.0 
+│   └── numpy >=1.22.4,<1.29.0 
 ├── seaborn >=0.9.0
 │   ├── matplotlib >=3.4,<3.6.1 || >3.6.1 
 │   │   ├── contourpy >=1.0.1 
@@ -80,7 +80,7 @@ quantstats 0.0.62 Portfolio analytics for quants
 │       ├── numpy >=1.26.0,<2 (circular dependency aborted here)
 │       ├── python-dateutil >=2.8.2 (circular dependency aborted here)
 │       ├── pytz >=2020.1 
-│       └── tzdata >=2022.1 
+│       └── tzdata >=2022.7 
 ├── tabulate >=0.8.0
 └── yfinance >=0.1.70
     ├── appdirs >=1.4.4 
@@ -100,7 +100,7 @@ quantstats 0.0.62 Portfolio analytics for quants
     │   ├── python-dateutil >=2.8.2 
     │   │   └── six >=1.5 (circular dependency aborted here)
     │   ├── pytz >=2020.1 
-    │   └── tzdata >=2022.1 
+    │   └── tzdata >=2022.7 
     ├── peewee >=3.16.2 
     ├── pytz >=2022.5 (circular dependency aborted here)
     └── requests >=2.31 
