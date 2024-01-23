@@ -181,3 +181,5 @@ def test_profit_metrics(portfolio):
     assert portfolio.profit.std() == pytest.approx(839.8620124674756)
     assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
     assert sharpe(portfolio.profit, n=252) == pytest.approx(-0.10965282385614909)
+    # profit is replacing NaNs with 0?!
+    assert portfolio.sharpe() == pytest.approx(-0.10210959124482079)
