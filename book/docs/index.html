@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>cvxsimulator &#8212; cvxsimulator</title>
   
@@ -29,43 +28,47 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/index';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Notebooks" href="nb.html" />
@@ -158,7 +161,18 @@ const thebe_selector_output = ".output, .cell_output"
     <p class="title logo__title">cvxsimulator</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -394,7 +408,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cvxsimulator">
-<h1><a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Permalink to this heading">#</a></h1>
+<h1><a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://badge.fury.io/py/cvxsimulator"><img alt="PyPI version" src="https://badge.fury.io/py/cvxsimulator.svg" /></a>
 <a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
 <a class="reference external" href="https://pepy.tech/project/cvxsimulator"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/cvxsimulator?period=month&amp;units=international_system&amp;left_color=black&amp;right_color=orange&amp;left_text=PyPI%20downloads%20per%20month" /></a>
@@ -408,18 +422,18 @@ allocate positions to all or some of the assets. This tool shall help to
 simplify the accounting. It keeps track of the available cash,
 the profits achieved, etc.</p>
 <section id="creating-portfolios">
-<h2>Creating portfolios<a class="headerlink" href="#creating-portfolios" title="Permalink to this heading">#</a></h2>
+<h2>Creating portfolios<a class="headerlink" href="#creating-portfolios" title="Link to this heading">#</a></h2>
 <p>The simulator shall be completely agnostic as to the trading policy/strategy.
 Our approach follows a rather common pattern:</p>
 <ul class="simple">
-<li><p><span class="xref myst">Create the builder object</span></p></li>
-<li><p><span class="xref myst">Loop through time</span></p></li>
-<li><p><span class="xref myst">Build the portfolio</span></p></li>
+<li><p><a class="reference internal" href="#create-the-builder-object"><span class="xref myst">Create the builder object</span></a></p></li>
+<li><p><a class="reference internal" href="#loop-through-time"><span class="xref myst">Loop through time</span></a></p></li>
+<li><p><a class="reference internal" href="#build-the-portfolio"><span class="xref myst">Build the portfolio</span></a></p></li>
 </ul>
 <p>We demonstrate those steps with somewhat silly policies.
 They are never good strategies, but are always valid ones.</p>
 <section id="create-the-builder-object">
-<h3>Create the builder object<a class="headerlink" href="#create-the-builder-object" title="Permalink to this heading">#</a></h3>
+<h3>Create the builder object<a class="headerlink" href="#create-the-builder-object" title="Link to this heading">#</a></h3>
 <p>The user defines a builder object by loading prices
 and initialize the amount of cash used in an experiment:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -437,7 +451,7 @@ The builder helps to fill up the frame of positions. Only once done
 we construct the actual portfolio.</p>
 </section>
 <section id="loop-through-time">
-<h3>Loop through time<a class="headerlink" href="#loop-through-time" title="Permalink to this heading">#</a></h3>
+<h3>Loop through time<a class="headerlink" href="#loop-through-time" title="Link to this heading">#</a></h3>
 <p>We have overloaded the <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> methods to create a custom loop.
 Let’s start with a first strategy. Each day we choose two names from the
 universe at random.
@@ -478,7 +492,7 @@ The builder class also exposes setters for such alternative conventions.</p>
 </div>
 </section>
 <section id="build-the-portfolio">
-<h3>Build the portfolio<a class="headerlink" href="#build-the-portfolio" title="Permalink to this heading">#</a></h3>
+<h3>Build the portfolio<a class="headerlink" href="#build-the-portfolio" title="Link to this heading">#</a></h3>
 <p>Once finished it is possible to build the portfolio object</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
@@ -486,7 +500,7 @@ The builder class also exposes setters for such alternative conventions.</p>
 </section>
 </section>
 <section id="analytics">
-<h2>Analytics<a class="headerlink" href="#analytics" title="Permalink to this heading">#</a></h2>
+<h2>Analytics<a class="headerlink" href="#analytics" title="Link to this heading">#</a></h2>
 <p>The portfolio object supports further analysis and exposes
 a number of properties, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>
@@ -503,7 +517,7 @@ package as an optional extra for further analysis. It is usually enough to injec
 the <code class="docutils literal notranslate"><span class="pre">portfolio.nav</span></code> into the many functions exposed by this package.</p>
 </section>
 <section id="poetry">
-<h2>Poetry<a class="headerlink" href="#poetry" title="Permalink to this heading">#</a></h2>
+<h2>Poetry<a class="headerlink" href="#poetry" title="Link to this heading">#</a></h2>
 <p>We assume you share already the love for <a class="reference external" href="https://python-poetry.org">Poetry</a>.
 Once you have installed poetry you can perform</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>install
@@ -512,7 +526,7 @@ Once you have installed poetry you can perform</p>
 <p>to replicate the virtual environment we have defined in pyproject.toml.</p>
 </section>
 <section id="jupyter">
-<h2>Jupyter<a class="headerlink" href="#jupyter" title="Permalink to this heading">#</a></h2>
+<h2>Jupyter<a class="headerlink" href="#jupyter" title="Link to this heading">#</a></h2>
 <p>We install <a class="reference external" href="https://jupyter.org">JupyterLab</a> on fly within the aforementioned
 virtual environment. Executing</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>jupyter
@@ -612,7 +626,7 @@ By Thomas Schmelzer
 
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
