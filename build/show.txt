@@ -18,7 +18,7 @@ ipython 8.18.1 IPython: Productive Interactive Computing
 │   └── pure-eval * 
 ├── traitlets >=5
 └── typing-extensions *
-numpy 1.26.3 Fundamental package for array computing in Python
+numpy 1.26.4 Fundamental package for array computing in Python
 pandas 2.2.0 Powerful data structures for data analysis, time series, and statistics
 ├── numpy >=1.22.4,<2
 ├── numpy >=1.23.2,<2
@@ -30,6 +30,8 @@ pandas 2.2.0 Powerful data structures for data analysis, time series, and statis
 plotly 5.18.0 An open-source, interactive data visualization library for Python
 ├── packaging *
 └── tenacity >=6.2.0
+pyarrow 15.0.0 Python library for Apache Arrow
+└── numpy >=1.16.6,<2
 quantstats 0.0.62 Portfolio analytics for quants
 ├── matplotlib >=3.0.0
 │   ├── contourpy >=1.0.1 
