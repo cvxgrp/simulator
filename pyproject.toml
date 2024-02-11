@@ -13,6 +13,7 @@ python = ">=3.9"
 numpy = "*"
 pandas = ">=2.2.0"
 plotly = "*"
+pyarrow = "*"
 ipython = { version = "*", optional = true }
 quantstats = { version = "*", optional = true }
 
