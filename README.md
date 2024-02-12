@@ -16,7 +16,7 @@ allocate positions to all or some of the assets. This tool shall help to
 simplify the accounting. It keeps track of the available cash,
 the profits achieved, etc.
 
-![Analytics](https://raw.githubusercontent.com/cvxgrp/simulator/main/portfolio.png)
+![Analytics](https://raw.githubusercontent.com/cvxgrp/simulator/main/new_portfolio.png)
 
 ## Creating portfolios
 
