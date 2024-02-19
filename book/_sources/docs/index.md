@@ -141,7 +141,7 @@ to replicate the virtual environment we have defined in pyproject.toml.
 
 ## Jupyter
 
-We install [JupyterLab](https://jupyter.org) on fly within the aforementioned
+We install [JupyterLab](https://jupyter.org) on the fly within the aforementioned
 virtual environment. Executing
 
 ```bash
