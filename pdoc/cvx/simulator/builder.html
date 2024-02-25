@@ -75,9 +75,6 @@
                         <li>
                                 <a class="function" href="#Builder.from_returns">from_returns</a>
                         </li>
-                        <li>
-                                <a class="function" href="#Builder.from_weights">from_weights</a>
-                        </li>
                 </ul>
 
             </li>
@@ -336,16 +333,6 @@
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>        <span class="n">prices</span> <span class="o">=</span> <span class="n">returns2prices</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">)</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span> <span class="nf">from_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">):</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from weights&quot;&quot;&quot;</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="n">builder</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="n">initial_aum</span><span class="p">)</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="k">return</span> <span class="n">builder</span>
 </span></pre></div>
 
 
@@ -569,16 +556,6 @@
 </span><span id="Builder-233"><a href="#Builder-233"><span class="linenos">233</span></a>
 </span><span id="Builder-234"><a href="#Builder-234"><span class="linenos">234</span></a>        <span class="n">prices</span> <span class="o">=</span> <span class="n">returns2prices</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
 </span><span id="Builder-235"><a href="#Builder-235"><span class="linenos">235</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">)</span>
-</span><span id="Builder-236"><a href="#Builder-236"><span class="linenos">236</span></a>
-</span><span id="Builder-237"><a href="#Builder-237"><span class="linenos">237</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Builder-238"><a href="#Builder-238"><span class="linenos">238</span></a>    <span class="k">def</span> <span class="nf">from_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">):</span>
-</span><span id="Builder-239"><a href="#Builder-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from weights&quot;&quot;&quot;</span>
-</span><span id="Builder-240"><a href="#Builder-240"><span class="linenos">240</span></a>        <span class="n">builder</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="n">initial_aum</span><span class="p">)</span>
-</span><span id="Builder-241"><a href="#Builder-241"><span class="linenos">241</span></a>        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
-</span><span id="Builder-242"><a href="#Builder-242"><span class="linenos">242</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-</span><span id="Builder-243"><a href="#Builder-243"><span class="linenos">243</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
-</span><span id="Builder-244"><a href="#Builder-244"><span class="linenos">244</span></a>
-</span><span id="Builder-245"><a href="#Builder-245"><span class="linenos">245</span></a>        <span class="k">return</span> <span class="n">builder</span>
 </span></pre></div>
 
 
@@ -922,35 +899,6 @@ The resulting EquityPortfolio object will have the same state as the Portfolio b
 
 
             <div class="docstring"><p>Build Futures Portfolio from returns</p>
-</div>
-
-
-                            </div>
-                            <div id="Builder.from_weights" class="classattr">
-                                        <input id="Builder.from_weights-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator">@classmethod</div>
-
-        <span class="def">def</span>
-        <span class="name">from_weights</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span>, </span><span class="param"><span class="n">weights</span>, </span><span class="param"><span class="n">prices</span>, </span><span class="param"><span class="n">initial_aum</span><span class="o">=</span><span class="mf">1000000.0</span></span><span class="return-annotation">):</span></span>
-
-                <label class="view-source-button" for="Builder.from_weights-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#Builder.from_weights"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.from_weights-237"><a href="#Builder.from_weights-237"><span class="linenos">237</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Builder.from_weights-238"><a href="#Builder.from_weights-238"><span class="linenos">238</span></a>    <span class="k">def</span> <span class="nf">from_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="mf">1e6</span><span class="p">):</span>
-</span><span id="Builder.from_weights-239"><a href="#Builder.from_weights-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from weights&quot;&quot;&quot;</span>
-</span><span id="Builder.from_weights-240"><a href="#Builder.from_weights-240"><span class="linenos">240</span></a>        <span class="n">builder</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">initial_aum</span><span class="o">=</span><span class="n">initial_aum</span><span class="p">)</span>
-</span><span id="Builder.from_weights-241"><a href="#Builder.from_weights-241"><span class="linenos">241</span></a>        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">builder</span><span class="p">:</span>
-</span><span id="Builder.from_weights-242"><a href="#Builder.from_weights-242"><span class="linenos">242</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-</span><span id="Builder.from_weights-243"><a href="#Builder.from_weights-243"><span class="linenos">243</span></a>            <span class="n">builder</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">aum</span>
-</span><span id="Builder.from_weights-244"><a href="#Builder.from_weights-244"><span class="linenos">244</span></a>
-</span><span id="Builder.from_weights-245"><a href="#Builder.from_weights-245"><span class="linenos">245</span></a>        <span class="k">return</span> <span class="n">builder</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Build Futures Portfolio from weights</p>
 </div>
 
 
