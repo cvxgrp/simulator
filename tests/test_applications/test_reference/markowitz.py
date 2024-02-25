@@ -26,9 +26,9 @@ def synthetic_returns(
     alpha = information_ratio**2
     var_eps = var_r * (1 - alpha) / alpha
     noise = rng.normal(0, np.sqrt(var_eps), size=returns.shape)
-    synthetic_returns = alpha * (returns + noise)
+    returns = alpha * (returns + noise)
 
-    return synthetic_returns
+    return returns
 
 
 @dataclass(frozen=True)

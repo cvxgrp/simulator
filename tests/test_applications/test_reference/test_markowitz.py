@@ -79,4 +79,4 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
     # build the portfolio
     portfolio = builder.build()
 
-    portfolio.snapshot(title="Markowitz Portfolio")
+    portfolio.snapshot(title="Markowitz Portfolio", aggregate=True)
