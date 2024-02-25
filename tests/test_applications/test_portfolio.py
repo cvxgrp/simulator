@@ -51,3 +51,5 @@ def test_from_cash_returns(prices):
     pd.testing.assert_series_equal(
         portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False
     )
+
+    print(portfolio.weights)
