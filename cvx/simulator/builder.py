@@ -232,13 +232,3 @@ class Builder:
 
         prices = returns2prices(returns)
         return cls(prices=prices)
-
-    @classmethod
-    def from_weights(cls, weights, prices, initial_aum=1e6):
-        """Build Futures Portfolio from weights"""
-        builder = cls(prices=prices, initial_aum=initial_aum)
-        for t, state in builder:
-            builder.weights = weights.loc[t[-1]]
-            builder.aum = state.aum
-
-        return builder
