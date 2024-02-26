@@ -363,13 +363,9 @@ class Portfolio:
 
             table.loc[label_strategy, "start"] = self.nav.index[0].strftime("%Y-%m-%d")
             table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
-            # table["start"][label_benchmark] = benchmark.index[0].strftime("%Y-%m-%d")
-            # table["end"][label_benchmark] = benchmark.index[-1].strftime("%Y-%m-%d")
             table.loc[label_strategy, "# assets"] = len(self.assets)
-            # table['# assets'][label_benchmark] =
-            table.loc[label_strategy, "Sharpe ratio"] = sharpe(
-                self.nav.pct_change().dropna()
-            )
+            table.loc[label_strategy, "Sharpe ratio"] = f"{sharpe(
+                self.nav.pct_change().dropna()),.2f}"
             # table["Sharpe ratio"][label_benchmark] = sharpe(benchmark.pct_change().dropna())
 
             if benchmark is not None:
