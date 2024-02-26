@@ -271,15 +271,6 @@ class Portfolio:
             ],
         )
 
-        # fig = make_subplots(
-        #    rows=3, cols=1,
-        #    shared_xaxes=True,
-        #    vertical_spacing=0.03,
-        #    specs=[[{"type": "table"}],
-        #           [{"type": "scatter"}],
-        #           [{"type": "scatter"}]]
-        # )
-
         # display the NAV
         fig.add_trace(
             go.Scatter(x=self.nav.index, y=self.nav, name=label_strategy), row=2, col=1
@@ -364,9 +355,9 @@ class Portfolio:
             table.loc[label_strategy, "start"] = self.nav.index[0].strftime("%Y-%m-%d")
             table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
             table.loc[label_strategy, "# assets"] = len(self.assets)
-            table.loc[label_strategy, "Sharpe ratio"] = f"{sharpe(
-                self.nav.pct_change().dropna()),.2f}"
-            # table["Sharpe ratio"][label_benchmark] = sharpe(benchmark.pct_change().dropna())
+
+            s = sharpe(self.nav.pct_change().dropna())
+            table.loc[label_strategy, "Sharpe ratio"] = f"{s:.2f}"
 
             if benchmark is not None:
                 table_bench = pd.DataFrame(
@@ -380,9 +371,9 @@ class Portfolio:
                     "%Y-%m-%d"
                 )
                 table_bench.loc[label_benchmark, "# assets"] = ""
-                table_bench.loc[label_benchmark, "Sharpe ratio"] = sharpe(
-                    benchmark.pct_change().dropna()
-                )
+                table_bench.loc[
+                    label_benchmark, "Sharpe ratio"
+                ] = f"{sharpe(benchmark.pct_change().dropna()):.2f}"
 
                 table = pd.concat([table, table_bench], axis=0)
 
