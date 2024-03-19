@@ -18,6 +18,20 @@ the profits achieved, etc.
 
 ![Analytics](https://raw.githubusercontent.com/cvxgrp/simulator/main/newplot.png)
 
+## Install
+
+It is possible to install cvxsimulator with the quantstats extra 
+
+```bash
+pip install cvxsimulator[quantstats]
+```
+
+or without it
+
+```bash
+pip install cvxsimulator
+```
+
 ## Creating portfolios
 
 The simulator shall be completely agnostic as to the trading policy/strategy.
