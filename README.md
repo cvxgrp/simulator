@@ -18,7 +18,7 @@ the profits achieved, etc.
 
 ![Analytics](https://raw.githubusercontent.com/cvxgrp/simulator/main/newplot.png)
 
-## Install
+## Installation
 
 It is possible to install cvxsimulator with the quantstats extra 
 
