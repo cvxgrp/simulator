@@ -20,7 +20,7 @@ the profits achieved, etc.
 
 ## Installation
 
-It is possible to install cvxsimulator with the quantstats extra 
+It is possible to install cvxsimulator with the quantstats extra
 
 ```bash
 pip install cvxsimulator[quantstats]
