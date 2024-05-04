@@ -26,7 +26,8 @@ pre-commit = "3.7.0"
 
 [tool.poetry.group.dev.dependencies]
 loguru = "*"
-cvxpy = "*"
+cvxpy-base = "*"
+clarabel = "0.7.1"
 tinycta = "0.7.1"
 ipykernel = "6.29.4"
 
