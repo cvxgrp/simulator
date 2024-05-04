@@ -20,14 +20,16 @@ quantstats = { version = "*", optional = true }
 quantstats = ["quantstats", "ipython"]
 
 [tool.poetry.group.test.dependencies]
-pytest = "*"
-pytest-cov = "*"
-pre-commit = "*"
+pytest = "8.2.0"
+pytest-cov = "5.0.0"
+pre-commit = "3.7.0"
+
 
 [tool.poetry.group.dev.dependencies]
 loguru = "*"
 cvxpy = "*"
 tinycta = "0.7.1"
+ipykernel = 6.29.4
 
 [build-system]
 requires = ["poetry>=1.6.0"]
