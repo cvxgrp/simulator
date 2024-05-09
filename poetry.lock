@@ -2621,4 +2621,4 @@ quantstats = ["ipython", "quantstats"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "6517075fede34560b192485d3774a2f22af19d2fe9b595c713ba6d1af8c507ef"
+content-hash = "da16457f977f30b473627b928c459a00c9dda46618267d850483081d21b9f85e"
