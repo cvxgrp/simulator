@@ -15,6 +15,8 @@ plotly = "*"
 pyarrow = "*"
 ipython = { version = "*", optional = true }
 quantstats = { version = "*", optional = true }
+jsonschema = "*"
+fastjsonschema = "*"
 
 [tool.poetry.extras]
 quantstats = ["quantstats", "ipython"]
@@ -26,7 +28,7 @@ pre-commit = "3.7.0"
 
 [tool.poetry.group.dev.dependencies]
 loguru = "*"
-cvxpy-base = "*"
+cvxpy-base = "1.5.0"
 clarabel = "0.7.1"
 tinycta = "0.7.1"
 ipykernel = "6.29.4"
