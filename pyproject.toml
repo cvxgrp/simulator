@@ -24,7 +24,7 @@ quantstats = ["quantstats", "ipython"]
 [tool.poetry.group.test.dependencies]
 pytest = "8.2.0"
 pytest-cov = "5.0.0"
-pre-commit = "3.7.0"
+pre-commit = "3.7.1"
 
 [tool.poetry.group.dev.dependencies]
 loguru = "*"
