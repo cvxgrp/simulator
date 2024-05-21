@@ -84,7 +84,7 @@ lxml = ["lxml"]
 name = "certifi"
 version = "2024.2.2"
 description = "Python package for providing Mozilla's CA Bundle."
-optional = false
+optional = true
 python-versions = ">=3.6"
 files = [
     {file = "certifi-2024.2.2-py3-none-any.whl", hash = "sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1"},
@@ -170,7 +170,7 @@ files = [
 name = "charset-normalizer"
 version = "3.3.2"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
-optional = false
+optional = true
 python-versions = ">=3.7.0"
 files = [
     {file = "charset-normalizer-3.3.2.tar.gz", hash = "sha256:f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5"},
@@ -267,19 +267,19 @@ files = [
 
 [[package]]
 name = "clarabel"
-version = "0.7.1"
+version = "0.8.1"
 description = "Clarabel Conic Interior Point Solver for Rust / Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "clarabel-0.7.1-cp37-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:32980b578842d17abe3d277df2d31a6b8bff3facf33b169c74d59b2ada10b61b"},
-    {file = "clarabel-0.7.1-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:b4d414b9db040effa186f9e048de2c7d3e38b6edcadaaa2432a52b6451ba9999"},
-    {file = "clarabel-0.7.1-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ec0fde90a467e07010176b0bd159ab8cb11c59c8ff0a09580af1ac77d7861971"},
-    {file = "clarabel-0.7.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:754e2681eb74e7f6fc35612ae58219d76819a0bc1b67771752b6f5425f72c1f8"},
-    {file = "clarabel-0.7.1-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:33283d190f1e2a3b8559c928f0eb0d1fefc45aad334fd0566cdf5eaa94606a13"},
-    {file = "clarabel-0.7.1-cp37-abi3-win32.whl", hash = "sha256:519f9b1daba08f909c106da8b5fd52937cfbc4ba27086c4cbd9728d168cfbc5c"},
-    {file = "clarabel-0.7.1-cp37-abi3-win_amd64.whl", hash = "sha256:33faf5a02465eb5f7f7380d892ce3cf1d293a3efefcea18d637c618f012f5f36"},
-    {file = "clarabel-0.7.1.tar.gz", hash = "sha256:a30ab135f475c5bc78329fd7df575291155e6055bcaf02124eb610b8ad176396"},
+    {file = "clarabel-0.8.1-cp37-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:8d6abb9b0980434b34a7ace7ee1e992bc7f73edfc5de54c5b3eead263e4248e9"},
+    {file = "clarabel-0.8.1-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:7a85c4a917dbab2e3e6062bf3e9ea0ae0c0f28cb16a75839c33c0c741f473187"},
+    {file = "clarabel-0.8.1-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d765a187c826e8cac09e4a4cc311795ff8a8ae9d80768c07e120507b65b1f62b"},
+    {file = "clarabel-0.8.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6da33bbf47e5244cf86489d648a92b8e87bff91e31005c9b3872aaad0cfe31eb"},
+    {file = "clarabel-0.8.1-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:b1c7297e3c06d16e71ca9b2ea2acfabd6df565cd4fddd0bd3a19234e25b4ab7c"},
+    {file = "clarabel-0.8.1-cp37-abi3-win32.whl", hash = "sha256:5767b1032e139121621ab1ce9d05f3ff61acc0cc322a086b50d4ec3ef52ad661"},
+    {file = "clarabel-0.8.1-cp37-abi3-win_amd64.whl", hash = "sha256:3cd70c210b42510c672cc2783251931e8cd49cd7bd1e4a3581d0506e88b80d3b"},
+    {file = "clarabel-0.8.1.tar.gz", hash = "sha256:d3718417396fccb79e74a55e0e891d1c602bc23ba7877666f1c2502fdd2623ea"},
 ]
 
 [package.dependencies]
@@ -774,7 +774,7 @@ license = ["ukkonen"]
 name = "idna"
 version = "3.7"
 description = "Internationalized Domain Names in Applications (IDNA)"
-optional = false
+optional = true
 python-versions = ">=3.5"
 files = [
     {file = "idna-3.7-py3-none-any.whl", hash = "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"},
@@ -2156,7 +2156,7 @@ rpds-py = ">=0.7.0"
 name = "requests"
 version = "2.32.0"
 description = "Python HTTP for Humans."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "requests-2.32.0-py3-none-any.whl", hash = "sha256:f2c3881dddb70d056c5bd7600a4fae312b2a300e39be6a118d30b90bd27262b5"},
@@ -2516,7 +2516,7 @@ files = [
 name = "urllib3"
 version = "2.2.1"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "urllib3-2.2.1-py3-none-any.whl", hash = "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d"},
@@ -2634,4 +2634,4 @@ quantstats = ["ipython", "quantstats"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "c89886c723012d01d3d0ae33367a9a8431485992d060dd3970be2304f97bc6ae"
+content-hash = "4bab8ec4bd02a121d3293144745e333f34139562f6a0de70fc03184b9312f343"
