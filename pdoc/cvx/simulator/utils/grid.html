@@ -119,7 +119,7 @@
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    :param grid: the coarse grid</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    :return: a frame changing only values on days in the grid</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span> <span class="o">*</span> <span class="n">frame</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="n">frame</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="n">sample</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="c1"># sample.loc[grid] = frame.loc[grid]</span>
