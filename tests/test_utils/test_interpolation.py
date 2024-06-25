@@ -7,19 +7,19 @@ from cvx.simulator.utils.interpolation import interpolate, valid
 def test_interpolate():
     ts = pd.Series(
         data=[
-            np.NaN,
-            np.NaN,
+            np.nan,
+            np.nan,
             2,
             3,
-            np.NaN,
-            np.NaN,
+            np.nan,
+            np.nan,
             4,
             5,
-            np.NaN,
-            np.NaN,
+            np.nan,
+            np.nan,
             6,
-            np.NaN,
-            np.NaN,
+            np.nan,
+            np.nan,
         ]
     )
     a = interpolate(ts)

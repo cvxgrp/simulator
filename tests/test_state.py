@@ -59,7 +59,7 @@ def test_set_position(state):
 
 def test_mask():
     state = State()
-    state.prices = pd.Series({"A": 1.0, "B": 2.0, "C": np.NaN})
+    state.prices = pd.Series({"A": 1.0, "B": 2.0, "C": np.nan})
     np.testing.assert_array_equal(state.mask, np.array([True, True, False]))
 
 

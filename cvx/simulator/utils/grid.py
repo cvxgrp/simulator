@@ -60,7 +60,7 @@ def _project_frame_to_grid(frame: pd.DataFrame, grid: pd.DatetimeIndex) -> pd.Da
     :param grid: the coarse grid
     :return: a frame changing only values on days in the grid
     """
-    sample = np.NaN * frame
+    sample = np.nan * frame
     for t in grid:
         sample.loc[t] = frame.loc[t]
     # sample.loc[grid] = frame.loc[grid]
