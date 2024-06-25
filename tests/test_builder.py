@@ -30,7 +30,7 @@ def test_build_empty(builder, prices):
     """
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices)
-    pd.testing.assert_frame_equal(portfolio.units, np.NaN * prices)
+    pd.testing.assert_frame_equal(portfolio.units, np.nan * prices)
     pd.testing.assert_series_equal(
         portfolio.profit, pd.Series(index=prices.index, data=0.0, name="Profit")
     )
@@ -130,11 +130,11 @@ def test_iteration_state(builder):
         assert state.nav == 1e6
         assert state.value == 0.0
         pd.testing.assert_series_equal(
-            state.weights, pd.Series(index=state.assets, data=np.NaN), check_names=False
+            state.weights, pd.Series(index=state.assets, data=np.nan), check_names=False
         )
         pd.testing.assert_series_equal(
             builder.position,
-            pd.Series(index=state.assets, data=np.NaN),
+            pd.Series(index=state.assets, data=np.nan),
             check_names=False,
         )
 

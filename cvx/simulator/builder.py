@@ -69,7 +69,7 @@ class Builder:
         self._units = pd.DataFrame(
             index=self.prices.index,
             columns=self.prices.columns,
-            data=np.NaN,
+            data=np.nan,
             dtype=float,
         )
 
