@@ -15,7 +15,7 @@ jobs:
         exclude:
           - os: windows-latest
             python-version: '3.12'
-    
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: cvxgrp/.github/actions/test@main
