@@ -22,7 +22,7 @@ fastjsonschema = "*"
 quantstats = ["quantstats", "ipython"]
 
 [tool.poetry.group.test.dependencies]
-pytest = "8.2.2"
+pytest = "8.3.1"
 pytest-cov = "5.0.0"
 pre-commit = "3.7.1"
 
