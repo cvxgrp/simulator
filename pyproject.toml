@@ -12,7 +12,8 @@ python = ">=3.9"
 numpy = "*"
 pandas = ">=2.2.0"
 plotly = "*"
-pyarrow = "*"
+# why did I include this?
+# pyarrow = "*"
 ipython = { version = "*", optional = true }
 quantstats = { version = "*", optional = true }
 jsonschema = "*"
