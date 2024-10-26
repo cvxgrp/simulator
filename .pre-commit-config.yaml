@@ -35,3 +35,10 @@ repos:
         args: ["--verbose"]
       - id: check-github-workflows
         args: ["--verbose"]
+
+  - repo: https://github.com/fpgmaas/deptry.git
+    #rev: "<tag>"
+    hooks:
+      - id: deptry
+        args: ["--ignore", "DEP001"]
+        
