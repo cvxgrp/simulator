@@ -45,3 +45,6 @@ target-version = "py310"
 exclude = [
     "*__init__.py",
 ]
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ["ipython", "quantstats", "jsonschema", "fastjsonschema"]

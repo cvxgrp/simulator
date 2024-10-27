@@ -23,8 +23,8 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from cvx.simulator.utils.metric import sharpe
-from cvx.simulator.utils.rescale import returns2prices
+from .utils.metric import sharpe
+from .utils.rescale import returns2prices
 
 
 @dataclass(frozen=True)
