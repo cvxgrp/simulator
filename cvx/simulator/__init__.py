@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from cvx.simulator.builder import Builder
-from cvx.simulator.portfolio import Portfolio
-from cvx.simulator.state import State
-from cvx.simulator.utils.interpolation import interpolate
+from .builder import Builder
+from .portfolio import Portfolio
+from .state import State
+from .utils.interpolation import interpolate
