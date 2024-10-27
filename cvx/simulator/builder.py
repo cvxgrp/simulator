@@ -19,10 +19,10 @@ from typing import Generator
 import numpy as np
 import pandas as pd
 
-from cvx.simulator.portfolio import Portfolio
-from cvx.simulator.state import State
-from cvx.simulator.utils.interpolation import valid
-from cvx.simulator.utils.rescale import returns2prices
+from .portfolio import Portfolio
+from .state import State
+from .utils.interpolation import valid
+from .utils.rescale import returns2prices
 
 
 @dataclass
