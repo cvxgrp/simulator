@@ -16,8 +16,8 @@ plotly = "*"
 # pyarrow = "*"
 ipython = { version = "*", optional = true }
 quantstats = { version = "*", optional = true }
-jsonschema = "*"
-fastjsonschema = "*"
+#jsonschema = "*"
+#fastjsonschema = "*"
 
 [tool.poetry.extras]
 quantstats = ["quantstats", "ipython"]
@@ -47,4 +47,4 @@ exclude = [
 ]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["ipython", "quantstats", "jsonschema", "fastjsonschema"]
+DEP002 = ["ipython", "quantstats"]
