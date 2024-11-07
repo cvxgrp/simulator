@@ -1,20 +1,17 @@
-from pathlib import Path
-
 import pandas as pd
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
 from cvx.simulator.utils.metric import sharpe
 
-
-@pytest.fixture()
-def nav():
-    return pd.read_csv(
-        Path(__file__).parent / "resources" / "nav.csv",
-        index_col=0,
-        parse_dates=True,
-        header=0,
-    ).squeeze()
+# @pytest.fixture()
+# def nav():
+#     return pd.read_csv(
+#         Path(__file__).parent / "resources" / "nav.csv",
+#         index_col=0,
+#         parse_dates=True,
+#         header=0,
+#     ).squeeze()
 
 
 @pytest.fixture()
