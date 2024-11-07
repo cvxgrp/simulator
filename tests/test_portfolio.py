@@ -1,20 +1,17 @@
-from pathlib import Path
-
 import pandas as pd
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
 from cvx.simulator.utils.metric import sharpe
 
-
-@pytest.fixture()
-def nav():
-    return pd.read_csv(
-        Path(__file__).parent / "resources" / "nav.csv",
-        index_col=0,
-        parse_dates=True,
-        header=0,
-    ).squeeze()
+# @pytest.fixture()
+# def nav():
+#     return pd.read_csv(
+#         Path(__file__).parent / "resources" / "nav.csv",
+#         index_col=0,
+#         parse_dates=True,
+#         header=0,
+#     ).squeeze()
 
 
 @pytest.fixture()
@@ -182,4 +179,4 @@ def test_profit_metrics(portfolio):
     assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
     assert sharpe(portfolio.profit, n=252) == pytest.approx(-0.10965282385614909)
     # profit is replacing NaNs with 0?!
-    assert portfolio.sharpe() == pytest.approx(-0.10210959124482079)
+    assert portfolio.sharpe() == pytest.approx(-0.1038600869081656)

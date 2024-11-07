@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from math import sqrt
 from typing import Any
 
 import numpy as np
@@ -396,10 +395,13 @@ class Portfolio:
 
         return fig
 
-    def sharpe(self, n=252):
+    def sharpe(self, n=None):
         """Simple Sharpe ratio"""
+
         ts = self.nav.pct_change().dropna()
-        return ts.mean() / ts.std() * sqrt(n)
+        return sharpe(ts, n=n)
+
+        # return ts.mean() / ts.std() * sqrt(n)
 
     @classmethod
     def from_cashpos_prices(
