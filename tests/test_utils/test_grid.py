@@ -10,7 +10,7 @@ def test_iron_frame(prices):
     :return:
     """
     # compute the coarse grid
-    frame = iron_frame(prices, rule="M")
+    frame = iron_frame(prices, rule="ME")
 
     # fish for days the prices in the frame are changing
     price_change = frame.diff().abs().sum(axis=1)
