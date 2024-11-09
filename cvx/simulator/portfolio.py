@@ -355,7 +355,7 @@ class Portfolio:
             table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
             table.loc[label_strategy, "# assets"] = len(self.assets)
 
-            s = sharpe(self.nav.pct_change().dropna())
+            s = sharpe(self.nav.ffill().pct_change(fill_method=None).dropna())
             table.loc[label_strategy, "Sharpe ratio"] = f"{s:.2f}"
 
             if benchmark is not None:
@@ -372,7 +372,7 @@ class Portfolio:
                 table_bench.loc[label_benchmark, "# assets"] = ""
                 table_bench.loc[
                     label_benchmark, "Sharpe ratio"
-                ] = f"{sharpe(benchmark.pct_change().dropna()):.2f}"
+                ] = f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
 
                 table = pd.concat([table, table_bench], axis=0)
 
