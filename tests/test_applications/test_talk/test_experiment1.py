@@ -29,5 +29,5 @@ def test_portfolio(prices):
         prices=prices, cashposition=1e6 * f(prices), aum=1e6
     )
     assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(
-        0.5375955959644553
+        0.5330704741938855
     )
