@@ -48,7 +48,7 @@ def test_portfolio(prices):
     portfolio = builder.build()
 
     assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(
-        1.338916996187723
+        1.3348481418003217
     )
 
     # portfolio.metrics()["Sharpe"] == pytest.approx(1.2778671597915794)

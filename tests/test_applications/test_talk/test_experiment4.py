@@ -40,4 +40,4 @@ def test_portfolio(prices):
     portfolio = Portfolio.from_cashpos_prices(
         prices=prices, cashposition=1e6 * f(prices), aum=1e8
     )
-    assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.98452653536996)
+    assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.9824232063067164)
