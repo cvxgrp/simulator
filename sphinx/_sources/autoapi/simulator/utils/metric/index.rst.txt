@@ -1,0 +1,28 @@
+simulator.utils.metric
+======================
+
+.. py:module:: simulator.utils.metric
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   simulator.utils.metric._periods
+   simulator.utils.metric.sharpe
+
+
+Module Contents
+---------------
+
+.. py:function:: _periods(ts)
+
+   compute the number of periods in a time series
+
+
+.. py:function:: sharpe(ts, n=None)
+
+   compute the sharpe ratio of a time series
+
+

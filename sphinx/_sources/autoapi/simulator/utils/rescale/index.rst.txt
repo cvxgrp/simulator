@@ -1,0 +1,28 @@
+simulator.utils.rescale
+=======================
+
+.. py:module:: simulator.utils.rescale
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   simulator.utils.rescale._rescale
+   simulator.utils.rescale.returns2prices
+
+
+Module Contents
+---------------
+
+.. py:function:: _rescale(r: pandas.Series)
+
+   Rescale a time series to start at 1
+
+
+.. py:function:: returns2prices(returns: pandas.DataFrame)
+
+   Convert returns to prices
+
+

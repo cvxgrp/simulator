@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simulator &mdash; cvxsimulator Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=c267ad58" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="simulator.builder" href="builder/index.html" />
+    <link rel="prev" title="API Reference" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cvxsimulator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="builder/index.html">simulator.builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="portfolio/index.html">simulator.portfolio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="state/index.html">simulator.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/index.html">simulator.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#simulator.Builder"><code class="docutils literal notranslate"><span class="pre">Builder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulator.Portfolio"><code class="docutils literal notranslate"><span class="pre">Portfolio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulator.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simulator.interpolate"><code class="docutils literal notranslate"><span class="pre">interpolate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cvxsimulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">simulator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/simulator/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-simulator">
+<span id="simulator"></span><h1>simulator<a class="headerlink" href="#module-simulator" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builder/index.html">simulator.builder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio/index.html">simulator.portfolio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state/index.html">simulator.state</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">simulator.utils</a></li>
+</ul>
+</div>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.Builder" title="simulator.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Builder</span></code></a></p></td>
+<td><p>The Builder is an auxiliary class used to build portfolios.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulator.Portfolio" title="simulator.Portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Portfolio</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.State" title="simulator.State"><code class="xref py py-obj docutils literal notranslate"><span class="pre">State</span></code></a></p></td>
+<td><p>The state class represents the current state of a portfolio.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulator.interpolate" title="simulator.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a>(ts)</p></td>
+<td><p>interpolate</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="simulator.Builder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.</span></span><span class="sig-name descname"><span class="pre">Builder</span></span><a class="reference internal" href="../../_modules/simulator/builder.html#Builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Builder" title="Link to this definition"></a></dt>
+<dd><p>The Builder is an auxiliary class used to build portfolios.
+It overloads the __iter__ method to allow the class to iterate over
+the timestamps for which the portfolio data is available.</p>
+<p>In each iteration we can update the portfolio by setting either
+the weights, the position or the cash position.</p>
+<p>After the iteration has been completed we build a Portfolio object
+by calling the build method.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Builder.prices">
+<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Builder.prices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Builder.initial_aum">
+<span class="sig-name descname"><span class="pre">initial_aum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="headerlink" href="#simulator.Builder.initial_aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Builder._state">
+<span class="sig-name descname"><span class="pre">_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="state/index.html#simulator.state.State" title="simulator.state.State"><span class="pre">simulator.state.State</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.Builder._state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Builder._units">
+<span class="sig-name descname"><span class="pre">_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.Builder._units" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Builder._aum">
+<span class="sig-name descname"><span class="pre">_aum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.Builder._aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Builder.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/simulator/builder.html#Builder.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Builder.__post_init__" title="Link to this definition"></a></dt>
+<dd><p>The __post_init__ method is a special method of initialized instances
+of the _Builder class and is called after initialization.
+It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.</p>
+<p>The method takes no input parameter. It initializes the cash attribute in the internal
+_State object with the initial amount of cash in the portfolio, self.initial_cash.</p>
+<p>Note that this method is often used in Python classes for additional initialization routines
+that can only be performed after the object is fully initialized. __post_init__
+is called automatically after the object initialization.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.valid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid</span></span><a class="headerlink" href="#simulator.Builder.valid" title="Link to this definition"></a></dt>
+<dd><p>Analyse the validity of the data
+Do it column by column of the prices</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.intervals">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="headerlink" href="#simulator.Builder.intervals" title="Link to this definition"></a></dt>
+<dd><p>Find for each column the first and the last valid index</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DatetimeIndex</span></em><a class="headerlink" href="#simulator.Builder.index" title="Link to this definition"></a></dt>
+<dd><p>A property that returns the index of the portfolio,
+which are the timestamps for which the portfolio data is available.</p>
+<p>Returns: pd.Index: A pandas index representing the
+time period for which the portfolio data is available.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.current_prices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.array</span></em><a class="headerlink" href="#simulator.Builder.current_prices" title="Link to this definition"></a></dt>
+<dd><p>Get the current prices from the state</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Builder.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.DatetimeIndex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="state/index.html#simulator.state.State" title="simulator.state.State"><span class="pre">simulator.state.State</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/simulator/builder.html#Builder.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Builder.__iter__" title="Link to this definition"></a></dt>
+<dd><p>The __iter__ method allows the object to be iterated over in a for loop,
+yielding time and the current state of the portfolio.
+The method yields a list of dates seen so far and returns a tuple
+containing the list of dates and the current portfolio state.</p>
+<p>Yield:</p>
+<p>time: a pandas DatetimeIndex object containing the dates seen so far.
+state: the current state of the portfolio,</p>
+<p>taking into account the stock prices at each interval.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Builder.position" title="Link to this definition"></a></dt>
+<dd><p>The position property returns the current position of the portfolio.
+It returns a pandas Series object containing the current position of the portfolio.</p>
+<p>Returns: pd.Series: a pandas Series object containing the current position of the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.cashposition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="headerlink" href="#simulator.Builder.cashposition" title="Link to this definition"></a></dt>
+<dd><p>The cashposition property returns the current cash position of the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.units">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">units</span></span><a class="headerlink" href="#simulator.Builder.units" title="Link to this definition"></a></dt>
+<dd><p>The units property returns the frame of holdings of the portfolio.
+Useful mainly for testing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Builder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/builder.html#Builder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Builder.build" title="Link to this definition"></a></dt>
+<dd><p>A function that creates a new instance of the EquityPortfolio
+class based on the internal state of the Portfolio builder object.</p>
+<p>Returns: EquityPortfolio: A new instance of the EquityPortfolio class
+with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.</p>
+<p>Notes: The function simply creates a new instance of the EquityPortfolio
+class with the attributes (prices, units, initial_cash, trading_cost_model) equal
+to the corresponding attributes in the Portfolio builder object.
+The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.array</span></em><a class="headerlink" href="#simulator.Builder.weights" title="Link to this definition"></a></dt>
+<dd><p>Get the current weights from the state</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Builder.aum">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aum</span></span><a class="headerlink" href="#simulator.Builder.aum" title="Link to this definition"></a></dt>
+<dd><p>The aum property returns the current AUM of the portfolio.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Builder.from_returns">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">returns</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/builder.html#Builder.from_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Builder.from_returns" title="Link to this definition"></a></dt>
+<dd><p>Build Futures Portfolio from returns</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulator.Portfolio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.</span></span><span class="sig-name descname"><span class="pre">Portfolio</span></span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Portfolio.prices">
+<span class="sig-name descname"><span class="pre">prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.prices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Portfolio.units">
+<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.units" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.Portfolio.aum">
+<span class="sig-name descname"><span class="pre">aum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Portfolio.aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.__post_init__" title="Link to this definition"></a></dt>
+<dd><p>A class method that performs input validation after object initialization.
+Notes: The post_init method is called after an instance of the Portfolio
+class has been initialized, and performs a series of input validation
+checks to ensure that the prices and units dataframes are in the
+expected format with no duplicates or missing data,
+and that the units dataframe represents valid equity positions
+for the assets held in the portfolio.
+Specifically, the method checks that both the prices and units dataframes
+have a monotonic increasing and unique index,
+and that the index and columns of the units dataframe are subsets
+of the index and columns of the prices dataframe, respectively.
+If any of these checks fail, an assertion error will be raised.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DatetimeIndex</span></em><a class="headerlink" href="#simulator.Portfolio.index" title="Link to this definition"></a></dt>
+<dd><p>A property that returns the index of the EquityPortfolio instance,
+which is the time period for which the portfolio data is available.</p>
+<p>Returns: pd.Index: A pandas index representing the time period for which the
+portfolio data is available.</p>
+<p>Notes: The function extracts the index of the prices dataframe,
+which represents the time periods for which data is available for the portfolio.
+The resulting index will be a pandas index object with the same length
+as the number of rows in the prices dataframe.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.assets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Index</span></em><a class="headerlink" href="#simulator.Portfolio.assets" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a list of the assets held by the EquityPortfolio object.</p>
+<p>Returns: list: A list of the assets held by the EquityPortfolio object.</p>
+<p>Notes: The function extracts the column names of the prices dataframe,
+which correspond to the assets held by the EquityPortfolio object.
+The resulting list will contain the names of all assets held by the portfolio, without any duplicates.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.nav">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Portfolio.nav" title="Link to this definition"></a></dt>
+<dd><p>Return a pandas series representing the NAV</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.profit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Portfolio.profit" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas series representing the
+profit gained or lost in the portfolio based on changes in asset prices.</p>
+<p>Returns: pd.Series: A pandas series representing the profit
+gained or lost in the portfolio based on changes in asset prices.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.highwater">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">highwater</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Portfolio.highwater" title="Link to this definition"></a></dt>
+<dd><p>A function that returns a pandas series representing
+the high-water mark of the portfolio, which is the highest point
+the portfolio value has reached over time.</p>
+<p>Returns: pd.Series: A pandas series representing the
+high-water mark of the portfolio.</p>
+<p>Notes: The function performs a rolling computation based on
+the cumulative maximum of the portfolio’s value over time,
+starting from the beginning of the time period being considered.
+Min_periods argument is set to 1 to include the minimum period of one day.
+The resulting series will show the highest value the portfolio has reached at each point in time.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.drawdown">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">drawdown</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.Portfolio.drawdown" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas series representing the
+drawdown of the portfolio, which measures the decline
+in the portfolio’s value from its (previously) highest
+point to its current point.</p>
+<p>Returns: pd.Series: A pandas series representing the
+drawdown of the portfolio.</p>
+<p>Notes: The function calculates the ratio of the portfolio’s current value
+vs. its current high-water-mark and then subtracting the result from 1.
+A positive drawdown means the portfolio is currently worth
+less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.cashposition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="headerlink" href="#simulator.Portfolio.cashposition" title="Link to this definition"></a></dt>
+<dd><p>Return a pandas dataframe representing the cash position</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.returns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returns</span></span><a class="headerlink" href="#simulator.Portfolio.returns" title="Link to this definition"></a></dt>
+<dd><p>The returns property exposes the returns of the individual assets</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.trades_units">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.trades_units" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.</p>
+<p>Notes: The function calculates the trades made by the portfolio by taking
+the difference between the current and previous values of the units dataframe.
+The resulting values will represent the number of shares of each asset
+bought or sold by the portfolio at each point in time.
+The resulting dataframe will have the same dimensions
+as the units dataframe, with NaN values filled with zeros.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.trades_currency">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades_currency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.trades_currency" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas dataframe representing
+the trades made in the portfolio in terms of currency.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.</p>
+<p>Notes: The function calculates the trades made in currency by multiplying
+the number of shares of each asset bought or sold (as represented in the trades_units dataframe)
+with the current prices of each asset (as represented in the prices dataframe).
+The resulting dataframe will have the same dimensions as the units and prices dataframes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.turnover_relative">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">turnover_relative</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.turnover_relative" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas dataframe representing the turnover
+relative to the NAV. Can be positive (if bought) or negative (if sold).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.turnover">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">turnover</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.turnover" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>The <cite>__getitem__</cite> method retrieves the stock data for a specific time in the dataframe.
+It returns the stock data for that time.</p>
+<p>The method takes one input parameter:
+- <cite>time</cite>: the time index for which to retrieve the stock data</p>
+<p>Returns:
+- stock data for the input time</p>
+<p>Note that the input time must be in the index of the dataframe,
+otherwise a KeyError will be raised.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.equity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">equity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.equity" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas dataframe
+representing the equity positions of the portfolio,
+which is the value of each asset held by the portfolio.
+Returns: pd.DataFrame: A pandas dataframe representing
+the equity positions of the portfolio.</p>
+<p>Notes: The function calculates the equity of the portfolio
+by multiplying the current prices of each asset
+by the number of shares held by the portfolio.
+The equity dataframe will have the same dimensions
+as the prices and units dataframes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.Portfolio.weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#simulator.Portfolio.weights" title="Link to this definition"></a></dt>
+<dd><p>A property that returns a pandas dataframe representing
+the weights of various assets in the portfolio.</p>
+<p>Returns: pd.DataFrame: A pandas dataframe representing the weights
+of various assets in the portfolio.</p>
+<p>Notes: The function calculates the weights of various assets
+in the portfolio by dividing the equity positions
+for each asset (as represented in the equity dataframe)
+by the total portfolio value (as represented in the nav dataframe).
+Both dataframes are assumed to have the same dimensions.
+The resulting dataframe will show the relative weight
+of each asset in the portfolio at each point in time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.snapshot">
+<span class="sig-name descname"><span class="pre">snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Portfolio</span> <span class="pre">Summary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Strategy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_benchmark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Benchmark'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.snapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.snapshot" title="Link to this definition"></a></dt>
+<dd><p>The snapshot method creates a snapshot of the performance of a Portfolio object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.sharpe">
+<span class="sig-name descname"><span class="pre">sharpe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.sharpe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.sharpe" title="Link to this definition"></a></dt>
+<dd><p>Simple Sharpe ratio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.from_cashpos_prices">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_cashpos_prices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cashposition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.from_cashpos_prices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.from_cashpos_prices" title="Link to this definition"></a></dt>
+<dd><p>Build Futures Portfolio from cashposition</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulator.Portfolio.from_cashpos_returns">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_cashpos_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">returns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cashposition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/portfolio.html#Portfolio.from_cashpos_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.Portfolio.from_cashpos_returns" title="Link to this definition"></a></dt>
+<dd><p>Build Futures Portfolio from cashposition</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulator.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simulator.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="reference internal" href="../../_modules/simulator/state.html#State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.State" title="Link to this definition"></a></dt>
+<dd><p>The state class represents the current state of a portfolio.
+It is updated within in a loop by the builder class.
+It has setter functions only for the aum, the cash, the position and the prices</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._prices">
+<span class="sig-name descname"><span class="pre">_prices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.State._prices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._position">
+<span class="sig-name descname"><span class="pre">_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.State._position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._trades">
+<span class="sig-name descname"><span class="pre">_trades</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.State._trades" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._time">
+<span class="sig-name descname"><span class="pre">_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulator.State._time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._days">
+<span class="sig-name descname"><span class="pre">_days</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#simulator.State._days" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._profit">
+<span class="sig-name descname"><span class="pre">_profit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#simulator.State._profit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulator.State._aum">
+<span class="sig-name descname"><span class="pre">_aum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#simulator.State._aum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.cash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cash</span></span><a class="headerlink" href="#simulator.State.cash" title="Link to this definition"></a></dt>
+<dd><p>The cash property returns the current amount of cash available in the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.nav">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nav</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulator.State.nav" title="Link to this definition"></a></dt>
+<dd><p>The nav property computes the net asset value (NAV) of the portfolio,
+which is the sum of the current value of the
+portfolio as determined by the value property,
+and the current amount of cash available in the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.value">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulator.State.value" title="Link to this definition"></a></dt>
+<dd><p>The value property computes the value of the portfolio at the current
+time taking into account the current holdings and current prices.
+If the value cannot be computed due to missing positions
+(they might be still None), zero is returned instead.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.cashposition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cashposition</span></span><a class="headerlink" href="#simulator.State.cashposition" title="Link to this definition"></a></dt>
+<dd><p>The <cite>cashposition</cite> property computes the cash position of the portfolio,
+which is the amount of cash in the portfolio as a fraction of the total portfolio value.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#simulator.State.position" title="Link to this definition"></a></dt>
+<dd><p>Get the current position. If the position is not yet set, then return an empty series.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.gmv">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gmv</span></span><a class="headerlink" href="#simulator.State.gmv" title="Link to this definition"></a></dt>
+<dd><p>gross market value, e.g. abs(short) + long</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#simulator.State.time" title="Link to this definition"></a></dt>
+<dd><p>The time property returns the current time of the state.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.days">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">days</span></span><a class="headerlink" href="#simulator.State.days" title="Link to this definition"></a></dt>
+<dd><p>Number of days between the current and the previous time. Most useful
+for computing the interest when holding cash.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.assets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Index</span></em><a class="headerlink" href="#simulator.State.assets" title="Link to this definition"></a></dt>
+<dd><p>The assets property returns the assets currently in the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.trades">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trades</span></span><a class="headerlink" href="#simulator.State.trades" title="Link to this definition"></a></dt>
+<dd><p>The trades property returns the trades currently needed to reach the position.
+Most helpful when computing the trading costs following the move to
+a new position.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.mask">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#simulator.State.mask" title="Link to this definition"></a></dt>
+<dd><p>construct true/false mask for assets with missing prices</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.prices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prices</span></span><a class="headerlink" href="#simulator.State.prices" title="Link to this definition"></a></dt>
+<dd><p>Get the current prices</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.profit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profit</span></span><a class="headerlink" href="#simulator.State.profit" title="Link to this definition"></a></dt>
+<dd><p>Following the price update the state updates the profit achieved
+between the previous and the current prices.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.aum">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aum</span></span><a class="headerlink" href="#simulator.State.aum" title="Link to this definition"></a></dt>
+<dd><p>The aum property returns the current assets under management (AUM) of the portfolio.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.Series</span></em><a class="headerlink" href="#simulator.State.weights" title="Link to this definition"></a></dt>
+<dd><p>The weights property computes the weighting of each asset in the current
+portfolio as a fraction of the total portfolio value (nav).</p>
+<p>Returns:</p>
+<p>a pandas series object containing the weighting of each asset as a
+fraction of the total portfolio value. If the positions are still
+missing, then a series of zeroes is returned.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulator.State.leverage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leverage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulator.State.leverage" title="Link to this definition"></a></dt>
+<dd><p>The <cite>leverage</cite> property computes the leverage of the portfolio,
+which is the sum of the absolute values of the portfolio weights.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simulator.interpolate">
+<span class="sig-prename descclassname"><span class="pre">simulator.</span></span><span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/simulator/utils/interpolation.html#interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simulator.interpolate" title="Link to this definition"></a></dt>
+<dd><p>interpolate</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="builder/index.html" class="btn btn-neutral float-right" title="simulator.builder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

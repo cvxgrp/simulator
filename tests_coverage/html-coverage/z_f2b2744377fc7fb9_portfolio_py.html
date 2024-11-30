@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_f2b2744377fc7fb9_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-29 14:12 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
+            created at 2024-11-30 06:43 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -438,7 +438,7 @@
     <p class="run"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">            <span class="nam">table</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">label_strategy</span><span class="op">,</span> <span class="str">"# assets"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">assets</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">            <span class="nam">s</span> <span class="op">=</span> <span class="nam">sharpe</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">nav</span><span class="op">.</span><span class="nam">ffill</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">pct_change</span><span class="op">(</span><span class="nam">fill_method</span><span class="op">=</span><span class="key">None</span><span class="op">)</span><span class="op">.</span><span class="nam">dropna</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">            <span class="nam">table</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">label_strategy</span><span class="op">,</span> <span class="str">"Sharpe ratio"</span><span class="op">]</span> <span class="op">=</span> <span class="str">f"{s:.2f}"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">            <span class="nam">table</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">label_strategy</span><span class="op">,</span> <span class="str">"Sharpe ratio"</span><span class="op">]</span> <span class="op">=</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">s</span><span class="op">:</span><span class="fst">.2f</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t">            <span class="key">if</span> <span class="nam">benchmark</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t">                <span class="nam">table_bench</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
@@ -454,7 +454,7 @@
     <p class="run"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">                <span class="nam">table_bench</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span><span class="nam">label_benchmark</span><span class="op">,</span> <span class="str">"# assets"</span><span class="op">]</span> <span class="op">=</span> <span class="str">""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">                <span class="nam">table_bench</span><span class="op">.</span><span class="nam">loc</span><span class="op">[</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">                    <span class="nam">label_benchmark</span><span class="op">,</span> <span class="str">"Sharpe ratio"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">                <span class="op">]</span> <span class="op">=</span> <span class="str">f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">                <span class="op">]</span> <span class="op">=</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">sharpe</span><span class="op">(</span><span class="nam">benchmark</span><span class="op">.</span><span class="nam">ffill</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">pct_change</span><span class="op">(</span><span class="nam">fill_method</span><span class="op">=</span><span class="key">None</span><span class="op">)</span><span class="op">.</span><span class="nam">dropna</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">:</span><span class="fst">.2f</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t376" href="#t376">376</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t377" href="#t377">377</a></span><span class="t">                <span class="nam">table</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">concat</span><span class="op">(</span><span class="op">[</span><span class="nam">table</span><span class="op">,</span> <span class="nam">table_bench</span><span class="op">]</span><span class="op">,</span> <span class="nam">axis</span><span class="op">=</span><span class="num">0</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t378" href="#t378">378</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -508,8 +508,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_f2b2744377fc7fb9_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-29 14:12 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
+            created at 2024-11-30 06:43 +0000
         </p>
     </div>
 </footer>
