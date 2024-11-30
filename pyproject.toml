@@ -1,50 +1,55 @@
-[tool.poetry]
+[project]
 name = "cvxsimulator"
 version = "0.0.0"
 description = "Simple simulator for investors"
-authors = ["Thomas Schmelzer"]
+authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 repository = "https://github.com/cvxgrp/simulator"
-packages = [{include = "cvx"}]
+requires-python = ">=3.10"
+dependencies = [
+    "cvxpy-base>=1.6.0",
+    "numpy>=2.1.3",
+    "pandas>=2.2.3",
+    "plotly>=5.0.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10"
-numpy = "*"
-pandas = ">=2.2.0"
-plotly = "*"
-# why did I include this?
-# pyarrow = "*"
-ipython = { version = "*", optional = true }
-quantstats = { version = "*", optional = true }
-#jsonschema = "*"
-#fastjsonschema = "*"
+[project.optional-dependencies]
+quantstats = [
+  "quantstats",
+  "ipython",
+]
 
-[tool.poetry.extras]
-quantstats = ["quantstats", "ipython"]
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.3",
+    "pre-commit>=4.0.1",
+    "clarabel>=0.9.0",
+    "loguru",
+    "tinycta"
+]
 
-[tool.poetry.group.test.dependencies]
-pytest = "8.3.3"
-pytest-cov = "6.0.0"
-pre-commit = "4.0.1"
-
-[tool.poetry.group.dev.dependencies]
-loguru = "*"
-cvxpy-base = "1.6.0"
-clarabel = "0.9.0"
-tinycta = "0.7.1"
-ipykernel = "6.29.5"
-
-[build-system]
-requires = ["poetry>=1.6.0"]
-build-backend = "poetry.core.masonry.api"
+#[tool.poetry.group.dev.dependencies]
+#loguru = "*"
+#cvxpy-base = "1.6.0"
+#clarabel = "0.9.0"
+#tinycta = "0.7.1"
+#ipykernel = "6.29.5"
 
 [tool.ruff]
 select = ["E", "F", "I"]
 line-length = 120
 target-version = "py310"
 exclude = [
-    "*__init__.py",
+    "*__init__.py"
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cvx"]
+
 [tool.deptry.per_rule_ignores]
-DEP002 = ["ipython", "quantstats"]
+DEP002 = ["cvxpy-base", "ipython", "quantstats"]
