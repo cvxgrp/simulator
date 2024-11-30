@@ -52,11 +52,7 @@ portfolio = b.build()
 ```
 
 ```{.python.marimo}
-portfolio_1 = b.build()
-```
-
-```{.python.marimo}
-portfolio_1.nav.plot()
+portfolio.nav.plot()
 ```
 
 ```{.python.marimo}

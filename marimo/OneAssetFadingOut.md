@@ -25,9 +25,9 @@ prices
 ```{.python.marimo}
 b = Builder(prices=prices, initial_aum=2000)
 
-for t, state in b:
-    b.weights = np.ones(len(state.assets)) / len(state.assets)
-    b.aum = state.aum
+for t, _state in b:
+    b.weights = np.ones(len(_state.assets)) / len(_state.assets)
+    b.aum = _state.aum
 ```
 
 ```{.python.marimo}
