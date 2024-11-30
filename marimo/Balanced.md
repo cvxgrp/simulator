@@ -21,31 +21,32 @@ we act only once the deviation of our drifted portfolio got too large from the t
 This problem has been discussed https://www.linkedin.com/feed/update/urn:li:activity:7149432321388064768/
 
 ```{.python.marimo}
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
 from cvx.simulator import Builder
+
+folder = Path(__file__).parent
 ```
 
 ```{.python.marimo}
 # load prices from flat csv file
 prices = pd.read_csv(
-    "data/stock-prices.csv", header=0, index_col=0, parse_dates=True
+    folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True
 )
 ```
 
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    builder.weights = np.ones(n) / n
-    builder.aum = state.aum
-portfolio = builder.build()
-```
+    _n = len(_state.assets)
+    _builder.weights = np.ones(_n) / _n
+    _builder.aum = _state.aum
 
-```{.python.marimo}
-portfolio.snapshot(aggregate=True)
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ## With cvxpy
@@ -66,18 +67,17 @@ open door to the world of convex paradise.
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    _weights = cp.Variable(n)
-    _objective = cp.norm(weights, 2)
-    _constraints = [weights >= 0, cp.sum(weights) == 1]
+    _n = len(_state.assets)
+    _weights = cp.Variable(_n)
+    _objective = cp.norm(_weights, 2)
+    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
     cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
         solver=cp.CLARABEL
     )
-    builder.weights = weights.value
-    builder.aum = state.aum
-portfolio_1 = builder.build()
-portfolio_1.snapshot(aggregate=True)
+    _builder.weights = _weights.value
+    _builder.aum = _state.aum
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ### Minimization of the $\infty$ norm
@@ -87,18 +87,17 @@ Based on an idea by Vladimir Markov
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    _weights = cp.Variable(n)
-    _objective = cp.norm_inf(weights)
-    _constraints = [weights >= 0, cp.sum(weights) == 1]
+    _n = len(_state.assets)
+    _weights = cp.Variable(_n)
+    _objective = cp.norm_inf(_weights)
+    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
     cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
         solver=cp.CLARABEL
     )
-    builder.weights = weights.value
-    builder.aum = state.aum
-portfolio_2 = builder.build()
-portfolio_2.snapshot(aggreagate=True)
+    _builder.weights = _weights.value
+    _builder.aum = _state.aum
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ### Maximization of the entropy
@@ -108,18 +107,17 @@ One can also maximize the entropy to arrive at the same result
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    _weights = cp.Variable(n)
-    _objective = cp.sum(cp.entr(weights))
-    _constraints = [weights >= 0, cp.sum(weights) == 1]
+    _n = len(_state.assets)
+    _weights = cp.Variable(_n)
+    _objective = cp.sum(cp.entr(_weights))
+    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
     cp.Problem(objective=cp.Maximize(_objective), constraints=_constraints).solve(
         solver=cp.CLARABEL
     )
-    builder.weights = weights.value
-    builder.aum = state.aum
-portfolio_3 = builder.build()
-portfolio_3.snapshot()
+    _builder.weights = _weights.value
+    _builder.aum = _state.aum
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ### Minimization of the tracking error
@@ -127,18 +125,17 @@ portfolio_3.snapshot()
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    _weights = cp.Variable(n)
-    _objective = cp.norm(weights - np.ones(n) / n, 2)
-    _constraints = [weights >= 0, cp.sum(weights) == 1]
+    _n = len(_state.assets)
+    _weights = cp.Variable(_n)
+    _objective = cp.norm(_weights - np.ones(_n) / _n, 2)
+    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
     cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
         solver=cp.CLARABEL
     )
-    builder.weights = weights.value
-    builder.aum = state.aum
-portfolio_4 = builder.build()
-portfolio_4.snapshot(aggregate=True)
+    _builder.weights = _weights.value
+    _builder.aum = _state.aum
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ## With sparse updates
@@ -149,18 +146,17 @@ is not an exact $1/n$ portfolio. We may expect slightly weaker results
 ```{.python.marimo}
 _builder = Builder(prices=prices, initial_aum=1000000.0)
 for _, _state in _builder:
-    _assets = state.assets
-    _n = len(assets)
-    target = np.ones(n) / n
-    drifted = state.weights[assets].fillna(0.0)
+    _n = len(_state.assets)
+    target = np.ones(_n) / _n
+    drifted = _state.weights[_state.assets].fillna(0.0)
     delta = (target - drifted).abs().sum()
     if delta > 0.2:
-        builder.weights = target
+        _builder.weights = target
     else:
-        builder.position = state.position
-    builder.aum = state.aum
-portfolio_5 = builder.build()
-portfolio_5.snapshot(aggregate=True)
+        _builder.position = _state.position
+    _builder.aum = _state.aum
+_portfolio = _builder.build()
+_portfolio.snapshot(aggregate=True)
 ```
 
 ```{.python.marimo}

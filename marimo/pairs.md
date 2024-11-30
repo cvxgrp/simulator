@@ -15,6 +15,8 @@ Not a good strategy, but a valid one.
 Of course the simulate will terminate if you go bust (which seems likely).
 
 ```{.python.marimo}
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from loguru import logger
@@ -22,12 +24,13 @@ from loguru import logger
 from cvx.simulator import Builder
 
 pd.options.plotting.backend = "plotly"
+folder = Path(__file__).parent
 ```
 
 ```{.python.marimo}
 logger.info("Load prices")
 prices = pd.read_csv(
-    "data/stock-prices.csv", index_col=0, parse_dates=True, header=0
+    folder / "data" / "stock-prices.csv", index_col=0, parse_dates=True, header=0
 )
 
 logger.info("Build portfolio")
