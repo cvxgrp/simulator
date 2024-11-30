@@ -10,8 +10,6 @@ dependencies = [
     "cvxpy-base>=1.6.0",
     "numpy>=2.1.3",
     "pandas>=2.2.3",
-    "scikit-learn>=1.5.2",
-    "scipy>=1.14.1",
     "plotly>=5.0.0",
 ]
 
@@ -54,4 +52,4 @@ build-backend = "hatchling.build"
 packages = ["cvx"]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["ipython", "quantstats"]
+DEP002 = ["cvxpy-base"]  #"ipython", "quantstats"]
