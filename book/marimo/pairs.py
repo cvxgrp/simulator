@@ -73,14 +73,8 @@ def __(Builder, logger, np, pd):
 
 
 @app.cell
-def __(b):
-    portfolio_1 = b.build()
-    return (portfolio_1,)
-
-
-@app.cell
-def __(portfolio_1):
-    portfolio_1.nav.plot()
+def __(portfolio):
+    portfolio.nav.plot()
     return
 
 

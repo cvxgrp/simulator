@@ -43,13 +43,13 @@ def __(Builder, n, np, prices, state, w):
     b = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
     for _time, _state in b:
-        _n = len(state.assets)
+        _n = len(_state.assets)
         _w = np.random.rand(n)
         _w = w / np.sum(w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
         b.weights = w
-        b.aum = state.aum
+        b.aum = _state.aum
     return (b,)
 
 

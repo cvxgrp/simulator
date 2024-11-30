@@ -48,10 +48,11 @@ def __(mo):
 def __(Builder, np, prices):
     b = Builder(prices=prices, initial_aum=2000)
 
-    for t, state in b:
-        b.weights = np.ones(len(state.assets)) / len(state.assets)
-        b.aum = state.aum
-    return b, state, t
+    for t, _state in b:
+        b.weights = np.ones(len(_state.assets)) / len(_state.assets)
+        b.aum = _state.aum
+
+    return b, t
 
 
 @app.cell
