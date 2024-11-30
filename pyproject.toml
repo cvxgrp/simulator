@@ -15,33 +15,28 @@ dependencies = [
     "plotly>=5.0.0",
 ]
 
+[project.optional-dependencies]
+quantstats = [
+  "quantstats",
+  "ipython",
+]
 
-[tool.poetry.dependencies]
-#python = ">=3.10"
-#numpy = "*"
-#pandas = ">=2.2.0"
-# plotly = "*"
-# why did I include this?
-# pyarrow = "*"
-ipython = { version = "*", optional = true }
-quantstats = { version = "*", optional = true }
-#jsonschema = "*"
-#fastjsonschema = "*"
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.3",
+    "pre-commit>=4.0.1",
+    "clarabel>=0.9.0",
+    "loguru",
+    "tinycta"
+]
 
-[tool.poetry.extras]
-quantstats = ["quantstats", "ipython"]
-
-[tool.poetry.group.test.dependencies]
-pytest = "8.3.3"
-pytest-cov = "6.0.0"
-pre-commit = "4.0.1"
-
-[tool.poetry.group.dev.dependencies]
-loguru = "*"
-cvxpy-base = "1.6.0"
-clarabel = "0.9.0"
-tinycta = "0.7.1"
-ipykernel = "6.29.5"
+#[tool.poetry.group.dev.dependencies]
+#loguru = "*"
+#cvxpy-base = "1.6.0"
+#clarabel = "0.9.0"
+#tinycta = "0.7.1"
+#ipykernel = "6.29.5"
 
 [tool.ruff]
 select = ["E", "F", "I"]
