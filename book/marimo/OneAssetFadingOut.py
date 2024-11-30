@@ -6,71 +6,51 @@ app = marimo.App()
 
 @app.cell
 def __(mo):
-    mo.md(
-        r"""
-        # One asset fading out
-        """
-    )
+    mo.md(r"""# One asset fading out""")
     return
 
 
 @app.cell
-def __():
+def __(__file__):
+    from pathlib import Path
+
     import numpy as np
     import pandas as pd
 
     from cvx.simulator import Builder
 
-    return Builder, np, pd
+    folder = Path(__file__).parent
+    return Builder, Path, folder, np, pd
 
 
 @app.cell
-def __(np, pd):
+def __(folder, np, pd):
     # two assets, A and B, constant price for A=100 and B=200
-    prices = pd.read_csv("data/prices.csv", header=0, index_col=0, parse_dates=True)
-    prices.loc["2022-01-03", "B"] = np.NaN
-    prices.loc["2022-01-04", "B"] = np.NaN
+    prices = pd.read_csv(
+        folder / "data" / "prices.csv", header=0, index_col=0, parse_dates=True
+    )
+    prices.loc["2022-01-03", "B"] = np.nan
+    prices.loc["2022-01-04", "B"] = np.nan
     prices
     return (prices,)
 
 
 @app.cell
 def __(mo):
-    mo.md(
-        r"""
-        ## Iterate
-        """
-    )
+    mo.md(r"""## Iterate""")
     return
 
 
 @app.cell
 def __(Builder, np, prices):
-    b = Builder(prices=prices, initial_aum=2000)
+    _builder = Builder(prices=prices, initial_aum=2000)
 
-    for t, _state in b:
-        b.weights = np.ones(len(_state.assets)) / len(_state.assets)
-        b.aum = _state.aum
+    for t, _state in _builder:
+        _builder.weights = np.ones(len(_state.assets)) / len(_state.assets)
+        _builder.aum = _state.aum
 
-    return b, t
-
-
-@app.cell
-def __(b):
-    b.units
-    return
-
-
-@app.cell
-def __(b):
-    b.prices
-    return
-
-
-@app.cell
-def __(b):
-    portfolio = b.build()
-    return (portfolio,)
+    portfolio = _builder.build()
+    return portfolio, t
 
 
 @app.cell

@@ -6,20 +6,19 @@ app = marimo.App()
 
 @app.cell
 def __(mo):
-    mo.md(
-        r"""
-        # Monkey portfolios
-        """
-    )
+    mo.md(r"""# Monkey portfolios""")
     return
 
 
 @app.cell
-def __():
+def __(__file__):
+    from pathlib import Path
+
     import numpy as np
     import pandas as pd
 
-    return np, pd
+    folder = Path(__file__).parent
+    return Path, folder, np, pd
 
 
 @app.cell
@@ -31,54 +30,47 @@ def __(pd):
 
 
 @app.cell
-def __(pd):
+def __(folder, pd):
     prices = pd.read_csv(
-        "data/stock-prices.csv", header=0, index_col=0, parse_dates=True
+        folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True
     )
     return (prices,)
 
 
 @app.cell
-def __(Builder, n, np, prices, state, w):
-    b = Builder(prices=prices, initial_aum=1000000.0)
+def __(Builder, np, prices):
+    _builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
-    for _time, _state in b:
+    for _time, _state in _builder:
         _n = len(_state.assets)
-        _w = np.random.rand(n)
-        _w = w / np.sum(w)
+        _w = np.random.rand(_n)
+        _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
-        b.weights = w
-        b.aum = _state.aum
-    return (b,)
+        _builder.weights = _w
+        _builder.aum = _state.aum
 
-
-@app.cell
-def __(b):
-    _portfolio = b.build()
-    _portfolio.nav.plot()
+    _portfolio = _builder.build()
+    _portfolio.snapshot(aggregate=True)
     return
 
 
 @app.cell
-def __(Builder, n, np, prices, state, w):
-    b_1 = Builder(prices=prices, initial_aum=1000000.0)
+def __(Builder, np, prices):
+    _builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
-    for _time, _state in b_1:
-        _n = len(state.assets)
-        _w = np.random.rand(n)
-        _w = w / np.sum(w)
+    for _time, _state in _builder:
+        _n = len(_state.assets)
+        _w = np.random.rand(_n)
+        _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
-        b_1.weights = w
-        b_1.aum = state.aum
-    return (b_1,)
+        _builder.weights = _w
+        _builder.aum = _state.aum
 
-
-@app.cell
-def __(b_1):
-    _portfolio = b_1.build()
+    _portfolio = _builder.build()
     _portfolio.snapshot(aggregate=True)
+
     return
 
 
