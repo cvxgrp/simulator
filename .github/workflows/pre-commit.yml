@@ -1,4 +1,4 @@
-name: "basic"
+name: pre-commit
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - uses: pre-commit/action@v3.0.1
@@ -15,9 +14,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: cvxgrp/.github/actions/coverage@main
+      - uses: actions/checkout@v4
+      - uses: cvxgrp/.github/actions/uv/coverage@main
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
@@ -28,4 +27,5 @@ jobs:
   deptry:
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/deptry@main
+      - uses: actions/checkout@v4
+      - uses: cvxgrp/.github/actions/uv/deptry@main
