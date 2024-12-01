@@ -216,20 +216,20 @@ def __(mo):
 
 @app.cell
 def __(Builder, np, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        target = np.ones(_n) / _n
-        drifted = _state.weights[_state.assets].fillna(0.0)
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        target = np.ones(n) / n
+        drifted = state.weights[state.assets].fillna(0.0)
         delta = (target - drifted).abs().sum()
         if delta > 0.2:
-            _builder.weights = target
+            builder.weights = target
         else:
-            _builder.position = _state.position
-        _builder.aum = _state.aum
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
-    return delta, drifted, target
+            builder.position = state.position
+        builder.aum = state.aum
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
+    return
 
 
 @app.cell
