@@ -54,14 +54,14 @@ def __(folder, pd):
 
 @app.cell
 def __(Builder, np, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        _builder.weights = np.ones(_n) / _n
-        _builder.aum = _state.aum
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        builder.weights = np.ones(n) / n
+        builder.aum = state.aum
 
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 
@@ -101,19 +101,19 @@ def __(mo):
 
 @app.cell
 def __(Builder, cp, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        _weights = cp.Variable(_n)
-        _objective = cp.norm(_weights, 2)
-        _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        weights = cp.Variable(n)
+        objective = cp.norm(weights, 2)
+        constraints = [weights >= 0, cp.sum(weights) == 1]
+        cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
             solver=cp.CLARABEL
         )
-        _builder.weights = _weights.value
-        _builder.aum = _state.aum
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+        builder.weights = weights.value
+        builder.aum = state.aum
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 
@@ -131,19 +131,19 @@ def __(mo):
 
 @app.cell
 def __(Builder, cp, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        _weights = cp.Variable(_n)
-        _objective = cp.norm_inf(_weights)
-        _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        weights = cp.Variable(n)
+        objective = cp.norm_inf(weights)
+        constraints = [weights >= 0, cp.sum(weights) == 1]
+        cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
             solver=cp.CLARABEL
         )
-        _builder.weights = _weights.value
-        _builder.aum = _state.aum
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+        builder.weights = weights.value
+        builder.aum = state.aum
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 
@@ -161,19 +161,19 @@ def __(mo):
 
 @app.cell
 def __(Builder, cp, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        _weights = cp.Variable(_n)
-        _objective = cp.sum(cp.entr(_weights))
-        _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Maximize(_objective), constraints=_constraints).solve(
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        weights = cp.Variable(n)
+        objective = cp.sum(cp.entr(weights))
+        constraints = [weights >= 0, cp.sum(weights) == 1]
+        cp.Problem(objective=cp.Maximize(objective), constraints=constraints).solve(
             solver=cp.CLARABEL
         )
-        _builder.weights = _weights.value
-        _builder.aum = _state.aum
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+        builder.weights = weights.value
+        builder.aum = state.aum
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 
@@ -185,19 +185,19 @@ def __(mo):
 
 @app.cell
 def __(Builder, cp, np, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
-    for _, _state in _builder:
-        _n = len(_state.assets)
-        _weights = cp.Variable(_n)
-        _objective = cp.norm(_weights - np.ones(_n) / _n, 2)
-        _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+    builder = Builder(prices=prices, initial_aum=1000000.0)
+    for _, state in builder:
+        n = len(state.assets)
+        weights = cp.Variable(n)
+        objective = cp.norm(weights - np.ones(n) / n, 2)
+        constraints = [weights >= 0, cp.sum(weights) == 1]
+        cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
             solver=cp.CLARABEL
         )
-        _builder.weights = _weights.value
-        _builder.aum = _state.aum
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+        builder.weights = weights.value
+        builder.aum = state.aum
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 

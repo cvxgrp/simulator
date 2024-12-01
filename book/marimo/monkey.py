@@ -39,37 +39,37 @@ def __(folder, pd):
 
 @app.cell
 def __(Builder, np, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
+    builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
-    for _time, _state in _builder:
-        _n = len(_state.assets)
-        _w = np.random.rand(_n)
+    for _time, state in builder:
+        n = len(state.assets)
+        _w = np.random.rand(n)
         _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
-        _builder.weights = _w
-        _builder.aum = _state.aum
+        builder.weights = _w
+        builder.aum = state.aum
 
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
     return
 
 
 @app.cell
 def __(Builder, np, prices):
-    _builder = Builder(prices=prices, initial_aum=1000000.0)
+    builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
-    for _time, _state in _builder:
-        _n = len(_state.assets)
-        _w = np.random.rand(_n)
+    for _time, state in builder:
+        n = len(state.assets)
+        _w = np.random.rand(n)
         _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
-        _builder.weights = _w
-        _builder.aum = _state.aum
+        builder.weights = _w
+        builder.aum = state.aum
 
-    _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    portfolio = builder.build()
+    portfolio.snapshot(aggregate=True)
 
     return
 
