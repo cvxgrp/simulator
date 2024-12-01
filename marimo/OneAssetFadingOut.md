@@ -29,13 +29,13 @@ prices
 ## Iterate
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=2000)
+builder = Builder(prices=prices, initial_aum=2000)
 
-for t, _state in _builder:
-    _builder.weights = np.ones(len(_state.assets)) / len(_state.assets)
-    _builder.aum = _state.aum
+for t, state in builder:
+    builder.weights = np.ones(len(state.assets)) / len(state.assets)
+    builder.aum = state.aum
 
-portfolio = _builder.build()
+portfolio = builder.build()
 ```
 
 ```{.python.marimo}

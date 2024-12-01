@@ -39,14 +39,14 @@ prices = pd.read_csv(
 ```
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=1000000.0)
-for _, _state in _builder:
-    _n = len(_state.assets)
-    _builder.weights = np.ones(_n) / _n
-    _builder.aum = _state.aum
+builder = Builder(prices=prices, initial_aum=1000000.0)
+for _, state in builder:
+    n = len(state.assets)
+    builder.weights = np.ones(n) / n
+    builder.aum = state.aum
 
-_portfolio = _builder.build()
-_portfolio.snapshot(aggregate=True)
+portfolio = builder.build()
+portfolio.snapshot(aggregate=True)
 ```
 
 ## With cvxpy
@@ -65,19 +65,19 @@ We minimize the Euclidean norm of the weight vector. Same results as above but w
 open door to the world of convex paradise.
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=1000000.0)
-for _, _state in _builder:
-    _n = len(_state.assets)
-    _weights = cp.Variable(_n)
-    _objective = cp.norm(_weights, 2)
-    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-    cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+builder = Builder(prices=prices, initial_aum=1000000.0)
+for _, state in builder:
+    n = len(state.assets)
+    weights = cp.Variable(n)
+    objective = cp.norm(weights, 2)
+    constraints = [weights >= 0, cp.sum(weights) == 1]
+    cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
         solver=cp.CLARABEL
     )
-    _builder.weights = _weights.value
-    _builder.aum = _state.aum
-_portfolio = _builder.build()
-_portfolio.snapshot(aggregate=True)
+    builder.weights = weights.value
+    builder.aum = state.aum
+portfolio = builder.build()
+portfolio.snapshot(aggregate=True)
 ```
 
 ### Minimization of the $\infty$ norm
@@ -85,19 +85,19 @@ _portfolio.snapshot(aggregate=True)
 Based on an idea by Vladimir Markov
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=1000000.0)
-for _, _state in _builder:
-    _n = len(_state.assets)
-    _weights = cp.Variable(_n)
-    _objective = cp.norm_inf(_weights)
-    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-    cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+builder = Builder(prices=prices, initial_aum=1000000.0)
+for _, state in builder:
+    n = len(state.assets)
+    weights = cp.Variable(n)
+    objective = cp.norm_inf(weights)
+    constraints = [weights >= 0, cp.sum(weights) == 1]
+    cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
         solver=cp.CLARABEL
     )
-    _builder.weights = _weights.value
-    _builder.aum = _state.aum
-_portfolio = _builder.build()
-_portfolio.snapshot(aggregate=True)
+    builder.weights = weights.value
+    builder.aum = state.aum
+portfolio = builder.build()
+portfolio.snapshot(aggregate=True)
 ```
 
 ### Maximization of the entropy
@@ -105,37 +105,37 @@ _portfolio.snapshot(aggregate=True)
 One can also maximize the entropy to arrive at the same result
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=1000000.0)
-for _, _state in _builder:
-    _n = len(_state.assets)
-    _weights = cp.Variable(_n)
-    _objective = cp.sum(cp.entr(_weights))
-    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-    cp.Problem(objective=cp.Maximize(_objective), constraints=_constraints).solve(
+builder = Builder(prices=prices, initial_aum=1000000.0)
+for _, state in builder:
+    n = len(state.assets)
+    weights = cp.Variable(n)
+    objective = cp.sum(cp.entr(weights))
+    constraints = [weights >= 0, cp.sum(weights) == 1]
+    cp.Problem(objective=cp.Maximize(objective), constraints=constraints).solve(
         solver=cp.CLARABEL
     )
-    _builder.weights = _weights.value
-    _builder.aum = _state.aum
-_portfolio = _builder.build()
-_portfolio.snapshot(aggregate=True)
+    builder.weights = weights.value
+    builder.aum = state.aum
+portfolio = builder.build()
+portfolio.snapshot(aggregate=True)
 ```
 
 ### Minimization of the tracking error
 
 ```{.python.marimo}
-_builder = Builder(prices=prices, initial_aum=1000000.0)
-for _, _state in _builder:
-    _n = len(_state.assets)
-    _weights = cp.Variable(_n)
-    _objective = cp.norm(_weights - np.ones(_n) / _n, 2)
-    _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-    cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
+builder = Builder(prices=prices, initial_aum=1000000.0)
+for _, state in builder:
+    n = len(state.assets)
+    weights = cp.Variable(n)
+    objective = cp.norm(weights - np.ones(n) / n, 2)
+    constraints = [weights >= 0, cp.sum(weights) == 1]
+    cp.Problem(objective=cp.Minimize(objective), constraints=constraints).solve(
         solver=cp.CLARABEL
     )
-    _builder.weights = _weights.value
-    _builder.aum = _state.aum
-_portfolio = _builder.build()
-_portfolio.snapshot(aggregate=True)
+    builder.weights = weights.value
+    builder.aum = state.aum
+portfolio = builder.build()
+portfolio.snapshot(aggregate=True)
 ```
 
 ## With sparse updates
