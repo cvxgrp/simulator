@@ -219,14 +219,19 @@ def __(Builder, np, prices):
     builder = Builder(prices=prices, initial_aum=1000000.0)
     for _, state in builder:
         n = len(state.assets)
+        # the target portfolio is 1/n
         target = np.ones(n) / n
+        # the drifted weights
         drifted = state.weights[state.assets].fillna(0.0)
+        # compute a simple L1-norm
         delta = (target - drifted).abs().sum()
         if delta > 0.2:
             builder.weights = target
         else:
+            # position today is exactly the old position
             builder.position = state.position
         builder.aum = state.aum
+
     portfolio = builder.build()
     portfolio.snapshot(aggregate=True)
     return
