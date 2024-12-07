@@ -1,6 +1,6 @@
 ---
 title: Oneassetfadingout
-marimo-version: 0.9.27
+marimo-version: 0.9.32
 ---
 
 # One asset fading out
