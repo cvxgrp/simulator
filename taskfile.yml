@@ -1,0 +1,5 @@
+version: '3'
+
+includes:
+    simulator:
+        taskfile: https://github.com/cvxgrp/.github.git//tasks/setup.yml?ref=main
