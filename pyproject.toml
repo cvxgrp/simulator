@@ -29,13 +29,6 @@ dev = [
     "tinycta"
 ]
 
-#[tool.poetry.group.dev.dependencies]
-#loguru = "*"
-#cvxpy-base = "1.6.0"
-#clarabel = "0.9.0"
-#tinycta = "0.7.1"
-#ipykernel = "6.29.5"
-
 [tool.ruff]
 select = ["E", "F", "I"]
 line-length = 120
