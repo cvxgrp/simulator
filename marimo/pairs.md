@@ -1,6 +1,6 @@
 ---
 title: Pairs
-marimo-version: 0.9.32
+marimo-version: 0.10.2
 ---
 
 # Almost pairs trading

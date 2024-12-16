@@ -1,6 +1,6 @@
 ---
 title: Monkey
-marimo-version: 0.9.32
+marimo-version: 0.10.2
 ---
 
 # Monkey portfolios
