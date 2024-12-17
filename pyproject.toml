@@ -13,6 +13,9 @@ dependencies = [
     "plotly>=5.0.0",
 ]
 
+[project.urls]
+repository = "https://github.com/cvxgrp/simulator"
+
 [project.optional-dependencies]
 quantstats = [
   "quantstats",
