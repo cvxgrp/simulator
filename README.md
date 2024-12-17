@@ -144,10 +144,11 @@ the `portfolio.nav` into the many functions exposed by this package.
 
 ## uv
 
+You need to install [task](https://taskfile.dev).
 Starting with
 
 ```bash
-make install
+task simulator:install
 ```
 
 will install [uv](https://github.com/astral-sh/uv) and create
@@ -160,7 +161,7 @@ We install [marimo](https://marimo.io) on the fly within the aforementioned
 virtual environment. Executing
 
 ```bash
-make marimo
+task simulator:marimo
 ```
 
 will install and start marimo.
