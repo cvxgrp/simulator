@@ -113,7 +113,7 @@ class Builder:
         """
         return self._state.prices[self._state.assets].values
 
-    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State], None, None]:
+    def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State]]:
         """
         The __iter__ method allows the object to be iterated over in a for loop,
         yielding time and the current state of the portfolio.
