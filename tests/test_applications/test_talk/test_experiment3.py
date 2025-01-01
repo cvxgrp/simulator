@@ -26,16 +26,12 @@ def portfolio(prices) -> Portfolio:
         # construct a fake-price, those fake-prices have homescedastic returns
         # price_adj = prices.apply(adj, com=vola, min_periods=100, clip=clip).cumsum()
 
-        price_adj = returns_adjust(
-            prices, com=vola, min_periods=100, clip=clip
-        ).cumsum()
+        price_adj = returns_adjust(prices, com=vola, min_periods=100, clip=clip).cumsum()
         # compute mu
         mu = np.tanh(osc(price_adj, fast=fast, slow=slow))
         return mu / prices.pct_change().ewm(com=slow, min_periods=100).std()
 
-    portfolio = Portfolio.from_cashpos_prices(
-        prices=prices, cashposition=1e6 * f(), aum=1e8
-    )
+    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(), aum=1e8)
 
     return portfolio
 

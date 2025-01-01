@@ -29,6 +29,7 @@ Popular year vs month performance table.
 
 Supports compounded and cumulative (i.e. fixed AUM) returns logic.
 """
+
 from __future__ import annotations
 
 import calendar
@@ -69,9 +70,7 @@ def monthlytable(returns: pd.Series, f: Aggregate) -> pd.DataFrame:
 
     return_monthly = r.groupby([r.index.year, r.index.month]).apply(f)
 
-    frame = return_monthly.unstack(level=1).rename(
-        columns=lambda x: calendar.month_abbr[x]
-    )
+    frame = return_monthly.unstack(level=1).rename(columns=lambda x: calendar.month_abbr[x])
 
     ytd = frame.apply(f, axis=1)
     frame["STDev"] = np.sqrt(12) * frame.std(axis=1)

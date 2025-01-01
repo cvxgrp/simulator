@@ -46,9 +46,7 @@ def __(__file__):
 @app.cell
 def __(folder, pd):
     # load prices from flat csv file
-    prices = pd.read_csv(
-        folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True
-    )
+    prices = pd.read_csv(folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True)
     return (prices,)
 
 
@@ -107,9 +105,7 @@ def __(Builder, cp, prices):
         _weights = cp.Variable(_n)
         _objective = cp.norm(_weights, 2)
         _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
-            solver=cp.CLARABEL
-        )
+        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(solver=cp.CLARABEL)
         _builder.weights = _weights.value
         _builder.aum = _state.aum
     _portfolio = _builder.build()
@@ -137,9 +133,7 @@ def __(Builder, cp, prices):
         _weights = cp.Variable(_n)
         _objective = cp.norm_inf(_weights)
         _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
-            solver=cp.CLARABEL
-        )
+        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(solver=cp.CLARABEL)
         _builder.weights = _weights.value
         _builder.aum = _state.aum
     _portfolio = _builder.build()
@@ -167,9 +161,7 @@ def __(Builder, cp, prices):
         _weights = cp.Variable(_n)
         _objective = cp.sum(cp.entr(_weights))
         _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Maximize(_objective), constraints=_constraints).solve(
-            solver=cp.CLARABEL
-        )
+        cp.Problem(objective=cp.Maximize(_objective), constraints=_constraints).solve(solver=cp.CLARABEL)
         _builder.weights = _weights.value
         _builder.aum = _state.aum
     _portfolio = _builder.build()
@@ -191,9 +183,7 @@ def __(Builder, cp, np, prices):
         _weights = cp.Variable(_n)
         _objective = cp.norm(_weights - np.ones(_n) / _n, 2)
         _constraints = [_weights >= 0, cp.sum(_weights) == 1]
-        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(
-            solver=cp.CLARABEL
-        )
+        cp.Problem(objective=cp.Minimize(_objective), constraints=_constraints).solve(solver=cp.CLARABEL)
         _builder.weights = _weights.value
         _builder.aum = _state.aum
     _portfolio = _builder.build()

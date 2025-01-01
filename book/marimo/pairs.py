@@ -46,9 +46,7 @@ def __(__file__):
 @app.cell
 def __(Builder, folder, logger, np, pd):
     logger.info("Load prices")
-    prices = pd.read_csv(
-        folder / "data" / "stock-prices.csv", index_col=0, parse_dates=True, header=0
-    )
+    prices = pd.read_csv(folder / "data" / "stock-prices.csv", index_col=0, parse_dates=True, header=0)
 
     logger.info("Build portfolio")
     b = Builder(prices=prices, initial_aum=1e6)

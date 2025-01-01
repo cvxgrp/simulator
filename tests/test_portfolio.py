@@ -89,9 +89,7 @@ def test_cashposition(portfolio):
     Test that the cashposition of the portfolio is the same as the cashposition of the prices
     :param portfolio: the portfolio object (fixture)
     """
-    pd.testing.assert_frame_equal(
-        portfolio.cashposition, portfolio.prices * portfolio.units
-    )
+    pd.testing.assert_frame_equal(portfolio.cashposition, portfolio.prices * portfolio.units)
 
 
 def test_plotly_aggregate(portfolio):

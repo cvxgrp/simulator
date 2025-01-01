@@ -91,9 +91,7 @@ class Builder:
         Find for each column the first and the last valid index
         """
         return self.prices.apply(
-            lambda ts: pd.Series(
-                {"first": ts.first_valid_index(), "last": ts.last_valid_index()}
-            )
+            lambda ts: pd.Series({"first": ts.first_valid_index(), "last": ts.last_valid_index()})
         ).transpose()
 
     @property

@@ -1,4 +1,5 @@
 """test portfolio"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -14,11 +15,7 @@ def f(prices, slow=96, fast=32, vola=96, clip=3):
     """
     construct cash position
     """
-    mu = np.tanh(
-        prices.apply(returns_adjust, com=vola, clip=clip)
-        .cumsum()
-        .apply(osc, fast=fast, slow=slow)
-    )
+    mu = np.tanh(prices.apply(returns_adjust, com=vola, clip=clip).cumsum().apply(osc, fast=fast, slow=slow))
     volatility = prices.pct_change().ewm(com=vola, min_periods=vola).std()
 
     # compute the series of Euclidean norms by compute the sum of squares for each row
@@ -37,7 +34,5 @@ def test_portfolio(prices):
     Args:
         prices: adjusted prices of futures
     """
-    portfolio = Portfolio.from_cashpos_prices(
-        prices=prices, cashposition=1e6 * f(prices), aum=1e8
-    )
+    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(prices), aum=1e8)
     assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.9824232063067164)

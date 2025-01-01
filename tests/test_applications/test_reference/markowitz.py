@@ -5,9 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def synthetic_returns(
-    prices: pd.DataFrame, information_ratio: float, forward_smoothing: int
-) -> pd.DataFrame:
+def synthetic_returns(prices: pd.DataFrame, information_ratio: float, forward_smoothing: int) -> pd.DataFrame:
     """
     prices: a DataFrame of prices
     information_ratio: the desired information ratio of the synthetic returns

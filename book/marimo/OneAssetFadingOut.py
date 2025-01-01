@@ -26,9 +26,7 @@ def __(__file__):
 @app.cell
 def __(folder, np, pd):
     # two assets, A and B, constant price for A=100 and B=200
-    prices = pd.read_csv(
-        folder / "data" / "prices.csv", header=0, index_col=0, parse_dates=True
-    )
+    prices = pd.read_csv(folder / "data" / "prices.csv", header=0, index_col=0, parse_dates=True)
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
     prices

@@ -31,9 +31,7 @@ def test_build_empty(builder, prices):
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices)
     pd.testing.assert_frame_equal(portfolio.units, np.nan * prices)
-    pd.testing.assert_series_equal(
-        portfolio.profit, pd.Series(index=prices.index, data=0.0, name="Profit")
-    )
+    pd.testing.assert_series_equal(portfolio.profit, pd.Series(index=prices.index, data=0.0, name="Profit"))
 
 
 def test_set_position(prices):
@@ -94,9 +92,7 @@ def test_set_position_again(prices):
 
 
 def test_weights_on_wrong_days(resource_dir):
-    prices = pd.read_csv(
-        resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0
-    ).apply(interpolate)
+    prices = pd.read_csv(resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0).apply(interpolate)
 
     # there are no inner NaNs
 
@@ -129,9 +125,7 @@ def test_iteration_state(builder):
         assert state.leverage == 0
         assert state.nav == 1e6
         assert state.value == 0.0
-        pd.testing.assert_series_equal(
-            state.weights, pd.Series(index=state.assets, data=np.nan), check_names=False
-        )
+        pd.testing.assert_series_equal(state.weights, pd.Series(index=state.assets, data=np.nan), check_names=False)
         pd.testing.assert_series_equal(
             builder.position,
             pd.Series(index=state.assets, data=np.nan),

@@ -11,13 +11,7 @@ from test_applications.test_reference.markowitz import (
 @pytest.fixture()
 def means(prices):
     forward_smoothing = 5
-    return (
-        synthetic_returns(
-            prices, information_ratio=0.15, forward_smoothing=forward_smoothing
-        )
-        .shift(-1)
-        .dropna()
-    )
+    return synthetic_returns(prices, information_ratio=0.15, forward_smoothing=forward_smoothing).shift(-1).dropna()
 
 
 @pytest.fixture()

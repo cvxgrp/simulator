@@ -29,27 +29,19 @@ def test_portfolio_cumulated(prices):
 def test_from_cash_position_prices(prices):
     cashpos = pd.DataFrame(index=prices.index, columns=prices.columns, data=1e5)
 
-    portfolio = Portfolio.from_cashpos_prices(
-        prices=prices, cashposition=cashpos, aum=1e6
-    )
+    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=cashpos, aum=1e6)
 
     profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
-    pd.testing.assert_series_equal(
-        portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False
-    )
+    pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False)
 
 
 def test_from_cash_returns(prices):
     returns = prices.pct_change().fillna(0.0)
     cashpos = pd.DataFrame(index=prices.index, columns=prices.columns, data=1e5)
 
-    portfolio = Portfolio.from_cashpos_returns(
-        returns=returns, cashposition=cashpos, aum=1e6
-    )
+    portfolio = Portfolio.from_cashpos_returns(returns=returns, cashposition=cashpos, aum=1e6)
 
     profit = (portfolio.cashposition.shift(1) * portfolio.returns).sum(axis=1)
-    pd.testing.assert_series_equal(
-        portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False
-    )
+    pd.testing.assert_series_equal(portfolio.nav, profit.cumsum() + portfolio.aum, check_names=False)
 
     print(portfolio.weights)

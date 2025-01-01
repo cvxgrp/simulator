@@ -1,4 +1,5 @@
 """test portfolio"""
+
 from __future__ import annotations
 
 import numpy as np
@@ -25,9 +26,5 @@ def test_portfolio(prices):
     Args:
         prices: adjusted prices of futures
     """
-    portfolio = Portfolio.from_cashpos_prices(
-        prices=prices, cashposition=1e6 * f(prices), aum=1e6
-    )
-    assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(
-        0.5330704741938855
-    )
+    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(prices), aum=1e6)
+    assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(0.5330704741938855)

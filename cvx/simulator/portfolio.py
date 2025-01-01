@@ -271,9 +271,7 @@ class Portfolio:
         )
 
         # display the NAV
-        fig.add_trace(
-            go.Scatter(x=self.nav.index, y=self.nav, name=label_strategy), row=2, col=1
-        )
+        fig.add_trace(go.Scatter(x=self.nav.index, y=self.nav, name=label_strategy), row=2, col=1)
 
         # change the title of the yaxis
         fig.update_yaxes(title_text="Cumulative Return", row=2, col=1)
@@ -284,9 +282,7 @@ class Portfolio:
 
         # Drawdown data
         fig.add_trace(
-            go.Scatter(
-                x=self.drawdown.index, y=-self.drawdown, name="Drawdown", fill="tozeroy"
-            ),
+            go.Scatter(x=self.drawdown.index, y=-self.drawdown, name="Drawdown", fill="tozeroy"),
             row=3,
             col=1,
         )
@@ -363,16 +359,12 @@ class Portfolio:
                     index=[label_benchmark],
                     columns=["start", "end", "# assets", "Sharpe ratio"],
                 )
-                table_bench.loc[label_benchmark, "start"] = benchmark.index[0].strftime(
-                    "%Y-%m-%d"
-                )
-                table_bench.loc[label_benchmark, "end"] = benchmark.index[-1].strftime(
-                    "%Y-%m-%d"
-                )
+                table_bench.loc[label_benchmark, "start"] = benchmark.index[0].strftime("%Y-%m-%d")
+                table_bench.loc[label_benchmark, "end"] = benchmark.index[-1].strftime("%Y-%m-%d")
                 table_bench.loc[label_benchmark, "# assets"] = ""
-                table_bench.loc[
-                    label_benchmark, "Sharpe ratio"
-                ] = f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
+                table_bench.loc[label_benchmark, "Sharpe ratio"] = (
+                    f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
+                )
 
                 table = pd.concat([table, table_bench], axis=0)
 
@@ -381,9 +373,7 @@ class Portfolio:
         # if table is not None:
         fig.add_trace(
             go.Table(
-                header=dict(
-                    values=list(table.columns), font=dict(size=10), align="left"
-                ),
+                header=dict(values=list(table.columns), font=dict(size=10), align="left"),
                 cells=dict(
                     values=[table[column].values for column in table.columns],
                     align="left",
@@ -404,17 +394,13 @@ class Portfolio:
         # return ts.mean() / ts.std() * sqrt(n)
 
     @classmethod
-    def from_cashpos_prices(
-        cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float
-    ):
+    def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float):
         """Build Futures Portfolio from cashposition"""
         units = cashposition.div(prices, fill_value=0.0)
         return cls(prices=prices, units=units, aum=aum)
 
     @classmethod
-    def from_cashpos_returns(
-        cls, returns: pd.DataFrame, cashposition: pd.DataFrame, aum: float
-    ):
+    def from_cashpos_returns(cls, returns: pd.DataFrame, cashposition: pd.DataFrame, aum: float):
         """Build Futures Portfolio from cashposition"""
         prices = returns2prices(returns)
         return cls.from_cashpos_prices(prices, cashposition, aum)

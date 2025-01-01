@@ -31,9 +31,7 @@ def __(pd):
 
 @app.cell
 def __(folder, pd):
-    prices = pd.read_csv(
-        folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True
-    )
+    prices = pd.read_csv(folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True)
     return (prices,)
 
 
