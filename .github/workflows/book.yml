@@ -17,12 +17,12 @@ jobs:
   pdoc:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/uv/pdoc@main
+      - uses: cvxgrp/.github/actions/uv/pdoc@testing
 
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/uv/coverage@main
+      - uses: cvxgrp/.github/actions/uv/coverage@testing
 
   jupyter:
     runs-on: "ubuntu-latest"
