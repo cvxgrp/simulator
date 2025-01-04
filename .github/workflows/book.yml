@@ -7,7 +7,7 @@ jobs:
   marimo:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: cvxgrp/.github/actions/uv/marimo@main
+      - uses: cvxgrp/.github/actions/uv/marimo@testing
 
   sphinx:
     runs-on: "ubuntu-latest"
