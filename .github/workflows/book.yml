@@ -7,26 +7,41 @@ jobs:
   marimo:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: cvxgrp/.github/actions/uv/marimo@testing
 
   sphinx:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: cvxgrp/.github/actions/uv/sphinx@testing
 
   pdoc:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: cvxgrp/.github/actions/uv/pdoc@testing
 
   test:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: cvxgrp/.github/actions/uv/coverage@testing
 
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
       - uses: cvxgrp/.github/actions/uv/jupyter@testing
 
   book:
