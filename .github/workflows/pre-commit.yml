@@ -15,7 +15,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/uv/coverage@main
+      - uses: cvxgrp/.github/actions/uv/coverage@testing
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2

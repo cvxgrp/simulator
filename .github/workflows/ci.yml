@@ -15,6 +15,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: cvxgrp/.github/actions/uv/test@main
+      - uses: cvxgrp/.github/actions/uv/test@testing
         with:
           python-version: ${{ matrix.python-version }}
