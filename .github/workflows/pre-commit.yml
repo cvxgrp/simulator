@@ -18,7 +18,7 @@ jobs:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/uv/coverage@testing
+      - uses: cvxgrp/.github/actions/uv/coverage@main
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
