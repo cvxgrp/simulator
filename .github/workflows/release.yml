@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/uv/build@main
+      - uses: cvxgrp/.github/actions/uv/build@v2.0.0
 
   deploy:
     runs-on: ubuntu-latest
@@ -20,4 +20,4 @@ jobs:
       id-token: write
 
     steps:
-      - uses: cvxgrp/.github/actions/publish@main
+      - uses: cvxgrp/.github/actions/publish@v2.0.0
