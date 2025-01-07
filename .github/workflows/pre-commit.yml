@@ -18,7 +18,7 @@ jobs:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/uv/coverage@v2.0.0
+      - uses: cvxgrp/.github/actions/uv/coverage@v2.0.1
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
@@ -32,4 +32,4 @@ jobs:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
-      - uses: cvxgrp/.github/actions/uv/deptry@v2.0.0
+      - uses: cvxgrp/.github/actions/uv/deptry@v2.0.1
