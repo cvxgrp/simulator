@@ -7,8 +7,8 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.8.4'
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.9.1'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
@@ -27,7 +27,7 @@ repos:
       - id: pyupgrade
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.30.0
+    rev: 0.31.0
     hooks:
       - id: check-dependabot
         args: ["--verbose"]
@@ -35,7 +35,7 @@ repos:
         args: ["--verbose"]
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.5
+    rev: v1.7.6
     hooks:
       - id: actionlint
         args: [-ignore, SC]
@@ -46,6 +46,6 @@ repos:
       - id: validate-pyproject
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.29.0
+    rev: dictgen-v0.3.1
     hooks:
       - id: typos
