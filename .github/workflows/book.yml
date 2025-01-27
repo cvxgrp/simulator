@@ -54,6 +54,5 @@ jobs:
     steps:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
-        
-      - uses: cvxgrp/.github/actions/book@v2.0.8
 
+      - uses: cvxgrp/.github/actions/book@v2.0.8
