@@ -12,9 +12,9 @@ jobs:
       contents: write
 
     #if: >
-    #  github.event.workflow_run.conclusion == 'success' &&
-    #  github.event.workflow_run.head_branch == 'main'
-
+    #  github.event_name == 'workflow_dispatch' ||
+    #  (github.event.workflow_run.conclusion == 'success' &&
+    #   github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
 
     steps:
@@ -45,5 +45,5 @@ jobs:
           name: dist
           path: dist
 
-      - name: Publish package distributions to PyPI
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
