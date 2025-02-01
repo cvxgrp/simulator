@@ -45,6 +45,6 @@ repos:
       - id: validate-pyproject
 
   - repo: https://github.com/crate-ci/typos
-    rev: dictgen-v0.3.1
+    rev: v1.29.5
     hooks:
       - id: typos
