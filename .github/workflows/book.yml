@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/uv/environment@v2.1.0
-        
+
       - uses: cvxgrp/.github/actions/uv/marimo@v2.0.17
 
   pdoc:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/uv/environment@v2.1.0
-        
+
       - uses: cvxgrp/.github/actions/uv/pdoc@v2.0.17
 
   test:
@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/uv/environment@v2.1.0
-        
+
       - uses: cvxgrp/.github/actions/uv/coverage@v2.0.17
 
   jupyter:
@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/uv/environment@v2.1.0
-        
+
       - uses: cvxgrp/.github/actions/uv/jupyter@v2.0.17
 
   book:
