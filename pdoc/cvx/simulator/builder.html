@@ -112,22 +112,22 @@
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="c1">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="c1">#    See the License for the specific language governing permissions and</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="c1">#    limitations under the License.</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span> <span class="nn">.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span> <span class="nn">.state</span> <span class="kn">import</span> <span class="n">State</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span> <span class="nn">.utils.interpolation</span> <span class="kn">import</span> <span class="n">valid</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span> <span class="nn">.utils.rescale</span> <span class="kn">import</span> <span class="n">returns2prices</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.portfolio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Portfolio</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.state</span><span class="w"> </span><span class="kn">import</span> <span class="n">State</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.utils.interpolation</span><span class="w"> </span><span class="kn">import</span> <span class="n">valid</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.utils.rescale</span><span class="w"> </span><span class="kn">import</span> <span class="n">returns2prices</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="nd">@dataclass</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="k">class</span> <span class="nc">Builder</span><span class="p">:</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Builder</span><span class="p">:</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    The Builder is an auxiliary class used to build portfolios.</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    It overloads the __iter__ method to allow the class to iterate over</span>
@@ -147,7 +147,7 @@
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="n">_units</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>    <span class="n">_aum</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">        The __post_init__ method is a special method of initialized instances</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">        of the _Builder class and is called after initialization.</span>
@@ -179,7 +179,7 @@
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_aum</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="nd">@property</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        Analyse the validity of the data</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        Do it column by column of the prices</span>
@@ -187,7 +187,7 @@
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="nd">@property</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        Find for each column the first and the last valid index</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -196,7 +196,7 @@
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="nd">@property</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        which are the timestamps for which the portfolio data is available.</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
@@ -206,13 +206,13 @@
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="nd">@property</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">def</span> <span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Get the current prices from the state</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">State</span><span class="p">]]:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">State</span><span class="p">]]:</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        The __iter__ method allows the object to be iterated over in a for loop,</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        yielding time and the current state of the portfolio.</span>
@@ -237,7 +237,7 @@
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="nd">@property</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        The position property returns the current position of the portfolio.</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
@@ -247,7 +247,7 @@
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        The position property returns the current position of the portfolio.</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
@@ -258,14 +258,14 @@
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="nd">@property</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        The cashposition property returns the current cash position of the portfolio.</span>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="nd">@property</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        The units property returns the frame of holdings of the portfolio.</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        Useful mainly for testing</span>
@@ -273,13 +273,13 @@
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span>
 </span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="nd">@cashposition</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">        The cashposition property sets the current cash position of the portfolio.</span>
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
@@ -295,14 +295,14 @@
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>        <span class="k">return</span> <span class="n">Portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span> <span class="n">aum</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aum</span><span class="p">)</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="nd">@property</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">        Get the current weights from the state</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>    <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">        The weights property sets the current weights of the portfolio.</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        We convert the weights to positions using the current prices and the NAV</span>
@@ -310,14 +310,14 @@
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="nd">@property</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">        The aum property returns the current AUM of the portfolio.</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aum</span>
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>    <span class="nd">@aum</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aum</span><span class="p">):</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aum</span><span class="p">):</span>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">        The aum property sets the current AUM of the portfolio.</span>
 </span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -325,7 +325,7 @@
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">aum</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="k">def</span> <span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from returns&quot;&quot;&quot;</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="c1"># compute artificial prices (but scaled such their returns are correct)</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>
@@ -348,7 +348,7 @@
     </div>
     <a class="headerlink" href="#Builder"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder-29"><a href="#Builder-29"><span class="linenos"> 29</span></a><span class="nd">@dataclass</span>
-</span><span id="Builder-30"><a href="#Builder-30"><span class="linenos"> 30</span></a><span class="k">class</span> <span class="nc">Builder</span><span class="p">:</span>
+</span><span id="Builder-30"><a href="#Builder-30"><span class="linenos"> 30</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Builder</span><span class="p">:</span>
 </span><span id="Builder-31"><a href="#Builder-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-32"><a href="#Builder-32"><span class="linenos"> 32</span></a><span class="sd">    The Builder is an auxiliary class used to build portfolios.</span>
 </span><span id="Builder-33"><a href="#Builder-33"><span class="linenos"> 33</span></a><span class="sd">    It overloads the __iter__ method to allow the class to iterate over</span>
@@ -368,7 +368,7 @@
 </span><span id="Builder-47"><a href="#Builder-47"><span class="linenos"> 47</span></a>    <span class="n">_units</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Builder-48"><a href="#Builder-48"><span class="linenos"> 48</span></a>    <span class="n">_aum</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Builder-49"><a href="#Builder-49"><span class="linenos"> 49</span></a>
-</span><span id="Builder-50"><a href="#Builder-50"><span class="linenos"> 50</span></a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Builder-50"><a href="#Builder-50"><span class="linenos"> 50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Builder-51"><a href="#Builder-51"><span class="linenos"> 51</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-52"><a href="#Builder-52"><span class="linenos"> 52</span></a><span class="sd">        The __post_init__ method is a special method of initialized instances</span>
 </span><span id="Builder-53"><a href="#Builder-53"><span class="linenos"> 53</span></a><span class="sd">        of the _Builder class and is called after initialization.</span>
@@ -400,7 +400,7 @@
 </span><span id="Builder-79"><a href="#Builder-79"><span class="linenos"> 79</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_aum</span>
 </span><span id="Builder-80"><a href="#Builder-80"><span class="linenos"> 80</span></a>
 </span><span id="Builder-81"><a href="#Builder-81"><span class="linenos"> 81</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-82"><a href="#Builder-82"><span class="linenos"> 82</span></a>    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-82"><a href="#Builder-82"><span class="linenos"> 82</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-83"><a href="#Builder-83"><span class="linenos"> 83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-84"><a href="#Builder-84"><span class="linenos"> 84</span></a><span class="sd">        Analyse the validity of the data</span>
 </span><span id="Builder-85"><a href="#Builder-85"><span class="linenos"> 85</span></a><span class="sd">        Do it column by column of the prices</span>
@@ -408,7 +408,7 @@
 </span><span id="Builder-87"><a href="#Builder-87"><span class="linenos"> 87</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
 </span><span id="Builder-88"><a href="#Builder-88"><span class="linenos"> 88</span></a>
 </span><span id="Builder-89"><a href="#Builder-89"><span class="linenos"> 89</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-90"><a href="#Builder-90"><span class="linenos"> 90</span></a>    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-90"><a href="#Builder-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-91"><a href="#Builder-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-92"><a href="#Builder-92"><span class="linenos"> 92</span></a><span class="sd">        Find for each column the first and the last valid index</span>
 </span><span id="Builder-93"><a href="#Builder-93"><span class="linenos"> 93</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -417,7 +417,7 @@
 </span><span id="Builder-96"><a href="#Builder-96"><span class="linenos"> 96</span></a>        <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 </span><span id="Builder-97"><a href="#Builder-97"><span class="linenos"> 97</span></a>
 </span><span id="Builder-98"><a href="#Builder-98"><span class="linenos"> 98</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-99"><a href="#Builder-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+</span><span id="Builder-99"><a href="#Builder-99"><span class="linenos"> 99</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
 </span><span id="Builder-100"><a href="#Builder-100"><span class="linenos">100</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
 </span><span id="Builder-101"><a href="#Builder-101"><span class="linenos">101</span></a><span class="sd">        which are the timestamps for which the portfolio data is available.</span>
 </span><span id="Builder-102"><a href="#Builder-102"><span class="linenos">102</span></a>
@@ -427,13 +427,13 @@
 </span><span id="Builder-106"><a href="#Builder-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 </span><span id="Builder-107"><a href="#Builder-107"><span class="linenos">107</span></a>
 </span><span id="Builder-108"><a href="#Builder-108"><span class="linenos">108</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-109"><a href="#Builder-109"><span class="linenos">109</span></a>    <span class="k">def</span> <span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="Builder-109"><a href="#Builder-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="Builder-110"><a href="#Builder-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-111"><a href="#Builder-111"><span class="linenos">111</span></a><span class="sd">        Get the current prices from the state</span>
 </span><span id="Builder-112"><a href="#Builder-112"><span class="linenos">112</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Builder-113"><a href="#Builder-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 </span><span id="Builder-114"><a href="#Builder-114"><span class="linenos">114</span></a>
-</span><span id="Builder-115"><a href="#Builder-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">State</span><span class="p">]]:</span>
+</span><span id="Builder-115"><a href="#Builder-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">State</span><span class="p">]]:</span>
 </span><span id="Builder-116"><a href="#Builder-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-117"><a href="#Builder-117"><span class="linenos">117</span></a><span class="sd">        The __iter__ method allows the object to be iterated over in a for loop,</span>
 </span><span id="Builder-118"><a href="#Builder-118"><span class="linenos">118</span></a><span class="sd">        yielding time and the current state of the portfolio.</span>
@@ -458,7 +458,7 @@
 </span><span id="Builder-137"><a href="#Builder-137"><span class="linenos">137</span></a>            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
 </span><span id="Builder-138"><a href="#Builder-138"><span class="linenos">138</span></a>
 </span><span id="Builder-139"><a href="#Builder-139"><span class="linenos">139</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-140"><a href="#Builder-140"><span class="linenos">140</span></a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+</span><span id="Builder-140"><a href="#Builder-140"><span class="linenos">140</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 </span><span id="Builder-141"><a href="#Builder-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-142"><a href="#Builder-142"><span class="linenos">142</span></a><span class="sd">        The position property returns the current position of the portfolio.</span>
 </span><span id="Builder-143"><a href="#Builder-143"><span class="linenos">143</span></a><span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
@@ -468,7 +468,7 @@
 </span><span id="Builder-147"><a href="#Builder-147"><span class="linenos">147</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">time</span><span class="p">]</span>
 </span><span id="Builder-148"><a href="#Builder-148"><span class="linenos">148</span></a>
 </span><span id="Builder-149"><a href="#Builder-149"><span class="linenos">149</span></a>    <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="Builder-150"><a href="#Builder-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Builder-150"><a href="#Builder-150"><span class="linenos">150</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Builder-151"><a href="#Builder-151"><span class="linenos">151</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-152"><a href="#Builder-152"><span class="linenos">152</span></a><span class="sd">        The position property returns the current position of the portfolio.</span>
 </span><span id="Builder-153"><a href="#Builder-153"><span class="linenos">153</span></a><span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
@@ -479,14 +479,14 @@
 </span><span id="Builder-158"><a href="#Builder-158"><span class="linenos">158</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 </span><span id="Builder-159"><a href="#Builder-159"><span class="linenos">159</span></a>
 </span><span id="Builder-160"><a href="#Builder-160"><span class="linenos">160</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-161"><a href="#Builder-161"><span class="linenos">161</span></a>    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-161"><a href="#Builder-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-162"><a href="#Builder-162"><span class="linenos">162</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-163"><a href="#Builder-163"><span class="linenos">163</span></a><span class="sd">        The cashposition property returns the current cash position of the portfolio.</span>
 </span><span id="Builder-164"><a href="#Builder-164"><span class="linenos">164</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Builder-165"><a href="#Builder-165"><span class="linenos">165</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="Builder-166"><a href="#Builder-166"><span class="linenos">166</span></a>
 </span><span id="Builder-167"><a href="#Builder-167"><span class="linenos">167</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-168"><a href="#Builder-168"><span class="linenos">168</span></a>    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-168"><a href="#Builder-168"><span class="linenos">168</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-169"><a href="#Builder-169"><span class="linenos">169</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-170"><a href="#Builder-170"><span class="linenos">170</span></a><span class="sd">        The units property returns the frame of holdings of the portfolio.</span>
 </span><span id="Builder-171"><a href="#Builder-171"><span class="linenos">171</span></a><span class="sd">        Useful mainly for testing</span>
@@ -494,13 +494,13 @@
 </span><span id="Builder-173"><a href="#Builder-173"><span class="linenos">173</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span>
 </span><span id="Builder-174"><a href="#Builder-174"><span class="linenos">174</span></a>
 </span><span id="Builder-175"><a href="#Builder-175"><span class="linenos">175</span></a>    <span class="nd">@cashposition</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="Builder-176"><a href="#Builder-176"><span class="linenos">176</span></a>    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Builder-176"><a href="#Builder-176"><span class="linenos">176</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cashposition</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Builder-177"><a href="#Builder-177"><span class="linenos">177</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-178"><a href="#Builder-178"><span class="linenos">178</span></a><span class="sd">        The cashposition property sets the current cash position of the portfolio.</span>
 </span><span id="Builder-179"><a href="#Builder-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Builder-180"><a href="#Builder-180"><span class="linenos">180</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">cashposition</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="Builder-181"><a href="#Builder-181"><span class="linenos">181</span></a>
-</span><span id="Builder-182"><a href="#Builder-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-182"><a href="#Builder-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-183"><a href="#Builder-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
 </span><span id="Builder-184"><a href="#Builder-184"><span class="linenos">184</span></a><span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 </span><span id="Builder-185"><a href="#Builder-185"><span class="linenos">185</span></a>
@@ -516,14 +516,14 @@
 </span><span id="Builder-195"><a href="#Builder-195"><span class="linenos">195</span></a>        <span class="k">return</span> <span class="n">Portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span> <span class="n">aum</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aum</span><span class="p">)</span>
 </span><span id="Builder-196"><a href="#Builder-196"><span class="linenos">196</span></a>
 </span><span id="Builder-197"><a href="#Builder-197"><span class="linenos">197</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-198"><a href="#Builder-198"><span class="linenos">198</span></a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="Builder-198"><a href="#Builder-198"><span class="linenos">198</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="Builder-199"><a href="#Builder-199"><span class="linenos">199</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-200"><a href="#Builder-200"><span class="linenos">200</span></a><span class="sd">        Get the current weights from the state</span>
 </span><span id="Builder-201"><a href="#Builder-201"><span class="linenos">201</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Builder-202"><a href="#Builder-202"><span class="linenos">202</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 </span><span id="Builder-203"><a href="#Builder-203"><span class="linenos">203</span></a>
 </span><span id="Builder-204"><a href="#Builder-204"><span class="linenos">204</span></a>    <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="Builder-205"><a href="#Builder-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Builder-205"><a href="#Builder-205"><span class="linenos">205</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Builder-206"><a href="#Builder-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-207"><a href="#Builder-207"><span class="linenos">207</span></a><span class="sd">        The weights property sets the current weights of the portfolio.</span>
 </span><span id="Builder-208"><a href="#Builder-208"><span class="linenos">208</span></a><span class="sd">        We convert the weights to positions using the current prices and the NAV</span>
@@ -531,14 +531,14 @@
 </span><span id="Builder-210"><a href="#Builder-210"><span class="linenos">210</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">nav</span> <span class="o">*</span> <span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span>
 </span><span id="Builder-211"><a href="#Builder-211"><span class="linenos">211</span></a>
 </span><span id="Builder-212"><a href="#Builder-212"><span class="linenos">212</span></a>    <span class="nd">@property</span>
-</span><span id="Builder-213"><a href="#Builder-213"><span class="linenos">213</span></a>    <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder-213"><a href="#Builder-213"><span class="linenos">213</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder-214"><a href="#Builder-214"><span class="linenos">214</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-215"><a href="#Builder-215"><span class="linenos">215</span></a><span class="sd">        The aum property returns the current AUM of the portfolio.</span>
 </span><span id="Builder-216"><a href="#Builder-216"><span class="linenos">216</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Builder-217"><a href="#Builder-217"><span class="linenos">217</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aum</span>
 </span><span id="Builder-218"><a href="#Builder-218"><span class="linenos">218</span></a>
 </span><span id="Builder-219"><a href="#Builder-219"><span class="linenos">219</span></a>    <span class="nd">@aum</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="Builder-220"><a href="#Builder-220"><span class="linenos">220</span></a>    <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aum</span><span class="p">):</span>
+</span><span id="Builder-220"><a href="#Builder-220"><span class="linenos">220</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aum</span><span class="p">):</span>
 </span><span id="Builder-221"><a href="#Builder-221"><span class="linenos">221</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder-222"><a href="#Builder-222"><span class="linenos">222</span></a><span class="sd">        The aum property sets the current AUM of the portfolio.</span>
 </span><span id="Builder-223"><a href="#Builder-223"><span class="linenos">223</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -546,7 +546,7 @@
 </span><span id="Builder-225"><a href="#Builder-225"><span class="linenos">225</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">aum</span> <span class="o">=</span> <span class="n">aum</span>
 </span><span id="Builder-226"><a href="#Builder-226"><span class="linenos">226</span></a>
 </span><span id="Builder-227"><a href="#Builder-227"><span class="linenos">227</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Builder-228"><a href="#Builder-228"><span class="linenos">228</span></a>    <span class="k">def</span> <span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
+</span><span id="Builder-228"><a href="#Builder-228"><span class="linenos">228</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
 </span><span id="Builder-229"><a href="#Builder-229"><span class="linenos">229</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from returns&quot;&quot;&quot;</span>
 </span><span id="Builder-230"><a href="#Builder-230"><span class="linenos">230</span></a>        <span class="c1"># compute artificial prices (but scaled such their returns are correct)</span>
 </span><span id="Builder-231"><a href="#Builder-231"><span class="linenos">231</span></a>
@@ -612,7 +612,7 @@ by calling the build method.</p>
     </div>
     <a class="headerlink" href="#Builder.valid"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.valid-81"><a href="#Builder.valid-81"><span class="linenos">81</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.valid-82"><a href="#Builder.valid-82"><span class="linenos">82</span></a>    <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder.valid-82"><a href="#Builder.valid-82"><span class="linenos">82</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.valid-83"><a href="#Builder.valid-83"><span class="linenos">83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.valid-84"><a href="#Builder.valid-84"><span class="linenos">84</span></a><span class="sd">        Analyse the validity of the data</span>
 </span><span id="Builder.valid-85"><a href="#Builder.valid-85"><span class="linenos">85</span></a><span class="sd">        Do it column by column of the prices</span>
@@ -637,7 +637,7 @@ Do it column by column of the prices</p>
     </div>
     <a class="headerlink" href="#Builder.intervals"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.intervals-89"><a href="#Builder.intervals-89"><span class="linenos">89</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.intervals-90"><a href="#Builder.intervals-90"><span class="linenos">90</span></a>    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder.intervals-90"><a href="#Builder.intervals-90"><span class="linenos">90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.intervals-91"><a href="#Builder.intervals-91"><span class="linenos">91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.intervals-92"><a href="#Builder.intervals-92"><span class="linenos">92</span></a><span class="sd">        Find for each column the first and the last valid index</span>
 </span><span id="Builder.intervals-93"><a href="#Builder.intervals-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -662,7 +662,7 @@ Do it column by column of the prices</p>
     </div>
     <a class="headerlink" href="#Builder.index"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.index-98"><a href="#Builder.index-98"><span class="linenos"> 98</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.index-99"><a href="#Builder.index-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
+</span><span id="Builder.index-99"><a href="#Builder.index-99"><span class="linenos"> 99</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">:</span>
 </span><span id="Builder.index-100"><a href="#Builder.index-100"><span class="linenos">100</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A property that returns the index of the portfolio,</span>
 </span><span id="Builder.index-101"><a href="#Builder.index-101"><span class="linenos">101</span></a><span class="sd">        which are the timestamps for which the portfolio data is available.</span>
 </span><span id="Builder.index-102"><a href="#Builder.index-102"><span class="linenos">102</span></a>
@@ -692,7 +692,7 @@ time period for which the portfolio data is available.</p>
     </div>
     <a class="headerlink" href="#Builder.current_prices"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.current_prices-108"><a href="#Builder.current_prices-108"><span class="linenos">108</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.current_prices-109"><a href="#Builder.current_prices-109"><span class="linenos">109</span></a>    <span class="k">def</span> <span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="Builder.current_prices-109"><a href="#Builder.current_prices-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="Builder.current_prices-110"><a href="#Builder.current_prices-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.current_prices-111"><a href="#Builder.current_prices-111"><span class="linenos">111</span></a><span class="sd">        Get the current prices from the state</span>
 </span><span id="Builder.current_prices-112"><a href="#Builder.current_prices-112"><span class="linenos">112</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -715,7 +715,7 @@ time period for which the portfolio data is available.</p>
     </div>
     <a class="headerlink" href="#Builder.position"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.position-139"><a href="#Builder.position-139"><span class="linenos">139</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.position-140"><a href="#Builder.position-140"><span class="linenos">140</span></a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+</span><span id="Builder.position-140"><a href="#Builder.position-140"><span class="linenos">140</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 </span><span id="Builder.position-141"><a href="#Builder.position-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.position-142"><a href="#Builder.position-142"><span class="linenos">142</span></a><span class="sd">        The position property returns the current position of the portfolio.</span>
 </span><span id="Builder.position-143"><a href="#Builder.position-143"><span class="linenos">143</span></a><span class="sd">        It returns a pandas Series object containing the current position of the portfolio.</span>
@@ -744,7 +744,7 @@ It returns a pandas Series object containing the current position of the portfol
     </div>
     <a class="headerlink" href="#Builder.cashposition"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.cashposition-160"><a href="#Builder.cashposition-160"><span class="linenos">160</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.cashposition-161"><a href="#Builder.cashposition-161"><span class="linenos">161</span></a>    <span class="k">def</span> <span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder.cashposition-161"><a href="#Builder.cashposition-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">cashposition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.cashposition-162"><a href="#Builder.cashposition-162"><span class="linenos">162</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.cashposition-163"><a href="#Builder.cashposition-163"><span class="linenos">163</span></a><span class="sd">        The cashposition property returns the current cash position of the portfolio.</span>
 </span><span id="Builder.cashposition-164"><a href="#Builder.cashposition-164"><span class="linenos">164</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -767,7 +767,7 @@ It returns a pandas Series object containing the current position of the portfol
     </div>
     <a class="headerlink" href="#Builder.units"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.units-167"><a href="#Builder.units-167"><span class="linenos">167</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.units-168"><a href="#Builder.units-168"><span class="linenos">168</span></a>    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder.units-168"><a href="#Builder.units-168"><span class="linenos">168</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.units-169"><a href="#Builder.units-169"><span class="linenos">169</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.units-170"><a href="#Builder.units-170"><span class="linenos">170</span></a><span class="sd">        The units property returns the frame of holdings of the portfolio.</span>
 </span><span id="Builder.units-171"><a href="#Builder.units-171"><span class="linenos">171</span></a><span class="sd">        Useful mainly for testing</span>
@@ -793,7 +793,7 @@ Useful mainly for testing</p>
 
     </div>
     <a class="headerlink" href="#Builder.build"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.build-182"><a href="#Builder.build-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.build-182"><a href="#Builder.build-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.build-183"><a href="#Builder.build-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that creates a new instance of the EquityPortfolio</span>
 </span><span id="Builder.build-184"><a href="#Builder.build-184"><span class="linenos">184</span></a><span class="sd">        class based on the internal state of the Portfolio builder object.</span>
 </span><span id="Builder.build-185"><a href="#Builder.build-185"><span class="linenos">185</span></a>
@@ -834,7 +834,7 @@ The resulting EquityPortfolio object will have the same state as the Portfolio b
     </div>
     <a class="headerlink" href="#Builder.weights"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.weights-197"><a href="#Builder.weights-197"><span class="linenos">197</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.weights-198"><a href="#Builder.weights-198"><span class="linenos">198</span></a>    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="Builder.weights-198"><a href="#Builder.weights-198"><span class="linenos">198</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="Builder.weights-199"><a href="#Builder.weights-199"><span class="linenos">199</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.weights-200"><a href="#Builder.weights-200"><span class="linenos">200</span></a><span class="sd">        Get the current weights from the state</span>
 </span><span id="Builder.weights-201"><a href="#Builder.weights-201"><span class="linenos">201</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -857,7 +857,7 @@ The resulting EquityPortfolio object will have the same state as the Portfolio b
     </div>
     <a class="headerlink" href="#Builder.aum"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.aum-212"><a href="#Builder.aum-212"><span class="linenos">212</span></a>    <span class="nd">@property</span>
-</span><span id="Builder.aum-213"><a href="#Builder.aum-213"><span class="linenos">213</span></a>    <span class="k">def</span> <span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Builder.aum-213"><a href="#Builder.aum-213"><span class="linenos">213</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Builder.aum-214"><a href="#Builder.aum-214"><span class="linenos">214</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Builder.aum-215"><a href="#Builder.aum-215"><span class="linenos">215</span></a><span class="sd">        The aum property returns the current AUM of the portfolio.</span>
 </span><span id="Builder.aum-216"><a href="#Builder.aum-216"><span class="linenos">216</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -883,7 +883,7 @@ The resulting EquityPortfolio object will have the same state as the Portfolio b
     </div>
     <a class="headerlink" href="#Builder.from_returns"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Builder.from_returns-227"><a href="#Builder.from_returns-227"><span class="linenos">227</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Builder.from_returns-228"><a href="#Builder.from_returns-228"><span class="linenos">228</span></a>    <span class="k">def</span> <span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
+</span><span id="Builder.from_returns-228"><a href="#Builder.from_returns-228"><span class="linenos">228</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_returns</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns</span><span class="p">):</span>
 </span><span id="Builder.from_returns-229"><a href="#Builder.from_returns-229"><span class="linenos">229</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Futures Portfolio from returns&quot;&quot;&quot;</span>
 </span><span id="Builder.from_returns-230"><a href="#Builder.from_returns-230"><span class="linenos">230</span></a>        <span class="c1"># compute artificial prices (but scaled such their returns are correct)</span>
 </span><span id="Builder.from_returns-231"><a href="#Builder.from_returns-231"><span class="linenos">231</span></a>

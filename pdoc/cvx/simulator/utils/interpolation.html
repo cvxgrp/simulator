@@ -72,7 +72,7 @@
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="c1">#    limitations under the License.</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;interpolate&quot;&quot;&quot;</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">first</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">()</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">last</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">last_valid_index</span><span class="p">()</span>
@@ -81,7 +81,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">return</span> <span class="n">ts</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">def</span><span class="w"> </span><span class="nf">valid</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="c1"># check the two series are identical</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">return</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 </span></pre></div>
@@ -99,7 +99,7 @@
 
     </div>
     <a class="headerlink" href="#interpolate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="interpolate-17"><a href="#interpolate-17"><span class="linenos">17</span></a><span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="interpolate-17"><a href="#interpolate-17"><span class="linenos">17</span></a><span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
 </span><span id="interpolate-18"><a href="#interpolate-18"><span class="linenos">18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;interpolate&quot;&quot;&quot;</span>
 </span><span id="interpolate-19"><a href="#interpolate-19"><span class="linenos">19</span></a>    <span class="n">first</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">()</span>
 </span><span id="interpolate-20"><a href="#interpolate-20"><span class="linenos">20</span></a>    <span class="n">last</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">last_valid_index</span><span class="p">()</span>
@@ -125,7 +125,7 @@
 
     </div>
     <a class="headerlink" href="#valid"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="valid-26"><a href="#valid-26"><span class="linenos">26</span></a><span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="valid-26"><a href="#valid-26"><span class="linenos">26</span></a><span class="k">def</span><span class="w"> </span><span class="nf">valid</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
 </span><span id="valid-27"><a href="#valid-27"><span class="linenos">27</span></a>    <span class="c1"># check the two series are identical</span>
 </span><span id="valid-28"><a href="#valid-28"><span class="linenos">28</span></a>    <span class="k">return</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">interpolate</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 </span></pre></div>
