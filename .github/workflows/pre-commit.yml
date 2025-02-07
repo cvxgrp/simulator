@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.1
+        uses: cvxgrp/.github/actions/environment@v2.2.3
 
-      - uses: cvxgrp/.github/actions/deptry@v2.2.1
+      - uses: cvxgrp/.github/actions/deptry@v2.2.3
 
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: cvxgrp/.github/actions/pre-commit@v2.2.1
+      - uses: cvxgrp/.github/actions/pre-commit@v2.2.3
