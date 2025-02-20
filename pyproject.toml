@@ -46,7 +46,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["cvx"]
+packages = ["src/cvx"]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = ["cvxpy-base", "ipython", "quantstats"]
