@@ -19,6 +19,8 @@ jobs:
         uses: cvxgrp/.github/actions/environment@v2.2.4
 
       - uses: cvxgrp/.github/actions/pdoc@v2.2.4
+        with:
+          source-folder: 'src/cvx'
 
   test:
     runs-on: "ubuntu-latest"
@@ -27,6 +29,9 @@ jobs:
         uses: cvxgrp/.github/actions/environment@v2.2.4
 
       - uses: cvxgrp/.github/actions/coverage@v2.2.4
+        with:
+          tests-folder: 'src/tests'
+          source-folder: 'src/cvx'
 
   jupyter:
     runs-on: "ubuntu-latest"
