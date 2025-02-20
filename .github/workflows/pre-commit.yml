@@ -11,6 +11,8 @@ jobs:
         uses: cvxgrp/.github/actions/environment@v2.2.4
 
       - uses: cvxgrp/.github/actions/deptry@v2.2.4
+        with:
+          source-folder: 'src/cvx'
 
   pre-commit:
     runs-on: ubuntu-latest
