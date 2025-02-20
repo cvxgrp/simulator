@@ -1,4 +1,4 @@
-SF:cvx/simulator/__init__.py
+SF:src/cvx/simulator/__init__.py
 DA:15,1
 DA:16,1
 DA:17,1
@@ -6,7 +6,7 @@ DA:18,1
 LF:4
 LH:4
 end_of_record
-SF:cvx/simulator/builder.py
+SF:src/cvx/simulator/builder.py
 DA:14,1
 DA:16,1
 DA:17,1
@@ -121,7 +121,7 @@ FNDA:1,Builder.from_returns
 FNF:17
 FNH:17
 end_of_record
-SF:cvx/simulator/portfolio.py
+SF:src/cvx/simulator/portfolio.py
 DA:14,1
 DA:16,1
 DA:17,1
@@ -301,7 +301,7 @@ FNDA:1,Portfolio.from_cashpos_returns
 FNF:20
 FNH:20
 end_of_record
-SF:cvx/simulator/state.py
+SF:src/cvx/simulator/state.py
 DA:14,1
 DA:15,1
 DA:17,1
@@ -444,9 +444,9 @@ FNDA:1,State.leverage
 FNF:21
 FNH:21
 end_of_record
-SF:cvx/simulator/utils/__init__.py
+SF:src/cvx/simulator/utils/__init__.py
 end_of_record
-SF:cvx/simulator/utils/grid.py
+SF:src/cvx/simulator/utils/grid.py
 DA:14,1
 DA:16,1
 DA:18,1
@@ -474,7 +474,7 @@ FNDA:1,_project_frame_to_grid
 FNF:3
 FNH:3
 end_of_record
-SF:cvx/simulator/utils/interpolation.py
+SF:src/cvx/simulator/utils/interpolation.py
 DA:16,1
 DA:18,1
 DA:19,1
@@ -491,7 +491,7 @@ FNDA:1,valid
 FNF:2
 FNH:2
 end_of_record
-SF:cvx/simulator/utils/metric.py
+SF:src/cvx/simulator/utils/metric.py
 DA:1,1
 DA:2,1
 DA:5,1
@@ -512,7 +512,7 @@ FNDA:1,sharpe
 FNF:2
 FNH:2
 end_of_record
-SF:cvx/simulator/utils/month.py
+SF:src/cvx/simulator/utils/month.py
 DA:33,1
 DA:35,1
 DA:36,1
@@ -546,7 +546,7 @@ FNDA:1,monthlytable
 FNF:3
 FNH:3
 end_of_record
-SF:cvx/simulator/utils/rescale.py
+SF:src/cvx/simulator/utils/rescale.py
 DA:14,1
 DA:17,1
 DA:21,1
