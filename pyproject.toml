@@ -21,7 +21,6 @@ quantstats = [
   "ipython",
 ]
 
-[dependency-groups]
 dev = [
     "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
@@ -50,3 +49,7 @@ packages = ["src/cvx"]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = ["cvxpy-base", "ipython", "quantstats"]
+
+[tool.deptry]
+# see https://deptry.com/usage/#pep-621-dev-dependency-groups
+pep621_dev_dependency_groups = ["dev"]
