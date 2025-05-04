@@ -5,25 +5,25 @@ RESET := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help venv install fmt test coverage marimo clean
+.PHONY: help install fmt test coverage marimo clean
 
 # Paths
-VENV_DIR     := .venv
+VENV_MARKER  := .venv/.installed
 TEST_DIR     := src/tests
 SOURCE_DIR   := src
 MARIMO_DIR   := book/marimo
 
 ##@ Development Setup
 
-venv/.installed:
+$(VENV_MARKER):
 	@printf "$(BLUE)Setting up virtual environment...$(RESET)\n"
 	@if ! command -v uv >/dev/null 2>&1; then \
 		curl -LsSf https://astral.sh/uv/install.sh | sh; \
 	fi
 	@uv venv --python 3.12
-	@touch venv/.installed
+	@touch $(VENV_MARKER)
 
-install: venv/.installed ## Install all dependencies using uv
+install: $(VENV_MARKER) ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
 	@uv sync --dev --frozen
 	@uv pip install pre-commit pytest pytest-cov marimo
