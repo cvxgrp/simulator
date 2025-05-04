@@ -25,7 +25,7 @@ $(VENV_MARKER):
 
 install: $(VENV_MARKER) ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
-	@uv sync --dev --frozen
+	@uv sync --dev --frozen --all-extras
 	@uv pip install pre-commit pytest pytest-cov marimo
 
 ##@ Code Quality
