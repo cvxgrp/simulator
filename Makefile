@@ -1,28 +1,37 @@
 # Colors for pretty output
-BLUE := \033[36m
-BOLD := \033[1m
+BLUE  := \033[36m
+BOLD  := \033[1m
 RESET := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help verify install fmt test marimo clean
+.PHONY: help venv install fmt test coverage marimo clean
+
+# Paths
+VENV_DIR     := .venv
+TEST_DIR     := src/tests
+SOURCE_DIR   := src
+MARIMO_DIR   := book/marimo
 
 ##@ Development Setup
 
-venv:
-	@printf "$(BLUE)Creating virtual environment...$(RESET)\n"
-	@curl -LsSf https://astral.sh/uv/install.sh | sh
+venv/.installed:
+	@printf "$(BLUE)Setting up virtual environment...$(RESET)\n"
+	@if ! command -v uv >/dev/null 2>&1; then \
+		curl -LsSf https://astral.sh/uv/install.sh | sh; \
+	fi
 	@uv venv --python 3.12
+	@touch venv/.installed
 
-install: venv ## Install all dependencies using uv
+install: venv/.installed ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
 	@uv sync --dev --frozen
+	@uv pip install pre-commit pytest pytest-cov marimo
 
 ##@ Code Quality
 
-fmt: venv ## Run code formatting and linting
+fmt: install ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uv pip install pre-commit
 	@uv run pre-commit install
 	@uv run pre-commit run --all-files
 
@@ -30,21 +39,25 @@ fmt: venv ## Run code formatting and linting
 
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv pip install pytest
-	@uv run pytest src/tests
+	@uv run pytest $(TEST_DIR)
+
+coverage: install ## Run tests with coverage
+	@printf "$(BLUE)Running tests with coverage...$(RESET)\n"
+	@uv run pytest --cov=$(SOURCE_DIR) --cov-report=term --cov-report=html $(TEST_DIR)
+	@printf "$(BLUE)HTML report generated at $(BOLD)htmlcov/index.html$(RESET)\n"
+	@uv run pytest --cov=$(SOURCE_DIR) --cov-fail-under=90 $(TEST_DIR)
+
+##@ Marimo & Jupyter
+
+marimo: install ## Start a Marimo server
+	@printf "$(BLUE)Starting Marimo server...$(RESET)\n"
+	@uv run marimo edit $(MARIMO_DIR)
 
 ##@ Cleanup
 
 clean: ## Clean generated files and directories
 	@printf "$(BLUE)Cleaning project...$(RESET)\n"
 	@git clean -d -X -f
-
-##@ Marimo & Jupyter
-
-marimo: install ## Start a Marimo server
-	@printf "$(BLUE)Start Marimo server...$(RESET)\n"
-	@uv pip install marimo
-	@uv run marimo edit book/marimo
 
 ##@ Help
 
