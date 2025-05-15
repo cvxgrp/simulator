@@ -1,9 +1,18 @@
 name: "book"
 
+# This workflow builds and publishes the project documentation
+# It runs on every push to the repository and generates:
+# - API documentation using pdoc
+# - Test coverage reports
+# - Processed Jupyter notebooks
+# - Marimo interactive notebooks
+# - A complete documentation book combining all the above
+
 on:
 - push
 
 jobs:
+  # Process Marimo interactive notebooks for documentation
   marimo:
     runs-on: "ubuntu-latest"
     steps:
@@ -12,6 +21,7 @@ jobs:
 
       - uses: cvxgrp/.github/actions/marimo@v2.2.8
 
+  # Generate API documentation using pdoc
   pdoc:
     runs-on: "ubuntu-latest"
     steps:
@@ -20,8 +30,10 @@ jobs:
 
       - uses: cvxgrp/.github/actions/pdoc@v2.2.8
         with:
+          # Specify the source code directory to generate documentation for
           source-folder: 'src/cvx'
 
+  # Run tests and generate coverage reports
   test:
     runs-on: "ubuntu-latest"
     steps:
@@ -30,9 +42,11 @@ jobs:
 
       - uses: cvxgrp/.github/actions/coverage@v2.2.8
         with:
+          # Specify the test and source directories for coverage reporting
           tests-folder: 'src/tests'
           source-folder: 'src/cvx'
 
+  # Process Jupyter notebooks for documentation
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
@@ -41,11 +55,14 @@ jobs:
 
       - uses: cvxgrp/.github/actions/jupyter@v2.2.8
 
+  # Build and publish the final documentation book
+  # This job runs only after all other jobs have completed successfully
   book:
     runs-on: "ubuntu-latest"
     needs: [test, pdoc, jupyter, marimo]
 
     permissions:
+      # Write permission is required to update the gh-pages branch
       contents: write
 
     steps:

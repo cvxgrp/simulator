@@ -1,5 +1,10 @@
 name: "CI"
 
+# This workflow runs continuous integration tests for the project
+# It tests the codebase on multiple operating systems and Python versions
+# to ensure cross-platform compatibility and forward compatibility
+# with newer Python releases
+
 on:
 - push
 
@@ -9,8 +14,11 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      # Matrix strategy allows testing across multiple configurations in parallel
       matrix:
+        # Test on both Linux and Windows environments
         os: [ ubuntu-latest, windows-latest ]
+        # Test across multiple Python versions to ensure compatibility
         python-version: [ '3.10', '3.11', '3.12', '3.13' ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -18,8 +26,10 @@ jobs:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
         with:
+          # Use the Python version from the matrix
           python-version: ${{ matrix.python-version }}
 
       - uses: cvxgrp/.github/actions/test@v2.2.8
         with:
+          # Specify the directory containing the tests
           tests-folder: 'src/tests'

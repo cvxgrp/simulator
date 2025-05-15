@@ -1,9 +1,15 @@
 name: pre-commit
 
+# This workflow runs code quality checks and dependency analysis
+# It helps maintain code quality standards and identify dependency issues
+# by running automated checks on every push
+
 on:
   push:
 
 jobs:
+  # Check for dependency issues using deptry
+  # This job identifies unused dependencies, missing dependencies, and transitive dependencies
   deptry:
     runs-on: ubuntu-latest
     steps:
@@ -12,8 +18,11 @@ jobs:
 
       - uses: cvxgrp/.github/actions/deptry@v2.2.8
         with:
+          # Specify the source code directory to analyze
           source-folder: 'src/cvx'
 
+  # Run pre-commit hooks to enforce code style and quality standards
+  # This includes linting, formatting, and other code quality checks
   pre-commit:
     runs-on: ubuntu-latest
     steps:

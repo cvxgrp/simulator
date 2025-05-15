@@ -1,11 +1,19 @@
 name: Bump version and publish
 
+# This workflow handles the versioning and publishing process for package releases
+# It is manually triggered and performs two main tasks:
+# 1. Generates a new version tag based on semantic versioning
+# 2. Publishes the package to PyPI using trusted publishing
+
 on:
+  # Manual trigger only - this workflow is not automated
   workflow_dispatch
 
 jobs:
+  # First job: Generate a new version tag for the release
   tag:
     permissions:
+      # Write permission needed to create a new tag
       contents: write
 
     runs-on: ubuntu-latest
@@ -14,23 +22,30 @@ jobs:
       - name: Generate Tag
         uses: cvxgrp/.github/actions/tag@v2.2.8
         with:
+          # Use the GitHub token for authentication
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+  # Second job: Publish the package to PyPI
   publish:
+    # Only run after the tag job completes successfully
     needs: tag
     runs-on: ubuntu-latest
+    # Use the release environment which may have specific secrets
     environment: release
 
     permissions:
+      # Read permission for repository contents
       contents: read
-      # This permission is required for trusted publishing.
+      # This permission is required for trusted publishing to PyPI
       id-token: write
 
     steps:
+      # Download the built distribution files from artifacts
       - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
 
+      # Publish the package to PyPI using trusted publishing
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
