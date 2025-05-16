@@ -8,7 +8,6 @@ from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import osc, returns_adjust, shrink2id
 
 from cvx.simulator.builder import Builder
-from cvx.simulator.utils.metric import sharpe
 
 correlation = 200
 
@@ -47,7 +46,8 @@ def test_portfolio(prices):
         builder.aum = state.aum
 
     portfolio = builder.build()
+    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(1.3347932969566416)
 
-    assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(1.3348481418003217)
+    # assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(1.3348481418003217)
 
     # portfolio.metrics()["Sharpe"] == pytest.approx(1.2778671597915794)

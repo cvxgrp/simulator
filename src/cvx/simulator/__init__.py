@@ -11,6 +11,19 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+"""
+CVX Simulator: A simple simulator for investors.
+
+This package provides tools for simulating investment portfolios, tracking
+positions, calculating returns, and analyzing performance. It allows users
+to backtest investment strategies using historical price data.
+
+Main components:
+- Builder: Creates portfolios by iterating through time and setting positions
+- Portfolio: Represents a portfolio of assets with methods for analysis
+- State: Represents the current state of a portfolio during simulation
+- interpolate: Utility function for interpolating missing values in time series
+"""
 
 from .builder import Builder
 from .portfolio import Portfolio
