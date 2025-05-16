@@ -211,10 +211,10 @@ DA:427,1
 DA:429,1
 DA:430,1
 DA:432,1
-DA:435,0
-DA:436,0
+DA:435,1
+DA:436,1
 LF:91
-LH:89
+LH:91
 FN:58,85,Portfolio.__post_init__
 FNDA:1,Portfolio.__post_init__
 FN:88,103,Portfolio.index
@@ -254,9 +254,9 @@ FNDA:1,Portfolio.from_cashpos_prices
 FN:427,430,Portfolio.from_cashpos_returns
 FNDA:1,Portfolio.from_cashpos_returns
 FN:432,436,Portfolio.snapshot
-FNDA:0,Portfolio.snapshot
+FNDA:1,Portfolio.snapshot
 FNF:20
-FNH:19
+FNH:20
 end_of_record
 SF:src/cvx/simulator/state.py
 DA:22,1
