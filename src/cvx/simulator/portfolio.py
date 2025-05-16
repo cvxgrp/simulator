@@ -11,6 +11,15 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+"""
+Portfolio representation and analysis for the CVX Simulator.
+
+This module provides the Portfolio class, which represents a portfolio of assets
+with methods for calculating various metrics (NAV, profit, drawdown, etc.) and
+analyzing performance. The Portfolio class is typically created by the Builder
+class after a simulation is complete.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -22,29 +31,54 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from .utils.metric import sharpe
+# from .utils.metric import sharpe
 from .utils.rescale import returns2prices
 
 
 @dataclass(frozen=True)
 class Portfolio:
+    """
+    Represents a portfolio of assets with methods for analysis and visualization.
+
+    The Portfolio class is a frozen dataclass (immutable) that represents a portfolio
+    of assets with their prices and positions (units). It provides methods for
+    calculating various metrics like NAV, profit, drawdown, and for visualizing
+    the portfolio's performance.
+
+    Attributes
+    ----------
+    prices : pd.DataFrame
+        DataFrame of asset prices over time, with dates as index and assets as columns
+    units : pd.DataFrame
+        DataFrame of asset positions (units) over time, with dates as index and assets as columns
+    aum : Union[float, pd.Series]
+        Assets under management, either as a constant float or as a Series over time
+    """
+
     prices: pd.DataFrame
     units: pd.DataFrame
     aum: float | pd.Series
 
     def __post_init__(self) -> None:
-        """A class method that performs input validation after object initialization.
-        Notes: The post_init method is called after an instance of the Portfolio
-        class has been initialized, and performs a series of input validation
-        checks to ensure that the prices and units dataframes are in the
-        expected format with no duplicates or missing data,
-        and that the units dataframe represents valid equity positions
-        for the assets held in the portfolio.
-        Specifically, the method checks that both the prices and units dataframes
-        have a monotonic increasing and unique index,
-        and that the index and columns of the units dataframe are subsets
-        of the index and columns of the prices dataframe, respectively.
-        If any of these checks fail, an assertion error will be raised."""
+        """
+        Validate the portfolio data after initialization.
+
+        This method is automatically called after an instance of the Portfolio
+        class has been initialized. It performs a series of validation checks
+        to ensure that the prices and units dataframes are in the expected format
+        with no duplicates or missing data.
+
+        The method checks that:
+        - Both prices and units dataframes have monotonic increasing indices
+        - Both prices and units dataframes have unique indices
+        - The index of units is a subset of the index of prices
+        - The columns of units is a subset of the columns of prices
+
+        Raises
+        ------
+        AssertionError
+            If any of the validation checks fail
+        """
 
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
@@ -56,33 +90,53 @@ class Portfolio:
 
     @property
     def index(self) -> pd.DatetimeIndex:
-        """A property that returns the index of the EquityPortfolio instance,
-        which is the time period for which the portfolio data is available.
+        """
+        Get the time index of the portfolio.
 
-        Returns: pd.Index: A pandas index representing the time period for which the
-        portfolio data is available.
+        Returns
+        -------
+        pd.DatetimeIndex
+            A DatetimeIndex representing the time period for which portfolio
+            data is available
 
-        Notes: The function extracts the index of the prices dataframe,
-        which represents the time periods for which data is available for the portfolio.
-        The resulting index will be a pandas index object with the same length
-        as the number of rows in the prices dataframe."""
+        Notes
+        -----
+        This property extracts the index from the prices DataFrame, which
+        represents all time points in the portfolio history.
+        """
         return pd.DatetimeIndex(self.prices.index)
 
     @property
     def assets(self) -> pd.Index:
-        """A property that returns a list of the assets held by the EquityPortfolio object.
+        """
+        Get the list of assets in the portfolio.
 
-        Returns: list: A list of the assets held by the EquityPortfolio object.
+        Returns
+        -------
+        pd.Index
+            An Index containing the names of all assets in the portfolio
 
-        Notes: The function extracts the column names of the prices dataframe,
-        which correspond to the assets held by the EquityPortfolio object.
-        The resulting list will contain the names of all assets held by the portfolio, without any duplicates.
+        Notes
+        -----
+        This property extracts the column names from the prices DataFrame,
+        which correspond to all assets for which price data is available.
         """
         return self.prices.columns
 
     @property
     def nav(self) -> pd.Series:
-        """Return a pandas series representing the NAV"""
+        """
+        Get the net asset value (NAV) of the portfolio over time.
+
+        The NAV represents the total value of the portfolio at each point in time.
+        If aum is provided as a Series, it is used directly. Otherwise, the NAV
+        is calculated from the cumulative profit plus the initial aum.
+
+        Returns
+        -------
+        pd.Series
+            Series representing the NAV of the portfolio over time
+        """
         if isinstance(self.aum, pd.Series):
             series = self.aum
         else:
@@ -94,11 +148,22 @@ class Portfolio:
 
     @property
     def profit(self) -> pd.Series:
-        """A property that returns a pandas series representing the
-        profit gained or lost in the portfolio based on changes in asset prices.
+        """
+        Get the profit/loss of the portfolio at each time point.
 
-        Returns: pd.Series: A pandas series representing the profit
-        gained or lost in the portfolio based on changes in asset prices.
+        This calculates the profit or loss at each time point based on the
+        previous positions and the returns of each asset.
+
+        Returns
+        -------
+        pd.Series
+            Series representing the profit/loss at each time point
+
+        Notes
+        -----
+        The profit is calculated by multiplying the previous day's positions
+        (in currency terms) by the returns of each asset, and then summing
+        across all assets.
         """
         series = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
         series.name = "Profit"
@@ -106,18 +171,22 @@ class Portfolio:
 
     @property
     def highwater(self) -> pd.Series:
-        """A function that returns a pandas series representing
-        the high-water mark of the portfolio, which is the highest point
-        the portfolio value has reached over time.
+        """
+        Get the high-water mark of the portfolio over time.
 
-        Returns: pd.Series: A pandas series representing the
-        high-water mark of the portfolio.
+        The high-water mark represents the highest value the portfolio has
+        reached up to each point in time.
 
-        Notes: The function performs a rolling computation based on
-        the cumulative maximum of the portfolio's value over time,
-        starting from the beginning of the time period being considered.
-        Min_periods argument is set to 1 to include the minimum period of one day.
-        The resulting series will show the highest value the portfolio has reached at each point in time.
+        Returns
+        -------
+        pd.Series
+            Series representing the high-water mark at each time point
+
+        Notes
+        -----
+        This is calculated using an expanding maximum of the NAV, which means
+        at each point in time, it shows the maximum NAV achieved up to that point.
+        This is commonly used to calculate drawdowns and performance fees.
         """
         series = self.nav.expanding(min_periods=1).max()
         series.name = "Highwater"
@@ -125,123 +194,233 @@ class Portfolio:
 
     @property
     def drawdown(self) -> pd.Series:
-        """A property that returns a pandas series representing the
-        drawdown of the portfolio, which measures the decline
-        in the portfolio's value from its (previously) highest
-        point to its current point.
+        """
+        Get the drawdown of the portfolio over time.
 
-        Returns: pd.Series: A pandas series representing the
-        drawdown of the portfolio.
+        Drawdown measures the decline in portfolio value from its previous
+        highest point (high-water mark) to the current point, expressed as
+        a fraction of the high-water mark.
 
-        Notes: The function calculates the ratio of the portfolio's current value
-        vs. its current high-water-mark and then subtracting the result from 1.
-        A positive drawdown means the portfolio is currently worth
-        less than its high-water mark. A drawdown of 0.1 implies that the nav is currently 0.9 times the high-water mark
+        Returns
+        -------
+        pd.Series
+            Series representing the drawdown at each time point
+
+        Notes
+        -----
+        Calculated as 1 - (NAV / high-water mark). A positive drawdown means
+        the portfolio is currently worth less than its high-water mark.
+        For example, a drawdown of 0.1 means the NAV is currently 90% of
+        the high-water mark.
         """
         series = 1.0 - self.nav / self.highwater
         series.name = "Drawdown"
         return series
 
     @property
-    def cashposition(self):
+    def cashposition(self) -> pd.DataFrame:
         """
-        Return a pandas dataframe representing the cash position
+        Get the cash value of each position over time.
+
+        This calculates the cash value of each position by multiplying
+        the number of units by the price for each asset at each time point.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the cash value of each position over time,
+            with dates as index and assets as columns
         """
         return self.prices * self.units
 
     @property
-    def returns(self):
+    def returns(self) -> pd.DataFrame:
         """
-        The returns property exposes the returns of the individual assets
+        Get the returns of individual assets over time.
+
+        This calculates the percentage change in price for each asset
+        from one time point to the next.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the returns of each asset over time,
+            with dates as index and assets as columns
         """
         return self.prices.pct_change()
 
     @property
     def trades_units(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing the trades made in the portfolio in terms of units.
+        """
+        Get the trades made in the portfolio in terms of units.
 
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of units.
+        This calculates the changes in position (units) from one time point
+        to the next for each asset.
 
-        Notes: The function calculates the trades made by the portfolio by taking
-        the difference between the current and previous values of the units dataframe.
-        The resulting values will represent the number of shares of each asset
-        bought or sold by the portfolio at each point in time.
-        The resulting dataframe will have the same dimensions
-        as the units dataframe, with NaN values filled with zeros."""
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the trades (changes in units) for each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        Calculated as the difference between consecutive position values.
+        Positive values represent buys, negative values represent sells.
+        The first row contains the initial positions, as there are no previous
+        positions to compare with.
+        """
         t = self.units.fillna(0.0).diff()
         t.loc[self.index[0]] = self.units.loc[self.index[0]]
         return t.fillna(0.0)
 
     @property
     def trades_currency(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the trades made in the portfolio in terms of currency.
+        """
+        Get the trades made in the portfolio in terms of currency.
 
-        Returns: pd.DataFrame: A pandas dataframe representing the trades made in the portfolio in terms of currency.
+        This calculates the cash value of trades by multiplying the changes
+        in position (units) by the current prices.
 
-        Notes: The function calculates the trades made in currency by multiplying
-        the number of shares of each asset bought or sold (as represented in the trades_units dataframe)
-        with the current prices of each asset (as represented in the prices dataframe).
-        The resulting dataframe will have the same dimensions as the units and prices dataframes.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the cash value of trades for each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        Calculated by multiplying trades_units by prices.
+        Positive values represent buys (cash outflows),
+        negative values represent sells (cash inflows).
         """
         return self.trades_units * self.prices
 
     @property
     def turnover_relative(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing the turnover
-        relative to the NAV. Can be positive (if bought) or negative (if sold)."""
+        """
+        Get the turnover relative to the portfolio NAV.
+
+        This calculates the trades as a percentage of the portfolio NAV,
+        which provides a measure of trading activity relative to portfolio size.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the relative turnover for each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        Calculated by dividing trades_currency by NAV.
+        Positive values represent buys, negative values represent sells.
+        A value of 0.05 means a buy equal to 5% of the portfolio NAV.
+        """
         return self.trades_currency.div(self.nav, axis=0)
 
     @property
     def turnover(self) -> pd.DataFrame:
+        """
+        Get the absolute turnover in the portfolio.
+
+        This calculates the absolute value of trades in currency terms,
+        which provides a measure of total trading activity regardless of
+        direction (buy or sell).
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the absolute turnover for each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        Calculated as the absolute value of trades_currency.
+        This is useful for calculating trading costs that apply equally
+        to buys and sells.
+        """
         return self.trades_currency.abs()
 
-    def __getitem__(self, time: datetime) -> pd.Series:
-        """The `__getitem__` method retrieves the stock data for a specific time in the dataframe.
-        It returns the stock data for that time.
+    def __getitem__(self, time: datetime | str | pd.Timestamp) -> pd.Series:
+        """
+        Get the portfolio positions (units) at a specific time.
 
-        The method takes one input parameter:
-        - `time`: the time index for which to retrieve the stock data
+        This method allows for dictionary-like access to the portfolio positions
+        at a specific time point using the syntax: portfolio[time].
 
-        Returns:
-        - stock data for the input time
+        Parameters
+        ----------
+        time : Union[datetime, str, pd.Timestamp]
+            The time index for which to retrieve the positions
 
-        Note that the input time must be in the index of the dataframe,
-        otherwise a KeyError will be raised."""
+        Returns
+        -------
+        pd.Series
+            Series containing the positions (units) for each asset at the specified time
+
+        Raises
+        ------
+        KeyError
+            If the specified time is not in the portfolio's index
+
+        Examples
+        --------
+        >>> portfolio['2023-01-01']  # Get positions on January 1, 2023
+        >>> portfolio[pd.Timestamp('2023-01-01')]  # Same as above
+        """
         return self.units.loc[time]
 
     @property
     def equity(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe
-        representing the equity positions of the portfolio,
-        which is the value of each asset held by the portfolio.
-        Returns: pd.DataFrame: A pandas dataframe representing
-        the equity positions of the portfolio.
+        """
+        Get the equity (cash value) of each position over time.
 
-        Notes: The function calculates the equity of the portfolio
-        by multiplying the current prices of each asset
-        by the number of shares held by the portfolio.
-        The equity dataframe will have the same dimensions
-        as the prices and units dataframes."""
+        This property returns the cash value of each position in the portfolio,
+        calculated by multiplying the number of units by the price for each asset.
 
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the cash value of each position over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        This is an alias for the cashposition property and returns the same values.
+        The term "equity" is used in the context of the cash value of positions,
+        not to be confused with the equity asset class.
+        """
         return self.cashposition
 
     @property
     def weights(self) -> pd.DataFrame:
-        """A property that returns a pandas dataframe representing
-        the weights of various assets in the portfolio.
+        """
+        Get the weight of each asset in the portfolio over time.
 
-        Returns: pd.DataFrame: A pandas dataframe representing the weights
-        of various assets in the portfolio.
+        This calculates the relative weight of each asset in the portfolio
+        by dividing the cash value of each position by the total portfolio
+        value (NAV) at each time point.
 
-        Notes: The function calculates the weights of various assets
-        in the portfolio by dividing the equity positions
-        for each asset (as represented in the equity dataframe)
-        by the total portfolio value (as represented in the nav dataframe).
-        Both dataframes are assumed to have the same dimensions.
-        The resulting dataframe will show the relative weight
-        of each asset in the portfolio at each point in time."""
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with the weight of each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        The sum of weights across all assets at any given time should equal 1.0
+        for a fully invested portfolio with no leverage. Weights can be negative
+        for short positions.
+        """
         return self.equity.apply(lambda x: x / self.nav)
+
+    @property
+    def nav_pl(self):
+        frame = self.nav.pct_change().to_frame()
+        frame.index.name = "Date"
+        print(frame)
+        return frame
 
     def snapshot(
         self,
@@ -351,8 +530,8 @@ class Portfolio:
             table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
             table.loc[label_strategy, "# assets"] = len(self.assets)
 
-            s = sharpe(self.nav.ffill().pct_change(fill_method=None).dropna())
-            table.loc[label_strategy, "Sharpe ratio"] = f"{s:.2f}"
+            # s = sharpe(self.nav.ffill().pct_change(fill_method=None).dropna())
+            # table.loc[label_strategy, "Sharpe ratio"] = f"{s:.2f}"
 
             if benchmark is not None:
                 table_bench = pd.DataFrame(
@@ -362,9 +541,9 @@ class Portfolio:
                 table_bench.loc[label_benchmark, "start"] = benchmark.index[0].strftime("%Y-%m-%d")
                 table_bench.loc[label_benchmark, "end"] = benchmark.index[-1].strftime("%Y-%m-%d")
                 table_bench.loc[label_benchmark, "# assets"] = ""
-                table_bench.loc[label_benchmark, "Sharpe ratio"] = (
-                    f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
-                )
+                # table_bench.loc[label_benchmark, "Sharpe ratio"] = (
+                #                    f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
+                #                )
 
                 table = pd.concat([table, table_bench], axis=0)
 
@@ -385,13 +564,13 @@ class Portfolio:
 
         return fig
 
-    def sharpe(self, n=None):
-        """Simple Sharpe ratio"""
+    # def sharpe(self, n=None):
+    #    """Simple Sharpe ratio"""
+    #
+    #    ts = self.nav.pct_change().dropna()
+    #    return sharpe(ts, n=n)
 
-        ts = self.nav.pct_change().dropna()
-        return sharpe(ts, n=n)
-
-        # return ts.mean() / ts.std() * sqrt(n)
+    # return ts.mean() / ts.std() * sqrt(n)
 
     @classmethod
     def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float):
