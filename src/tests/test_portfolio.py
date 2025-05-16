@@ -341,3 +341,8 @@ def test_profit(portfolio):
 #     # assert sharpe(portfolio.profit, n=252) == pytest.approx(-0.10965282385614909)
 #     # profit is replacing NaNs with 0?!
 #     assert portfolio.sharpe() == pytest.approx(-0.1038600869081656)
+
+
+def test_snapshot(portfolio: Portfolio) -> None:
+    fig = portfolio.snapshot()
+    fig.show()
