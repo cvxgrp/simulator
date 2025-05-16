@@ -187,6 +187,10 @@ def test_cashposition(portfolio: Portfolio) -> None:
     pd.testing.assert_frame_equal(portfolio.cashposition, portfolio.prices * portfolio.units)
 
 
+def test_sharpe(portfolio: Portfolio) -> None:
+    assert portfolio.data.stats.sharpe(periods=252)["NAV"] == pytest.approx(-0.1021095912448208)
+
+
 # def test_plotly_aggregate(portfolio: Portfolio) -> None:
 #     """
 #     Test that the snapshot method works with aggregated data.

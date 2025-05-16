@@ -24,14 +24,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
-import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+from jquantstats.api import build_data
 
-# from .utils.metric import sharpe
 from .utils.rescale import returns2prices
 
 
@@ -416,161 +412,10 @@ class Portfolio:
         return self.equity.apply(lambda x: x / self.nav)
 
     @property
-    def nav_pl(self):
+    def data(self):
         frame = self.nav.pct_change().to_frame()
         frame.index.name = "Date"
-        print(frame)
-        return frame
-
-    def snapshot(
-        self,
-        benchmark: Any = None,
-        title: str = "Portfolio Summary",
-        table: pd.DataFrame = None,
-        aggregate: bool = False,
-        log_scale: bool = False,
-        label_strategy: str = "Strategy",
-        label_benchmark: str = "Benchmark",
-    ) -> Any:
-        """
-        The snapshot method creates a snapshot of the performance of a Portfolio object.
-        """
-        fig = make_subplots(
-            rows=4,
-            cols=1,
-            shared_xaxes=True,
-            vertical_spacing=0.01,
-            row_heights=[0.13, 0.47, 0.2, 0.2],
-            specs=[
-                [{"type": "table"}],
-                [{"type": "scatter"}],
-                [{"type": "scatter"}],
-                [{"type": "bar"}],
-            ],
-        )
-
-        # display the NAV
-        fig.add_trace(go.Scatter(x=self.nav.index, y=self.nav, name=label_strategy), row=2, col=1)
-
-        # change the title of the yaxis
-        fig.update_yaxes(title_text="Cumulative Return", row=2, col=1)
-
-        # change yaxis to log scale
-        if log_scale:
-            fig.update_yaxes(type="log", row=2, col=1)
-
-        # Drawdown data
-        fig.add_trace(
-            go.Scatter(x=self.drawdown.index, y=-self.drawdown, name="Drawdown", fill="tozeroy"),
-            row=3,
-            col=1,
-        )
-        fig.update_yaxes(title_text="Drawdown", row=3, col=1)
-
-        # Daily/Monthly Returns
-        if aggregate:
-            self.nav.index.name = "date"
-            nav = self.nav.resample("ME").last()
-            returns = 100 * nav.pct_change().dropna()
-
-            df = returns.to_frame("value")
-            df["color"] = np.where(df["value"] >= 0, "green", "red")
-
-            fig.add_trace(
-                go.Bar(
-                    x=df.index,
-                    y=df["value"],
-                    xperiod="M1",
-                    xperiodalignment="middle",
-                    marker_color=df["color"],
-                    name="Monthly Returns",
-                ),
-                row=4,
-                col=1,
-            )
-            fig.update_yaxes(title_text="Monthly Returns", row=4, col=1)
-
-        else:
-            self.nav.index.name = "date"
-            returns = 100 * self.nav.pct_change().dropna()
-
-            df = returns.to_frame("value")  # .reset_index()
-            df["color"] = np.where(df["value"] >= 0, "green", "red")
-
-            fig.add_trace(
-                go.Bar(
-                    x=df.index,
-                    y=df["value"],
-                    marker_color=df["color"],
-                    name="Daily Returns",
-                ),
-                row=4,
-                col=1,
-            )
-            fig.update_yaxes(title_text="Daily Returns", row=4, col=1)
-
-        fig.update_traces(showlegend=True)
-        fig.update_layout(height=800, title_text=title)
-
-        if benchmark is not None:
-            fig.add_trace(
-                go.Scatter(x=benchmark.index, y=benchmark.values, name=label_benchmark),
-                row=2,
-                col=1,
-            )
-
-        if table is None:
-            table = pd.DataFrame(
-                index=[label_strategy],
-                columns=["start", "end", "# assets", "Sharpe ratio"],
-            )
-            table.index.name = "Portfolio"
-
-            table.loc[label_strategy, "start"] = self.nav.index[0].strftime("%Y-%m-%d")
-            table.loc[label_strategy, "end"] = self.nav.index[-1].strftime("%Y-%m-%d")
-            table.loc[label_strategy, "# assets"] = len(self.assets)
-
-            # s = sharpe(self.nav.ffill().pct_change(fill_method=None).dropna())
-            # table.loc[label_strategy, "Sharpe ratio"] = f"{s:.2f}"
-
-            if benchmark is not None:
-                table_bench = pd.DataFrame(
-                    index=[label_benchmark],
-                    columns=["start", "end", "# assets", "Sharpe ratio"],
-                )
-                table_bench.loc[label_benchmark, "start"] = benchmark.index[0].strftime("%Y-%m-%d")
-                table_bench.loc[label_benchmark, "end"] = benchmark.index[-1].strftime("%Y-%m-%d")
-                table_bench.loc[label_benchmark, "# assets"] = ""
-                # table_bench.loc[label_benchmark, "Sharpe ratio"] = (
-                #                    f"{sharpe(benchmark.ffill().pct_change(fill_method=None).dropna()):.2f}"
-                #                )
-
-                table = pd.concat([table, table_bench], axis=0)
-
-            table = table.reset_index()
-
-        # if table is not None:
-        fig.add_trace(
-            go.Table(
-                header=dict(values=list(table.columns), font=dict(size=10), align="left"),
-                cells=dict(
-                    values=[table[column].values for column in table.columns],
-                    align="left",
-                ),
-            ),
-            row=1,
-            col=1,
-        )
-
-        return fig
-
-    # def sharpe(self, n=None):
-    #    """Simple Sharpe ratio"""
-    #
-    #    ts = self.nav.pct_change().dropna()
-    #    return sharpe(ts, n=n)
-
-    # return ts.mean() / ts.std() * sqrt(n)
+        return build_data(returns=frame)
 
     @classmethod
     def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float):

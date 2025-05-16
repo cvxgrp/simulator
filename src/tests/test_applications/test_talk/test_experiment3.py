@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from jquantstats.api import build_data
 from tinycta.signal import osc, returns_adjust
 
 from cvx.simulator.portfolio import Portfolio
@@ -40,6 +39,4 @@ def test_portfolio(portfolio):
     """
     test portfolio
     """
-    data = build_data(returns=portfolio.nav_pl)
-
-    assert data.stats.sharpe()["NAV"] == pytest.approx(0.9134164184741005)
+    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(0.9134164184741005)

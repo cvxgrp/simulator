@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from jquantstats.api import build_data
 from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import osc, returns_adjust, shrink2id
 
@@ -47,9 +46,7 @@ def test_portfolio(prices):
         builder.aum = state.aum
 
     portfolio = builder.build()
-    data = build_data(returns=portfolio.nav_pl)
-
-    assert data.stats.sharpe()["NAV"] == pytest.approx(1.3347932969566416)
+    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(1.3347932969566416)
 
     # assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(1.3348481418003217)
 

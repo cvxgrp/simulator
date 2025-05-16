@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from jquantstats.api import build_data
 
 from cvx.simulator.portfolio import Portfolio
 
@@ -28,6 +27,4 @@ def test_portfolio(prices):
         prices: adjusted prices of futures
     """
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(prices), aum=1e8)
-    data = build_data(returns=portfolio.nav_pl)
-
-    assert data.stats.sharpe()["NAV"] == pytest.approx(0.6231488411522048)
+    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(0.6231488411522048)
