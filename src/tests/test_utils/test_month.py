@@ -7,29 +7,20 @@ verify that the monthlytable function correctly creates tables with both
 compounded and cumulative aggregation methods.
 """
 
-import pandas as pd
+# import pandas as pd
 
-from cvx.simulator.utils.month import Aggregate, monthlytable
-
-
-def test_month_compounded(nav: pd.Series) -> None:
-    """
-    Test that the monthlytable function works with compounded returns.
-
-    This test creates a monthly performance table using the COMPOUND aggregation
-    method, which aggregates returns by multiplying (1+r) values. The test prints
-    the resulting table for visual inspection.
-
-    Parameters
-    ----------
-    nav : pd.Series
-        Series of portfolio NAV values over time, provided by a fixture
-    """
-    table = monthlytable(nav.pct_change().fillna(0.0), Aggregate.COMPOUND)
-    print(table)
+# from cvx.simulator.utils.month import Aggregate, monthlytable
 
 
-def test_month_cumulative(nav: pd.Series) -> None:
+# @pytest.fixture(scope="module")
+def test_month_compounded(data) -> None:
+    fig = data.plots.monthly_heatmap(col="NAV", compounded=True)
+    fig.show()
+    # table = monthlytable(nav.pct_change().fillna(0.0), Aggregate.COMPOUND)
+    # print(table)
+
+
+def test_month_cumulative(data) -> None:
     """
     Test that the monthlytable function works with cumulative returns.
 
@@ -42,5 +33,8 @@ def test_month_cumulative(nav: pd.Series) -> None:
     nav : pd.Series
         Series of portfolio NAV values over time, provided by a fixture
     """
-    table = monthlytable(nav.pct_change().fillna(0.0), Aggregate.CUMULATIVE)
-    print(table)
+    fig = data.plots.monthly_heatmap(col="NAV", compounded=False)
+    fig.show()
+
+    # table = monthlytable(nav.pct_change().fillna(0.0), Aggregate.CUMULATIVE)
+    # print(table)
