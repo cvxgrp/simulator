@@ -10,7 +10,8 @@ dependencies = [
     "jquantstats>=0.0.8",
     "numpy>=2.1.3",
     "pandas>=2.2.3",
-    "polars>=1.29.0"
+    "plotly>=6.0.1",
+    "polars>=1.29.0",
 ]
 
 [project.urls]
