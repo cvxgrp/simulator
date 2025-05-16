@@ -49,7 +49,22 @@
                     <h1 class="modulename">
 <a href="./../cvx.html">cvx</a><wbr>.simulator    </h1>
 
-                
+                        <div class="docstring"><p>CVX Simulator: A simple simulator for investors.</p>
+
+<p>This package provides tools for simulating investment portfolios, tracking
+positions, calculating returns, and analyzing performance. It allows users
+to backtest investment strategies using historical price data.</p>
+
+<p>Main components:</p>
+
+<ul>
+<li>Builder: Creates portfolios by iterating through time and setting positions</li>
+<li>Portfolio: Represents a portfolio of assets with methods for analysis</li>
+<li>State: Represents the current state of a portfolio during simulation</li>
+<li>interpolate: Utility function for interpolating missing values in time series</li>
+</ul>
+</div>
+
                         <input id="mod-simulator-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-simulator-view-source"><span>View Source</span></label>
@@ -67,11 +82,24 @@
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="c1">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="c1">#    See the License for the specific language governing permissions and</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="c1">#    limitations under the License.</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Builder</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.portfolio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Portfolio</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.state</span><span class="w"> </span><span class="kn">import</span> <span class="n">State</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.utils.interpolation</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">CVX Simulator: A simple simulator for investors.</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">This package provides tools for simulating investment portfolios, tracking</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">positions, calculating returns, and analyzing performance. It allows users</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">to backtest investment strategies using historical price data.</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">Main components:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">- Builder: Creates portfolios by iterating through time and setting positions</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">- Portfolio: Represents a portfolio of assets with methods for analysis</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">- State: Represents the current state of a portfolio during simulation</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">- interpolate: Utility function for interpolating missing values in time series</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Builder</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.portfolio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Portfolio</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.state</span><span class="w"> </span><span class="kn">import</span> <span class="n">State</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">.utils.interpolation</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate</span>
 </span></pre></div>
 
 
