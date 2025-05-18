@@ -429,8 +429,5 @@ class Portfolio:
         prices = returns2prices(returns)
         return cls.from_cashpos_prices(prices, cashposition, aum)
 
-    def snapshot(
-        self, title: str = "Portfolio Summary", compounded: bool = True, log_scale: bool = True, aggregate=True
-    ):
-        print(aggregate)
-        return self.data.plots.plot_snapshot(title=title, compounded=compounded, log_scale=log_scale)
+    def snapshot(self, title: str = "Portfolio Summary", log_scale: bool = True):
+        return self.data.plots.plot_snapshot(title=title, log_scale=log_scale)

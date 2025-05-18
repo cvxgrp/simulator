@@ -7,13 +7,6 @@ from tinycta.signal import osc, returns_adjust
 from cvx.simulator.portfolio import Portfolio
 
 
-def adj(price, com, min_periods, clip):
-    # assert np.all(price.dropna() > 0.0)
-    # assert (price.dropna() > 0).all()
-    r = np.log(price.dropna()).diff()
-    return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
-
-
 @pytest.fixture()
 def portfolio(prices) -> Portfolio:
     # take two moving averages and apply the sign-function, adjust by volatility
