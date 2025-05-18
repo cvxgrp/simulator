@@ -211,10 +211,9 @@ DA:427,1
 DA:429,1
 DA:430,1
 DA:432,1
-DA:435,1
-DA:436,1
-LF:91
-LH:91
+DA:433,1
+LF:90
+LH:90
 FN:58,85,Portfolio.__post_init__
 FNDA:1,Portfolio.__post_init__
 FN:88,103,Portfolio.index
@@ -253,7 +252,7 @@ FN:421,424,Portfolio.from_cashpos_prices
 FNDA:1,Portfolio.from_cashpos_prices
 FN:427,430,Portfolio.from_cashpos_returns
 FNDA:1,Portfolio.from_cashpos_returns
-FN:432,436,Portfolio.snapshot
+FN:432,433,Portfolio.snapshot
 FNDA:1,Portfolio.snapshot
 FNF:20
 FNH:20

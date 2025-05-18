@@ -54,8 +54,8 @@
             </div>
         </aside>
         <h2>
-            <span class="text">91 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">91<span class="text"> run</span></button>
+            <span class="text">90 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">90<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_229149eb413aa93c_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-16 10:58 +0000
+            created at 2025-05-18 18:40 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -511,11 +511,8 @@
     <p class="run"><span class="n"><a id="t429" href="#t429">429</a></span><span class="t">        <span class="nam">prices</span> <span class="op">=</span> <span class="nam">returns2prices</span><span class="op">(</span><span class="nam">returns</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t430" href="#t430">430</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">.</span><span class="nam">from_cashpos_prices</span><span class="op">(</span><span class="nam">prices</span><span class="op">,</span> <span class="nam">cashposition</span><span class="op">,</span> <span class="nam">aum</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t431" href="#t431">431</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t432" href="#t432">432</a></span><span class="t">    <span class="key">def</span> <span class="nam">snapshot</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t433" href="#t433">433</a></span><span class="t">        <span class="nam">self</span><span class="op">,</span> <span class="nam">title</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"Portfolio Summary"</span><span class="op">,</span> <span class="nam">compounded</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">True</span><span class="op">,</span> <span class="nam">log_scale</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">True</span><span class="op">,</span> <span class="nam">aggregate</span><span class="op">=</span><span class="key">True</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t434" href="#t434">434</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t435" href="#t435">435</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">aggregate</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t436" href="#t436">436</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">data</span><span class="op">.</span><span class="nam">plots</span><span class="op">.</span><span class="nam">plot_snapshot</span><span class="op">(</span><span class="nam">title</span><span class="op">=</span><span class="nam">title</span><span class="op">,</span> <span class="nam">compounded</span><span class="op">=</span><span class="nam">compounded</span><span class="op">,</span> <span class="nam">log_scale</span><span class="op">=</span><span class="nam">log_scale</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t432" href="#t432">432</a></span><span class="t">    <span class="key">def</span> <span class="nam">snapshot</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">title</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"Portfolio Summary"</span><span class="op">,</span> <span class="nam">log_scale</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">True</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t433" href="#t433">433</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">data</span><span class="op">.</span><span class="nam">plots</span><span class="op">.</span><span class="nam">plot_snapshot</span><span class="op">(</span><span class="nam">title</span><span class="op">=</span><span class="nam">title</span><span class="op">,</span> <span class="nam">log_scale</span><span class="op">=</span><span class="nam">log_scale</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -525,7 +522,7 @@
             <a class="nav" href="z_229149eb413aa93c_state_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-16 10:58 +0000
+            created at 2025-05-18 18:40 +0000
         </p>
     </div>
 </footer>
