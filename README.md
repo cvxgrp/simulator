@@ -21,13 +21,7 @@ the profits achieved, etc.
 
 ## Installation
 
-It is possible to install cvxsimulator with the quantstats extra
-
-```bash
-pip install cvxsimulator[quantstats]
-```
-
-or without it
+It is possible to install cvxsimulator via
 
 ```bash
 pip install cvxsimulator
@@ -138,10 +132,6 @@ It is possible to perform
 ```python
 portfolio.snapshot()
 ```
-
-We have also integrated the [quantstats](https://github.com/ranaroussi/quantstats)
-package as an optional extra for further analysis. It is usually enough to inject
-the `portfolio.nav` into the many functions exposed by this package.
 
 ## uv
 
