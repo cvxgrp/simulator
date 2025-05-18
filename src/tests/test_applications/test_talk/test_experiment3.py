@@ -5,14 +5,6 @@ import pytest
 from tinycta.signal import osc, returns_adjust
 
 from cvx.simulator.portfolio import Portfolio
-from cvx.simulator.utils.metric import sharpe
-
-
-def adj(price, com, min_periods, clip):
-    # assert np.all(price.dropna() > 0.0)
-    # assert (price.dropna() > 0).all()
-    r = np.log(price.dropna()).diff()
-    return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
 
 
 @pytest.fixture()
@@ -40,4 +32,4 @@ def test_portfolio(portfolio):
     """
     test portfolio
     """
-    assert sharpe(portfolio.nav.pct_change()) == pytest.approx(0.9134164184741003)
+    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(0.9134164184741005)

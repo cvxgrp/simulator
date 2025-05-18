@@ -11,3 +11,13 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+"""
+Utility functions for the CVX Simulator package.
+
+This module provides various utility functions used throughout the simulator:
+- grid: Functions for resampling time series data to a coarser grid
+- interpolation: Functions for interpolating missing values in time series
+- metric: Functions for calculating performance metrics like Sharpe ratio
+- month: Functions for creating monthly performance tables
+- rescale: Functions for converting between returns and prices
+"""

@@ -49,7 +49,7 @@ def __(Builder, np, prices):
         _builder.aum = _state.aum
 
     _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    _portfolio.snapshot()
     return
 
 
@@ -67,7 +67,7 @@ def __(Builder, np, prices):
         _builder.aum = _state.aum
 
     _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    _portfolio.snapshot()
 
     return
 

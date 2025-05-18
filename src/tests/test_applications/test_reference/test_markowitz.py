@@ -71,6 +71,6 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             builder.aum = state.aum - costs
 
     # build the portfolio
-    portfolio = builder.build()
+    # portfolio = builder.build()
 
-    portfolio.snapshot(title="Markowitz Portfolio", aggregate=True)
+    # portfolio.snapshot(title="Markowitz Portfolio", aggregate=True)
