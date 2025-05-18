@@ -218,7 +218,7 @@ def __(Builder, np, prices):
             _builder.position = _state.position
         _builder.aum = _state.aum
     _portfolio = _builder.build()
-    _portfolio.snapshot(aggregate=True)
+    _portfolio.snapshot()
     return delta, drifted, target
 
 
