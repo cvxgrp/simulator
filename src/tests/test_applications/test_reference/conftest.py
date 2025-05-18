@@ -24,27 +24,9 @@ def prices(resource_dir):
 
 
 @pytest.fixture()
-def volumes(resource_dir, prices):
-    """
-    Fixture for the volume
-    :param resource_dir: the resource directory (fixture)
-    """
-    return pd.read_csv(resource_dir / "volumes.csv", parse_dates=True, index_col=0).loc[prices.index]
-
-
-@pytest.fixture()
 def spreads(resource_dir, prices):
     """
     Fixture for the spread
     :param resource_dir: the resource directory (fixture)
     """
     return pd.read_csv(resource_dir / "spreads.csv", parse_dates=True, index_col=0).loc[prices.index]
-
-
-@pytest.fixture()
-def rf(resource_dir, prices):
-    """
-    Fixture for the risk free rate
-    :param resource_dir: the resource directory (fixture)
-    """
-    return pd.read_csv(resource_dir / "rf.csv", parse_dates=True, index_col=0).squeeze().loc[prices.index]
