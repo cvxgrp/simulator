@@ -1,25 +1,33 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
+# This file configures the Jupyter Book for the cvxsimulator project
 
-title: cvxsimulator
-author: Thomas Schmelzer
-only_build_toc_files: true
+# Basic book metadata
+title: cvxsimulator  # The title that appears on the book's cover and navigation
+author: Thomas Schmelzer  # The author name displayed in the book
+only_build_toc_files: true  # Only include files explicitly listed in _toc.yml
 
-# needed for plotly
+# Sphinx configuration
+# Sphinx is the documentation generator used by Jupyter Book
 sphinx:
   config:
+    # JavaScript files to include in the HTML output
+    # This specific JS file is needed for plotly visualizations to work properly
     html_js_files:
     - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
 
+# Repository configuration
 # Information about where the book exists on the web
+# This enables features like "edit this page" links
 repository:
-  url: https://github.com/cvxgrp/simulator
-  path_to_book: book
-  branch: main
+  url: https://github.com/cvxgrp/simulator  # URL of the GitHub repository
+  path_to_book: book  # Path to the book's source files within the repository
+  branch: main  # The branch where the book source is located
 
+# HTML output configuration
 # Add GitHub buttons to your book
 # See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
-  use_issues_button: true
-  use_repository_button: true
+  use_issues_button: true  # Adds a link to the GitHub issues page for the repository
+  use_repository_button: true  # Adds a link to the GitHub repository
   extra_navbar: Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
