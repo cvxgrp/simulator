@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>cvxsimulator &#8212; cvxsimulator</title>
+    <title>🚀 cvxsimulator &#8212; cvxsimulator</title>
   
   
   
@@ -173,7 +173,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    cvxsimulator
+                    🚀 cvxsimulator
                 </a>
             </li>
         </ul>
@@ -366,7 +366,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>cvxsimulator</h1>
+    <h1>🚀 cvxsimulator</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -376,16 +376,22 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">Creating portfolios</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">📥 Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">📊 Creating Portfolios</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-portfolio">Build the portfolio</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">Analytics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uv">uv</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo">marimo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">📈 Analytics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development">🛠️ Development</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uv-package-manager">UV Package Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo-notebooks">Marimo Notebooks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">📚 Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing">🤝 Contributing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">📄 License</a></li>
 </ul>
             </nav>
         </div>
@@ -398,43 +404,44 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cvxsimulator">
-<h1><a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Link to this heading">#</a></h1>
+<h1>🚀 <a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://badge.fury.io/py/cvxsimulator"><img alt="PyPI version" src="https://badge.fury.io/py/cvxsimulator.svg" /></a>
 <a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
 <a class="reference external" href="https://pepy.tech/project/cvxsimulator"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/cvxsimulator?period=month&amp;units=international_system&amp;left_color=black&amp;right_color=orange&amp;left_text=PyPI%20downloads%20per%20month" /></a>
 <a class="reference external" href="https://coveralls.io/github/cvxgrp/simulator?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main" /></a>
 <a class="reference external" href="https://github.com/renovatebot/renovate"><img alt="Renovate enabled" src="https://img.shields.io/badge/renovate-enabled-brightgreen.svg" /></a></p>
 <p><a class="reference external" href="https://codespaces.new/cvxgrp/simulator"><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" /></a></p>
+<p>A simple yet powerful simulator for investment strategies and portfolio backtesting.</p>
 <p>Given a universe of <span class="math notranslate nohighlight">\(m\)</span> assets we are given prices for each of them at
 time <span class="math notranslate nohighlight">\(t_1, t_2, \ldots t_n\)</span>, e.g. we operate using an <span class="math notranslate nohighlight">\(n \times m\)</span> matrix where
 each column corresponds to a particular asset.</p>
 <p>In a backtest we iterate in time (e.g. row by row) through the matrix and
-allocate positions to all or some of the assets. This tool shall help to
+allocate positions to all or some of the assets. This tool helps to
 simplify the accounting. It keeps track of the available cash,
 the profits achieved, etc.</p>
 <p><img alt="Analytics" src="https://raw.githubusercontent.com/cvxgrp/simulator/main/newplot.png" /></p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>It is possible to install cvxsimulator via</p>
+<h2>📥 Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<p>Install cvxsimulator via pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cvxsimulator
 </pre></div>
 </div>
 </section>
 <section id="creating-portfolios">
-<h2>Creating portfolios<a class="headerlink" href="#creating-portfolios" title="Link to this heading">#</a></h2>
-<p>The simulator shall be completely agnostic as to the trading policy/strategy.
+<h2>📊 Creating Portfolios<a class="headerlink" href="#creating-portfolios" title="Link to this heading">#</a></h2>
+<p>The simulator is completely agnostic to the trading policy/strategy.
 Our approach follows a rather common pattern:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#create-the-builder-object"><span class="xref myst">Create the builder object</span></a></p></li>
 <li><p><a class="reference internal" href="#loop-through-time"><span class="xref myst">Loop through time</span></a></p></li>
 <li><p><a class="reference internal" href="#build-the-portfolio"><span class="xref myst">Build the portfolio</span></a></p></li>
 </ul>
-<p>We demonstrate those steps with somewhat silly policies.
+<p>We demonstrate these steps with simple example policies.
 They are never good strategies, but are always valid ones.</p>
 <section id="create-the-builder-object">
 <h3>Create the builder object<a class="headerlink" href="#create-the-builder-object" title="Link to this heading">#</a></h3>
 <p>The user defines a builder object by loading prices
-and initialize the amount of cash used in an experiment:</p>
+and initializing the amount of cash used in an experiment:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cvx.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Builder</span>
 
@@ -443,7 +450,7 @@ and initialize the amount of cash used in an experiment:</p>
 </pre></div>
 </div>
 <p>Prices have to be valid, there may be NaNs only at the beginning and the end of
-each column in frame.
+each column in the frame.
 There can be no NaNs hiding in the middle of any time series.</p>
 <p>It is also possible to specify a model for trading costs.
 The builder helps to fill up the frame of positions. Only once done
@@ -473,7 +480,7 @@ t is <span class="math notranslate nohighlight">\(t1\)</span>, in the second ite
 The state gives access to the currently available cash, the current prices
 and the current valuation of all holdings.</p>
 <p>Here’s a slightly more realistic loop. Given a set of <span class="math notranslate nohighlight">\(4\)</span> assets we want to
-implemenent the popular <span class="math notranslate nohighlight">\(1/n\)</span> strategy.</p>
+implement the popular <span class="math notranslate nohighlight">\(1/n\)</span> strategy.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># each day we invest a quarter of the capital in the assets</span>
     <span class="n">b</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">nav</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">prices</span>
@@ -492,44 +499,74 @@ The builder class also exposes setters for such alternative conventions.</p>
 </section>
 <section id="build-the-portfolio">
 <h3>Build the portfolio<a class="headerlink" href="#build-the-portfolio" title="Link to this heading">#</a></h3>
-<p>Once finished it is possible to build the portfolio object</p>
+<p>Once finished it is possible to build the portfolio object:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="analytics">
-<h2>Analytics<a class="headerlink" href="#analytics" title="Link to this heading">#</a></h2>
+<h2>📈 Analytics<a class="headerlink" href="#analytics" title="Link to this heading">#</a></h2>
 <p>The portfolio object supports further analysis and exposes
-a number of properties, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">cash</span>
-<span class="n">portfolio</span><span class="o">.</span><span class="n">equity</span>
+a number of properties, e.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">nav</span>  <span class="c1"># Net Asset Value</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">cash</span>  <span class="c1"># Cash position</span>
+<span class="n">portfolio</span><span class="o">.</span><span class="n">equity</span>  <span class="c1"># Equity value</span>
 </pre></div>
 </div>
-<p>It is possible to perform</p>
+<p>It is possible to generate a snapshot of the portfolio:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="uv">
-<h2>uv<a class="headerlink" href="#uv" title="Link to this heading">#</a></h2>
-<p>Starting with</p>
+<section id="development">
+<h2>🛠️ Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h2>
+<section id="uv-package-manager">
+<h3>UV Package Manager<a class="headerlink" href="#uv-package-manager" title="Link to this heading">#</a></h3>
+<p>Start with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>install
 </pre></div>
 </div>
-<p>will install <a class="reference external" href="https://github.com/astral-sh/uv">uv</a> and create
+<p>This will install <a class="reference external" href="https://github.com/astral-sh/uv">uv</a> and create
 the virtual environment defined in
 pyproject.toml and locked in uv.lock.</p>
 </section>
-<section id="marimo">
-<h2>marimo<a class="headerlink" href="#marimo" title="Link to this heading">#</a></h2>
+<section id="marimo-notebooks">
+<h3>Marimo Notebooks<a class="headerlink" href="#marimo-notebooks" title="Link to this heading">#</a></h3>
 <p>We install <a class="reference external" href="https://marimo.io">marimo</a> on the fly within the aforementioned
-virtual environment. Executing</p>
+virtual environment. Execute:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>marimo
 </pre></div>
 </div>
-<p>will install and start marimo.</p>
+<p>This will install and start marimo for interactive notebook development.</p>
+</section>
+</section>
+<section id="documentation">
+<h2>📚 Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Full documentation is available at <a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxgrp.org/simulator/book</a></p></li>
+<li><p>API reference can be found in the documentation</p></li>
+<li><p>Example notebooks are included in the repository under the <code class="docutils literal notranslate"><span class="pre">book</span></code> directory</p></li>
+</ul>
+</section>
+<section id="contributing">
+<h2>🤝 Contributing<a class="headerlink" href="#contributing" title="Link to this heading">#</a></h2>
+<p>Contributions are welcome! Here’s how you can contribute:</p>
+<ol class="arabic simple">
+<li><p>Fork the repository</p></li>
+<li><p>Create a feature branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">feature-name</span></code></p></li>
+<li><p>Commit your changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">'Add</span> <span class="pre">some</span> <span class="pre">feature'</span></code></p></li>
+<li><p>Push to the branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">feature-name</span></code></p></li>
+<li><p>Open a pull request</p></li>
+</ol>
+<p>Please make sure to update tests as appropriate and follow the
+code style of the project.</p>
+</section>
+<section id="license">
+<h2>📄 License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
+<p>This project is licensed under the Apache License 2.0 - see
+the <a class="reference internal" href="#LICENSE"><span class="xref myst">LICENSE</span></a> file for details.</p>
+<p>Copyright 2023 Stanford University Convex Optimization Group</p>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -590,16 +627,22 @@ virtual environment. Executing</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">Creating portfolios</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">📥 Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-portfolios">📊 Creating Portfolios</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-builder-object">Create the builder object</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-through-time">Loop through time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-portfolio">Build the portfolio</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">Analytics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uv">uv</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo">marimo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics">📈 Analytics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development">🛠️ Development</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uv-package-manager">UV Package Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#marimo-notebooks">Marimo Notebooks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">📚 Documentation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing">🤝 Contributing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">📄 License</a></li>
 </ul>
   </nav></div>
 
