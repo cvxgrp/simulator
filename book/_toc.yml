@@ -1,8 +1,15 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
+# This file defines the structure and organization of the Jupyter Book
+
+# Format specification - using the Jupyter Book format
 format: jb-book
+
+# Root document - the landing/home page of the book
 root: docs/index
+
+# Chapters section - defines the main sections of the book
 chapters:
-    - file: docs/api
-    - file: docs/reports
-    - file: docs/marimo
+    - file: docs/api      # API documentation generated from source code
+    - file: docs/reports  # Jupyter notebook reports and examples
+    - file: docs/marimo   # Interactive marimo notebooks

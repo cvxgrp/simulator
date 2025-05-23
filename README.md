@@ -8,41 +8,43 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/cvxgrp/simulator)
 
+A simple yet powerful simulator for investment strategies and portfolio backtesting.
+
 Given a universe of $m$ assets we are given prices for each of them at
 time $t_1, t_2, \ldots t_n$, e.g. we operate using an $n \times m$ matrix where
 each column corresponds to a particular asset.
 
 In a backtest we iterate in time (e.g. row by row) through the matrix and
-allocate positions to all or some of the assets. This tool shall help to
+allocate positions to all or some of the assets. This tool helps to
 simplify the accounting. It keeps track of the available cash,
 the profits achieved, etc.
 
 ![Analytics](https://raw.githubusercontent.com/cvxgrp/simulator/main/newplot.png)
 
-## Installation
+## 📥 Installation
 
-It is possible to install cvxsimulator via
+Install cvxsimulator via pip:
 
 ```bash
 pip install cvxsimulator
 ```
 
-## Creating portfolios
+## 📊 Creating Portfolios
 
-The simulator shall be completely agnostic as to the trading policy/strategy.
+The simulator is completely agnostic to the trading policy/strategy.
 Our approach follows a rather common pattern:
 
-* [Create the builder object](#create-the-builder-object)
-* [Loop through time](#loop-through-time)
-* [Build the portfolio](#build-the-portfolio)
+- [Create the builder object](#create-the-builder-object)
+- [Loop through time](#loop-through-time)
+- [Build the portfolio](#build-the-portfolio)
 
-We demonstrate those steps with somewhat silly policies.
+We demonstrate these steps with simple example policies.
 They are never good strategies, but are always valid ones.
 
 ### Create the builder object
 
 The user defines a builder object by loading prices
-and initialize the amount of cash used in an experiment:
+and initializing the amount of cash used in an experiment:
 
 ```python
 import pandas as pd
@@ -53,7 +55,7 @@ b = Builder(prices=prices, initial_aum=1e6)
 ```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
-each column in frame.
+each column in the frame.
 There can be no NaNs hiding in the middle of any time series.
 
 It is also possible to specify a model for trading costs.
@@ -68,6 +70,8 @@ universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
+import numpy as np
+
 for t, state in b:
     # pick two assets at random
     pair = np.random.choice(state.assets, 2, replace=False)
@@ -88,7 +92,7 @@ The state gives access to the currently available cash, the current prices
 and the current valuation of all holdings.
 
 Here's a slightly more realistic loop. Given a set of $4$ assets we want to
-implemenent the popular $1/n$ strategy.
+implement the popular $1/n$ strategy.
 
 ```python
 for t, state in b:
@@ -110,48 +114,76 @@ for t, state in b:
 
 ### Build the portfolio
 
-Once finished it is possible to build the portfolio object
+Once finished it is possible to build the portfolio object:
 
 ```python
 portfolio = b.build()
 ```
 
-## Analytics
+## 📈 Analytics
 
 The portfolio object supports further analysis and exposes
-a number of properties, e.g.
+a number of properties, e.g.:
 
 ```python
-portfolio.nav
-portfolio.cash
-portfolio.equity
+portfolio.nav  # Net Asset Value
+portfolio.cash  # Cash position
+portfolio.equity  # Equity value
 ```
 
-It is possible to perform
+It is possible to generate a snapshot of the portfolio:
 
 ```python
 portfolio.snapshot()
 ```
 
-## uv
+## 🛠️ Development
 
-Starting with
+### UV Package Manager
+
+Start with:
 
 ```bash
 make install
 ```
 
-will install [uv](https://github.com/astral-sh/uv) and create
+This will install [uv](https://github.com/astral-sh/uv) and create
 the virtual environment defined in
 pyproject.toml and locked in uv.lock.
 
-## marimo
+### Marimo Notebooks
 
 We install [marimo](https://marimo.io) on the fly within the aforementioned
-virtual environment. Executing
+virtual environment. Execute:
 
 ```bash
 make marimo
 ```
 
-will install and start marimo.
+This will install and start marimo for interactive notebook development.
+
+## 📚 Documentation
+
+- Full documentation is available at [cvxgrp.org/simulator/book](https://www.cvxgrp.org/simulator/book)
+- API reference can be found in the documentation
+- Example notebooks are included in the repository under the `book` directory
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can contribute:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature-name`
+5. Open a pull request
+
+Please make sure to update tests as appropriate and follow the
+code style of the project.
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see
+the [LICENSE](LICENSE) file for details.
+
+Copyright 2023 Stanford University Convex Optimization Group
