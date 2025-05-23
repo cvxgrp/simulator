@@ -1,25 +1,33 @@
+# Continuous Integration workflow to ensure code quality and compatibility
 name: "CI"
 
+# Trigger workflow on push events
 on:
 - push
 
 jobs:
+  # Run tests across multiple platforms and Python versions
   test:
-    # The type of runner that the job will run on
+    # The type of runner that the job will run on - determined by matrix strategy
     runs-on: ${{ matrix.os }}
 
+    # Define test matrix for cross-platform and multi-version testing
     strategy:
       matrix:
+        # Test on both Ubuntu and Windows
         os: [ ubuntu-latest, windows-latest ]
+        # Test across multiple Python versions for compatibility
         python-version: [ '3.10', '3.11', '3.12', '3.13' ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Set up Python environment with dependencies for the specified version
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
         with:
           python-version: ${{ matrix.python-version }}
 
+      # Run the test suite
       - uses: cvxgrp/.github/actions/test@v2.2.8
         with:
           tests-folder: 'src/tests'

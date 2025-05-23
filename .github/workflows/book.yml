@@ -1,52 +1,70 @@
+# Workflow for building documentation and running tests
 name: "book"
 
+# Trigger workflow on push events
 on:
 - push
 
 jobs:
+  # Process marimo notebooks
   marimo:
     runs-on: "ubuntu-latest"
     steps:
+      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
 
+      # Run marimo notebooks processing
       - uses: cvxgrp/.github/actions/marimo@v2.2.8
 
+  # Generate API documentation using pdoc
   pdoc:
     runs-on: "ubuntu-latest"
     steps:
+      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
 
+      # Generate API documentation for the source code
       - uses: cvxgrp/.github/actions/pdoc@v2.2.8
         with:
           source-folder: 'src/cvx'
 
+  # Run tests with coverage reporting
   test:
     runs-on: "ubuntu-latest"
     steps:
+      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
 
+      # Run tests and generate coverage report
       - uses: cvxgrp/.github/actions/coverage@v2.2.8
         with:
           tests-folder: 'src/tests'
           source-folder: 'src/cvx'
 
+  # Process Jupyter notebooks
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
+      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: cvxgrp/.github/actions/environment@v2.2.8
 
+      # Run Jupyter notebook processing
       - uses: cvxgrp/.github/actions/jupyter@v2.2.8
 
+  # Build the final documentation book
   book:
     runs-on: "ubuntu-latest"
+    # This job runs after all other jobs have completed successfully
     needs: [test, pdoc, jupyter, marimo]
 
+    # Need write permissions to push the built book to the repository
     permissions:
       contents: write
 
     steps:
+      # Build and deploy the documentation book
       - uses: cvxgrp/.github/actions/book@v2.2.8
