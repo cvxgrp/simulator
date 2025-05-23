@@ -1,4 +1,4 @@
-# 🚀 [cvxsimulator](https://www.cvxgrp.org/simulator/book)
+# [cvxsimulator](https://www.cvxgrp.org/simulator/book)
 
 [![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
@@ -70,6 +70,8 @@ universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
+import numpy as np
+
 for t, state in b:
     # pick two assets at random
     pair = np.random.choice(state.assets, 2, replace=False)
