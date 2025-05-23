@@ -17,7 +17,5 @@ Utility functions for the CVX Simulator package.
 This module provides various utility functions used throughout the simulator:
 - grid: Functions for resampling time series data to a coarser grid
 - interpolation: Functions for interpolating missing values in time series
-- metric: Functions for calculating performance metrics like Sharpe ratio
-- month: Functions for creating monthly performance tables
 - rescale: Functions for converting between returns and prices
 """
