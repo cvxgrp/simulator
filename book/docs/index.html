@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>🚀 cvxsimulator &#8212; cvxsimulator</title>
+    <title>cvxsimulator &#8212; cvxsimulator</title>
   
   
   
@@ -173,7 +173,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    🚀 cvxsimulator
+                    cvxsimulator
                 </a>
             </li>
         </ul>
@@ -366,7 +366,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>🚀 cvxsimulator</h1>
+    <h1>cvxsimulator</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -404,7 +404,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cvxsimulator">
-<h1>🚀 <a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Link to this heading">#</a></h1>
+<h1><a class="reference external" href="https://www.cvxgrp.org/simulator/book">cvxsimulator</a><a class="headerlink" href="#cvxsimulator" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://badge.fury.io/py/cvxsimulator"><img alt="PyPI version" src="https://badge.fury.io/py/cvxsimulator.svg" /></a>
 <a class="reference external" href="https://github.com/cvxgrp/simulator/blob/master/LICENSE"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" /></a>
 <a class="reference external" href="https://pepy.tech/project/cvxsimulator"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/cvxsimulator?period=month&amp;units=international_system&amp;left_color=black&amp;right_color=orange&amp;left_text=PyPI%20downloads%20per%20month" /></a>
@@ -462,7 +462,9 @@ we construct the actual portfolio.</p>
 Let’s start with a first strategy. Each day we choose two names from the
 universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
     <span class="c1"># pick two assets at random</span>
     <span class="n">pair</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">assets</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># compute the pair</span>
