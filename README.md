@@ -1,4 +1,4 @@
-# [cvxsimulator](https://www.cvxgrp.org/simulator/book)
+# 🔄 [cvxsimulator](https://www.cvxgrp.org/simulator/book)
 
 [![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
