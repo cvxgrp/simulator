@@ -1,5 +1,7 @@
 # Workflow for code quality checks and dependency analysis
 name: pre-commit
+permissions:
+  contents: read
 
 # Trigger workflow on push events
 on:
