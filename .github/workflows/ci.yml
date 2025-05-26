@@ -1,5 +1,7 @@
 # Continuous Integration workflow to ensure code quality and compatibility
 name: "CI"
+permissions:
+  contents: read
 
 # Trigger workflow on push events
 on:
