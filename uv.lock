@@ -226,12 +226,12 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "clarabel", marker = "extra == 'dev'", specifier = ">=0.9.0" },
-    { name = "cvxpy-base", specifier = ">=1.6.0" },
-    { name = "jquantstats", specifier = ">=0.0.14" },
+    { name = "cvxpy-base", specifier = ">=1.5.1" },
+    { name = "jquantstats", specifier = ">=0.0.15" },
     { name = "loguru", marker = "extra == 'dev'" },
-    { name = "numpy", specifier = ">=2.1.3" },
+    { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
-    { name = "polars", specifier = ">=1.29.0" },
+    { name = "polars", specifier = ">=1.18.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.0.0" },
@@ -289,7 +289,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.0.14"
+version = "0.0.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "kaleido" },
@@ -300,9 +300,9 @@ dependencies = [
     { name = "pyarrow" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ea/58/5281ba43db44bb57eec5c9c67973c41957935ff4ffc6bc40c55ee83a6f79/jquantstats-0.0.14.tar.gz", hash = "sha256:e4aec81f833867145d008f127df3d0de4d2660f963811d231c817386e57c526f", size = 17330, upload-time = "2025-05-23T12:08:24.809Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/9b/2c87de5e99489dc9ec6649c9ae1255229bcba06d44a9581066458550ba03/jquantstats-0.0.15.tar.gz", hash = "sha256:a31b1de6fc515932f3860c34281b9c430d28fff43d4fc39e29037613377a023e", size = 17335, upload-time = "2025-05-29T19:11:58.401Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/10/29/20a2e8e7ba2b941c6865502f224a4b7653a1b95b091747f521eb9b9a87e9/jquantstats-0.0.14-py3-none-any.whl", hash = "sha256:0b6a953a44686a9e7830400fb9e81afb5031848b8b36498c12fcf387f80ea095", size = 20538, upload-time = "2025-05-23T12:08:23.074Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/97/cf3084719265865d234b8f9b8e1fe7d0a406a02507e0d17c12c74e38c284/jquantstats-0.0.15-py3-none-any.whl", hash = "sha256:18ebfa84e25f8074f2ed8ebe614471b4d4c5664c3ac11f16dabc8d04d31c16ee", size = 20535, upload-time = "2025-05-29T19:11:57.103Z" },
 ]
 
 [[package]]
