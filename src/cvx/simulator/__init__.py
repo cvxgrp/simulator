@@ -24,8 +24,17 @@ Main components:
 - State: Represents the current state of a portfolio during simulation
 - interpolate: Utility function for interpolating missing values in time series
 """
+from importlib.metadata import version
+__version__ = version("cvxsimulator")
 
 from .builder import Builder
 from .portfolio import Portfolio
 from .state import State
 from .utils.interpolation import interpolate
+
+__all__ = [
+    "Builder",
+    "Portfolio",
+    "State",
+    "interpolate"
+]
