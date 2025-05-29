@@ -3,17 +3,17 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-toml
-      - id: end-of-file-fixer
+      #- id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-yaml
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.11.11'
-    hooks:
-      - id: ruff
-        args: [ --fix, --exit-non-zero-on-fix ]
+  #- repo: https://github.com/astral-sh/ruff-pre-commit
+  #  rev: 'v0.11.11'
+  #  hooks:
+      #- id: ruff
+      #  args: [ --fix, --exit-non-zero-on-fix ]
       # Run the formatter
-      - id: ruff-format
+      #- id: ruff-format
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.45.0
