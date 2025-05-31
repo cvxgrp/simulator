@@ -6,11 +6,9 @@ authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "cvxpy-base>=1.5.1",
-    "jquantstats>=0.0.15",
+    "jquantstats>=0.0.17",
     "numpy>=2.0",
     "pandas>=2.2.3",
-    "polars>=1.18.0",
 ]
 
 [project.urls]
@@ -18,6 +16,7 @@ repository = "https://github.com/cvxgrp/simulator"
 
 [project.optional-dependencies]
 dev = [
+    "cvxpy-base>=1.5.1",
     "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "pre-commit>=4.0.1",
@@ -44,7 +43,7 @@ build-backend = "hatchling.build"
 packages = ["src/cvx"]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["cvxpy-base", "polars", "jquantstats"]
+DEP002 = ["jquantstats"]
 
 [tool.deptry]
 # see https://deptry.com/usage/#pep-621-dev-dependency-groups
