@@ -6,11 +6,9 @@ authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    #"cvxpy-base>=1.5.1",
     "jquantstats>=0.0.17",
     "numpy>=2.0",
     "pandas>=2.2.3",
-    #"polars>=1.18.0",
 ]
 
 [project.urls]
