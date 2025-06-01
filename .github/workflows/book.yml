@@ -1,6 +1,10 @@
 # Workflow for building documentation and running tests
 name: "book"
 
+# Set default permissions for all jobs
+permissions:
+  contents: read
+
 # Trigger workflow on push events
 on:
 - push
