@@ -9,7 +9,7 @@ permissions:
 on:
   push:
     branches:
-      main
+      - main
 
 jobs:
   # Process marimo notebooks
