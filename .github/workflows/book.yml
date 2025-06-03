@@ -7,7 +7,9 @@ permissions:
 
 # Trigger workflow on push events
 on:
-- push
+  push:
+    branches:
+      - main
 
 jobs:
   # Process marimo notebooks
