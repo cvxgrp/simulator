@@ -18,10 +18,13 @@ This module provides functions for interpolating missing values in time series
 and validating that time series don't have missing values in the middle.
 """
 
+from typing import Union
+
 import pandas as pd
+import polars as pl
 
 
-def interpolate(ts: pd.Series) -> pd.Series:
+def interpolate(ts: Union[pd.Series, pl.Series]) -> Union[pd.Series, pl.Series]:
     """
     Interpolate missing values in a time series between the first and last valid indices.
 
@@ -30,12 +33,12 @@ def interpolate(ts: pd.Series) -> pd.Series:
 
     Parameters
     ----------
-    ts : pd.Series
+    ts : Union[pd.Series, pl.Series]
         The time series to interpolate
 
     Returns
     -------
-    pd.Series
+    Union[pd.Series, pl.Series]
         The interpolated time series
 
     Examples
@@ -51,14 +54,44 @@ def interpolate(ts: pd.Series) -> pd.Series:
     4    5.0
     dtype: float64
     """
-    first = ts.first_valid_index()
-    last = ts.last_valid_index()
+    # Handle pandas Series
+    if isinstance(ts, pd.Series):
+        first = ts.first_valid_index()
+        last = ts.last_valid_index()
 
-    ts.loc[first:last] = ts.loc[first:last].ffill()
-    return ts
+        if first is not None and last is not None:
+            ts.loc[first:last] = ts.loc[first:last].ffill()
+        return ts
+
+    # Handle polars Series
+    elif isinstance(ts, pl.Series):
+        # Find first and last non-null indices
+        non_null_indices = ts.is_not_null().arg_true()
+
+        if len(non_null_indices) > 0:
+            first = non_null_indices[0]
+            last = non_null_indices[-1]
+
+            # Create a new series with the same values
+            result = ts.clone()
+
+            # Get the values as a list
+            values = result.to_list()
+
+            # Fill forward in the range from first to last
+            for i in range(first + 1, last + 1):
+                if values[i] is None:
+                    values[i] = values[i - 1]
+
+            # Create a new series with the filled values
+            return pl.Series(values)
+        return ts
+
+    else:
+        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")
 
 
-def valid(ts: pd.Series) -> bool:
+def valid(ts: Union[pd.Series, pl.Series]) -> bool:
     """
     Check if a time series has no missing values between the first and last valid indices.
 
@@ -67,7 +100,7 @@ def valid(ts: pd.Series) -> bool:
 
     Parameters
     ----------
-    ts : pd.Series
+    ts : Union[pd.Series, pl.Series]
         The time series to check
 
     Returns
@@ -87,6 +120,22 @@ def valid(ts: pd.Series) -> bool:
     >>> valid(ts2)
     False
     """
-    # Check if the series with NaNs dropped has the same indices as the interpolated series with NaNs dropped
-    # If they're the same, there are no NaNs in the middle of the series
-    return (ts.dropna().index).equals(interpolate(ts).dropna().index)
+    # Handle pandas Series
+    if isinstance(ts, pd.Series):
+        # Check if the series with NaNs dropped has the same indices as the interpolated series with NaNs dropped
+        # If they're the same, there are no NaNs in the middle of the series
+        return (ts.dropna().index).equals(interpolate(ts).dropna().index)
+
+    # Handle polars Series
+    elif isinstance(ts, pl.Series):
+        # Get indices of non-null values in original series
+        original_non_null = ts.is_not_null().arg_true()
+
+        # Get indices of non-null values in interpolated series
+        interpolated_non_null = interpolate(ts).is_not_null().arg_true()
+
+        # If they're the same, there are no nulls in the middle of the series
+        return original_non_null.equals(interpolated_non_null)
+
+    else:
+        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")
