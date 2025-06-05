@@ -9,8 +9,7 @@ dependencies = [
     "jquantstats>=0.0.17",
     "numpy>=2.0",
     "pandas>=2.2.3",
-    "polars>=1.24.0",
-    "narwhals>=1.41.0"
+    "polars>=1.24.0"
 ]
 
 [project.urls]
