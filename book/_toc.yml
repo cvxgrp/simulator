@@ -12,7 +12,6 @@ root: docs/index
 chapters:
     - file: docs/api      # API documentation generated from source code
     - file: docs/reports  # Jupyter notebook reports and examples
-    - file: docs/marimo   # Interactive marimo notebooks
 
     - url: https://cvxgrp.org/simulator/marimo/Balanced/index.html
       title: 1/n portfolios
