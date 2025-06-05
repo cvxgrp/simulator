@@ -21,9 +21,9 @@ def prices(resource_dir):
 
 
 @pytest.fixture()
-def nav():
+def nav(resource_dir):
     return pd.read_csv(
-        Path(__file__).parent / "resources" / "nav.csv",
+        resource_dir / "nav.csv",
         index_col=0,
         parse_dates=True,
         header=0,
