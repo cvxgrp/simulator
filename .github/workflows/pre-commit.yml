@@ -14,10 +14,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.69
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run deptry to analyze dependencies and detect issues
-      - uses: tschm/cradle/actions/deptry@v0.1.69
+      - uses: tschm/cradle/actions/deptry@v0.1.71
         with:
           source-folder: 'src/cvx'
 
@@ -26,4 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Run all configured pre-commit hooks
-      - uses: tschm/cradle/actions/pre-commit@v0.1.69
+      - uses: tschm/cradle/actions/pre-commit@v0.1.71
