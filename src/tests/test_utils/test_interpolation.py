@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from cvx.simulator.utils.interpolation import interpolate, valid
+from cvx.simulator.utils.interpolation import interpolate, interpolate_pl, valid, valid_pl
 
 
 def test_interpolate_pandas() -> None:
@@ -81,8 +81,8 @@ def test_interpolate_polars() -> None:
         None,
     ]
     ts = pl.Series(data)
-    a = interpolate(ts)
-    assert valid(a)
+    a = interpolate_pl(ts)
+    assert valid_pl(a)
 
 
 def test_valid_pandas() -> None:
@@ -104,8 +104,8 @@ def test_valid_polars() -> None:
     """
     # Series with nulls only at beginning and end - should be valid
     ts1 = pl.Series([None, 1, 2, 3, None])
-    assert valid(ts1)
+    assert valid_pl(ts1)
 
     # Series with null in the middle - should not be valid
     ts2 = pl.Series([1, 2, None, 4, 5])
-    assert not valid(ts2)
+    assert not valid_pl(ts2)
