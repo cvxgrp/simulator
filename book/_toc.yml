@@ -19,3 +19,9 @@ chapters:
 
     - url: https://cvxgrp/simulator/marimo/monkey/index.html
       title: monkey portfolios
+
+    - url: https://cvxgrp/simulator/marimo/pairs/index.html
+      title: Pairs trading
+
+    - url: https://cvxgrp/simulator/marimo/OneAssetFadingOut/index.html
+      title: One asset fading away
