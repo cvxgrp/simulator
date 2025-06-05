@@ -210,3 +210,92 @@ def valid_pl(ts: pl.Series) -> bool:
     # If all values between first and last valid indices are non-null,
     # then the count of non-null values should equal the range size
     return len([i for i in non_null_indices if first <= i <= last]) == expected_count
+
+
+def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Interpolate missing values in a polars DataFrame between the first and last valid indices for each column.
+
+    This function applies interpolate_pl to each column of a DataFrame,
+    filling forward (ffill) missing values in each column, but only
+    between the first and last valid indices. Values outside this range remain null.
+
+    Parameters
+    ----------
+    df : pl.DataFrame
+        The DataFrame to interpolate
+
+    Returns
+    -------
+    pl.DataFrame
+        The interpolated DataFrame
+
+    Examples
+    --------
+    >>> import polars as pl
+    >>> df = pl.DataFrame({
+    ...     'A': [1, None, None, 4, 5],
+    ...     'B': [None, 2, None, 4, None]
+    ... })
+    >>> interpolate_df_pl(df)
+    shape: (5, 2)
+    ┌─────┬─────┐
+    │ A   ┆ B   │
+    │ --- ┆ --- │
+    │ f64 ┆ f64 │
+    ╞═════╪═════╡
+    │ 1   ┆ null│
+    │ 1   ┆ 2   │
+    │ 1   ┆ 2   │
+    │ 4   ┆ 4   │
+    │ 5   ┆ null│
+    └─────┴─────┘
+    """
+    # Apply interpolate_pl to each column
+    result = {}
+    for col in df.columns:
+        result[col] = interpolate_pl(df[col])
+
+    return pl.DataFrame(result)
+
+
+def valid_df_pl(df: pl.DataFrame) -> bool:
+    """
+    Check if a polars DataFrame has no missing values between the first and last valid indices for each column.
+
+    This function verifies that each column in the DataFrame doesn't have any null values in the middle.
+    It's acceptable to have nulls at the beginning or end of each column.
+
+    Parameters
+    ----------
+    df : pl.DataFrame
+        The DataFrame to check
+
+    Returns
+    -------
+    bool
+        True if all columns in the DataFrame have no missing values between their first and last valid indices,
+        False otherwise
+
+    Examples
+    --------
+    >>> import polars as pl
+    >>> df1 = pl.DataFrame({
+    ...     'A': [None, 1, 2, 3, None],  # Nulls only at beginning and end
+    ...     'B': [None, 2, 3, 4, None]   # Nulls only at beginning and end
+    ... })
+    >>> valid_df_pl(df1)
+    True
+    >>> df2 = pl.DataFrame({
+    ...     'A': [1, 2, None, 4, 5],     # Null in the middle
+    ...     'B': [1, 2, 3, 4, 5]         # No nulls
+    ... })
+    >>> valid_df_pl(df2)
+    False
+    """
+    # Check each column
+    for col in df.columns:
+        if not valid_pl(df[col]):
+            return False
+
+    return True
