@@ -43,8 +43,8 @@ install: $(VENV_MARKER) ## Install all dependencies using uv
 
 fmt: install ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uv run pre-commit install  # Install pre-commit hooks into the git repository
-	@uv run pre-commit run --all-files  # Run all pre-commit hooks on all files
+	@uvx pre-commit install          # Install pre-commit hooks into the git repository
+	@uvx pre-commit run --all-files  # Run all pre-commit hooks on all files
 
 ##@ Testing
 # This section contains targets for running tests and generating coverage reports

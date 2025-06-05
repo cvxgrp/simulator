@@ -15,15 +15,31 @@ jobs:
   # Process marimo notebooks
   marimo:
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
     steps:
-      # Set up Python environment with dependencies
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+      # Step: Set up the virtual environment
+      - name: "Build the virtual environment"
+        uses: tschm/cradle/actions/environment@v0.1.71
 
-      # Run marimo notebooks processing
-      - uses: cvxgrp/.github/actions/marimo@v2.2.8
+      - name: Export notebook via wasm
+        run: |
+          uv pip install --no-cache-dir marimo
+
+          # export all .py files in book/marimo directory
+          for py_file in book/marimo/*.py; do
+            if [ -f "$py_file" ]; then
+              filename=$(basename "$py_file" .py)
+              echo "Processing $py_file"
+              mkdir -p "artifacts/marimo/$filename"
+              uv run marimo export html-wasm "$py_file" -o "artifacts/marimo/$filename/index.html" --mode edit
+            fi
+          done
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: marimo
+          path: artifacts/marimo
+          retention-days: 1
 
   # Generate API documentation using pdoc
   pdoc:
@@ -33,10 +49,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Generate API documentation for the source code
-      - uses: cvxgrp/.github/actions/pdoc@v2.2.8
+      - uses: tschm/cradle/actions/pdoc@v0.1.71
         with:
           source-folder: 'src/cvx'
 
@@ -48,10 +64,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run tests and generate coverage report
-      - uses: cvxgrp/.github/actions/coverage@v2.2.8
+      - uses: tschm/cradle/actions/coverage@v0.1.71
         with:
           tests-folder: 'src/tests'
           source-folder: 'src/cvx'
@@ -64,21 +80,26 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run Jupyter notebook processing
-      - uses: cvxgrp/.github/actions/jupyter@v2.2.8
+      - uses: tschm/cradle/actions/jupyter@v0.1.71
 
-  # Build the final documentation book
   book:
     runs-on: "ubuntu-latest"
-    # This job runs after all other jobs have completed successfully
+    # This job depends on the completion of test, pdoc, and jupyter jobs
     needs: [test, pdoc, jupyter, marimo]
 
-    # Need write permissions to push the built book to the repository
+    environment:
+      name: github-pages
+
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
 
     steps:
-      # Build and deploy the documentation book
-      - uses: cvxgrp/.github/actions/book@v2.2.8
+      # Step: Upload the generated documentation book
+      # Skipped when running locally with 'act' to prevent accidental deployments
+      - name: Upload the book
+        uses: tschm/cradle/actions/book@v0.1.71
