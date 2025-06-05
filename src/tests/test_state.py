@@ -7,8 +7,12 @@ positions, prices, cash, and other portfolio metrics, and that it updates these
 values correctly when the state changes.
 """
 
+import datetime
+
 import numpy as np
 import pandas as pd
+import polars as pl
+import polars.testing as pdt
 import pytest
 
 from cvx.simulator import State
@@ -29,8 +33,21 @@ def prices() -> pd.DataFrame:
     """
     return pd.DataFrame(
         columns=["A", "B", "C", "D"],
-        index=pd.Index([pd.Timestamp("2020-01-01"), pd.Timestamp("2020-01-30")]),
+        index=pd.Index([datetime.date(2020, 1, 1), datetime.date(2020, 1, 30)], name="date"),
         data=[[1.0, 2.0, 3.0, 4.0], [1.3, 2.3, 2.7, 4.2]],
+    )
+
+
+@pytest.fixture()
+def prices_pl() -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "date": [datetime.date(2020, 1, 1), datetime.date(2020, 1, 30)],
+            "A": [1.0, 1.3],
+            "B": [2.0, 2.3],
+            "C": [3.0, 2.7],
+            "D": [4.0, 4.2],
+        }
     )
 
 
@@ -55,6 +72,42 @@ def state(prices: pd.DataFrame) -> State:
     state = State()
     state.prices = prices.iloc[0]
     return state
+
+
+@pytest.fixture()
+def state_pl(prices_pl: pl.DataFrame) -> State:
+    """
+    Create a State fixture for testing.
+
+    This fixture creates a State instance and initializes it with the first
+    row of price data from the prices fixture.
+
+    Parameters
+    ----------
+    prices : pd.DataFrame
+        The price data fixture
+
+    Returns
+    -------
+    State
+        A State instance initialized with the first row of price data
+    """
+    state = State()
+    state.prices = pd.Series(
+        {col: prices_pl[col][0] for col in prices_pl.columns if col != "date"}, name=prices_pl["date"][0]
+    )
+
+    return state
+
+
+def test_prices(prices: pd.DataFrame, prices_pl: pl.DataFrame) -> None:
+    left = pl.from_pandas(prices.reset_index())
+    right = prices_pl
+    pdt.assert_frame_equal(left, right)
+
+
+def test_states(state: State, state_pl: State) -> None:
+    pd.testing.assert_series_equal(state.prices, state_pl.prices)
 
 
 def test_assets_partial(prices: pd.DataFrame) -> None:

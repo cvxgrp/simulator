@@ -8,11 +8,11 @@ these metrics and provides the expected visualization capabilities.
 """
 
 import pandas as pd
+import polars as pl
+import polars.testing as pdt
 import pytest
 
 from cvx.simulator.portfolio import Portfolio
-
-# from cvx.simulator.utils.metric import sharpe
 
 
 @pytest.fixture()
@@ -37,6 +37,11 @@ def portfolio(prices: pd.DataFrame, nav: pd.Series) -> Portfolio:
     """
     units = pd.DataFrame(index=prices.index, columns=prices.columns, data=1.0)
     return Portfolio(prices=prices, units=units, aum=nav)
+
+
+def test_prices_polars(prices: pd.DataFrame, prices_pl: pl.DataFrame):
+    prices = pl.from_pandas(prices.reset_index())
+    pdt.assert_frame_equal(prices_pl, prices)
 
 
 def test_assets(portfolio: Portfolio, prices: pd.DataFrame) -> None:
