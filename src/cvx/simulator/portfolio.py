@@ -166,54 +166,6 @@ class Portfolio:
         return series
 
     @property
-    def highwater(self) -> pd.Series:
-        """
-        Get the high-water mark of the portfolio over time.
-
-        The high-water mark represents the highest value the portfolio has
-        reached up to each point in time.
-
-        Returns
-        -------
-        pd.Series
-            Series representing the high-water mark at each time point
-
-        Notes
-        -----
-        This is calculated using an expanding maximum of the NAV, which means
-        at each point in time, it shows the maximum NAV achieved up to that point.
-        This is commonly used to calculate drawdowns and performance fees.
-        """
-        series = self.nav.expanding(min_periods=1).max()
-        series.name = "Highwater"
-        return series
-
-    @property
-    def drawdown(self) -> pd.Series:
-        """
-        Get the drawdown of the portfolio over time.
-
-        Drawdown measures the decline in portfolio value from its previous
-        highest point (high-water mark) to the current point, expressed as
-        a fraction of the high-water mark.
-
-        Returns
-        -------
-        pd.Series
-            Series representing the drawdown at each time point
-
-        Notes
-        -----
-        Calculated as 1 - (NAV / high-water mark). A positive drawdown means
-        the portfolio is currently worth less than its high-water mark.
-        For example, a drawdown of 0.1 means the NAV is currently 90% of
-        the high-water mark.
-        """
-        series = 1.0 - self.nav / self.highwater
-        series.name = "Drawdown"
-        return series
-
-    @property
     def cashposition(self) -> pd.DataFrame:
         """
         Get the cash value of each position over time.

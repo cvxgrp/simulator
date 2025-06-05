@@ -225,29 +225,6 @@ def test_sharpe(portfolio: Portfolio) -> None:
 #     fig.show()
 
 
-def test_drawdown(portfolio: Portfolio) -> None:
-    """
-    Test that the drawdown and highwater properties calculate correctly.
-
-    This test verifies that:
-    1. The highwater property correctly calculates the expanding maximum of NAV
-    2. The drawdown property correctly calculates 1 - (NAV / highwater)
-
-    Parameters
-    ----------
-    portfolio : Portfolio
-        The Portfolio fixture to test
-    """
-    pd.testing.assert_series_equal(
-        portfolio.highwater,
-        portfolio.nav.expanding(min_periods=1).max(),
-        check_names=False,
-    )
-
-    drawdown = 1.0 - portfolio.nav / portfolio.highwater
-    pd.testing.assert_series_equal(portfolio.drawdown, drawdown, check_names=False)
-
-
 def test_monotonic() -> None:
     """
     Test that Portfolio initialization fails with non-monotonic index.
