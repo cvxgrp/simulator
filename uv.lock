@@ -209,6 +209,7 @@ dependencies = [
     { name = "jquantstats" },
     { name = "numpy" },
     { name = "pandas" },
+    { name = "polars" },
 ]
 
 [package.optional-dependencies]
@@ -230,6 +231,7 @@ requires-dist = [
     { name = "loguru", marker = "extra == 'dev'" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
+    { name = "polars", specifier = ">=1.24.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.0.0" },
