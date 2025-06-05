@@ -14,8 +14,8 @@ chapters:
     - file: docs/reports  # Jupyter notebook reports and examples
     - file: docs/marimo   # Interactive marimo notebooks
 
-    - url: https://tschm.github.io/jquantstats/marimo/Balanced/index.html
+    - url: https://cvxgrp/simulator/marimo/Balanced/index.html
       title: 1/n portfolios
 
-    - url: https://tschm.github.io/jquantstats/marimo/monkey/index.html
+    - url: https://cvxgrp/simulator/marimo/monkey/index.html
       title: monkey portfolios
