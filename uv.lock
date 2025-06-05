@@ -207,6 +207,7 @@ version = "0.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "jquantstats" },
+    { name = "narwhals" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "polars" },
@@ -229,6 +230,7 @@ requires-dist = [
     { name = "cvxpy-base", marker = "extra == 'dev'", specifier = ">=1.5.1" },
     { name = "jquantstats", specifier = ">=0.0.17" },
     { name = "loguru", marker = "extra == 'dev'" },
+    { name = "narwhals", specifier = ">=1.41.0" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "polars", specifier = ">=1.24.0" },
