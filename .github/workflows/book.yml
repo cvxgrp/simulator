@@ -20,10 +20,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run marimo notebooks processing
-      - uses: cvxgrp/.github/actions/marimo@v2.2.8
+      - uses: tschm/cradle/actions/marimo@v0.1.71
 
   # Generate API documentation using pdoc
   pdoc:
@@ -33,7 +33,7 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Generate API documentation for the source code
       - uses: cvxgrp/.github/actions/pdoc@v2.2.8
@@ -48,7 +48,7 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run tests and generate coverage report
       - uses: cvxgrp/.github/actions/coverage@v2.2.8
@@ -64,21 +64,26 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: cvxgrp/.github/actions/environment@v2.2.8
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Run Jupyter notebook processing
       - uses: cvxgrp/.github/actions/jupyter@v2.2.8
 
-  # Build the final documentation book
   book:
     runs-on: "ubuntu-latest"
-    # This job runs after all other jobs have completed successfully
+    # This job depends on the completion of test, pdoc, and jupyter jobs
     needs: [test, pdoc, jupyter, marimo]
 
-    # Need write permissions to push the built book to the repository
+    environment:
+      name: github-pages
+
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
 
     steps:
-      # Build and deploy the documentation book
-      - uses: cvxgrp/.github/actions/book@v2.2.8
+      # Step: Upload the generated documentation book
+      # Skipped when running locally with 'act' to prevent accidental deployments
+      - name: Upload the book
+        uses: tschm/cradle/actions/book@v0.1.71

@@ -14,7 +14,7 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.69hoo
+        uses: tschm/cradle/actions/environment@v0.1.69
 
       # Run deptry to analyze dependencies and detect issues
       - uses: tschm/cradle/actions/deptry@v0.1.69
