@@ -1,28 +1,26 @@
 import marimo
 
-__generated_with = "0.9.27"
+__generated_with = "0.13.15"
 app = marimo.App()
 
 
 @app.cell
-def __(mo):
+def _(mo):
     mo.md(r"""# Monkey portfolios""")
     return
 
 
 @app.cell
-def __(__file__):
-    from pathlib import Path
-
+def _():
+    import marimo as mo
     import numpy as np
     import pandas as pd
 
-    folder = Path(__file__).parent
-    return Path, folder, np, pd
+    return mo, np, pd
 
 
 @app.cell
-def __(pd):
+def _(pd):
     from cvx.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
@@ -30,13 +28,13 @@ def __(pd):
 
 
 @app.cell
-def __(folder, pd):
-    prices = pd.read_csv(folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True)
+def _(mo, pd):
+    prices = pd.read_csv(mo.notebook_location() / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True)
     return (prices,)
 
 
 @app.cell
-def __(Builder, np, prices):
+def _(Builder, np, prices):
     _builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
     for _time, _state in _builder:
@@ -54,7 +52,7 @@ def __(Builder, np, prices):
 
 
 @app.cell
-def __(Builder, np, prices):
+def _(Builder, np, prices):
     _builder = Builder(prices=prices, initial_aum=1000000.0)
     np.random.seed(42)
     for _time, _state in _builder:
@@ -70,13 +68,6 @@ def __(Builder, np, prices):
     _portfolio.snapshot()
 
     return
-
-
-@app.cell
-def __():
-    import marimo as mo
-
-    return (mo,)
 
 
 if __name__ == "__main__":

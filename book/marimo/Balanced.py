@@ -31,22 +31,21 @@ def _(mo):
 
 @app.cell
 def _():
-    from pathlib import Path
-
+    import marimo as mo
     import numpy as np
     import pandas as pd
 
     from cvx.simulator import Builder
 
-    folder = Path(__file__).parent
-
-    return Builder, folder, np, pd
+    return Builder, mo, np, pd
 
 
 @app.cell
-def _(folder, pd):
+def _(mo, pd):
     # load prices from flat csv file
-    prices = pd.read_csv(folder / "data" / "stock-prices.csv", header=0, index_col=0, parse_dates=True)
+    prices = pd.read_csv(
+        str(mo.notebook_location() / "data" / "stock-prices.csv"), header=0, index_col=0, parse_dates=True
+    )
     return (prices,)
 
 
@@ -220,13 +219,6 @@ def _(Builder, np, prices):
     _portfolio = _builder.build()
     _portfolio.snapshot()
     return
-
-
-@app.cell
-def _():
-    import marimo as mo
-
-    return (mo,)
 
 
 if __name__ == "__main__":
