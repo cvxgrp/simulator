@@ -41,12 +41,11 @@ def portfolio(prices: pd.DataFrame, nav: pd.Series) -> Portfolio:
 def test_prices_polars(prices: pd.DataFrame, prices_pl: pl.DataFrame):
     """Compare two dataframes by moving to polars and comparing.
 
-    Parameters
-    ----------
-    prices (pd.DataFrame): Input pandas DataFrame to be converted to a Polars DataFrame.
-    prices_pl (pl.DataFrame): Input Polars DataFrame to compare against.
+    Args:
+        prices (pd.DataFrame): Input pandas DataFrame to be converted to a Polars DataFrame.
+        prices_pl (pl.DataFrame): Input Polars DataFrame to compare against.
 
-    Raises
+    Raises:
     ------
     AssertionError: If the two dataframes are not equal after conversion.
 
@@ -56,18 +55,17 @@ def test_prices_polars(prices: pd.DataFrame, prices_pl: pl.DataFrame):
 
 
 def test_prices_pandas(prices: pd.DataFrame, prices_pl: pl.DataFrame):
-    """
-    Compare two dataframes by moving to pandas and comparing.
+    """Compare two dataframes by moving to pandas and comparing.
+
     This function compares a pandas DataFrame and a polars DataFrame after converting
     the polars DataFrame into a pandas DataFrame. Both DataFrames are expected to have
-    financial price data with identical structures, and this verifies their eq
+    financial price data with identical structures, and this verifies their eq.
 
-    Parameters
-    ----------
-    prices (pd.DataFrame): A pandas DataFrame containing price data.
-    prices_pl (pl.DataFrame): A polars DataFrame containing price data.
+    Args:
+        prices (pd.DataFrame): A pandas DataFrame containing price data.
+        prices_pl (pl.DataFrame): A polars DataFrame containing price data.
 
-    Raises
+    Raises:
     ------
     AssertionError: If the converted polars DataFrame does not match the pandas DataFrame.
 

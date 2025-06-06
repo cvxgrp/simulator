@@ -1,3 +1,17 @@
+"""Demonstration of portfolio behavior when an asset fades out.
+
+This module demonstrates how the CVX simulator handles the case where an asset
+becomes unavailable (fades out) during the simulation period. It creates a simple
+portfolio with two assets, A and B, where B becomes unavailable after a certain date.
+The portfolio is rebalanced to maintain equal weights among the available assets.
+
+The notebook shows:
+1. How to create a price dataset with missing values
+2. How to build a portfolio with the Builder class
+3. How the portfolio automatically adjusts when an asset fades out
+4. How to examine the resulting portfolio's prices, NAV, and weights
+"""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -6,12 +20,34 @@ app = marimo.App()
 
 @app.cell
 def _(mo):
+    """Display the title of the notebook.
+
+    Parameters
+    ----------
+    mo : marimo.Module
+        The marimo module object
+
+    """
     mo.md(r"""# One asset fading out""")
     return
 
 
 @app.cell
 def _():
+    """Import required libraries and modules.
+
+    This cell imports the necessary libraries and modules for the simulation:
+    - marimo: For notebook functionality
+    - numpy: For numerical operations
+    - pandas: For data manipulation
+    - Builder: From cvx.simulator for portfolio simulation
+
+    Returns
+    -------
+    tuple
+        A tuple containing the imported modules (Builder, mo, np, pd)
+
+    """
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -23,6 +59,29 @@ def _():
 
 @app.cell
 def _(mo, np, pd):
+    """Load and modify price data to simulate an asset fading out.
+
+    This cell:
+    1. Loads price data for two assets (A and B) from a CSV file
+    2. Modifies the data to make asset B fade out by setting its prices
+       to NaN on 2022-01-03 and 2022-01-04
+    3. Returns the modified price data
+
+    Parameters
+    ----------
+    mo : marimo.Module
+        The marimo module object
+    np : module
+        The numpy module
+    pd : module
+        The pandas module
+
+    Returns
+    -------
+    tuple
+        A tuple containing the modified prices DataFrame
+
+    """
     # two assets, A and B, constant price for A=100 and B=200
     prices = pd.read_csv(mo.notebook_location() / "data" / "prices.csv", header=0, index_col=0, parse_dates=True)
     prices.loc["2022-01-03", "B"] = np.nan
@@ -39,6 +98,30 @@ def _(mo):
 
 @app.cell
 def _(Builder, np, prices):
+    """Build a portfolio with equal weights that adapts to an asset fading out.
+
+    This cell:
+    1. Creates a Builder instance with the modified price data
+    2. Iterates through time, setting equal weights for all available assets
+       at each time step (automatically adapting when asset B fades out)
+    3. Builds and returns the final portfolio
+
+    Parameters
+    ----------
+    Builder : class
+        The Builder class from cvx.simulator
+    np : module
+        The numpy module
+    prices : pd.DataFrame
+        DataFrame of asset prices with dates as index and assets as columns,
+        where asset B fades out (has NaN values) on certain dates
+
+    Returns
+    -------
+    tuple
+        A tuple containing the built portfolio
+
+    """
     _builder = Builder(prices=prices, initial_aum=2000)
 
     for t, _state in _builder:
@@ -51,6 +134,17 @@ def _(Builder, np, prices):
 
 @app.cell
 def _(portfolio):
+    """Display the prices DataFrame from the portfolio.
+
+    This cell shows the price data in the portfolio, including the
+    missing values for asset B after it fades out.
+
+    Parameters
+    ----------
+    portfolio : Portfolio
+        The portfolio object built by the previous cell
+
+    """
     portfolio.prices
     return
 
@@ -63,6 +157,18 @@ def _(portfolio):
 
 @app.cell
 def _(portfolio):
+    """Display the portfolio weights over time.
+
+    This cell shows how the portfolio weights evolve over time,
+    particularly how the weights adjust when asset B fades out
+    (shifting from 50/50 to 100% in asset A).
+
+    Parameters
+    ----------
+    portfolio : Portfolio
+        The portfolio object built by the previous cell
+
+    """
     portfolio.weights
     return
 

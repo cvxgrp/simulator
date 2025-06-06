@@ -1,5 +1,4 @@
-"""
-Tests for the interpolation utility functions in the cvx.simulator package.
+"""Tests for the interpolation utility functions in the cvx.simulator package.
 
 This module contains tests for the interpolation utility functions, which are used
 for filling missing values in time series data. The tests verify that the interpolate
@@ -15,8 +14,7 @@ from cvx.simulator.utils.interpolation import interpolate, valid
 
 
 def test_interpolate_pandas() -> None:
-    """
-    Test that the interpolate function correctly fills missing values in a pandas Series.
+    """Test that the interpolate function correctly fills missing values in a pandas Series.
 
     This test creates a Series with NaN values at the beginning, middle, and end,
     applies the interpolate function to it, and verifies that the result is valid
@@ -51,8 +49,7 @@ def test_interpolate_pandas() -> None:
 
 
 def test_interpolate_polars() -> None:
-    """
-    Test that the interpolate function correctly fills missing values in a polars Series.
+    """Test that the interpolate function correctly fills missing values in a polars Series.
 
     This test creates a Series with null values at the beginning, middle, and end,
     applies the interpolate function to it, and verifies that the result is valid
@@ -86,9 +83,7 @@ def test_interpolate_polars() -> None:
 
 
 def test_valid_pandas() -> None:
-    """
-    Test that the valid function correctly identifies pandas Series with no missing values in the middle.
-    """
+    """Test that the valid function correctly identifies pandas Series with no missing values in the middle."""
     # Series with NaNs only at beginning and end - should be valid
     ts1 = pd.Series([np.nan, 1, 2, 3, np.nan])
     assert valid(ts1)
@@ -99,9 +94,7 @@ def test_valid_pandas() -> None:
 
 
 def test_valid_polars() -> None:
-    """
-    Test that the valid function correctly identifies polars Series with no missing values in the middle.
-    """
+    """Test that the valid function correctly identifies polars Series with no missing values in the middle."""
     # Series with nulls only at beginning and end - should be valid
     ts1 = pl.Series([None, 1, 2, 3, None])
     assert valid(ts1)

@@ -1,5 +1,4 @@
-"""
-Tests for the State class in the cvx.simulator package.
+"""Tests for the State class in the cvx.simulator package.
 
 This module contains tests for the State class, which represents the current state
 of a portfolio during simulation. The tests verify that the State correctly tracks
@@ -20,8 +19,7 @@ from cvx.simulator import State
 
 @pytest.fixture()
 def prices() -> pd.DataFrame:
-    """
-    Create a price data fixture for testing.
+    """Create a price data fixture for testing.
 
     This fixture creates a DataFrame with price data for four assets (A, B, C, D)
     at two time points (2020-01-01 and 2020-01-30).
@@ -30,6 +28,7 @@ def prices() -> pd.DataFrame:
     -------
     pd.DataFrame
         DataFrame with price data for testing
+
     """
     return pd.DataFrame(
         columns=["A", "B", "C", "D"],
@@ -40,6 +39,17 @@ def prices() -> pd.DataFrame:
 
 @pytest.fixture()
 def prices_pl() -> pl.DataFrame:
+    """Create a price data fixture for testing using Polars.
+
+    This fixture creates a Polars DataFrame with price data for four assets (A, B, C, D)
+    at two time points (2020-01-01 and 2020-01-30).
+
+    Returns
+    -------
+    pl.DataFrame
+        Polars DataFrame with price data for testing
+
+    """
     return pl.DataFrame(
         {
             "date": [datetime.date(2020, 1, 1), datetime.date(2020, 1, 30)],
@@ -53,8 +63,7 @@ def prices_pl() -> pl.DataFrame:
 
 @pytest.fixture()
 def state(prices: pd.DataFrame) -> State:
-    """
-    Create a State fixture for testing.
+    """Create a State fixture for testing.
 
     This fixture creates a State instance and initializes it with the first
     row of price data from the prices fixture.
@@ -68,6 +77,7 @@ def state(prices: pd.DataFrame) -> State:
     -------
     State
         A State instance initialized with the first row of price data
+
     """
     state = State()
     state.prices = prices.iloc[0]
@@ -76,21 +86,21 @@ def state(prices: pd.DataFrame) -> State:
 
 @pytest.fixture()
 def state_pl(prices_pl: pl.DataFrame) -> State:
-    """
-    Create a State fixture for testing.
+    """Create a State fixture for testing.
 
     This fixture creates a State instance and initializes it with the first
     row of price data from the prices fixture.
 
     Parameters
     ----------
-    prices : pd.DataFrame
-        The price data fixture
+    prices_pl : pl.DataFrame
+        The prices polars data fixture
 
     Returns
     -------
     State
         A State instance initialized with the first row of price data
+
     """
     state = State()
     state.prices = pd.Series(
@@ -101,18 +111,44 @@ def state_pl(prices_pl: pl.DataFrame) -> State:
 
 
 def test_prices(prices: pd.DataFrame, prices_pl: pl.DataFrame) -> None:
+    """Test that pandas and polars price data fixtures are equivalent.
+
+    This test verifies that the pandas DataFrame and polars DataFrame fixtures
+    contain the same price data by converting the pandas DataFrame to polars
+    and comparing the two.
+
+    Parameters
+    ----------
+    prices : pd.DataFrame
+        The pandas DataFrame price data fixture
+    prices_pl : pl.DataFrame
+        The polars DataFrame price data fixture
+
+    """
     left = pl.from_pandas(prices.reset_index())
     right = prices_pl
     pdt.assert_frame_equal(left, right)
 
 
 def test_states(state: State, state_pl: State) -> None:
+    """Test that pandas and polars state fixtures are equivalent.
+
+    This test verifies that the State instances created from pandas and polars
+    data sources have equivalent price data.
+
+    Parameters
+    ----------
+    state : State
+        The State fixture created from pandas DataFrame
+    state_pl : State
+        The State fixture created from polars DataFrame
+
+    """
     pd.testing.assert_series_equal(state.prices, state_pl.prices)
 
 
 def test_assets_partial(prices: pd.DataFrame) -> None:
-    """
-    Test that the assets property works with a subset of assets.
+    """Test that the assets property works with a subset of assets.
 
     This test verifies that the State.assets property correctly returns
     the subset of assets for which prices have been set.
@@ -121,6 +157,7 @@ def test_assets_partial(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     state = State()
     state.prices = prices[["A", "B", "C"]].iloc[0]
@@ -128,8 +165,7 @@ def test_assets_partial(prices: pd.DataFrame) -> None:
 
 
 def test_assets_full(state: State, prices: pd.DataFrame) -> None:
-    """
-    Test that the assets property works with all assets.
+    """Test that the assets property works with all assets.
 
     This test verifies that the State.assets property correctly returns
     all assets from the price data when all prices have been set.
@@ -140,13 +176,13 @@ def test_assets_full(state: State, prices: pd.DataFrame) -> None:
         The State fixture
     prices : pd.DataFrame
         The price data fixture
+
     """
     pd.testing.assert_index_equal(state.assets, prices.columns)
 
 
 def test_trade_no_init_pos(state: State) -> None:
-    """
-    Test trade calculation with no initial position.
+    """Test trade calculation with no initial position.
 
     This test verifies that the State correctly calculates trades when
     there is no initial position (i.e., the initial position is effectively zero).
@@ -155,14 +191,14 @@ def test_trade_no_init_pos(state: State) -> None:
     ----------
     state : State
         The State fixture
+
     """
     x = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}).sub(state.position, fill_value=0)
     pd.testing.assert_series_equal(x.dropna(), pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
 def test_gap(state: State, prices: pd.DataFrame) -> None:
-    """
-    Test that the days property correctly calculates time gaps.
+    """Test that the days property correctly calculates time gaps.
 
     This test verifies that the State.days property correctly calculates
     the number of days between consecutive time points.
@@ -173,6 +209,7 @@ def test_gap(state: State, prices: pd.DataFrame) -> None:
         The State fixture
     prices : pd.DataFrame
         The price data fixture
+
     """
     assert state.days == 0
     state.time = prices.index[0]
@@ -182,8 +219,7 @@ def test_gap(state: State, prices: pd.DataFrame) -> None:
 
 
 def test_set_position(state: State) -> None:
-    """
-    Test that the position property can be set correctly.
+    """Test that the position property can be set correctly.
 
     This test verifies that the State.position property can be set
     with a pandas Series and that the values are correctly stored.
@@ -192,14 +228,14 @@ def test_set_position(state: State) -> None:
     ----------
     state : State
         The State fixture
+
     """
     state.position = pd.Series({"B": 25.0, "C": -15.0, "D": 40.0})
     pd.testing.assert_series_equal(state.position.dropna(), pd.Series({"B": 25.0, "C": -15.0, "D": 40.0}))
 
 
 def test_mask() -> None:
-    """
-    Test that the mask property correctly identifies valid prices.
+    """Test that the mask property correctly identifies valid prices.
 
     This test verifies that the State.mask property correctly identifies
     which assets have valid (non-NaN) prices.
@@ -210,8 +246,7 @@ def test_mask() -> None:
 
 
 def test_init(prices: pd.DataFrame) -> None:
-    """
-    Test the initialization and updating of a State object.
+    """Test the initialization and updating of a State object.
 
     This comprehensive test verifies that:
     1. A new State with only AUM set has correct initial values
@@ -224,6 +259,7 @@ def test_init(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     state = State()
     state.aum = 1e4
@@ -276,8 +312,7 @@ def test_init(prices: pd.DataFrame) -> None:
 
 
 def test_cash_set_aum(state: State) -> None:
-    """
-    Test setting AUM directly.
+    """Test setting AUM directly.
 
     This test verifies that setting the AUM property directly correctly
     updates the AUM, cash, and NAV values.
@@ -286,6 +321,7 @@ def test_cash_set_aum(state: State) -> None:
     ----------
     state : State
         The State fixture
+
     """
     state.aum = 1e6
     assert state.aum == 1e6
@@ -294,8 +330,7 @@ def test_cash_set_aum(state: State) -> None:
 
 
 def test_cash_set_cash(state: State) -> None:
-    """
-    Test setting cash directly.
+    """Test setting cash directly.
 
     This test verifies that setting the cash property directly correctly
     updates the AUM, cash, and NAV values.
@@ -304,6 +339,7 @@ def test_cash_set_cash(state: State) -> None:
     ----------
     state : State
         The State fixture
+
     """
     state.cash = 1e6
     assert state.aum == 1e6
@@ -312,8 +348,7 @@ def test_cash_set_cash(state: State) -> None:
 
 
 def test_before_price() -> None:
-    """
-    Test an empty state before the prices are set.
+    """Test an empty state before the prices are set.
 
     This test verifies that a newly created State object has the expected
     default values for all properties before any prices are set.
@@ -336,8 +371,7 @@ def test_before_price() -> None:
 
 
 def test_after_price(prices: pd.DataFrame) -> None:
-    """
-    Test a state after the first prices are set.
+    """Test a state after the first prices are set.
 
     This test verifies that a State object has the expected values for all
     properties after prices are set but before any positions are established.
@@ -346,6 +380,7 @@ def test_after_price(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     state = State()
     state.prices = prices.iloc[0]

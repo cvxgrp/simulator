@@ -1,5 +1,4 @@
-"""
-Tests for achieving 100% coverage of the interpolation utility functions.
+"""Tests for achieving 100% coverage of the interpolation utility functions.
 
 This module contains additional tests for the interpolation utility functions
 to ensure 100% test coverage, focusing on functions and edge cases that are
@@ -20,9 +19,7 @@ from cvx.simulator.utils.interpolation import (
 
 
 def test_valid_df_pl_all_valid():
-    """
-    Test that valid_df_pl returns True when all columns in the DataFrame are valid.
-    """
+    """Test that valid_df_pl returns True when all columns in the DataFrame are valid."""
     # Create a DataFrame with valid columns
     df = pl.DataFrame(
         {
@@ -37,9 +34,7 @@ def test_valid_df_pl_all_valid():
 
 
 def test_valid_df_pl_one_invalid():
-    """
-    Test that valid_df_pl returns False when at least one column in the DataFrame is invalid.
-    """
+    """Test that valid_df_pl returns False when at least one column in the DataFrame is invalid."""
     # Create a DataFrame with one invalid column
     df = pl.DataFrame(
         {
@@ -54,9 +49,7 @@ def test_valid_df_pl_one_invalid():
 
 
 def test_interpolate_df_pl_with_different_types():
-    """
-    Test that interpolate_df_pl correctly handles a DataFrame with different types of columns.
-    """
+    """Test that interpolate_df_pl correctly handles a DataFrame with different types of columns."""
     # Create a DataFrame with different types of columns
     df = pl.DataFrame(
         {
@@ -82,9 +75,7 @@ def test_interpolate_df_pl_with_different_types():
 
 
 def test_interpolate_df_pl_empty_dataframe():
-    """
-    Test that interpolate_df_pl correctly handles an empty DataFrame.
-    """
+    """Test that interpolate_df_pl correctly handles an empty DataFrame."""
     # Create an empty DataFrame
     df = pl.DataFrame()
 
@@ -96,9 +87,7 @@ def test_interpolate_df_pl_empty_dataframe():
 
 
 def test_valid_df_pl_empty_dataframe():
-    """
-    Test that valid_df_pl correctly handles an empty DataFrame.
-    """
+    """Test that valid_df_pl correctly handles an empty DataFrame."""
     # Create an empty DataFrame
     df = pl.DataFrame()
 
@@ -107,9 +96,7 @@ def test_valid_df_pl_empty_dataframe():
 
 
 def test_interpolate_pl_with_one_value():
-    """
-    Test that interpolate_pl correctly handles a Series with only one non-null value.
-    """
+    """Test that interpolate_pl correctly handles a Series with only one non-null value."""
     # Create a Series with only one non-null value
     ts = pl.Series([None, 1, None])
 
@@ -121,9 +108,7 @@ def test_interpolate_pl_with_one_value():
 
 
 def test_valid_pl_with_all_nulls():
-    """
-    Test that valid_pl correctly handles a Series with all null values.
-    """
+    """Test that valid_pl correctly handles a Series with all null values."""
     # Create a Series with all null values
     ts = pl.Series([None, None, None])
 
@@ -132,9 +117,7 @@ def test_valid_pl_with_all_nulls():
 
 
 def test_interpolate_empty_pandas_series():
-    """
-    Test that interpolate correctly handles an empty pandas Series.
-    """
+    """Test that interpolate correctly handles an empty pandas Series."""
     # Create an empty pandas Series
     ts = pd.Series([])
 
@@ -146,9 +129,7 @@ def test_interpolate_empty_pandas_series():
 
 
 def test_valid_empty_pandas_series():
-    """
-    Test that valid correctly handles an empty pandas Series.
-    """
+    """Test that valid correctly handles an empty pandas Series."""
     # Create an empty pandas Series
     ts = pd.Series([])
 
@@ -157,9 +138,7 @@ def test_valid_empty_pandas_series():
 
 
 def test_interpolate_pl_empty_series():
-    """
-    Test that interpolate_pl correctly handles an empty polars Series.
-    """
+    """Test that interpolate_pl correctly handles an empty polars Series."""
     # Create an empty polars Series
     ts = pl.Series([], dtype=pl.Float64)
 
@@ -171,9 +150,7 @@ def test_interpolate_pl_empty_series():
 
 
 def test_valid_pl_empty_series():
-    """
-    Test that valid_pl correctly handles an empty polars Series.
-    """
+    """Test that valid_pl correctly handles an empty polars Series."""
     # Create an empty polars Series
     ts = pl.Series([], dtype=pl.Float64)
 

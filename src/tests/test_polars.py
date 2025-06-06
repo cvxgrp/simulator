@@ -1,4 +1,10 @@
-"""Testing polars functionality for later."""
+"""Tests for Polars DataFrame functionality in the cvx.simulator package.
+
+This module contains tests for working with Polars DataFrames, including iteration,
+index extraction, window operations, and conversion between Polars and Pandas.
+These tests verify that the package can correctly handle Polars DataFrames as an
+alternative to Pandas DataFrames.
+"""
 
 import pandas as pd
 import polars as pl

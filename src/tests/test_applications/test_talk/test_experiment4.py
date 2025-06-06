@@ -1,4 +1,4 @@
-"""test portfolio"""
+"""Test Experiment 4."""
 
 from __future__ import annotations
 
@@ -11,9 +11,7 @@ from cvx.simulator.portfolio import Portfolio
 
 # take two moving averages and apply the sign-function, adjust by volatility
 def f(prices, slow=96, fast=32, vola=96, clip=3):
-    """
-    construct cash position
-    """
+    """Construct cash position."""
     mu = np.tanh(prices.apply(returns_adjust, com=vola, clip=clip).cumsum().apply(osc, fast=fast, slow=slow))
     volatility = prices.pct_change().ewm(com=vola, min_periods=vola).std()
 
@@ -27,11 +25,11 @@ def f(prices, slow=96, fast=32, vola=96, clip=3):
 
 
 def test_portfolio(prices):
-    """
-    test portfolio
+    """Test portfolio.
 
     Args:
         prices: adjusted prices of futures
+
     """
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(prices), aum=1e8)
     assert portfolio.sharpe() == pytest.approx(0.9824232063067163)

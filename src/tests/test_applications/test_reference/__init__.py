@@ -1,2 +1,5 @@
-# This is a test related to the Markowitz reference implementation in
-# https://github.com/cvxgrp/markowitz-reference
+"""Test the Markowitz reference implementation.
+
+This package contains tests for the Markowitz portfolio optimization reference
+implementation found at https://github.com/cvxgrp/markowitz-reference.
+"""
