@@ -32,4 +32,4 @@ def test_portfolio(portfolio):
     """
     test portfolio
     """
-    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(0.9134164184741005)
+    assert portfolio.sharpe() == pytest.approx(0.9134164184741005)

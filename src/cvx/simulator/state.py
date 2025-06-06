@@ -340,7 +340,6 @@ class State:
         """
         value_before = (self.prices * self.position).sum()  # self.cashposition.sum()
         value_after = (prices * self.position).sum()
-        print(value_after)
 
         self._prices = prices
         self._profit = value_after - value_before

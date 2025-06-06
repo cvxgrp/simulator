@@ -34,4 +34,4 @@ def test_portfolio(prices):
         prices: adjusted prices of futures
     """
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=1e6 * f(prices), aum=1e8)
-    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(0.9824232063067163)
+    assert portfolio.sharpe() == pytest.approx(0.9824232063067163)

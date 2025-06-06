@@ -1,3 +1,5 @@
+"""Builder class for the CVX Simulator."""
+
 #    Copyright 2023 Stanford University Convex Optimization Group
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +20,56 @@ from typing import Generator
 
 import numpy as np
 import pandas as pd
+import polars as pl
 
 from .portfolio import Portfolio
 from .state import State
 from .utils.interpolation import valid
-from .utils.rescale import returns2prices
+
+
+def polars2pandas(df: pl.DataFrame) -> pd.DataFrame:
+    """Convert a Polars DataFrame to a Pandas DataFrame with 'date' column as index.
+
+    This function takes a Polars DataFrame that contains a 'date' column and converts it
+    to a Pandas DataFrame. During the conversion, the 'date' column is cast to a datetime
+    type with nanosecond precision and then set as the index of the resulting Pandas DataFrame.
+
+    Args:
+        df (pl.DataFrame): A Polars DataFrame containing a 'date' column.
+            The 'date' column should be convertible to a datetime type.
+
+    Returns:
+        pd.DataFrame: A Pandas DataFrame with the 'date' column set as the index.
+            The index will be of type DatetimeIndex with nanosecond precision.
+
+    Example:
+        >>> import polars as pl
+        >>> import pandas as pd
+        >>> from datetime import date
+        >>> from cvx.simulator.builder import polars2pandas
+        >>>
+        >>> # Create a sample Polars DataFrame
+        >>> pl_df = pl.DataFrame({
+        ...     "date": [date(2023,1,1), date(2023,1,2), date(2023,1,3)],
+        ...     "value": [1.0, 2.0, 3.0]
+        ... })
+        >>>
+        >>> # Convert to Pandas DataFrame
+        >>> pd_df = polars2pandas(pl_df)
+        >>> print(type(pd_df))
+        <class 'pandas.core.frame.DataFrame'>
+        >>> print(pd_df.index.name)
+        date
+
+    """
+    df = df.with_columns(pl.col("date").cast(pl.Datetime("ns")))
+    return df.to_pandas().set_index("date")
 
 
 @dataclass
 class Builder:
-    """
-    The Builder is an auxiliary class used to build portfolios.
+    """The Builder is an auxiliary class used to build portfolios.
+
     It overloads the __iter__ method to allow the class to iterate over
     the timestamps for which the portfolio data is available.
 
@@ -47,19 +88,21 @@ class Builder:
     _aum: pd.Series = None
 
     def __post_init__(self) -> None:
+        """Initialize the Builder instance after creation.
+
+        This method is automatically called after the object is initialized.
+        It sets up the internal state, creates empty DataFrames for units and AUM,
+        and initializes the AUM with the provided initial_aum value.
+
+        The method performs several validations on the prices DataFrame:
+        - Checks that the index is monotonically increasing
+        - Checks that the index has unique values
+
+        Returns
+        -------
+        None
+
         """
-        The __post_init__ method is a special method of initialized instances
-        of the _Builder class and is called after initialization.
-        It sets the initial amount of cash in the portfolio to be equal to the input initial_cash parameter.
-
-        The method takes no input parameter. It initializes the cash attribute in the internal
-        _State object with the initial amount of cash in the portfolio, self.initial_cash.
-
-        Note that this method is often used in Python classes for additional initialization routines
-        that can only be performed after the object is fully initialized. __post_init__
-        is called automatically after the object initialization.
-        """
-
         # assert isinstance(self.prices, pd.DataFrame)
         assert self.prices.index.is_monotonic_increasing
         assert self.prices.index.is_unique
@@ -79,16 +122,44 @@ class Builder:
 
     @property
     def valid(self):
-        """
-        Analyse the validity of the data
-        Do it column by column of the prices
+        """Check the validity of price data for each asset.
+
+        This property analyzes each column of the prices DataFrame to determine
+        if there are any missing values between the first and last valid data points.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the same columns as prices, containing boolean values
+            indicating whether each asset's price series is valid (True) or has
+            missing values in the middle (False)
+
+        Notes
+        -----
+        A valid price series can have missing values at the beginning or end,
+        but not in the middle between the first and last valid data points.
+
         """
         return self.prices.apply(valid)
 
     @property
     def intervals(self):
-        """
-        Find for each column the first and the last valid index
+        """Get the first and last valid index for each asset's price series.
+
+        This property identifies the time range for which each asset has valid price data.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with assets as rows and two columns:
+            - 'first': The first valid index (timestamp) for each asset
+            - 'last': The last valid index (timestamp) for each asset
+
+        Notes
+        -----
+        This is useful for determining the valid trading period for each asset,
+        especially when different assets have different data availability periods.
+
         """
         return self.prices.apply(
             lambda ts: pd.Series({"first": ts.first_valid_index(), "last": ts.last_valid_index()})
@@ -96,8 +167,7 @@ class Builder:
 
     @property
     def index(self) -> pd.DatetimeIndex:
-        """A property that returns the index of the portfolio,
-        which are the timestamps for which the portfolio data is available.
+        """The index of the portfolio.
 
         Returns: pd.Index: A pandas index representing the
         time period for which the portfolio data is available.
@@ -106,24 +176,36 @@ class Builder:
 
     @property
     def current_prices(self) -> np.array:
-        """
-        Get the current prices from the state
+        """Get the current prices for all assets in the portfolio.
+
+        This property retrieves the current prices from the internal state
+        for all assets that are currently in the portfolio.
+
+        Returns
+        -------
+        np.array
+            An array of current prices for all assets in the portfolio
+
+        Notes
+        -----
+        The prices are retrieved from the internal state, which is updated
+        during iteration through the portfolio's time index.
+
         """
         return self._state.prices[self._state.assets].values
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State]]:
-        """
-        The __iter__ method allows the object to be iterated over in a for loop,
-        yielding time and the current state of the portfolio.
+        """The __iter__ method iterates over object in a for loop.
+
         The method yields a list of dates seen so far and returns a tuple
         containing the list of dates and the current portfolio state.
 
         Yield:
-
         time: a pandas DatetimeIndex object containing the dates seen so far.
         state: the current state of the portfolio,
 
         taking into account the stock prices at each interval.
+
         """
         for t in self.index:
             # update the current prices for the portfolio
@@ -137,8 +219,8 @@ class Builder:
 
     @property
     def position(self) -> pd.Series:
-        """
-        The position property returns the current position of the portfolio.
+        """The position property returns the current position of the portfolio.
+
         It returns a pandas Series object containing the current position of the portfolio.
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
@@ -147,86 +229,201 @@ class Builder:
 
     @position.setter
     def position(self, position: pd.Series) -> None:
-        """
-        The position property returns the current position of the portfolio.
-        It returns a pandas Series object containing the current position of the portfolio.
+        """Set the current position of the portfolio.
 
-        Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
+        This setter updates the position (number of units) for each asset in the portfolio
+        at the current time point. It also updates the internal state's position.
+
+        Parameters
+        ----------
+        position : pd.Series
+            A pandas Series containing the new position (number of units) for each asset
+
+        Returns
+        -------
+        None
+
         """
         self._units.loc[self._state.time, self._state.assets] = position
         self._state.position = position
 
     @property
     def cashposition(self):
-        """
-        The cashposition property returns the current cash position of the portfolio.
+        """Get the current cash value of each position in the portfolio.
+
+        This property calculates the cash value of each position by multiplying
+        the number of units by the current price for each asset.
+
+        Returns
+        -------
+        pd.Series
+            A pandas Series containing the cash value of each position,
+            indexed by asset
+
+        Notes
+        -----
+        This is different from the 'cash' property, which represents
+        uninvested money. This property represents the market value
+        of each invested position.
+
         """
         return self.position * self.current_prices
 
     @property
     def units(self):
-        """
-        The units property returns the frame of holdings of the portfolio.
-        Useful mainly for testing
+        """Get the complete history of portfolio holdings.
+
+        This property returns the entire DataFrame of holdings (units) for all
+        assets over all time points in the portfolio.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame containing the number of units held for each asset over time,
+            with dates as index and assets as columns
+
+        Notes
+        -----
+        This property is particularly useful for testing and for building
+        the final Portfolio object via the build() method.
+
         """
         return self._units
 
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
-        """
-        The cashposition property sets the current cash position of the portfolio.
+        """Set the current cash value of each position in the portfolio.
+
+        This setter updates the cash value of each position and automatically
+        converts the cash values to positions (units) using the current prices.
+
+        Parameters
+        ----------
+        cashposition : pd.Series
+            A pandas Series containing the new cash value for each position,
+            indexed by asset
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        This is a convenient way to specify positions in terms of currency
+        amounts rather than number of units. The conversion formula is:
+        position = cashposition / prices
+
         """
         self.position = cashposition / self.current_prices
 
     def build(self):
-        """A function that creates a new instance of the EquityPortfolio
-        class based on the internal state of the Portfolio builder object.
+        """Create a new Portfolio instance from the current builder state.
 
-        Returns: EquityPortfolio: A new instance of the EquityPortfolio class
-        with the attributes (prices, units, initial_cash, trading_cost_model) as specified in the Portfolio builder.
+        This method creates a new immutable Portfolio object based on the
+        current state of the Builder, which can be used for analysis and reporting.
 
-        Notes: The function simply creates a new instance of the EquityPortfolio
-        class with the attributes (prices, units, initial_cash, trading_cost_model) equal
-        to the corresponding attributes in the Portfolio builder object.
-        The resulting EquityPortfolio object will have the same state as the Portfolio builder from which it was built.
+        Returns
+        -------
+        Portfolio
+            A new instance of the Portfolio class with the attributes
+            (prices, units, aum) as specified in the Builder
+
+        Notes
+        -----
+        The resulting Portfolio object will be immutable (frozen) and will
+        have the same data as the Builder from which it was built, but
+        with a different interface focused on analysis rather than construction.
+
         """
-
         return Portfolio(prices=self.prices, units=self.units, aum=self.aum)
 
     @property
     def weights(self) -> np.array:
-        """
-        Get the current weights from the state
+        """Get the current portfolio weights for each asset.
+
+        This property retrieves the weight of each asset in the portfolio
+        from the internal state. Weights represent the proportion of the
+        portfolio's value invested in each asset.
+
+        Returns
+        -------
+        np.array
+            An array of weights for each asset in the portfolio
+
+        Notes
+        -----
+        Weights sum to 1.0 for a fully invested portfolio with no leverage.
+        Negative weights represent short positions.
+
         """
         return self._state.weights[self._state.assets].values
 
     @weights.setter
     def weights(self, weights: np.array) -> None:
-        """
-        The weights property sets the current weights of the portfolio.
-        We convert the weights to positions using the current prices and the NAV
+        """Set the current portfolio weights for each asset.
+
+        This setter updates the portfolio weights and automatically converts
+        the weights to positions (units) using the current prices and NAV.
+
+        Parameters
+        ----------
+        weights : np.array
+            An array of weights for each asset in the portfolio
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        This is a convenient way to rebalance the portfolio by specifying
+        the desired allocation as weights rather than exact positions.
+        The conversion formula is: position = NAV * weights / prices
+
         """
         self.position = self._state.nav * weights / self.current_prices
 
     @property
     def aum(self):
-        """
-        The aum property returns the current AUM of the portfolio.
+        """Get the assets under management (AUM) history of the portfolio.
+
+        This property returns the entire series of AUM values over time,
+        representing the total value of the portfolio at each time point.
+
+        Returns
+        -------
+        pd.Series
+            A Series containing the AUM values over time, with dates as index
+
+        Notes
+        -----
+        AUM (assets under management) represents the total value of the portfolio,
+        including both invested positions and uninvested cash.
+
         """
         return self._aum
 
     @aum.setter
     def aum(self, aum):
-        """
-        The aum property sets the current AUM of the portfolio.
+        """Set the current assets under management (AUM) of the portfolio.
+
+        This setter updates the AUM value at the current time point and
+        also updates the internal state's AUM.
+
+        Parameters
+        ----------
+        aum : float
+            The new AUM value to set
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        Changing the AUM affects the portfolio's ability to take positions,
+        as position sizes are often calculated as a fraction of AUM.
+
         """
         self._aum[self._state.time] = aum
         self._state.aum = aum
-
-    @classmethod
-    def from_returns(cls, returns):
-        """Build Futures Portfolio from returns"""
-        # compute artificial prices (but scaled such their returns are correct)
-
-        prices = returns2prices(returns)
-        return cls(prices=prices)

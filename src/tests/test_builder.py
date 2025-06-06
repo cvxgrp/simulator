@@ -1,5 +1,4 @@
-"""
-Tests for the Builder class in the cvx.simulator package.
+"""Tests for the Builder class in the cvx.simulator package.
 
 This module contains tests for the Builder class, which is responsible for
 creating portfolios by iterating through time and setting positions. The tests
@@ -18,8 +17,7 @@ from cvx.simulator import Builder, Portfolio, interpolate
 
 @pytest.fixture()
 def builder(prices: pd.DataFrame) -> Builder:
-    """
-    Create a Builder fixture for testing.
+    """Create a Builder fixture for testing.
 
     This fixture creates a Builder instance with the provided price data
     and a fixed initial AUM of 1,000,000.
@@ -33,13 +31,13 @@ def builder(prices: pd.DataFrame) -> Builder:
     -------
     Builder
         A Builder instance initialized with the provided prices
+
     """
     return Builder(prices=prices, initial_aum=1e6)
 
 
 def test_initial_cash(builder: Builder) -> None:
-    """
-    Test that the initial AUM is set correctly.
+    """Test that the initial AUM is set correctly.
 
     This test verifies that the Builder correctly initializes with
     the specified initial AUM value.
@@ -48,13 +46,13 @@ def test_initial_cash(builder: Builder) -> None:
     ----------
     builder : Builder
         The Builder fixture to test
+
     """
     assert builder.initial_aum == 1e6
 
 
 def test_build_empty(builder: Builder, prices: pd.DataFrame) -> None:
-    """
-    Test that a newly built portfolio is empty with correct structure.
+    """Test that a newly built portfolio is empty with correct structure.
 
     This test verifies that a portfolio built from a new Builder (without
     any positions set) has the correct structure: same prices as input,
@@ -66,6 +64,7 @@ def test_build_empty(builder: Builder, prices: pd.DataFrame) -> None:
         The Builder fixture to test
     prices : pd.DataFrame
         The price data fixture used to initialize the Builder
+
     """
     portfolio = builder.build()
     pd.testing.assert_frame_equal(portfolio.prices, prices)
@@ -74,8 +73,7 @@ def test_build_empty(builder: Builder, prices: pd.DataFrame) -> None:
 
 
 def test_set_position(prices: pd.DataFrame) -> None:
-    """
-    Test setting positions directly in the Builder.
+    """Test setting positions directly in the Builder.
 
     This test verifies that positions can be set directly in the Builder
     during iteration, and that the resulting portfolio has the expected NAV.
@@ -84,6 +82,7 @@ def test_set_position(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
@@ -98,8 +97,7 @@ def test_set_position(prices: pd.DataFrame) -> None:
 
 
 def test_set_weights(prices: pd.DataFrame) -> None:
-    """
-    Test setting weights in the Builder.
+    """Test setting weights in the Builder.
 
     This test verifies that portfolio weights can be set directly in the Builder
     during iteration, and that the resulting portfolio has the expected NAV.
@@ -109,6 +107,7 @@ def test_set_weights(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
@@ -122,8 +121,7 @@ def test_set_weights(prices: pd.DataFrame) -> None:
 
 
 def test_set_cashpositions(prices: pd.DataFrame) -> None:
-    """
-    Test setting cash positions in the Builder.
+    """Test setting cash positions in the Builder.
 
     This test verifies that cash positions can be set directly in the Builder
     during iteration, and that the resulting portfolio has the expected NAV.
@@ -133,6 +131,7 @@ def test_set_cashpositions(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
@@ -146,8 +145,7 @@ def test_set_cashpositions(prices: pd.DataFrame) -> None:
 
 
 def test_set_position_again(prices: pd.DataFrame) -> None:
-    """
-    Test setting positions directly in the Builder (duplicate test).
+    """Test setting positions directly in the Builder (duplicate test).
 
     This test is similar to test_set_position and verifies that positions
     can be set directly in the Builder during iteration, and that the
@@ -157,6 +155,7 @@ def test_set_position_again(prices: pd.DataFrame) -> None:
     ----------
     prices : pd.DataFrame
         The price data fixture
+
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
     for times, state in b:
@@ -170,8 +169,7 @@ def test_set_position_again(prices: pd.DataFrame) -> None:
 
 
 def test_weights_on_wrong_days(resource_dir: Any) -> None:
-    """
-    Test error handling when setting weights with invalid dimensions.
+    """Test error handling when setting weights with invalid dimensions.
 
     This test verifies that the Builder correctly raises ValueError when:
     1. Setting weights with incorrect dimensions
@@ -184,6 +182,7 @@ def test_weights_on_wrong_days(resource_dir: Any) -> None:
     ----------
     resource_dir : Any
         Fixture providing the path to test resources
+
     """
     prices = pd.read_csv(resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0).apply(interpolate)
 
@@ -210,8 +209,7 @@ def test_weights_on_wrong_days(resource_dir: Any) -> None:
 
 
 def test_iteration_state(builder: Builder) -> None:
-    """
-    Test the initial state during Builder iteration.
+    """Test the initial state during Builder iteration.
 
     This test verifies that the initial state of the portfolio during
     iteration has the expected properties: zero leverage, correct NAV,
@@ -221,6 +219,7 @@ def test_iteration_state(builder: Builder) -> None:
     ----------
     builder : Builder
         The Builder fixture to test
+
     """
     for t, state in builder:
         assert state.leverage == 0
@@ -234,30 +233,8 @@ def test_iteration_state(builder: Builder) -> None:
         )
 
 
-def test_init_from_returns(prices: pd.DataFrame) -> None:
-    """
-    Test initializing a Builder from returns instead of prices.
-
-    This test verifies that a Builder can be created from returns data
-    instead of price data, and that the resulting price data is correctly
-    scaled to match the original prices.
-
-    Parameters
-    ----------
-    prices : pd.DataFrame
-        The price data fixture
-    """
-    # the rescaled prices start at 1.0...
-    returns = prices.pct_change().fillna(0.0)
-    # create the builder from the returns
-    builder = Builder.from_returns(returns)
-
-    pd.testing.assert_series_equal(builder.prices["A"] * 1673.78, prices["A"])
-
-
 def test_valid(builder: Builder) -> None:
-    """
-    Test that all assets in the Builder have valid price data.
+    """Test that all assets in the Builder have valid price data.
 
     This test verifies that the Builder correctly identifies all assets
     as having valid price data (no NaN values in the middle of time series).
@@ -266,13 +243,13 @@ def test_valid(builder: Builder) -> None:
     ----------
     builder : Builder
         The Builder fixture to test
+
     """
     assert np.all(builder.valid)
 
 
 def test_intervals(builder: Builder) -> None:
-    """
-    Test that the Builder correctly identifies first and last valid indices.
+    """Test that the Builder correctly identifies first and last valid indices.
 
     This test verifies that the Builder's intervals property correctly
     identifies the first and last valid indices for each asset.
@@ -281,6 +258,7 @@ def test_intervals(builder: Builder) -> None:
     ----------
     builder : Builder
         The Builder fixture to test
+
     """
     x = builder.intervals
     assert x["last"].loc["G"] == pd.Timestamp("2015-04-22")

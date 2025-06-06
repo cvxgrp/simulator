@@ -11,8 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""
-Interpolation utilities for time series data.
+"""Interpolation utilities for time series data.
 
 This module provides functions for interpolating missing values in time series
 and validating that time series don't have missing values in the middle.
@@ -23,8 +22,7 @@ import polars as pl
 
 
 def interpolate(ts):
-    """
-    Interpolate missing values in a time series between the first and last valid indices.
+    """Interpolate missing values in a time series between the first and last valid indices.
 
     This function fills forward (ffill) missing values in a time series, but only
     between the first and last valid indices. Values outside this range remain NaN/null.
@@ -51,6 +49,7 @@ def interpolate(ts):
     3    4.0
     4    5.0
     dtype: float64
+
     """
     # Check if the input is a valid type
     if not isinstance(ts, (pd.Series, pl.Series)):
@@ -72,8 +71,7 @@ def interpolate(ts):
 
 
 def valid(ts) -> bool:
-    """
-    Check if a time series has no missing values between the first and last valid indices.
+    """Check if a time series has no missing values between the first and last valid indices.
 
     This function verifies that a time series doesn't have any NaN/null values in the middle.
     It's acceptable to have NaNs/nulls at the beginning or end of the series.
@@ -99,6 +97,7 @@ def valid(ts) -> bool:
     >>> ts2 = pd.Series([1, 2, np.nan, 4, 5])  # NaN in the middle
     >>> valid(ts2)
     False
+
     """
     # Check if the input is a valid type
     if not isinstance(ts, (pd.Series, pl.Series)):
@@ -113,8 +112,7 @@ def valid(ts) -> bool:
 
 
 def interpolate_pl(ts: pl.Series) -> pl.Series:
-    """
-    Interpolate missing values in a polars time series between the first and last valid indices.
+    """Interpolate missing values in a polars time series between the first and last valid indices.
 
     This function fills forward (ffill) missing values in a time series, but only
     between the first and last valid indices. Values outside this range remain null.
@@ -135,7 +133,7 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
     >>> ts = pl.Series([1, None, None, 4, 5])
     >>> interpolate_pl(ts)
     shape: (5,)
-    Series: '' [f64]
+    Series: '' [i64]
     [
         1
         1
@@ -143,6 +141,7 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
         4
         5
     ]
+
     """
     # Find first and last valid indices
     non_null_indices = ts.is_not_null().arg_true()
@@ -169,8 +168,7 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
 
 
 def valid_pl(ts: pl.Series) -> bool:
-    """
-    Check if a polars time series has no missing values between the first and last valid indices.
+    """Check if a polars time series has no missing values between the first and last valid indices.
 
     This function verifies that a time series doesn't have any null values in the middle.
     It's acceptable to have nulls at the beginning or end of the series.
@@ -195,6 +193,7 @@ def valid_pl(ts: pl.Series) -> bool:
     >>> ts2 = pl.Series([1, 2, None, 4, 5])  # Null in the middle
     >>> valid_pl(ts2)
     False
+
     """
     # Get indices of non-null values
     non_null_indices = ts.is_not_null().arg_true()
@@ -213,8 +212,7 @@ def valid_pl(ts: pl.Series) -> bool:
 
 
 def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
-    """
-    Interpolate missing values in a polars DataFrame between the first and last valid indices for each column.
+    """Interpolate missing values in a polars DataFrame between the first and last valid indices for each column.
 
     This function applies interpolate_pl to each column of a DataFrame,
     filling forward (ffill) missing values in each column, but only
@@ -234,22 +232,23 @@ def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
     --------
     >>> import polars as pl
     >>> df = pl.DataFrame({
-    ...     'A': [1, None, None, 4, 5],
-    ...     'B': [None, 2, None, 4, None]
+    ...     'A': [1.0, None, None, 4.0, 5.0],
+    ...     'B': [None, 2.0, None, 4.0, None]
     ... })
     >>> interpolate_df_pl(df)
     shape: (5, 2)
-    ┌─────┬─────┐
-    │ A   ┆ B   │
-    │ --- ┆ --- │
-    │ f64 ┆ f64 │
-    ╞═════╪═════╡
-    │ 1   ┆ null│
-    │ 1   ┆ 2   │
-    │ 1   ┆ 2   │
-    │ 4   ┆ 4   │
-    │ 5   ┆ null│
-    └─────┴─────┘
+    ┌─────┬──────┐
+    │ A   ┆ B    │
+    │ --- ┆ ---  │
+    │ f64 ┆ f64  │
+    ╞═════╪══════╡
+    │ 1.0 ┆ null │
+    │ 1.0 ┆ 2.0  │
+    │ 1.0 ┆ 2.0  │
+    │ 4.0 ┆ 4.0  │
+    │ 5.0 ┆ null │
+    └─────┴──────┘
+
     """
     # Apply interpolate_pl to each column
     result = {}
@@ -260,8 +259,7 @@ def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def valid_df_pl(df: pl.DataFrame) -> bool:
-    """
-    Check if a polars DataFrame has no missing values between the first and last valid indices for each column.
+    """Check if a polars DataFrame has no missing values between the first and last valid indices for each column.
 
     This function verifies that each column in the DataFrame doesn't have any null values in the middle.
     It's acceptable to have nulls at the beginning or end of each column.
@@ -292,6 +290,7 @@ def valid_df_pl(df: pl.DataFrame) -> bool:
     ... })
     >>> valid_df_pl(df2)
     False
+
     """
     # Check each column
     for col in df.columns:
