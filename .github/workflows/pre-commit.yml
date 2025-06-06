@@ -16,10 +16,17 @@ jobs:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.71
 
+      - name: Run deptry
+        run : |
+          uvx deptry src/cvx
+
+      - name: Run ty
+        run : |
+          uvx ty check
       # Run deptry to analyze dependencies and detect issues
-      - uses: tschm/cradle/actions/deptry@v0.1.71
-        with:
-          source-folder: 'src/cvx'
+      #- uses: tschm/cradle/actions/deptry@v0.1.71
+      #  with:
+      #    source-folder: 'src/cvx'
 
   # Run pre-commit hooks for code formatting, linting, etc.
   pre-commit:
