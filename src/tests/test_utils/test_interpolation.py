@@ -11,14 +11,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from cvx.simulator.utils.interpolation import (
-    interpolate,
-    interpolate_df_pl,
-    interpolate_pl,
-    valid,
-    valid_df_pl,
-    valid_pl,
-)
+from cvx.simulator.utils.interpolation import interpolate, valid
 
 
 def test_interpolate_pandas() -> None:
@@ -88,8 +81,8 @@ def test_interpolate_polars() -> None:
         None,
     ]
     ts = pl.Series(data)
-    a = interpolate_pl(ts)
-    assert valid_pl(a)
+    a = interpolate(ts)
+    assert valid(a)
 
 
 def test_valid_pandas() -> None:
@@ -111,83 +104,8 @@ def test_valid_polars() -> None:
     """
     # Series with nulls only at beginning and end - should be valid
     ts1 = pl.Series([None, 1, 2, 3, None])
-    assert valid_pl(ts1)
+    assert valid(ts1)
 
     # Series with null in the middle - should not be valid
     ts2 = pl.Series([1, 2, None, 4, 5])
-    assert not valid_pl(ts2)
-
-
-def test_interpolate_df_pl() -> None:
-    """
-    Test that the interpolate_df_pl function correctly fills missing values in a polars DataFrame.
-
-    This test creates a DataFrame with null values at the beginning, middle, and end of different columns,
-    applies the interpolate_df_pl function to it, and verifies that the result has no null values
-    between the first and last valid indices for each column.
-    """
-    # Create a test DataFrame with nulls in different positions
-    df = pl.DataFrame(
-        {
-            "A": [1, None, None, 4, 5],  # Nulls in the middle
-            "B": [None, 2, None, 4, None],  # Nulls at beginning, middle, and end
-            "C": [None, None, 3, 4, 5],  # Nulls at beginning
-            "D": [1, 2, 3, None, None],  # Nulls at end
-        }
-    )
-
-    # Apply interpolate_df_pl
-    result = interpolate_df_pl(df)
-
-    # Verify each column is valid
-    for col in result.columns:
-        assert valid_pl(result[col])
-
-    # Check specific values
-    # Column A: [1, 1, 1, 4, 5]
-    assert result["A"].to_list() == [1, 1, 1, 4, 5]
-
-    # Column B: [None, 2, 2, 4, None]
-    assert result["B"].to_list()[0] is None
-    assert result["B"].to_list()[1:4] == [2, 2, 4]
-    assert result["B"].to_list()[4] is None
-
-    # Column C: [None, None, 3, 4, 5]
-    assert result["C"].to_list()[0:2] == [None, None]
-    assert result["C"].to_list()[2:5] == [3, 4, 5]
-
-    # Column D: [1, 2, 3, None, None]
-    assert result["D"].to_list()[0:3] == [1, 2, 3]
-    assert result["D"].to_list()[3:5] == [None, None]
-
-
-def test_valid_df_pl() -> None:
-    """
-    Test that the valid_df_pl function correctly identifies polars DataFrames with no missing values in the middle.
-    """
-    # DataFrame with nulls only at beginning and end of each column - should be valid
-    df1 = pl.DataFrame(
-        {
-            "A": [None, 1, 2, 3, None],  # Nulls only at beginning and end
-            "B": [None, 2, 3, 4, None],  # Nulls only at beginning and end
-        }
-    )
-    assert valid_df_pl(df1)
-
-    # DataFrame with null in the middle of one column - should not be valid
-    df2 = pl.DataFrame(
-        {
-            "A": [1, 2, None, 4, 5],  # Null in the middle
-            "B": [1, 2, 3, 4, 5],  # No nulls
-        }
-    )
-    assert not valid_df_pl(df2)
-
-    # DataFrame with nulls only at beginning and end of one column and no nulls in another - should be valid
-    df3 = pl.DataFrame(
-        {
-            "A": [None, 1, 2, 3, None],  # Nulls only at beginning and end
-            "B": [1, 2, 3, 4, 5],  # No nulls
-        }
-    )
-    assert valid_df_pl(df3)
+    assert not valid(ts2)

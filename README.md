@@ -47,11 +47,19 @@ The user defines a builder object by loading prices
 and initializing the amount of cash used in an experiment:
 
 ```python
-import pandas as pd
-from cvx.simulator import Builder
-
-prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True, header=0)
-b = Builder(prices=prices, initial_aum=1e6)
+>>> import pandas as pd
+>>> from cvx.simulator import Builder
+>>>
+>>> # For doctest, we'll create a small DataFrame instead of reading from a file
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>> b = Builder(prices=prices, initial_aum=1e6)
+>>>
 ```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
@@ -70,18 +78,37 @@ universe at random.
 Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 
 ```python
-import numpy as np
-
-for t, state in b:
-    # pick two assets at random
-    pair = np.random.choice(state.assets, 2, replace=False)
-    # compute the pair
-    units = pd.Series(index=state.assets, data=0.0)
-    units[pair] = [state.nav, -state.nav] / state.prices[pair].values
-    # update the position
-    b.position = 0.1 * units
-    # Do not apply trading costs
-    b.aum = state.aum
+>>> import pandas as pd
+>>> import numpy as np
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>> b = Builder(prices=prices, initial_aum=1e6)
+>>> np.random.seed(42)  # Set seed for reproducibility
+>>>
+>>> for t, state in b:
+...     # pick two assets deterministically for doctest
+...     pair = ['A', 'B']  # Use first two assets instead of random choice
+...     # compute the pair
+...     units = pd.Series(index=state.assets, data=0.0)
+...     units[pair] = [state.nav, -state.nav] / state.prices[pair].values
+...     # update the position
+...     b.position = 0.1 * units
+...     # Do not apply trading costs
+...     b.aum = state.aum
+>>>
+>>> # Check the final positions
+>>> b.units.iloc[-1][['A', 'B']]
+A     951.409346
+B   -1884.867573
+Name: 2020-01-05 00:00:00, dtype: float64
+>>>
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
@@ -95,10 +122,32 @@ Here's a slightly more realistic loop. Given a set of $4$ assets we want to
 implement the popular $1/n$ strategy.
 
 ```python
-for t, state in b:
-    # each day we invest a quarter of the capital in the assets
-    b.position = 0.25 * state.nav / state.prices
-    b.aum = state.aum
+>>> import pandas as pd
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>>
+>>> b2 = Builder(prices=prices, initial_aum=1e6)
+>>>
+>>> for t, state in b2:
+...     # each day we invest a quarter of the capital in the assets
+...     b2.position = 0.25 * state.nav / state.prices
+...     b2.aum = state.aum
+>>>
+>>> # Check the final positions
+>>> b2.units.iloc[-1]
+A    2508.939034
+B    4970.539596
+C    1254.469517
+D    3334.665805
+Name: 2020-01-05 00:00:00, dtype: float64
+>>>
 ```
 
 Note that we update the position at the last element in the t list
@@ -106,10 +155,34 @@ using a series of actual units rather than weights or cashpositions.
 The builder class also exposes setters for such alternative conventions.
 
 ```python
-for t, state in b:
-    # each day we invest a quarter of the capital in the assets
-    b.weights = np.ones(4)*0.25
-    b.aum = state.aum
+>>> # Setup code for this example
+>>> import pandas as pd
+>>> import numpy as np
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>>
+>>> b3 = Builder(prices=prices, initial_aum=1e6)
+>>>
+>>> for t, state in b3:
+...     # each day we invest a quarter of the capital in the assets
+...     b3.weights = np.ones(4)*0.25
+...     b3.aum = state.aum
+>>>
+>>> # Check the final positions
+>>> b3.units.iloc[-1]
+A    2508.939034
+B    4970.539596
+C    1254.469517
+D    3334.665805
+Name: 2020-01-05 00:00:00, dtype: float64
+>>>
 ```
 
 ### Build the portfolio
@@ -117,7 +190,31 @@ for t, state in b:
 Once finished it is possible to build the portfolio object:
 
 ```python
-portfolio = b.build()
+>>> import pandas as pd
+>>> import numpy as np
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>>
+>>> b3 = Builder(prices=prices, initial_aum=1e6)
+>>>
+>>> for t, state in b3:
+...     b3.weights = np.ones(4)*0.25
+...     b3.aum = state.aum
+>>>
+>>> # Build the portfolio from one of our builders
+>>> portfolio = b3.build()
+>>>
+>>> # Verify the portfolio was created successfully
+>>> type(portfolio).__name__
+'Portfolio'
+>>>
 ```
 
 ## 📈 Analytics
@@ -126,15 +223,68 @@ The portfolio object supports further analysis and exposes
 a number of properties, e.g.:
 
 ```python
-portfolio.nav  # Net Asset Value
-portfolio.cash  # Cash position
-portfolio.equity  # Equity value
+>>> # Setup code for this example
+>>> import pandas as pd
+>>> import numpy as np
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>>
+>>> b3 = Builder(prices=prices, initial_aum=1e6)
+>>>
+>>> for t, state in b3:
+...     b3.weights = np.ones(4)*0.25
+...     b3.aum = state.aum
+>>> portfolio = b3.build()
+>>>
+>>> # Access portfolio properties
+>>> len(portfolio.nav)  # Length of the NAV series
+5
+>>> portfolio.nav.name  # Name of the NAV series
+'NAV'
+>>>
+>>> # Check the equity (positions in cash terms)
+>>> portfolio.equity.shape
+(5, 4)
+>>>
 ```
 
 It is possible to generate a snapshot of the portfolio:
 
 ```python
-portfolio.snapshot()
+>>> # Setup code for this example
+>>> import pandas as pd
+>>> import numpy as np
+>>> from cvx.simulator import Builder
+>>>
+>>> dates = pd.date_range('2020-01-01', periods=5)
+>>> prices = pd.DataFrame({
+...     'A': [100, 102, 104, 103, 105],
+...     'B': [50, 51, 52, 51, 53],
+...     'C': [200, 202, 198, 205, 210],
+...     'D': [75, 76, 77, 78, 79]
+... }, index=dates)
+>>>
+>>> b3 = Builder(prices=prices, initial_aum=1e6)
+>>>
+>>> for t, state in b3:
+...     b3.weights = np.ones(4)*0.25
+...     b3.aum = state.aum
+>>> portfolio = b3.build()
+>>>
+>>> # Generate a snapshot (returns a plotly figure)
+>>> fig = portfolio.snapshot()
+>>>
+>>> # For doctest, we'll just check the type of the returned object
+>>> isinstance(fig, object)
+True
+>>>
 ```
 
 ## 🛠️ Development

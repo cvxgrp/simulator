@@ -30,8 +30,6 @@ def prices_pl(resource_dir):
     frame = frame.with_columns(pl.col("date").cast(pl.Datetime("ns")))
     return frame.fill_null(strategy="forward")
 
-    # return frame
-
 
 @pytest.fixture()
 def nav(resource_dir):
