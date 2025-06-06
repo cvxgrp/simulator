@@ -364,10 +364,17 @@ class Portfolio:
         return self.equity.apply(lambda x: x / self.nav)
 
     @property
-    def data(self):
+    def _data(self):
         frame = self.nav.pct_change().to_frame()
         frame.index.name = "Date"
         return build_data(returns=frame)
+
+    @property
+    def stats(self):
+        return self._data.stats
+
+    def sharpe(self, periods=None):
+        return self.stats.sharpe(periods=periods)["NAV"]
 
     @classmethod
     def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float):
@@ -382,4 +389,4 @@ class Portfolio:
         return cls.from_cashpos_prices(prices, cashposition, aum)
 
     def snapshot(self, title: str = "Portfolio Summary", log_scale: bool = True):
-        return self.data.plots.plot_snapshot(title=title, log_scale=log_scale)
+        return self._data.plots.plot_snapshot(title=title, log_scale=log_scale)

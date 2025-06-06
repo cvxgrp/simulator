@@ -198,41 +198,7 @@ def test_cashposition(portfolio: Portfolio) -> None:
 
 
 def test_sharpe(portfolio: Portfolio) -> None:
-    assert portfolio.data.stats.sharpe(periods=252)["NAV"] == pytest.approx(-0.1021095912448208)
-
-
-# def test_plotly_aggregate(portfolio: Portfolio) -> None:
-#     """
-#     Test that the snapshot method works with aggregated data.
-#
-#     This test verifies that the Portfolio.snapshot method correctly generates
-#     a plotly figure when the aggregate parameter is set to True.
-#
-#     Parameters
-#     ----------
-#     portfolio : Portfolio
-#         The Portfolio fixture to test
-#     """
-#     benchmark = pd.Series(index=portfolio.index, data=1e6)
-#     fig = portfolio.snapshot(benchmark=benchmark, aggregate=True)
-#     fig.show()
-#
-#
-# def test_plotly_no_aggregate(portfolio: Portfolio) -> None:
-#     """
-#     Test that the snapshot method works with non-aggregated data.
-#
-#     This test verifies that the Portfolio.snapshot method correctly generates
-#     a plotly figure when the aggregate parameter is set to False (default).
-#
-#     Parameters
-#     ----------
-#     portfolio : Portfolio
-#         The Portfolio fixture to test
-#     """
-#     benchmark = pd.Series(index=portfolio.index, data=1e6)
-#     fig = portfolio.snapshot(benchmark=benchmark)
-#     fig.show()
+    assert portfolio.sharpe(periods=252) == pytest.approx(-0.1021095912448208)
 
 
 def test_monotonic() -> None:
@@ -245,56 +211,6 @@ def test_monotonic() -> None:
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
     with pytest.raises(AssertionError):
         Portfolio(prices=prices, units=prices, aum=1e6)
-
-
-# def test_snapshot(portfolio: Portfolio) -> None:
-#     """
-#     Test that the snapshot method works with a zero benchmark.
-#
-#     This test verifies that the Portfolio.snapshot method correctly generates
-#     a plotly figure when provided with a benchmark series of zeros.
-#
-#     Parameters
-#     ----------
-#     portfolio : Portfolio
-#         The Portfolio fixture to test
-#     """
-#     xxx = pd.Series(index=portfolio.index, data=0.0)
-#     fig = portfolio.snapshot(benchmark=xxx)
-#     fig.show()
-
-
-# def test_snapshot_no_benchmark(portfolio: Portfolio) -> None:
-#     """
-#     Test that the snapshot method works without a benchmark.
-#
-#     This test verifies that the Portfolio.snapshot method correctly generates
-#     a plotly figure when no benchmark is provided.
-#
-#     Parameters
-#     ----------
-#     portfolio : Portfolio
-#         The Portfolio fixture to test
-#     """
-#     fig = portfolio.snapshot()
-#     fig.show()
-
-
-# def test_snapshot_log_axis(portfolio: Portfolio) -> None:
-#     """
-#     Test that the snapshot method works with a logarithmic scale.
-#
-#     This test verifies that the Portfolio.snapshot method correctly generates
-#     a plotly figure with a logarithmic y-axis when log_scale is set to True.
-#
-#     Parameters
-#     ----------
-#     portfolio : Portfolio
-#         The Portfolio fixture to test
-#     """
-#     xxx = pd.Series(index=portfolio.index, data=10.0)
-#     fig = portfolio.snapshot(log_scale=True, benchmark=xxx)
-#     fig.show()
 
 
 def test_equity(portfolio):

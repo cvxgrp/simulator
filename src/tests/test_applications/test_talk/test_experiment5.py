@@ -46,7 +46,7 @@ def test_portfolio(prices):
         builder.aum = state.aum
 
     portfolio = builder.build()
-    assert portfolio.data.stats.sharpe()["NAV"] == pytest.approx(1.3347932969566416)
+    assert portfolio.sharpe() == pytest.approx(1.3347932969566416)
 
     # assert sharpe(portfolio.nav.pct_change().dropna()) == pytest.approx(1.3348481418003217)
 
