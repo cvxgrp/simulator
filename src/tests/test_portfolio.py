@@ -44,6 +44,11 @@ def test_prices_polars(prices: pd.DataFrame, prices_pl: pl.DataFrame):
     pdt.assert_frame_equal(prices_pl, prices)
 
 
+def test_prices_pandas(prices: pd.DataFrame, prices_pl: pl.DataFrame):
+    prices_pl = prices_pl.to_pandas().set_index("date")
+    pd.testing.assert_frame_equal(prices_pl, prices)
+
+
 def test_assets(portfolio: Portfolio, prices: pd.DataFrame) -> None:
     """
     Test that the portfolio assets match the price data columns.
