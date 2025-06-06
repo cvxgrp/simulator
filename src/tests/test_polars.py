@@ -1,3 +1,5 @@
+"""Testing polars functionality for later."""
+
 import pandas as pd
 import polars as pl
 
@@ -5,17 +7,51 @@ from cvx.simulator.builder import polars2pandas
 
 
 def test_iteration(prices_pl: pl.DataFrame):
+    """Test iteration over rows in a Polars DataFrame.
+
+    This test verifies that a Polars DataFrame can be iterated over row by row
+    using the rows() method with named=True.
+
+    Parameters
+    ----------
+    prices_pl : pl.DataFrame
+        A Polars DataFrame fixture containing price data
+
+    """
     # iterate
     for row in prices_pl.rows(named=True):
         row
 
 
 def test_index(prices_pl: pl.DataFrame):
+    """Test extraction of the date index from a Polars DataFrame.
+
+    This test verifies that the date column can be extracted from a Polars DataFrame
+    and converted to a list.
+
+    Parameters
+    ----------
+    prices_pl : pl.DataFrame
+        A Polars DataFrame fixture containing price data with a 'date' column
+
+    """
     index = prices_pl["date"].to_list()
     print(index)
 
 
 def test_index_history(prices_pl: pl.DataFrame):
+    """Test building a history of dates from a Polars DataFrame.
+
+    This test verifies that we can extract the date column from a Polars DataFrame,
+    convert it to a list, and then build a growing history of dates by slicing
+    the list up to each point in time.
+
+    Parameters
+    ----------
+    prices_pl : pl.DataFrame
+        A Polars DataFrame fixture containing price data with a 'date' column
+
+    """
     index = prices_pl["date"].to_list()
 
     for i in range(len(index)):
@@ -24,6 +60,18 @@ def test_index_history(prices_pl: pl.DataFrame):
 
 
 def test_index_window(prices_pl: pl.DataFrame):
+    """Test creating a sliding window of dates from a Polars DataFrame.
+
+    This test verifies that we can extract the date column from a Polars DataFrame,
+    convert it to a list, and then create a sliding window of dates of a fixed size
+    that moves forward in time.
+
+    Parameters
+    ----------
+    prices_pl : pl.DataFrame
+        A Polars DataFrame fixture containing price data with a 'date' column
+
+    """
     index = prices_pl["date"].to_list()
 
     window_size = 3
@@ -34,15 +82,18 @@ def test_index_window(prices_pl: pl.DataFrame):
 
 
 def test_polars2pandas(prices_pl: pl.DataFrame, prices: pd.DataFrame):
-    """
-    Test the polars2pandas function.
+    """Test the polars2pandas function.
 
     This test verifies that the polars2pandas function correctly converts a Polars DataFrame
     to a Pandas DataFrame with the 'date' column set as the index.
 
-    Args:
-        prices_pl: A Polars DataFrame fixture containing price data
-        prices: A Pandas DataFrame fixture containing the same price data
+    Parameters
+    ----------
+    prices_pl : pl.DataFrame
+        A Polars DataFrame fixture containing price data
+    prices : pd.DataFrame
+        A Pandas DataFrame fixture containing the same price data
+
     """
     # Convert the Polars DataFrame to a Pandas DataFrame
     result = polars2pandas(prices_pl)
