@@ -1,4 +1,4 @@
-"""test portfolio"""
+"""Test Experiment 5."""
 
 from __future__ import annotations
 
@@ -13,13 +13,12 @@ correlation = 200
 
 
 def test_portfolio(prices):
-    """
-    test portfolio
+    """Test portfolio.
 
     Args:
         prices: adjusted prices of futures
-    """
 
+    """
     vola = 96
     clip = 4.2
     corr = 200

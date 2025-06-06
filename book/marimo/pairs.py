@@ -1,3 +1,5 @@
+"""pairs trading."""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -6,6 +8,14 @@ app = marimo.App()
 
 @app.cell
 def _(mo):
+    """Display the title of the notebook.
+
+    Parameters
+    ----------
+    mo : marimo.Module
+        The marimo module object
+
+    """
     mo.md(r"""# Almost pairs trading""")
     return
 
@@ -29,6 +39,21 @@ def _(mo):
 
 @app.cell
 def _():
+    """Import required libraries and modules.
+
+    This cell imports the necessary libraries and modules for the pairs trading simulation:
+    - marimo: For notebook functionality
+    - numpy: For numerical operations
+    - pandas: For data manipulation
+    - loguru: For logging
+    - Builder: From cvx.simulator for portfolio simulation
+
+    Returns
+    -------
+    tuple
+        A tuple containing the imported modules (Builder, logger, mo, np, pd)
+
+    """
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -41,6 +66,37 @@ def _():
 
 @app.cell
 def _(Builder, logger, mo, np, pd):
+    """Implement the pairs trading strategy and build the portfolio.
+
+    This cell:
+    1. Loads price data from a CSV file
+    2. Creates a Builder instance with the price data and initial AUM
+    3. Implements the pairs trading strategy:
+       - For each time step, randomly selects two assets
+       - Goes long one asset and short the other with equal dollar amounts
+       - Allocates 10% of the portfolio to this pair
+    4. Applies transaction costs (1 bps of traded volume)
+    5. Builds and returns the final portfolio
+
+    Parameters
+    ----------
+    Builder : class
+        The Builder class from cvx.simulator
+    logger : Logger
+        The logger instance for logging information
+    mo : marimo.Module
+        The marimo module object
+    np : module
+        The numpy module
+    pd : module
+        The pandas module
+
+    Returns
+    -------
+    tuple
+        A tuple containing the built portfolio
+
+    """
     logger.info("Load prices")
     prices = pd.read_csv(
         str(mo.notebook_location() / "data" / "stock-prices.csv"), index_col=0, parse_dates=True, header=0
@@ -70,6 +126,17 @@ def _(Builder, logger, mo, np, pd):
 
 @app.cell
 def _(portfolio):
+    """Plot the portfolio's net asset value (NAV) over time.
+
+    This cell visualizes the performance of the pairs trading strategy
+    by plotting the portfolio's NAV over the simulation period.
+
+    Parameters
+    ----------
+    portfolio : Portfolio
+        The portfolio object built by the previous cell
+
+    """
     portfolio.nav.plot()
     return
 

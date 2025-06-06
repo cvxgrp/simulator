@@ -1,5 +1,4 @@
-"""
-Tests for error handling in the interpolation utility functions.
+"""Tests for error handling in the interpolation utility functions.
 
 This module contains tests for the error handling in the interpolation utility functions,
 which are used for filling missing values in time series data.
@@ -12,8 +11,7 @@ from cvx.simulator.utils.interpolation import interpolate, valid
 
 
 def test_interpolate_invalid_type():
-    """
-    Test that interpolate raises TypeError when input is not a pandas or polars Series.
+    """Test that interpolate raises TypeError when input is not a pandas or polars Series.
 
     This test calls interpolate with a list and verifies that it raises a TypeError.
     """
@@ -23,8 +21,7 @@ def test_interpolate_invalid_type():
 
 
 def test_valid_invalid_type():
-    """
-    Test that valid raises TypeError when input is not a pandas or polars Series.
+    """Test that valid raises TypeError when input is not a pandas or polars Series.
 
     This test calls valid with a list and verifies that it raises a TypeError.
     """
@@ -34,8 +31,7 @@ def test_valid_invalid_type():
 
 
 def test_interpolate_polars_with_nulls():
-    """
-    Test that interpolate correctly handles a polars Series with nulls.
+    """Test that interpolate correctly handles a polars Series with nulls.
 
     This test creates a polars Series with nulls in the middle, applies interpolate,
     and verifies that the nulls are filled correctly.
@@ -51,8 +47,7 @@ def test_interpolate_polars_with_nulls():
 
 
 def test_interpolate_polars_all_nulls():
-    """
-    Test that interpolate correctly handles a polars Series with all nulls.
+    """Test that interpolate correctly handles a polars Series with all nulls.
 
     This test creates a polars Series with all null values, applies interpolate,
     and verifies that the result is unchanged.

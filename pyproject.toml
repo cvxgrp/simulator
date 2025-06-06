@@ -34,7 +34,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
+select = ["E", "F", "I", "D"]
 
 [build-system]
 requires = ["hatchling"]

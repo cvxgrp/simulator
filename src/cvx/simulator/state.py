@@ -11,8 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""
-Portfolio state management for the CVX Simulator.
+"""Portfolio state management for the CVX Simulator.
 
 This module provides the State class, which represents the current state of a portfolio
 during simulation. It tracks positions, prices, cash, and other portfolio metrics,
@@ -29,8 +28,7 @@ import pandas as pd
 
 @dataclass()
 class State:
-    """
-    Represents the current state of a portfolio during simulation.
+    """Represents the current state of a portfolio during simulation.
 
     The State class tracks the current positions, prices, cash, and other metrics
     of a portfolio at a specific point in time. It is updated within a loop by the
@@ -56,6 +54,7 @@ class State:
         Profit achieved between the previous and current prices
     _aum : float
         Current assets under management (AUM) of the portfolio
+
     """
 
     _prices: Optional[pd.Series] = None
@@ -68,21 +67,20 @@ class State:
 
     @property
     def cash(self) -> float:
-        """
-        Get the current amount of cash available in the portfolio.
+        """Get the current amount of cash available in the portfolio.
 
         Returns
         -------
         float
             The cash component of the portfolio, calculated as NAV minus
             the value of all positions
+
         """
         return self.nav - self.value
 
     @cash.setter
     def cash(self, cash: float) -> None:
-        """
-        Update the amount of cash available in the portfolio.
+        """Update the amount of cash available in the portfolio.
 
         This updates the AUM (assets under management) based on the new
         cash amount while keeping the value of positions constant.
@@ -91,13 +89,13 @@ class State:
         ----------
         cash : float
             The new cash amount to set
+
         """
         self.aum = cash + self.value
 
     @property
     def nav(self) -> float:
-        """
-        Get the net asset value (NAV) of the portfolio.
+        """Get the net asset value (NAV) of the portfolio.
 
         The NAV represents the total value of the portfolio, including
         both the value of positions and available cash.
@@ -110,6 +108,7 @@ class State:
         Notes
         -----
         This is equivalent to the AUM (assets under management).
+
         """
         # assert np.isclose(self.value + self.cash, self.aum), f"{self.value + self.cash} != {self.aum}"
         # return self.value + self.cash
@@ -117,8 +116,7 @@ class State:
 
     @property
     def value(self) -> float:
-        """
-        Get the value of all positions in the portfolio.
+        """Get the value of all positions in the portfolio.
 
         This computes the total value of all holdings at current prices,
         not including cash.
@@ -131,13 +129,13 @@ class State:
         Notes
         -----
         If positions are missing (None), the sum will effectively be zero.
+
         """
         return self.cashposition.sum()
 
     @property
     def cashposition(self) -> pd.Series:
-        """
-        Get the cash value of each position in the portfolio.
+        """Get the cash value of each position in the portfolio.
 
         This computes the cash value of each position by multiplying
         the number of units by the current price for each asset.
@@ -146,13 +144,13 @@ class State:
         -------
         pd.Series
             Series with the cash value of each position, indexed by asset
+
         """
         return self.prices * self.position
 
     @property
     def position(self) -> pd.Series:
-        """
-        Get the current position (number of units) for each asset.
+        """Get the current position (number of units) for each asset.
 
         Returns
         -------
@@ -160,6 +158,7 @@ class State:
             Series with the number of units held for each asset, indexed by asset.
             If the position is not yet set, returns an empty series with the
             correct index.
+
         """
         if self._position is None:
             return pd.Series(index=self.assets, dtype=float)
@@ -168,8 +167,7 @@ class State:
 
     @position.setter
     def position(self, position: Union[np.ndarray, pd.Series]) -> None:
-        """
-        Update the position of the portfolio.
+        """Update the position of the portfolio.
 
         This method updates the position (number of units) for each asset,
         computes the required trades to reach the new position, and updates
@@ -180,6 +178,7 @@ class State:
         position : Union[np.ndarray, pd.Series]
             The new position to set, either as a numpy array or pandas Series.
             If a numpy array, it must have the same length as self.assets.
+
         """
         # update the position
         position = pd.Series(index=self.assets, data=position)
@@ -192,8 +191,7 @@ class State:
 
     @property
     def gmv(self) -> float:
-        """
-        Get the gross market value of the portfolio.
+        """Get the gross market value of the portfolio.
 
         The gross market value is the sum of the absolute values of all positions,
         which represents the total market exposure including both long and short positions.
@@ -202,25 +200,25 @@ class State:
         -------
         float
             The gross market value (abs(short) + long)
+
         """
         return self.cashposition.abs().sum()
 
     @property
     def time(self) -> Optional[datetime]:
-        """
-        Get the current time of the portfolio state.
+        """Get the current time of the portfolio state.
 
         Returns
         -------
         Optional[datetime]
             The current time in the simulation, or None if not set
+
         """
         return self._time
 
     @time.setter
     def time(self, time: datetime) -> None:
-        """
-        Update the time of the portfolio state.
+        """Update the time of the portfolio state.
 
         This method updates the current time and computes the number of days
         between the new time and the previous time.
@@ -229,6 +227,7 @@ class State:
         ----------
         time : datetime
             The new time to set
+
         """
         if self.time is None:
             self._days = 0
@@ -239,8 +238,7 @@ class State:
 
     @property
     def days(self) -> int:
-        """
-        Get the number of days between the current and previous time.
+        """Get the number of days between the current and previous time.
 
         Returns
         -------
@@ -251,19 +249,20 @@ class State:
         -----
         This is useful for computing interest when holding cash or for
         time-dependent calculations.
+
         """
         return self._days
 
     @property
     def assets(self) -> pd.Index:
-        """
-        Get the assets currently in the portfolio.
+        """Get the assets currently in the portfolio.
 
         Returns
         -------
         pd.Index
             Index of assets with valid prices in the portfolio.
             If no prices are set, returns an empty index.
+
         """
         if self._prices is None:
             return pd.Index(data=[], dtype=str)
@@ -272,8 +271,7 @@ class State:
 
     @property
     def trades(self) -> Optional[pd.Series]:
-        """
-        Get the trades needed to reach the current position.
+        """Get the trades needed to reach the current position.
 
         Returns
         -------
@@ -285,19 +283,20 @@ class State:
         -----
         This is helpful when computing trading costs following a position change.
         Positive values represent buys, negative values represent sells.
+
         """
         return self._trades
 
     @property
     def mask(self) -> np.ndarray:
-        """
-        Get a boolean mask for assets with valid (non-NaN) prices.
+        """Get a boolean mask for assets with valid (non-NaN) prices.
 
         Returns
         -------
         np.ndarray
             Boolean array where True indicates a valid price and False indicates
             a missing (NaN) price. Returns an empty array if no prices are set.
+
         """
         if self._prices is None:
             return np.array([])
@@ -306,14 +305,14 @@ class State:
 
     @property
     def prices(self) -> pd.Series:
-        """
-        Get the current prices of assets in the portfolio.
+        """Get the current prices of assets in the portfolio.
 
         Returns
         -------
         pd.Series
             Series of current prices indexed by asset.
             Returns an empty series if no prices are set.
+
         """
         if self._prices is None:
             return pd.Series(dtype=float)
@@ -321,8 +320,7 @@ class State:
 
     @prices.setter
     def prices(self, prices: pd.Series | dict) -> None:
-        """
-        Update the prices of assets in the portfolio.
+        """Update the prices of assets in the portfolio.
 
         This method updates the prices and calculates the profit achieved
         due to price changes. It also updates the portfolio's AUM by adding
@@ -337,6 +335,7 @@ class State:
         -----
         The profit is calculated as the difference between the portfolio value
         before and after the price update.
+
         """
         value_before = (self.prices * self.position).sum()  # self.cashposition.sum()
         value_after = (prices * self.position).sum()
@@ -347,45 +346,44 @@ class State:
 
     @property
     def profit(self) -> float:
-        """
-        Get the profit achieved between the previous and current prices.
+        """Get the profit achieved between the previous and current prices.
 
         Returns
         -------
         float
             The profit (or loss) achieved due to price changes since the
             last price update
+
         """
         return self._profit
 
     @property
     def aum(self) -> float:
-        """
-        Get the current assets under management (AUM) of the portfolio.
+        """Get the current assets under management (AUM) of the portfolio.
 
         Returns
         -------
         float
             The total assets under management
+
         """
         return self._aum
 
     @aum.setter
     def aum(self, aum: float) -> None:
-        """
-        Update the assets under management (AUM) of the portfolio.
+        """Update the assets under management (AUM) of the portfolio.
 
         Parameters
         ----------
         aum : float
             The new assets under management value to set
+
         """
         self._aum = aum
 
     @property
     def weights(self) -> pd.Series:
-        """
-        Get the weight of each asset in the portfolio.
+        """Get the weight of each asset in the portfolio.
 
         This computes the weighting of each asset as a fraction of the
         total portfolio value (NAV).
@@ -400,14 +398,14 @@ class State:
         -----
         If positions are missing, a series of zeros is effectively returned.
         The sum of weights equals 1.0 for a fully invested portfolio with no leverage.
+
         """
         assert np.isclose(self.nav, self.aum), f"{self.nav} != {self.aum}"
         return self.cashposition / self.nav
 
     @property
     def leverage(self) -> float:
-        """
-        Get the leverage of the portfolio.
+        """Get the leverage of the portfolio.
 
         Leverage is calculated as the sum of the absolute values of all position
         weights. For a long-only portfolio with no cash, this equals 1.0.
@@ -423,5 +421,6 @@ class State:
         A leverage of 2.0 means the portfolio has twice the market exposure
         compared to its net asset value, which could be achieved through
         borrowing or short selling.
+
         """
         return float(self.weights.abs().sum())
