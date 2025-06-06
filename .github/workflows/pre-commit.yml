@@ -22,7 +22,7 @@ jobs:
 
       - name: Run ty
         run : |
-          uvx ty check
+          uvx ty check src
       # Run deptry to analyze dependencies and detect issues
       #- uses: tschm/cradle/actions/deptry@v0.1.71
       #  with:
