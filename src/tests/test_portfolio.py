@@ -50,8 +50,7 @@ def test_prices_polars(prices: pd.DataFrame, prices_pl: pl.DataFrame):
     AssertionError: If the two dataframes are not equal after conversion.
 
     """
-    prices = pl.from_pandas(prices.reset_index())
-    pdt.assert_frame_equal(prices_pl, prices)
+    pdt.assert_frame_equal(prices_pl, pl.from_pandas(prices.reset_index()))
 
 
 def test_prices_pandas(prices: pd.DataFrame, prices_pl: pl.DataFrame):
@@ -70,8 +69,7 @@ def test_prices_pandas(prices: pd.DataFrame, prices_pl: pl.DataFrame):
     AssertionError: If the converted polars DataFrame does not match the pandas DataFrame.
 
     """
-    prices_pl = prices_pl.to_pandas().set_index("date")
-    pd.testing.assert_frame_equal(prices_pl, prices)
+    pd.testing.assert_frame_equal(prices_pl.to_pandas().set_index("date"), prices)
 
 
 def test_assets(portfolio: Portfolio, prices: pd.DataFrame) -> None:

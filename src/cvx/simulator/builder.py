@@ -81,11 +81,11 @@ class Builder:
     """
 
     prices: pd.DataFrame
-    initial_aum: float = 1e6
 
-    _state: State = None
-    _units: pd.DataFrame = None
-    _aum: pd.Series = None
+    _state: State | None = None
+    _units: pd.DataFrame | None = None
+    _aum: pd.Series | None = None
+    initial_aum: float = 1e6
 
     def __post_init__(self) -> None:
         """Initialize the Builder instance after creation.
@@ -175,7 +175,7 @@ class Builder:
         return pd.DatetimeIndex(self.prices.index)
 
     @property
-    def current_prices(self) -> np.array:
+    def current_prices(self) -> np.ndarray:
         """Get the current prices for all assets in the portfolio.
 
         This property retrieves the current prices from the internal state
@@ -338,7 +338,7 @@ class Builder:
         return Portfolio(prices=self.prices, units=self.units, aum=self.aum)
 
     @property
-    def weights(self) -> np.array:
+    def weights(self) -> np.ndarray:
         """Get the current portfolio weights for each asset.
 
         This property retrieves the weight of each asset in the portfolio
@@ -359,7 +359,7 @@ class Builder:
         return self._state.weights[self._state.assets].values
 
     @weights.setter
-    def weights(self, weights: np.array) -> None:
+    def weights(self, weights: np.ndarray) -> None:
         """Set the current portfolio weights for each asset.
 
         This setter updates the portfolio weights and automatically converts

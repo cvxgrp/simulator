@@ -10,7 +10,8 @@ over time with interest on cash and borrowing fees.
 import pytest
 
 from cvx.simulator.builder import Builder
-from test_applications.test_reference.markowitz import (
+
+from .markowitz import (
     OptimizationInput,
     basic_markowitz,
     synthetic_returns,
@@ -118,7 +119,7 @@ def test_markowitz(builder, feasible, covariance, means, spreads):
             )
 
             #  optimize portfolio
-            w, _ = basic_markowitz(_input)
+            w = basic_markowitz(_input)
 
             # update weights in builder
             builder.weights = w

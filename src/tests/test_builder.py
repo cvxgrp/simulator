@@ -197,11 +197,11 @@ def test_weights_on_wrong_days(resource_dir: Any) -> None:
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.cashposition = [5, 5, 5]
+            b.cashposition = np.array([5, 5, 5])
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.position = [5, 5, 5]
+            b.position = np.array([5, 5, 5])
 
     for t, state in b:
         # set the weights for all assets alive

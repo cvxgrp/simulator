@@ -46,6 +46,10 @@ fmt: install ## Run code formatting and linting
 	@uvx pre-commit install          # Install pre-commit hooks into the git repository
 	@uvx pre-commit run --all-files  # Run all pre-commit hooks on all files
 
+ty: install
+	@uvx ty check
+
+
 ##@ Testing
 # This section contains targets for running tests and generating coverage reports
 

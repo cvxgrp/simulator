@@ -82,7 +82,7 @@ class OptimizationInput:
         return len(self.mean)
 
 
-def basic_markowitz(inputs: OptimizationInput) -> tuple[np.ndarray, float]:
+def basic_markowitz(inputs: OptimizationInput) -> np.ndarray | None:
     """Compute the basic Markowitz portfolio weights.
 
     This function solves the Markowitz portfolio optimization problem:
@@ -127,4 +127,4 @@ def basic_markowitz(inputs: OptimizationInput) -> tuple[np.ndarray, float]:
     problem = cp.Problem(cp.Maximize(objective), constraints)
     problem.solve()
     assert problem.status in {cp.OPTIMAL, cp.OPTIMAL_INACCURATE}, problem.status
-    return w.value, c.value
+    return w.value
