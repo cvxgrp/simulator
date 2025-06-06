@@ -39,3 +39,15 @@ def nav(resource_dir):
         parse_dates=True,
         header=0,
     ).squeeze()
+
+
+@pytest.fixture()
+def readme_path() -> Path:
+    """Find the README.md file in the project root directory."""
+    current_dir = Path(__file__).resolve().parent
+    while current_dir != current_dir.parent:
+        candidate = current_dir / "README.md"
+        if candidate.is_file():
+            return candidate
+        current_dir = current_dir.parent
+    raise FileNotFoundError("README.md not found in any parent directory")
