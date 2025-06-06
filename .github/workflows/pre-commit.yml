@@ -23,10 +23,6 @@ jobs:
       - name: Run ty
         run : |
           uvx ty check src
-      # Run deptry to analyze dependencies and detect issues
-      #- uses: tschm/cradle/actions/deptry@v0.1.71
-      #  with:
-      #    source-folder: 'src/cvx'
 
   # Run pre-commit hooks for code formatting, linting, etc.
   pre-commit:
