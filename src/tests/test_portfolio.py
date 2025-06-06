@@ -79,7 +79,7 @@ def test_index(portfolio: Portfolio) -> None:
         The Portfolio fixture to test
     """
     assert len(portfolio.index) == 602
-    pd.testing.assert_index_equal(portfolio.index, portfolio.prices.index)
+    assert portfolio.index == portfolio.prices.index.to_list()
 
 
 def test_prices(portfolio: Portfolio, prices: pd.DataFrame) -> None:
@@ -164,6 +164,7 @@ def test_units(portfolio: Portfolio) -> None:
         The Portfolio fixture to test
     """
     stocks = pd.DataFrame(index=portfolio.index, columns=portfolio.assets, data=1.0)
+    stocks.index.name = "date"
     pd.testing.assert_frame_equal(portfolio.units, stocks)
 
 
@@ -233,19 +234,75 @@ def test_profit(portfolio):
     )
 
 
-# def test_profit_metrics(portfolio):
-#     """
-#     Test that the profit is computed correctly
-#     :param portfolio: the portfolio object (fixture)
-#     """
-#     assert portfolio.profit.mean() == pytest.approx(-5.801328903654639)
-#     assert portfolio.profit.std() == pytest.approx(839.8620124674756)
-#     assert portfolio.profit.sum() == pytest.approx(-3492.4000000000033)
-#     # assert sharpe(portfolio.profit, n=252) == pytest.approx(-0.10965282385614909)
-#     # profit is replacing NaNs with 0?!
-#     assert portfolio.sharpe() == pytest.approx(-0.1038600869081656)
+def test_metrics(portfolio):
+    print(portfolio.reports.metrics())
 
 
 def test_snapshot(portfolio: Portfolio) -> None:
     fig = portfolio.snapshot()
     fig.show()
+
+
+def test_weights(portfolio: Portfolio) -> None:
+    """
+    Test that the weights property correctly calculates the weight of each asset in the portfolio.
+
+    This test verifies that the weights are correctly calculated by dividing the equity by the NAV.
+    In a real portfolio, the sum of weights would typically equal 1.0 for a fully invested portfolio,
+    but in our test fixture, the NAV is loaded from a separate file and may not equal the sum of equity values.
+
+    Parameters
+    ----------
+    portfolio : Portfolio
+        The Portfolio fixture to test
+    """
+    # Calculate expected weights by dividing equity by NAV
+    expected_weights = portfolio.equity.apply(lambda x: x / portfolio.nav)
+
+    # Verify that the weights property returns the expected values
+    pd.testing.assert_frame_equal(portfolio.weights, expected_weights)
+
+
+def test_from_cashpos_returns() -> None:
+    """
+    Test that the from_cashpos_returns method correctly creates a portfolio from returns and cashposition.
+
+    This test creates a returns DataFrame and a cashposition DataFrame, calls from_cashpos_returns
+    with these inputs and a sample aum value, and verifies that the resulting Portfolio object
+    has the expected properties.
+    """
+    # Create a sample returns DataFrame
+    returns = pd.DataFrame({"A": [0.05, 0.03, -0.02, 0.01], "B": [0.02, 0.01, 0.03, -0.01]})
+
+    # Create a sample cashposition DataFrame
+    # The cashposition values don't matter much for this test, as they're just used to calculate units
+    cashposition = pd.DataFrame({"A": [100, 110, 105, 110], "B": [200, 205, 215, 210]}, index=returns.index)
+
+    # Sample aum value
+    aum = 1e6
+
+    # Call from_cashpos_returns
+    portfolio = Portfolio.from_cashpos_returns(returns, cashposition, aum)
+
+    # Verify that the portfolio has the expected properties
+    # 1. The prices should be calculated from the returns using returns2prices
+    from cvx.simulator.utils.rescale import returns2prices
+
+    expected_prices = returns2prices(returns)
+
+    # Set the index name to match the portfolio's index name
+    expected_prices.index.name = "Date"
+
+    # Convert portfolio.prices to pandas if it's a polars DataFrame
+    prices_pd = portfolio.prices
+    if not isinstance(prices_pd, pd.DataFrame):
+        prices_pd = portfolio.prices.to_pandas()
+
+    pd.testing.assert_frame_equal(prices_pd, expected_prices)
+
+    # 2. The units should be calculated by dividing cashposition by prices
+    expected_units = cashposition.div(expected_prices, fill_value=0.0)
+    pd.testing.assert_frame_equal(portfolio.units, expected_units)
+
+    # 3. The aum should be the provided aum value
+    assert portfolio.aum == aum

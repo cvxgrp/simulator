@@ -22,10 +22,11 @@ class after a simulation is complete.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 import pandas as pd
+from jquantstats._data import Data
 from jquantstats.api import build_data
 
 from .utils.rescale import returns2prices
@@ -54,6 +55,7 @@ class Portfolio:
     prices: pd.DataFrame
     units: pd.DataFrame
     aum: float | pd.Series
+    _data: Data = field(init=False)
 
     def __post_init__(self) -> None:
         """
@@ -84,8 +86,14 @@ class Portfolio:
         assert set(self.units.index).issubset(set(self.prices.index))
         assert set(self.units.columns).issubset(set(self.prices.columns))
 
+        frame = self.nav.pct_change().to_frame()
+        frame.index.name = "Date"
+        d = build_data(returns=frame)
+
+        object.__setattr__(self, "_data", d)
+
     @property
-    def index(self) -> pd.DatetimeIndex:
+    def index(self) -> list[datetime]:
         """
         Get the time index of the portfolio.
 
@@ -100,10 +108,10 @@ class Portfolio:
         This property extracts the index from the prices DataFrame, which
         represents all time points in the portfolio history.
         """
-        return pd.DatetimeIndex(self.prices.index)
+        return pd.DatetimeIndex(self.prices.index).to_list()
 
     @property
-    def assets(self) -> pd.Index:
+    def assets(self) -> list[str]:
         """
         Get the list of assets in the portfolio.
 
@@ -117,7 +125,7 @@ class Portfolio:
         This property extracts the column names from the prices DataFrame,
         which correspond to all assets for which price data is available.
         """
-        return self.prices.columns
+        return self.prices.columns.to_list()
 
     @property
     def nav(self) -> pd.Series:
@@ -364,14 +372,16 @@ class Portfolio:
         return self.equity.apply(lambda x: x / self.nav)
 
     @property
-    def _data(self):
-        frame = self.nav.pct_change().to_frame()
-        frame.index.name = "Date"
-        return build_data(returns=frame)
-
-    @property
     def stats(self):
         return self._data.stats
+
+    @property
+    def plots(self):
+        return self._data.plots
+
+    @property
+    def reports(self):
+        return self._data.reports
 
     def sharpe(self, periods=None):
         return self.stats.sharpe(periods=periods)["NAV"]
@@ -389,4 +399,4 @@ class Portfolio:
         return cls.from_cashpos_prices(prices, cashposition, aum)
 
     def snapshot(self, title: str = "Portfolio Summary", log_scale: bool = True):
-        return self._data.plots.plot_snapshot(title=title, log_scale=log_scale)
+        return self.plots.plot_snapshot(title=title, log_scale=log_scale)
