@@ -18,11 +18,50 @@ from typing import Generator
 
 import numpy as np
 import pandas as pd
+import polars as pl
 
 from .portfolio import Portfolio
 from .state import State
 from .utils.interpolation import valid
 from .utils.rescale import returns2prices
+
+
+def polars2pandas(df: pl.DataFrame) -> pd.DataFrame:
+    """
+    Convert a Polars DataFrame to a Pandas DataFrame with 'date' column as index.
+
+    This function takes a Polars DataFrame that contains a 'date' column and converts it
+    to a Pandas DataFrame. During the conversion, the 'date' column is cast to a datetime
+    type with nanosecond precision and then set as the index of the resulting Pandas DataFrame.
+
+    Args:
+        df (pl.DataFrame): A Polars DataFrame containing a 'date' column.
+            The 'date' column should be convertible to a datetime type.
+
+    Returns:
+        pd.DataFrame: A Pandas DataFrame with the 'date' column set as the index.
+            The index will be of type DatetimeIndex with nanosecond precision.
+
+    Example:
+        >>> import polars as pl
+        >>> import pandas as pd
+        >>> from cvx.simulator.builder import polars2pandas
+        >>>
+        >>> # Create a sample Polars DataFrame
+        >>> pl_df = pl.DataFrame({
+        ...     "date": ["2023-01-01", "2023-01-02", "2023-01-03"],
+        ...     "value": [1.0, 2.0, 3.0]
+        ... })
+        >>>
+        >>> # Convert to Pandas DataFrame
+        >>> pd_df = polars2pandas(pl_df)
+        >>> print(type(pd_df))
+        <class 'pandas.core.frame.DataFrame'>
+        >>> print(pd_df.index.name)
+        date
+    """
+    df = df.with_columns(pl.col("date").cast(pl.Datetime("ns")))
+    return df.to_pandas().set_index("date")
 
 
 @dataclass
