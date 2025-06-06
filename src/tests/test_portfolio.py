@@ -293,10 +293,7 @@ def test_from_cashpos_returns() -> None:
     # Set the index name to match the portfolio's index name
     expected_prices.index.name = "Date"
 
-    # Convert portfolio.prices to pandas if it's a polars DataFrame
     prices_pd = portfolio.prices
-    if not isinstance(prices_pd, pd.DataFrame):
-        prices_pd = portfolio.prices.to_pandas()
 
     pd.testing.assert_frame_equal(prices_pd, expected_prices)
 
