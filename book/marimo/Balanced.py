@@ -83,33 +83,20 @@ async def _():
 
     from cvx.simulator import Builder
 
-    return Builder, mo, np, pd, pl
+    return Builder, mo, np, pl
 
 
 @app.cell
-def _(mo, pd):
-    """Load price data from a CSV file.
+def _(mo, pl):
+    from cvx.simulator.builder import polars2pandas
 
-    This cell loads historical price data for multiple assets from a CSV file.
-    The data is used for the portfolio simulations in subsequent cells.
+    # Step 1: Read the CSV, parse dates
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
 
-    Parameters
-    ----------
-    mo : marimo.Module
-        The marimo module object
-    pd : module
-        The pandas module
-
-    Returns
-    -------
-    tuple
-        A tuple containing the prices DataFrame
-
-    """
-    # load prices from flat csv file
-    prices = pd.read_csv(
-        str(mo.notebook_location() / "public" / "stock-prices.csv"), header=0, index_col=0, parse_dates=True
-    )
+    prices = polars2pandas(prices)
+    print(prices)
+    print(prices.dtypes)
+    print(prices.index.dtype)
     return (prices,)
 
 

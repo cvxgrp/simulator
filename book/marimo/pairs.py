@@ -80,7 +80,21 @@ async def _():
 
 
 @app.cell
-def _(Builder, logger, mo, np, pd):
+def _(mo, pl):
+    from cvx.simulator.builder import polars2pandas
+
+    # Step 1: Read the CSV, parse dates
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
+
+    prices = polars2pandas(prices)
+    print(prices)
+    print(prices.dtypes)
+    print(prices.index.dtype)
+    return (prices,)
+
+
+@app.cell
+def _(Builder, logger, np, pd, prices):
     """Implement the pairs trading strategy and build the portfolio.
 
     This cell:
@@ -99,12 +113,12 @@ def _(Builder, logger, mo, np, pd):
         The Builder class from cvx.simulator
     logger : Logger
         The logger instance for logging information
-    mo : marimo.Module
-        The marimo module object
     np : module
         The numpy module
     pd : module
         The pandas module
+    prices: pd.DataFrame
+        The prices
 
     Returns
     -------
@@ -113,10 +127,6 @@ def _(Builder, logger, mo, np, pd):
 
     """
     logger.info("Load prices")
-    prices = pd.read_csv(
-        str(mo.notebook_location() / "public" / "stock-prices.csv"), index_col=0, parse_dates=True, header=0
-    )
-
     logger.info("Build portfolio")
     b = Builder(prices=prices, initial_aum=1e6)
 
