@@ -5,7 +5,6 @@ name: "Marimo Notebooks"
 
 on:
   push:  # Triggered on every push to the repository
-  pull_request:  # Also run on pull requests
 
 permissions:
   contents: read  # Read-only access to repository contents
