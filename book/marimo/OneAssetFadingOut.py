@@ -100,7 +100,7 @@ def _(mo, np, pd):
     prices = pd.read_csv(mo.notebook_location() / "public" / "prices.csv", header=0, index_col=0, parse_dates=True)
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
-    prices
+    print(prices)
     return (prices,)
 
 
@@ -159,7 +159,7 @@ def _(portfolio):
         The portfolio object built by the previous cell
 
     """
-    portfolio.prices
+    print(portfolio.prices)
     return
 
 
