@@ -52,7 +52,7 @@ def interpolate(ts):
 
     """
     # Check if the input is a valid type
-    if not isinstance(ts, (pd.Series, pl.Series)):
+    if not isinstance(ts, pd.Series | pl.Series):
         raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")
 
     # If the input is a polars Series, use the polars-specific function
@@ -100,7 +100,7 @@ def valid(ts) -> bool:
 
     """
     # Check if the input is a valid type
-    if not isinstance(ts, (pd.Series, pl.Series)):
+    if not isinstance(ts, pd.Series | pl.Series):
         raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")
 
     # If the input is a polars Series, use the polars-specific function

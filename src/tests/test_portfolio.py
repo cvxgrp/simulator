@@ -245,7 +245,7 @@ def test_monotonic() -> None:
     when initialized with price data that has a non-monotonic index.
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         Portfolio(prices=prices, units=prices, aum=1e6)
 
 
@@ -311,7 +311,7 @@ def test_snapshot(portfolio: Portfolio) -> None:
 
     """
     fig = portfolio.snapshot()
-    fig
+    print(fig.to_dict())
 
 
 def test_weights(portfolio: Portfolio) -> None:

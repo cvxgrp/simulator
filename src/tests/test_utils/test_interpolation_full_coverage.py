@@ -21,7 +21,7 @@ from cvx.simulator.utils.interpolation import (
 def test_valid_df_pl_all_valid():
     """Test that valid_df_pl returns True when all columns in the DataFrame are valid."""
     # Create a DataFrame with valid columns
-    df = pl.DataFrame(
+    dframe = pl.DataFrame(
         {
             "A": [None, 1, 2, 3, None],  # Nulls only at beginning and end
             "B": [None, 2, 3, 4, None],  # Nulls only at beginning and end
@@ -30,13 +30,13 @@ def test_valid_df_pl_all_valid():
     )
 
     # Verify that valid_df_pl returns True
-    assert valid_df_pl(df)
+    assert valid_df_pl(dframe)
 
 
 def test_valid_df_pl_one_invalid():
     """Test that valid_df_pl returns False when at least one column in the DataFrame is invalid."""
     # Create a DataFrame with one invalid column
-    df = pl.DataFrame(
+    dframe = pl.DataFrame(
         {
             "A": [None, 1, 2, 3, None],  # Nulls only at beginning and end
             "B": [1, 2, None, 4, 5],  # Null in the middle
@@ -45,13 +45,13 @@ def test_valid_df_pl_one_invalid():
     )
 
     # Verify that valid_df_pl returns False
-    assert not valid_df_pl(df)
+    assert not valid_df_pl(dframe)
 
 
 def test_interpolate_df_pl_with_different_types():
     """Test that interpolate_df_pl correctly handles a DataFrame with different types of columns."""
     # Create a DataFrame with different types of columns
-    df = pl.DataFrame(
+    dframe = pl.DataFrame(
         {
             "int": [1, None, None, 4, 5],
             "float": [1.0, None, None, 4.0, 5.0],
@@ -61,7 +61,7 @@ def test_interpolate_df_pl_with_different_types():
     )
 
     # Apply interpolate_df_pl
-    result = interpolate_df_pl(df)
+    result = interpolate_df_pl(dframe)
 
     # Verify that all columns are valid
     for col in result.columns:
@@ -77,10 +77,10 @@ def test_interpolate_df_pl_with_different_types():
 def test_interpolate_df_pl_empty_dataframe():
     """Test that interpolate_df_pl correctly handles an empty DataFrame."""
     # Create an empty DataFrame
-    df = pl.DataFrame()
+    dframe = pl.DataFrame()
 
     # Apply interpolate_df_pl
-    result = interpolate_df_pl(df)
+    result = interpolate_df_pl(dframe)
 
     # Verify that the result is an empty DataFrame
     assert result.shape == (0, 0)
@@ -89,10 +89,10 @@ def test_interpolate_df_pl_empty_dataframe():
 def test_valid_df_pl_empty_dataframe():
     """Test that valid_df_pl correctly handles an empty DataFrame."""
     # Create an empty DataFrame
-    df = pl.DataFrame()
+    dframe = pl.DataFrame()
 
     # Verify that valid_df_pl returns True for an empty DataFrame
-    assert valid_df_pl(df)
+    assert valid_df_pl(dframe)
 
 
 def test_interpolate_pl_with_one_value():

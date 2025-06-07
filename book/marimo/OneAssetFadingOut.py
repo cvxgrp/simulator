@@ -85,7 +85,7 @@ def _(mo, np, pl):
 
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
-
+    print(prices)
     return (prices,)
 
 
@@ -123,7 +123,7 @@ def _(Builder, np, prices):
     """
     _builder = Builder(prices=prices, initial_aum=2000)
 
-    for t, _state in _builder:
+    for _t, _state in _builder:
         _builder.weights = np.ones(len(_state.assets)) / len(_state.assets)
         _builder.aum = _state.aum
 
@@ -144,13 +144,13 @@ def _(portfolio):
         The portfolio object built by the previous cell
 
     """
-    portfolio.prices
+    print(portfolio.prices)
     return
 
 
 @app.cell
 def _(portfolio):
-    portfolio.nav
+    print(portfolio.nav)
     return
 
 
@@ -168,7 +168,7 @@ def _(portfolio):
         The portfolio object built by the previous cell
 
     """
-    portfolio.weights
+    print(portfolio.weights)
     return
 
 

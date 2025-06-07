@@ -85,7 +85,7 @@ def test_set_position(prices: pd.DataFrame) -> None:
 
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
-    for times, state in b:
+    for _times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
         b.aum = state.aum
@@ -93,7 +93,7 @@ def test_set_position(prices: pd.DataFrame) -> None:
     portfolio = b.build()
     assert isinstance(portfolio, Portfolio)
 
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+    assert portfolio.nav.to_numpy()[-1] == pytest.approx(49773.093729)
 
 
 def test_set_weights(prices: pd.DataFrame) -> None:
@@ -110,14 +110,14 @@ def test_set_weights(prices: pd.DataFrame) -> None:
 
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
-    for times, state in b:
-        b.weights = np.array([0.5, 0.5])
-        assert np.allclose(b.weights, np.array([0.5, 0.5]))
-        assert np.allclose(state.weights.values, np.array([0.5, 0.5]))
+    for _times, state in b:
+        b.weights = np.array((0.5, 0.5))
+        assert np.allclose(b.weights, np.array((0.5, 0.5)))
+        assert np.allclose(state.weights.values, np.array((0.5, 0.5)))
         b.aum = state.aum  # cash - (state.trades * state.prices).sum()
 
     portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+    assert portfolio.nav.to_numpy()[-1] == pytest.approx(49773.093729)
 
 
 def test_set_cashpositions(prices: pd.DataFrame) -> None:
@@ -134,14 +134,14 @@ def test_set_cashpositions(prices: pd.DataFrame) -> None:
 
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
-    for times, state in b:
-        b.cashposition = np.ones(2) * state.nav / 2
-        assert np.allclose(b.cashposition, np.ones(2) * state.nav / 2)
+    for _times, state in b:
+        b.cashposition = np.ones((2,)) * state.nav / 2
+        assert np.allclose(b.cashposition, np.ones((2,)) * state.nav / 2)
         # b.cash = state.cash - (state.trades * state.prices).sum()
         b.aum = state.aum
 
     portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+    assert portfolio.nav.to_numpy()[-1] == pytest.approx(49773.093729)
 
 
 def test_set_position_again(prices: pd.DataFrame) -> None:
@@ -158,14 +158,14 @@ def test_set_position_again(prices: pd.DataFrame) -> None:
 
     """
     b = Builder(prices=prices[["B", "C"]].head(5), initial_aum=50000)
-    for times, state in b:
+    for _times, state in b:
         b.position = state.nav / (state.prices * 2)
         assert np.allclose(b.position, state.nav / (state.prices * 2))
         # b.cash = state.cash - (state.trades * state.prices).sum()
         b.aum = state.aum
 
     portfolio = b.build()
-    assert portfolio.nav.values[-1] == pytest.approx(49773.093729)
+    assert portfolio.nav.to_numpy()[-1] == pytest.approx(49773.093729)
 
 
 def test_weights_on_wrong_days(resource_dir: Any) -> None:
@@ -187,25 +187,25 @@ def test_weights_on_wrong_days(resource_dir: Any) -> None:
     prices = pd.read_csv(resource_dir / "priceNaN.csv", index_col=0, parse_dates=True, header=0).apply(interpolate)
 
     # there are no inner NaNs
+    rng = np.random.default_rng(42)
 
     b = Builder(prices=prices, initial_aum=50000)
-    t = prices.index
 
-    for t, state in b:
+    for _t, _ in b:
         with pytest.raises(ValueError):
-            b.weights = np.array([0.5, 0.25, 0.25])
-
-        with pytest.raises(ValueError):
-            # C is not there yet
-            b.cashposition = np.array([5, 5, 5])
+            b.weights = np.array((0.5, 0.25, 0.25))
 
         with pytest.raises(ValueError):
             # C is not there yet
-            b.position = np.array([5, 5, 5])
+            b.cashposition = np.array((5, 5, 5))
 
-    for t, state in b:
+        with pytest.raises(ValueError):
+            # C is not there yet
+            b.position = np.array((5, 5, 5))
+
+    for _t, state in b:
         # set the weights for all assets alive
-        b.weights = np.random.rand(len(state.assets))
+        b.weights = rng.uniform(size=len(state.assets))
 
 
 def test_iteration_state(builder: Builder) -> None:
@@ -221,7 +221,7 @@ def test_iteration_state(builder: Builder) -> None:
         The Builder fixture to test
 
     """
-    for t, state in builder:
+    for _t, state in builder:
         assert state.leverage == 0
         assert state.nav == 1e6
         assert state.value == 0.0

@@ -130,7 +130,7 @@ def _(Builder, logger, np, pd, prices):
     logger.info("Build portfolio")
     b = Builder(prices=prices, initial_aum=1e6)
 
-    for t, state in b:
+    for _t, state in b:
         assert state.nav > 0, "Game over"
 
         # pick two assets at random
@@ -138,7 +138,7 @@ def _(Builder, logger, np, pd, prices):
 
         # compute the pair
         units = pd.Series(index=state.assets, data=0.0)
-        units[pair] = [state.nav, -state.nav] / state.prices[pair].values
+        units[pair] = [state.nav, -state.nav] / state.prices[pair].to_numpy()
         b.position = 0.1 * units
 
         # 1 bps of the traded volume (measured in USD) are paid as fee
