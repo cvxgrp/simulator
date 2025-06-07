@@ -72,32 +72,17 @@ async def _():
 
 
 @app.cell
-def _(mo, np, pd):
-    """Load and modify price data to simulate an asset fading out.
+def _(mo, np, pl):
+    from cvx.simulator.builder import polars2pandas
 
-    This cell:
-    1. Loads price data for two assets (A and B) from a CSV file
-    2. Modifies the data to make asset B fade out by setting its prices
-       to NaN on 2022-01-03 and 2022-01-04
-    3. Returns the modified price data
+    # Step 1: Read the CSV, parse dates
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "prices.csv"), try_parse_dates=True)
 
-    Parameters
-    ----------
-    mo : marimo.Module
-        The marimo module object
-    np : module
-        The numpy module
-    pd : module
-        The pandas module
+    prices = polars2pandas(prices)
+    print(prices)
+    print(prices.dtypes)
+    print(prices.index.dtype)
 
-    Returns
-    -------
-    tuple
-        A tuple containing the modified prices DataFrame
-
-    """
-    # two assets, A and B, constant price for A=100 and B=200
-    prices = pd.read_csv(mo.notebook_location() / "public" / "prices.csv", header=0, index_col=0, parse_dates=True)
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
     print(prices)

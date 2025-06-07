@@ -1,0 +1,30 @@
+name: "Marimo Notebooks"
+# Workflow for running marimo notebooks
+# This workflow runs all marimo notebooks in the book/marimo directory
+# to ensure they execute without errors.
+
+on:
+  push:  # Triggered on every push to the repository
+
+permissions:
+  contents: read  # Read-only access to repository contents
+
+jobs:
+  run-notebooks:
+    name: Run Marimo Notebooks
+    runs-on: ubuntu-latest  # Run on Ubuntu
+
+    steps:
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.71
+
+      - name: Run notebooks
+        run: |
+          uv pip install --no-cache-dir marimo
+
+          # export all .py files in book/marimo directory
+          for py_file in book/marimo/*.py; do
+              filename=$(basename "$py_file" .py)
+              echo "Processing $py_file"
+              uv run python "$py_file"
+          done
