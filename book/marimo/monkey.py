@@ -32,7 +32,7 @@ async def _():
 
     pd.options.plotting.backend = "plotly"
 
-    return mo, np, pd, pl
+    return mo, np, pl
 
 
 @app.cell
@@ -44,10 +44,16 @@ def _(pd):
 
 
 @app.cell
-def _(mo, pd):
-    prices = pd.read_csv(
-        mo.notebook_location() / "public" / "stock-prices.csv", header=0, index_col=0, parse_dates=True
-    )
+def _(mo, pl):
+    from cvx.simulator.builder import polars2pandas
+
+    # Step 1: Read the CSV, parse dates
+    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
+
+    prices = polars2pandas(prices)
+    print(prices)
+    print(prices.dtypes)
+    print(prices.index.dtype)
     return (prices,)
 
 

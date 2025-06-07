@@ -6,11 +6,13 @@ and analyzing performance. The tests verify that the Portfolio correctly calcula
 these metrics and provides the expected visualization capabilities.
 """
 
+import numpy as np
 import pandas as pd
 import polars as pl
 import polars.testing as pdt
 import pytest
 
+from cvx.simulator.builder import polars2pandas
 from cvx.simulator.portfolio import Portfolio
 
 
@@ -330,3 +332,31 @@ def test_weights(portfolio: Portfolio) -> None:
 
     # Verify that the weights property returns the expected values
     pd.testing.assert_frame_equal(portfolio.weights, expected_weights)
+
+
+def test_csv_route(prices_pl, prices):
+    """Tests the CSV data conversion route.
+
+    This function checks the conversion of a Polars DataFrame to a Pandas DataFrame using
+    a helper function. It performs a series of assertions to validate the transformation,
+    ensuring the integrity of data types and the uniformity of the output.
+
+    Parameters
+    ----------
+    prices_pl : polars.DataFrame
+        The input Polars DataFrame containing price data.
+    prices : pandas.DataFrame
+        The reference Pandas DataFrame for comparison.
+
+    Raises
+    ------
+    AssertionError
+        If the converted DataFrame does not match the reference DataFrame in structure,
+        content, index data type, or column data types.
+
+    """
+    ppp = polars2pandas(prices_pl, date_col="date")
+    pd.testing.assert_frame_equal(ppp, prices)
+
+    assert ppp.index.dtype == "datetime64[ns]"
+    assert np.all(np.array(ppp.dtypes) == np.dtype("float64"))
