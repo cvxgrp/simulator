@@ -62,14 +62,28 @@ def _(mo):
 
 
 @app.cell
-def _():
+async def _():
+    try:
+        import sys
+
+        if "pyodide" in sys.modules:
+            import micropip
+
+            await micropip.install("cvxsimulator")
+
+    except ImportError:
+        pass
+
     import marimo as mo
     import numpy as np
     import pandas as pd
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
 
     from cvx.simulator import Builder
 
-    return Builder, mo, np, pd
+    return Builder, mo, np, pd, pl
 
 
 @app.cell
@@ -94,7 +108,7 @@ def _(mo, pd):
     """
     # load prices from flat csv file
     prices = pd.read_csv(
-        str(mo.notebook_location() / "data" / "stock-prices.csv"), header=0, index_col=0, parse_dates=True
+        str(mo.notebook_location() / "public" / "stock-prices.csv"), header=0, index_col=0, parse_dates=True
     )
     return (prices,)
 
