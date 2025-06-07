@@ -7,41 +7,58 @@ on:
 
 jobs:
   # Create a new version tag based on semantic versioning
-  tag:
+  tagging:
     # Need write permissions to create tags in the repository
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag_step.outputs.new_tag }}  # Output the new tag for use in other jobs
 
     steps:
       # Generate a new version tag based on commit history
       - name: Generate Tag
+        id: tag_step
         uses: tschm/cradle/actions/tag@v0.1.71
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  # Publish the package to PyPI
-  publish:
-    # This job runs after the tag job completes successfully
-    needs: tag
+  # Job to build the package with the new version
+  build:
     runs-on: ubuntu-latest
-    # Use the release environment for PyPI credentials
-    environment: release
+    needs: tagging  # Depends on the tagging job to get the new version
+    steps:
+      # Build the package (sdist and wheel) with the new version tag
+      - name: build
+        uses: tschm/cradle/actions/build@v0.1.71
+        with:
+          tag: ${{ needs.tagging.outputs.new_tag }}  # Use the tag from the previous job
 
+  # Job to publish the built package to PyPI
+  publish:
+    needs: build  # Depends on the build job to have the package ready
+    runs-on: ubuntu-latest
+    environment: release  # Use the 'release' environment for secrets
+
+    # Permissions needed for PyPI trusted publishing
     permissions:
-      # Read access to repository contents
-      contents: read
-      # This permission is required for trusted publishing to PyPI
-      id-token: write
+      contents: read  # Only need read access to the repository
+      id-token: write  # Required for trusted publishing to PyPI
 
     steps:
-      # Download the built distribution package
+      # Check out the repository code
+      # - name: Checkout [${{ github.repository }}]
+      #   uses: actions/checkout@v4
+
+      # Download the built package artifacts from the build job
       - uses: actions/download-artifact@v4
         with:
-          name: dist
-          path: dist
+          name: dist  # Artifact name containing the built packages
+          path: dist  # Local path to download to
 
       # Publish the package to PyPI using trusted publishing
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@release/v1  # Official PyPI publishing action
+        with:
+          verbose: 'true'
