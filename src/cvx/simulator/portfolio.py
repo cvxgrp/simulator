@@ -74,13 +74,25 @@ class Portfolio:
             If any of the validation checks fail
 
         """
-        assert self.prices.index.is_monotonic_increasing
-        assert self.prices.index.is_unique
-        assert self.units.index.is_monotonic_increasing
-        assert self.units.index.is_unique
+        if not self.prices.index.is_monotonic_increasing:
+            raise ValueError("`prices` index must be monotonic increasing.")
 
-        assert set(self.units.index).issubset(set(self.prices.index))
-        assert set(self.units.columns).issubset(set(self.prices.columns))
+        if not self.prices.index.is_unique:
+            raise ValueError("`prices` index must be unique.")
+
+        if not self.units.index.is_monotonic_increasing:
+            raise ValueError("`units` index must be monotonic increasing.")
+
+        if not self.units.index.is_unique:
+            raise ValueError("`units` index must be unique.")
+
+        missing_dates = self.units.index.difference(self.prices.index)
+        if not missing_dates.empty:
+            raise ValueError(f"`units` index contains dates not present in `prices`: {missing_dates.tolist()}")
+
+        missing_assets = self.units.columns.difference(self.prices.columns)
+        if not missing_assets.empty:
+            raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")
 
         frame = self.nav.pct_change().to_frame()
         frame.index.name = "Date"

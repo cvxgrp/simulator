@@ -101,10 +101,10 @@ def test_interpolate_df_pl_with_date_column() -> None:
     dates = [datetime(2023, 1, 1) + timedelta(days=i) for i in range(5)]
 
     # Create a polars DataFrame with a date column and null values in other columns
-    df = pl.DataFrame({"date": dates, "A": [1.0, 2.0, None, 4.0, 5.0], "B": [None, 2.0, 3.0, None, 5.0]})
+    dframe = pl.DataFrame({"date": dates, "A": [1.0, 2.0, None, 4.0, 5.0], "B": [None, 2.0, 3.0, None, 5.0]})
 
     # Apply interpolate_df_pl
-    result = interpolate_df_pl(df)
+    result = interpolate_df_pl(dframe)
 
     # Verify that the date column is unchanged
     assert result["date"].to_list() == dates

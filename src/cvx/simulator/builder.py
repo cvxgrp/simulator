@@ -15,8 +15,8 @@
 #    limitations under the License.
 from __future__ import annotations
 
+from collections.abc import Generator
 from dataclasses import dataclass
-from typing import Generator
 
 import numpy as np
 import pandas as pd
@@ -27,7 +27,7 @@ from .state import State
 from .utils.interpolation import valid
 
 
-def polars2pandas(df: pl.DataFrame) -> pd.DataFrame:
+def polars2pandas(dframe: pl.DataFrame) -> pd.DataFrame:
     """Convert a Polars DataFrame to a Pandas DataFrame with 'date' column as index.
 
     This function takes a Polars DataFrame that contains a 'date' column and converts it
@@ -35,7 +35,7 @@ def polars2pandas(df: pl.DataFrame) -> pd.DataFrame:
     type with nanosecond precision and then set as the index of the resulting Pandas DataFrame.
 
     Args:
-        df (pl.DataFrame): A Polars DataFrame containing a 'date' column.
+        dframe (pl.DataFrame): A Polars DataFrame containing a 'date' column.
             The 'date' column should be convertible to a datetime type.
 
     Returns:
@@ -62,8 +62,8 @@ def polars2pandas(df: pl.DataFrame) -> pd.DataFrame:
         date
 
     """
-    df = df.with_columns(pl.col("date").cast(pl.Datetime("ns")))
-    return df.to_pandas().set_index("date")
+    dframe = dframe.with_columns(pl.col("date").cast(pl.Datetime("ns")))
+    return dframe.to_pandas().set_index("date")
 
 
 @dataclass
@@ -104,8 +104,11 @@ class Builder:
 
         """
         # assert isinstance(self.prices, pd.DataFrame)
-        assert self.prices.index.is_monotonic_increasing
-        assert self.prices.index.is_unique
+        if not self.prices.index.is_monotonic_increasing:
+            raise ValueError("Index must be monotonically increasing")
+
+        if not self.prices.index.is_unique:
+            raise ValueError("Index must have unique values")
 
         self._state = State()
 
@@ -192,7 +195,7 @@ class Builder:
         during iteration through the portfolio's time index.
 
         """
-        return self._state.prices[self._state.assets].values
+        return self._state.prices[self._state.assets].to_numpy()
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State]]:
         """Iterate over object in a for loop.
@@ -356,7 +359,7 @@ class Builder:
         Negative weights represent short positions.
 
         """
-        return self._state.weights[self._state.assets].values
+        return self._state.weights[self._state.assets].to_numpy()
 
     @weights.setter
     def weights(self, weights: np.ndarray) -> None:

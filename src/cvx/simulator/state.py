@@ -20,7 +20,6 @@ and is updated by the Builder class during the simulation process.
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -57,10 +56,10 @@ class State:
 
     """
 
-    _prices: Optional[pd.Series] = None
-    _position: Optional[pd.Series] = None
-    _trades: Optional[pd.Series] = None
-    _time: Optional[datetime] = None
+    _prices: pd.Series | None = None
+    _position: pd.Series | None = None
+    _trades: pd.Series | None = None
+    _time: datetime | None = None
     _days: int = 0
     _profit: float = 0.0
     _aum: float = 0.0
@@ -166,7 +165,7 @@ class State:
         return self._position
 
     @position.setter
-    def position(self, position: Union[np.ndarray, pd.Series]) -> None:
+    def position(self, position: np.ndarray | pd.Series) -> None:
         """Update the position of the portfolio.
 
         This method updates the position (number of units) for each asset,
@@ -205,7 +204,7 @@ class State:
         return self.cashposition.abs().sum()
 
     @property
-    def time(self) -> Optional[datetime]:
+    def time(self) -> datetime | None:
         """Get the current time of the portfolio state.
 
         Returns
@@ -270,7 +269,7 @@ class State:
         return self.prices.dropna().index
 
     @property
-    def trades(self) -> Optional[pd.Series]:
+    def trades(self) -> pd.Series | None:
         """Get the trades needed to reach the current position.
 
         Returns
@@ -299,7 +298,7 @@ class State:
 
         """
         if self._prices is None:
-            return np.array([])
+            return np.empty(0, dtype=bool)
 
         return np.isfinite(self.prices.values)
 
@@ -400,7 +399,9 @@ class State:
         The sum of weights equals 1.0 for a fully invested portfolio with no leverage.
 
         """
-        assert np.isclose(self.nav, self.aum), f"{self.nav} != {self.aum}"
+        if not np.isclose(self.nav, self.aum):
+            raise ValueError(f"{self.nav} != {self.aum}")
+
         return self.cashposition / self.nav
 
     @property

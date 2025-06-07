@@ -112,13 +112,13 @@ def basic_markowitz(inputs: OptimizationInput) -> np.ndarray | None:
         - The optimal cash weight as a float
 
     """
-    mu, Sigma = inputs.mean.values, inputs.covariance.values
+    mu, sigma = inputs.mean.to_numpy(), inputs.covariance.to_numpy()
 
     w = cp.Variable(inputs.n_assets)
     c = cp.Variable()
     objective = mu @ w
 
-    chol = np.linalg.cholesky(Sigma)
+    chol = np.linalg.cholesky(sigma)
     constraints = [
         cp.sum(w) + c == 1,
         cp.norm2(chol.T @ w) <= inputs.risk_target,

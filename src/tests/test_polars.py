@@ -26,7 +26,7 @@ def test_iteration(prices_pl: pl.DataFrame):
     """
     # iterate
     for row in prices_pl.rows(named=True):
-        row
+        print(row)
 
 
 def test_index(prices_pl: pl.DataFrame):
