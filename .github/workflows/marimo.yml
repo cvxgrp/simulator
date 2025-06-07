@@ -27,5 +27,5 @@ jobs:
           for py_file in book/marimo/*.py; do
               filename=$(basename "$py_file" .py)
               echo "Processing $py_file"
-              uv run marimo run "$py_file"
+              uv run python "$py_file"
           done
