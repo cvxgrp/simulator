@@ -27,14 +27,14 @@ from .state import State
 from .utils.interpolation import valid
 
 
-def polars2pandas(df: pl.DataFrame, date_col="date") -> pd.DataFrame:
+def polars2pandas(dframe: pl.DataFrame, date_col="date") -> pd.DataFrame:
     """Convert a Polars DataFrame to a Pandas DataFrame.
 
     Ensuring the date column is cast to a datetime format and
     all other columns are cast to Float64. The resulting Pandas DataFrame is indexed by the specified date column.
 
     Args:
-        df (pl.DataFrame): The Polars DataFrame to be converted.
+        dframe (pl.DataFrame): The Polars DataFrame to be converted.
         date_col (str): The name of the column containing date values, defaults to "date".
 
     Returns:
@@ -42,7 +42,7 @@ def polars2pandas(df: pl.DataFrame, date_col="date") -> pd.DataFrame:
 
     """
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in df.columns if col != date_col])
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     return dframe.to_pandas().set_index(date_col)
 
 
