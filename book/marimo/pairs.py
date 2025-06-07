@@ -38,7 +38,7 @@ def _(mo):
 
 
 @app.cell
-def _():
+async def _():
     """Import required libraries and modules.
 
     This cell imports the necessary libraries and modules for the pairs trading simulation:
@@ -54,14 +54,29 @@ def _():
         A tuple containing the imported modules (Builder, logger, mo, np, pd)
 
     """
+    try:
+        import sys
+
+        if "pyodide" in sys.modules:
+            import micropip
+
+            await micropip.install("cvxsimulator")
+
+    except ImportError:
+        pass
+
     import marimo as mo
     import numpy as np
     import pandas as pd
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
+
     from loguru import logger
 
     from cvx.simulator import Builder
 
-    return Builder, logger, mo, np, pd
+    return Builder, logger, mo, np, pd, pl
 
 
 @app.cell
@@ -99,7 +114,7 @@ def _(Builder, logger, mo, np, pd):
     """
     logger.info("Load prices")
     prices = pd.read_csv(
-        str(mo.notebook_location() / "data" / "stock-prices.csv"), index_col=0, parse_dates=True, header=0
+        str(mo.notebook_location() / "public" / "stock-prices.csv"), index_col=0, parse_dates=True, header=0
     )
 
     logger.info("Build portfolio")

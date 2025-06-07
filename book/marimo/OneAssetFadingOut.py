@@ -33,7 +33,7 @@ def _(mo):
 
 
 @app.cell
-def _():
+async def _():
     """Import required libraries and modules.
 
     This cell imports the necessary libraries and modules for the simulation:
@@ -48,13 +48,27 @@ def _():
         A tuple containing the imported modules (Builder, mo, np, pd)
 
     """
+    try:
+        import sys
+
+        if "pyodide" in sys.modules:
+            import micropip
+
+            await micropip.install("cvxsimulator")
+
+    except ImportError:
+        pass
+
     import marimo as mo
     import numpy as np
     import pandas as pd
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
 
     from cvx.simulator import Builder
 
-    return Builder, mo, np, pd
+    return Builder, mo, np, pd, pl
 
 
 @app.cell
@@ -83,7 +97,7 @@ def _(mo, np, pd):
 
     """
     # two assets, A and B, constant price for A=100 and B=200
-    prices = pd.read_csv(mo.notebook_location() / "data" / "prices.csv", header=0, index_col=0, parse_dates=True)
+    prices = pd.read_csv(mo.notebook_location() / "public" / "prices.csv", header=0, index_col=0, parse_dates=True)
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
     prices
