@@ -49,8 +49,8 @@ jobs:
   # Generate API documentation using pdoc
   pdoc:
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
+    #permissions:
+    #  contents: read
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
@@ -64,8 +64,8 @@ jobs:
   # Run tests with coverage reporting
   test:
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
+    #permissions:
+    #  contents: read
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
@@ -80,8 +80,8 @@ jobs:
   # Process Jupyter notebooks
   jupyter:
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
+    #permissions:
+    #  contents: read
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
@@ -99,7 +99,7 @@ jobs:
       name: github-pages
 
     permissions:
-      contents: read
+      #contents: read
       pages: write
       id-token: write
 
