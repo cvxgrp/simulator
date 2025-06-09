@@ -5,9 +5,33 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import marimo as mo
+    import numpy as np
+    import pandas as pd
+    import plotly.io as pio
+    import polars as pl
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+
+    path = mo.notebook_location() / "public" / "stock-prices.csv"
+
+    # from cvxsimulator.builder import polars2pandas
+    date_col = "date"
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col)
+
+    from loguru import logger
+
+    from cvxsimulator import Builder
+
 
 @app.cell
-def _(mo):
+def _():
     """Display the title of the notebook.
 
     Parameters
@@ -39,51 +63,6 @@ def _(mo):
 
 @app.cell
 def _():
-    """Import required libraries and modules.
-
-    This cell imports the necessary libraries and modules for the pairs trading simulation:
-    - marimo: For notebook functionality
-    - numpy: For numerical operations
-    - pandas: For data manipulation
-    - loguru: For logging
-    - Builder: From cvx.simulator for portfolio simulation
-
-    Returns
-    -------
-    tuple
-        A tuple containing the imported modules (Builder, logger, mo, np, pd)
-
-    """
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-    import polars as pl
-
-    pd.options.plotting.backend = "plotly"
-
-    from loguru import logger
-
-    from cvxsimulator import Builder
-
-    return Builder, logger, mo, np, pd, pl
-
-
-@app.cell
-def _(mo, pl):
-    from cvxsimulator.builder import polars2pandas
-
-    # Step 1: Read the CSV, parse dates
-    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
-
-    prices = polars2pandas(prices)
-    print(prices)
-    print(prices.dtypes)
-    print(prices.index.dtype)
-    return (prices,)
-
-
-@app.cell
-def _(Builder, logger, np, pd, prices):
     """Implement the pairs trading strategy and build the portfolio.
 
     This cell:
@@ -96,18 +75,6 @@ def _(Builder, logger, np, pd, prices):
     4. Applies transaction costs (1 bps of traded volume)
     5. Builds and returns the final portfolio
 
-    Parameters
-    ----------
-    Builder : class
-        The Builder class from cvx.simulator
-    logger : Logger
-        The logger instance for logging information
-    np : module
-        The numpy module
-    pd : module
-        The pandas module
-    prices: pd.DataFrame
-        The prices
 
     Returns
     -------
@@ -118,12 +85,13 @@ def _(Builder, logger, np, pd, prices):
     logger.info("Load prices")
     logger.info("Build portfolio")
     b = Builder(prices=prices, initial_aum=1e6)
+    rng = np.random.default_rng(42)
 
     for _t, state in b:
         assert state.nav > 0, "Game over"
 
         # pick two assets at random
-        pair = np.random.choice(state.assets, 2, replace=False)
+        pair = rng.choice(state.assets, 2, replace=False)
 
         # compute the pair
         units = pd.Series(index=state.assets, data=0.0)

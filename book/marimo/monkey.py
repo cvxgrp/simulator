@@ -6,53 +6,41 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 
+with app.setup:
+    import marimo as mo
+    import numpy as np
+    import plotly.io as pio
+    import polars as pl
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+
+    path = mo.notebook_location() / "public" / "stock-prices.csv"
+
+    # from cvxsimulator.builder import polars2pandas
+    date_col = "date"
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col)
+
+    from cvxsimulator import Builder
+
+
 @app.cell
-def _(mo):
+def _():
     mo.md(r"""# Monkey portfolios""")
     return
 
 
 @app.cell
 def _():
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-    import polars as pl
-
-    pd.options.plotting.backend = "plotly"
-
-    return mo, np, pl
-
-
-@app.cell
-def _(pd):
-    from cvxsimulator import Builder
-
-    pd.options.plotting.backend = "plotly"
-    return (Builder,)
-
-
-@app.cell
-def _(mo, pl):
-    from cvxsimulator.builder import polars2pandas
-
-    # Step 1: Read the CSV, parse dates
-    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
-
-    prices = polars2pandas(prices)
-    print(prices)
-    print(prices.dtypes)
-    print(prices.index.dtype)
-    return (prices,)
-
-
-@app.cell
-def _(Builder, np, prices):
     _builder = Builder(prices=prices, initial_aum=1000000.0)
-    np.random.seed(42)
+    rng = np.random.default_rng(42)
     for _time, _state in _builder:
         _n = len(_state.assets)
-        _w = np.random.rand(_n)
+        _w = rng.random(_n)
         _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
@@ -65,12 +53,12 @@ def _(Builder, np, prices):
 
 
 @app.cell
-def _(Builder, np, prices):
+def _():
     _builder = Builder(prices=prices, initial_aum=1000000.0)
-    np.random.seed(42)
+    rng = np.random.default_rng(42)
     for _time, _state in _builder:
         _n = len(_state.assets)
-        _w = np.random.rand(_n)
+        _w = rng.random(_n)
         _w = _w / np.sum(_w)
         assert np.all(_w >= 0)
         assert np.allclose(np.sum(_w), 1)
