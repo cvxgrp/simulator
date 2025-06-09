@@ -14,17 +14,6 @@ def _(mo):
 
 @app.cell
 async def _():
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -37,7 +26,7 @@ async def _():
 
 @app.cell
 def _(pd):
-    from cvxsimulator.simulator import Builder
+    from cvxsimulator import Builder
 
     pd.options.plotting.backend = "plotly"
     return (Builder,)

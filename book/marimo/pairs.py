@@ -54,17 +54,6 @@ async def _():
         A tuple containing the imported modules (Builder, logger, mo, np, pd)
 
     """
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -74,7 +63,7 @@ async def _():
 
     from loguru import logger
 
-    from cvxsimulator.simulator import Builder
+    from cvxsimulator import Builder
 
     return Builder, logger, mo, np, pd, pl
 

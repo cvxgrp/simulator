@@ -48,17 +48,6 @@ async def _():
         A tuple containing the imported modules (Builder, mo, np, pd)
 
     """
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -66,7 +55,7 @@ async def _():
 
     pd.options.plotting.backend = "plotly"
 
-    from cvxsimulator.simulator import Builder
+    from cvxsimulator import Builder
 
     return Builder, mo, np, pd, pl
 
