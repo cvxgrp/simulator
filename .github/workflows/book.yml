@@ -25,27 +25,6 @@ jobs:
         with:
           command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
 
-      #- name: Export notebook via wasm
-      #  run: |
-      #    uv pip install --no-cache-dir marimo
-      #
-      #    # export all .py files in book/marimo directory
-      #    for py_file in book/marimo/*.py; do
-      #      if [ -f "$py_file" ]; then
-      #        filename=$(basename "$py_file" .py)
-      #        echo "Processing $py_file"
-      #        mkdir -p "artifacts/marimo/$filename"
-      #        uv run marimo export html-wasm "$py_file" -o "artifacts/marimo/$filename/index.html" --mode edit
-      #      fi
-      #    done
-
-      #- name: Upload documentation
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: marimo
-      #    path: artifacts/marimo
-      #    retention-days: 1
-
   # Generate API documentation using pdoc
   pdoc:
     runs-on: "ubuntu-latest"
