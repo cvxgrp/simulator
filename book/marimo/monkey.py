@@ -13,7 +13,7 @@ def _(mo):
 
 
 @app.cell
-async def _():
+def _():
     import marimo as mo
     import numpy as np
     import pandas as pd

@@ -38,7 +38,7 @@ def _(mo):
 
 
 @app.cell
-async def _():
+def _():
     """Import required libraries and modules.
 
     This cell imports the necessary libraries and modules for the pairs trading simulation:
