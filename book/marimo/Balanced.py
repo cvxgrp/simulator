@@ -21,9 +21,33 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import marimo as mo
+    import numpy as np
+    import pandas as pd
+    import plotly.io as pio
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+
+    path = mo.notebook_location() / "public" / "stock-prices.csv"
+
+    # from cvxsimulator.builder import polars2pandas
+    date_col = "date"
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col)
+
+    from cvxsimulator import Builder
+
 
 @app.cell
-def _(mo):
+def _():
     """Display the introduction and overview of the 1/n portfolio family.
 
     This cell provides an introduction to the 1/n portfolio strategy and outlines
@@ -31,11 +55,6 @@ def _(mo):
     - Vanilla implementation with daily rebalancing
     - Formulation as convex optimization problems with different objectives
     - Sparse updating strategy
-
-    Parameters
-    ----------
-    mo : marimo.Module
-        The marimo module object
 
     """
     mo.md(
@@ -63,48 +82,11 @@ def _(mo):
 
 @app.cell
 def _():
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-    import polars as pl
-
-    pd.options.plotting.backend = "plotly"
-
-    from cvxsimulator import Builder
-
-    return Builder, mo, np, pl
-
-
-@app.cell
-def _(mo, pl):
-    from cvxsimulator.builder import polars2pandas
-
-    # Step 1: Read the CSV, parse dates
-    prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)
-
-    prices = polars2pandas(prices)
-    print(prices)
-    print(prices.dtypes)
-    print(prices.index.dtype)
-    return (prices,)
-
-
-@app.cell
-def _(Builder, np, prices):
     """Implement a simple 1/n portfolio strategy with daily rebalancing.
 
     This cell creates a portfolio that allocates equal weight to each asset
     and rebalances daily to maintain these equal weights. It then builds the
     portfolio and displays a snapshot of its performance.
-
-    Parameters
-    ----------
-    Builder : class
-        The Builder class from cvx.simulator
-    np : module
-        The numpy module
-    prices : pd.DataFrame
-        DataFrame of asset prices with dates as index and assets as columns
 
     """
     _builder = Builder(prices=prices, initial_aum=1000000.0)
@@ -119,18 +101,13 @@ def _(Builder, np, prices):
 
 
 @app.cell
-def _(mo):
+def _():
     """Display the introduction to the cvxpy implementation section.
 
     This cell introduces the concept of formulating the 1/n portfolio problem
     as a convex optimization problem using cvxpy. It explains the benefits of
     this approach, particularly for adding constraints and understanding the
     relationship to Tikhonov regularization.
-
-    Parameters
-    ----------
-    mo : marimo.Module
-        The marimo module object
 
     """
     mo.md(
@@ -190,7 +167,7 @@ def _(mo):
 
 
 @app.cell
-def _(Builder, cp, prices):
+def _(cp):
     """Implement a 1/n portfolio using Euclidean norm minimization.
 
     This cell creates a portfolio by formulating and solving a convex optimization
@@ -248,7 +225,7 @@ def _(mo):
 
 
 @app.cell
-def _(Builder, cp, prices):
+def _(cp):
     """Implement a 1/n portfolio using infinity norm minimization.
 
     This cell creates a portfolio by formulating and solving a convex optimization
@@ -282,7 +259,7 @@ def _(Builder, cp, prices):
 
 
 @app.cell
-def _(mo):
+def _():
     """Display the introduction to the entropy maximization approach.
 
     This cell introduces the third convex optimization approach: maximizing
@@ -307,7 +284,7 @@ def _(mo):
 
 
 @app.cell
-def _(Builder, cp, prices):
+def _(cp):
     """Implement a 1/n portfolio using entropy maximization.
 
     This cell creates a portfolio by formulating and solving a convex optimization
@@ -341,7 +318,7 @@ def _(Builder, cp, prices):
 
 
 @app.cell
-def _(mo):
+def _():
     """Display the introduction to the tracking error minimization approach.
 
     This cell introduces the fourth convex optimization approach: minimizing
@@ -360,7 +337,7 @@ def _(mo):
 
 
 @app.cell
-def _(Builder, cp, np, prices):
+def _(cp):
     """Implement a 1/n portfolio using tracking error minimization.
 
     This cell creates a portfolio by formulating and solving a convex optimization
@@ -396,7 +373,7 @@ def _(Builder, cp, np, prices):
 
 
 @app.cell
-def _(mo):
+def _():
     """Display the introduction to the sparse updates approach.
 
     This cell introduces a more practical approach to implementing the 1/n
@@ -423,7 +400,7 @@ def _(mo):
 
 
 @app.cell
-def _(Builder, np, prices):
+def _():
     _builder = Builder(prices=prices, initial_aum=1000000.0)
     for _, _state in _builder:
         _n = len(_state.assets)

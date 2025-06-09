@@ -4,15 +4,10 @@ name: Bump version and publish
 # This workflow is triggered manually or by pushing a tag
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
 
 jobs:
   # Create a new version tag based on semantic versioning
   tagging:
-    # Only run this job when triggered by workflow_dispatch, not when triggered by a tag push
-    if: github.event_name == 'workflow_dispatch'
     # Need write permissions to create tags in the repository
     permissions:
       contents: write
@@ -35,14 +30,13 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     needs: [tagging]  # Depends on the tagging job to get the new version, but tagging may be skipped
-    if: always() && (github.event_name == 'push' || success())
     steps:
       # Build the package (sdist and wheel) with the new version tag
       - name: build
         uses: tschm/cradle/actions/build@v0.1.71
         with:
           # Use the tag from the tagging job if available, otherwise use the tag from the GitHub context
-          tag: ${{ github.event_name == 'workflow_dispatch' && needs.tagging.outputs.new_tag || github.ref_name }}
+          tag: ${{ needs.tagging.outputs.new_tag  }}
 
   # Job to publish the built package to PyPI
   publish:

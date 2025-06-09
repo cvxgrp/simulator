@@ -17,9 +17,36 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import marimo as mo
+    import numpy as np
+    import pandas as pd
+    import plotly.io as pio
+    import polars as pl
+
+    pd.options.plotting.backend = "plotly"
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+
+    path = mo.notebook_location() / "public" / "prices.csv"
+
+    # from cvxsimulator.builder import polars2pandas
+    date_col = "date"
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col)
+
+    prices.loc["2022-01-03", "B"] = np.nan
+    prices.loc["2022-01-04", "B"] = np.nan
+
+    from cvxsimulator import Builder
+
 
 @app.cell
-def _(mo):
+def _():
     """Display the title of the notebook.
 
     Parameters
@@ -33,59 +60,13 @@ def _(mo):
 
 
 @app.cell
-def _():
-    """Import required libraries and modules.
-
-    This cell imports the necessary libraries and modules for the simulation:
-    - marimo: For notebook functionality
-    - numpy: For numerical operations
-    - pandas: For data manipulation
-    - Builder: From cvx.simulator for portfolio simulation
-
-    Returns
-    -------
-    tuple
-        A tuple containing the imported modules (Builder, mo, np, pd)
-
-    """
-    import marimo as mo
-    import numpy as np
-    import pandas as pd
-    import polars as pl
-
-    pd.options.plotting.backend = "plotly"
-
-    from cvxsimulator import Builder
-
-    return Builder, mo, np, pd, pl
-
-
-@app.cell
-def _(mo, np, pl):
-    from cvxsimulator.builder import polars2pandas
-
-    # Step 1: Read the CSV, parse dates
-    prices = pl.read_csv(str(mo.notebook_location() / "public" / "prices.csv"), try_parse_dates=True)
-
-    prices = polars2pandas(prices)
-    print(prices)
-    print(prices.dtypes)
-    print(prices.index.dtype)
-
-    prices.loc["2022-01-03", "B"] = np.nan
-    prices.loc["2022-01-04", "B"] = np.nan
-    print(prices)
-    return (prices,)
-
-
-@app.cell
 def _(mo):
     mo.md(r"""## Iterate""")
     return
 
 
 @app.cell
-def _(Builder, np, prices):
+def _():
     """Build a portfolio with equal weights that adapts to an asset fading out.
 
     This cell:
@@ -93,16 +74,6 @@ def _(Builder, np, prices):
     2. Iterates through time, setting equal weights for all available assets
        at each time step (automatically adapting when asset B fades out)
     3. Builds and returns the final portfolio
-
-    Parameters
-    ----------
-    Builder : class
-        The Builder class from cvx.simulator
-    np : module
-        The numpy module
-    prices : pd.DataFrame
-        DataFrame of asset prices with dates as index and assets as columns,
-        where asset B fades out (has NaN values) on certain dates
 
     Returns
     -------
@@ -134,30 +105,6 @@ def _(portfolio):
 
     """
     print(portfolio.prices)
-    return
-
-
-@app.cell
-def _(portfolio):
-    print(portfolio.nav)
-    return
-
-
-@app.cell
-def _(portfolio):
-    """Display the portfolio weights over time.
-
-    This cell shows how the portfolio weights evolve over time,
-    particularly how the weights adjust when asset B fades out
-    (shifting from 50/50 to 100% in asset A).
-
-    Parameters
-    ----------
-    portfolio : Portfolio
-        The portfolio object built by the previous cell
-
-    """
-    print(portfolio.weights)
     return
 
 
