@@ -26,6 +26,8 @@ jobs:
 
   # Job to build the package with the new version
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     needs: tagging  # Depends on the tagging job to get the new version
     steps:
