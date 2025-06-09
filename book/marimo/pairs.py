@@ -12,6 +12,8 @@ with app.setup:
     import plotly.io as pio
     import polars as pl
 
+    pd.options.plotting.backend = "plotly"
+
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
 

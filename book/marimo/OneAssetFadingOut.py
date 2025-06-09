@@ -13,6 +13,7 @@ The notebook shows:
 """
 
 import marimo
+import pandas as pd
 
 __generated_with = "0.13.15"
 app = marimo.App()
@@ -22,6 +23,8 @@ with app.setup:
     import numpy as np
     import plotly.io as pio
     import polars as pl
+
+    pd.options.plotting.backend = "plotly"
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
