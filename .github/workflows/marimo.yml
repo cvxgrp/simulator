@@ -22,8 +22,10 @@ jobs:
         run: |
           uv pip install --no-cache-dir marimo
 
+          cd book/marimo
+
           # export all .py files in book/marimo directory
-          for py_file in book/marimo/*.py; do
+          for py_file in *.py; do
               filename=$(basename "$py_file" .py)
               echo "Processing $py_file"
               uv run python "$py_file"
