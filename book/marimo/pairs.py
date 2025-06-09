@@ -74,14 +74,14 @@ async def _():
 
     from loguru import logger
 
-    from cvx.simulator import Builder
+    from cvxsimulator.simulator import Builder
 
     return Builder, logger, mo, np, pd, pl
 
 
 @app.cell
 def _(mo, pl):
-    from cvx.simulator.builder import polars2pandas
+    from cvxsimulator.builder import polars2pandas
 
     # Step 1: Read the CSV, parse dates
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "stock-prices.csv"), try_parse_dates=True)

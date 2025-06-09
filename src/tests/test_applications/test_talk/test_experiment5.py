@@ -7,7 +7,7 @@ import pytest
 from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import osc, returns_adjust, shrink2id
 
-from cvx.simulator.builder import Builder
+from cvxsimulator.builder import Builder
 
 correlation = 200
 

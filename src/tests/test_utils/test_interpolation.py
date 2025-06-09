@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from cvx.simulator.utils.interpolation import interpolate, valid
+from cvxsimulator.utils import interpolate, valid
 
 
 def test_interpolate_pandas() -> None:
