@@ -59,7 +59,7 @@ jobs:
       # Generate API documentation for the source code
       - uses: tschm/cradle/actions/pdoc@v0.1.71
         with:
-          source-folder: 'src/cvx'
+          source-folder: 'src/cvxsimulator'
 
   # Run tests with coverage reporting
   test:
@@ -75,7 +75,7 @@ jobs:
       - uses: tschm/cradle/actions/coverage@v0.1.71
         with:
           tests-folder: 'src/tests'
-          source-folder: 'src/cvx'
+          source-folder: 'src/cvxsimulator'
 
   # Process Jupyter notebooks
   jupyter:
