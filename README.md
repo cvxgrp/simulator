@@ -48,7 +48,7 @@ and initializing the amount of cash used in an experiment:
 
 ```python
 >> > import pandas as pd
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> >  # For doctest, we'll create a small DataFrame instead of reading from a file
 >> > dates = pd.date_range('2020-01-01', periods=5)
@@ -84,7 +84,7 @@ Buy one (say 0.1 of your portfolio wealth) and short one the same amount.
 ```python
 >> > import pandas as pd
 >> > import numpy as np
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
@@ -138,7 +138,7 @@ implement the popular $1/n$ strategy.
 
 ```python
 >> > import pandas as pd
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
@@ -184,7 +184,7 @@ The builder class also exposes setters for such alternative conventions.
 >> >  # Setup code for this example
 >> > import pandas as pd
 >> > import numpy as np
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
@@ -229,7 +229,7 @@ Once finished it is possible to build the portfolio object:
 ```python
 >> > import pandas as pd
 >> > import numpy as np
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
@@ -269,7 +269,7 @@ a number of properties, e.g.:
 >> >  # Setup code for this example
 >> > import pandas as pd
 >> > import numpy as np
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
@@ -310,7 +310,7 @@ It is possible to generate a snapshot of the portfolio:
 >> >  # Setup code for this example
 >> > import pandas as pd
 >> > import numpy as np
->> > from cvxsimulator.simulator import Builder
+>> > from cvxsimulator import Builder
 >> >
 >> > dates = pd.date_range('2020-01-01', periods=5)
 >> > prices = pd.DataFrame({
