@@ -27,6 +27,9 @@ with app.setup:
 
     from cvxsimulator import Builder
 
+    # Initialize random number generator once to be used by all cells
+    rng = np.random.default_rng(42)
+
 
 @app.cell
 def _():
@@ -37,7 +40,6 @@ def _():
 @app.cell
 def _():
     _builder = Builder(prices=prices, initial_aum=1000000.0)
-    rng = np.random.default_rng(42)
     for _time, _state in _builder:
         _n = len(_state.assets)
         _w = rng.random(_n)
@@ -55,7 +57,6 @@ def _():
 @app.cell
 def _():
     _builder = Builder(prices=prices, initial_aum=1000000.0)
-    rng = np.random.default_rng(42)
     for _time, _state in _builder:
         _n = len(_state.assets)
         _w = rng.random(_n)

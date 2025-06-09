@@ -29,6 +29,9 @@ with app.setup:
 
     from cvxsimulator import Builder
 
+    # Initialize random number generator once to be used by all cells
+    rng = np.random.default_rng(42)
+
 
 @app.cell
 def _():
@@ -85,7 +88,6 @@ def _():
     logger.info("Load prices")
     logger.info("Build portfolio")
     b = Builder(prices=prices, initial_aum=1e6)
-    rng = np.random.default_rng(42)
 
     for _t, state in b:
         assert state.nav > 0, "Game over"
