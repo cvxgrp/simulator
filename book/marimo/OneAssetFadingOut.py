@@ -33,7 +33,7 @@ def _(mo):
 
 
 @app.cell
-async def _():
+def _():
     """Import required libraries and modules.
 
     This cell imports the necessary libraries and modules for the simulation:
@@ -48,17 +48,6 @@ async def _():
         A tuple containing the imported modules (Builder, mo, np, pd)
 
     """
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
-
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -66,14 +55,14 @@ async def _():
 
     pd.options.plotting.backend = "plotly"
 
-    from cvx.simulator import Builder
+    from cvxsimulator import Builder
 
     return Builder, mo, np, pd, pl
 
 
 @app.cell
 def _(mo, np, pl):
-    from cvx.simulator.builder import polars2pandas
+    from cvxsimulator.builder import polars2pandas
 
     # Step 1: Read the CSV, parse dates
     prices = pl.read_csv(str(mo.notebook_location() / "public" / "prices.csv"), try_parse_dates=True)

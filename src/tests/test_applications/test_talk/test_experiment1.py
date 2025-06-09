@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvx.simulator.portfolio import Portfolio
+from cvxsimulator import Portfolio
 
 
 def f(prices, fast=32, slow=96):

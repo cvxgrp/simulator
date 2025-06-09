@@ -36,7 +36,7 @@ dev = [
 line-length = 120
 target-version = "py310"
 exclude = [
-    "src/cvx/simulator/__init__.py"
+    "src/cvxsimulator/__init__.py"
 ]
 
 # Linting rules configuration
@@ -98,7 +98,7 @@ build-backend = "hatchling.build"
 # Configuration for building wheel distributions
 # Specifies which packages to include in the wheel
 [tool.hatch.build.targets.wheel]
-packages = ["src/cvx"]
+packages = ["src/cvxsimulator"]
 
 # Deptry configuration for dependency checking
 # Specific rule ignores for dependency checking

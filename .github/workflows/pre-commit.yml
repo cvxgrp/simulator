@@ -18,7 +18,7 @@ jobs:
 
       - name: Run deptry
         run : |
-          uvx deptry src/cvx
+          uvx deptry src/cvxsimulator
 
       - name: Run ty
         run : |

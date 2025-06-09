@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from tinycta.signal import osc, returns_adjust
 
-from cvx.simulator.portfolio import Portfolio
+from cvxsimulator.portfolio import Portfolio
 
 
 @pytest.fixture()
