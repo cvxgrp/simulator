@@ -1,63 +1,56 @@
-# Workflow for creating a new release version and publishing to PyPI
 name: Bump version and publish
+# Release workflow for publishing to PyPI
+# This workflow handles version bumping, package building, and publishing to PyPI.
+# It is manually triggered and requires appropriate permissions.
 
-# This workflow is triggered manually or by pushing a tag
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manually triggered by a user with appropriate permissions
+
+permissions:
+  contents: write  # Write access to repository contents for tagging
 
 jobs:
-  # Create a new version tag based on semantic versioning
   tagging:
-    # Need write permissions to create tags in the repository
-    permissions:
-      contents: write
-
+    # Version tagging job
+    # Generates a new version tag for the release based on semantic versioning
     runs-on: ubuntu-latest
     outputs:
-      new_tag: ${{ steps.tag_step.outputs.new_tag }}  # Output the new tag for use in other jobs
+      new_tag: ${{ steps.tag_step.outputs.new_tag }}  # Output the new tag for use in subsequent jobs
 
     steps:
-      # Generate a new version tag based on commit history
       - name: Generate Tag
         id: tag_step
-        uses: tschm/cradle/actions/tag@v0.1.71
+        uses: tschm/cradle/actions/tag@v0.1.71  # Use the tag action to generate a new version tag
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
 
-  # Job to build the package with the new version
   build:
-    permissions:
-      contents: read
+    # Package building job
+    # Builds the Python package with the new version tag
     runs-on: ubuntu-latest
-    needs: [tagging]  # Depends on the tagging job to get the new version, but tagging may be skipped
+    needs: tagging  # Depends on the tagging job to get the new version
     steps:
-      # Build the package (sdist and wheel) with the new version tag
       - name: build
-        uses: tschm/cradle/actions/build@v0.1.71
+        uses: tschm/cradle/actions/build@v0.1.71  # Use the build action to build the package
         with:
-          # Use the tag from the tagging job if available, otherwise use the tag from the GitHub context
-          tag: ${{ needs.tagging.outputs.new_tag  }}
+          tag: ${{ needs.tagging.outputs.new_tag }}  # Use the tag from the tagging job
 
-  # Job to publish the built package to PyPI
   publish:
+    # PyPI publishing job
+    # Publishes the built package to PyPI using trusted publishing
     needs: build  # Depends on the build job to have the package ready
     runs-on: ubuntu-latest
-    environment: release  # Use the 'release' environment for secrets
+    environment: release  # Use the release environment for secrets and protection
 
-    # Permissions needed for PyPI trusted publishing
     permissions:
-      contents: read  # Only need read access to the repository
-      id-token: write  # Required for trusted publishing to PyPI
+       contents: read  # Read-only access to repository contents
+       id-token: write  # Write access to ID token for trusted publishing
 
     steps:
-      # Download the built package artifacts from the build job
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4  # Download the built package artifacts
         with:
-          name: dist  # Artifact name containing the built packages
-          path: dist  # Local path to download to
+          name: dist  # Artifact name
+          path: dist  # Download path
 
-      # Publish the package to PyPI using trusted publishing
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1  # Official PyPI publishing action
-        with:
-          verbose: 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1  # Use PyPI's official action for trusted publishing
