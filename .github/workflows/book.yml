@@ -18,7 +18,7 @@ jobs:
     steps:
       # Step: Set up the virtual environment
       - name: "Build the virtual environment"
-        uses: tschm/cradle/actions/environment@v0.1.71
+        uses: tschm/cradle/actions/environment@v0.1.72
 
       - name: "Run the marimo notebooks"
         uses: tschm/cradle/actions/marimo@main
@@ -33,10 +33,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.71
+        uses: tschm/cradle/actions/environment@v0.1.72
 
       # Generate API documentation for the source code
-      - uses: tschm/cradle/actions/pdoc@v0.1.71
+      - uses: tschm/cradle/actions/pdoc@v0.1.72
         with:
           source-folder: 'src/cvxsimulator'
 
@@ -48,10 +48,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.71
+        uses: tschm/cradle/actions/environment@v0.1.72
 
       # Run tests and generate coverage report
-      - uses: tschm/cradle/actions/coverage@v0.1.71
+      - uses: tschm/cradle/actions/coverage@v0.1.72
         with:
           tests-folder: 'src/tests'
           source-folder: 'src/cvxsimulator'
@@ -64,10 +64,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.71
+        uses: tschm/cradle/actions/environment@v0.1.72
 
       # Run Jupyter notebook processing
-      - uses: tschm/cradle/actions/jupyter@v0.1.71
+      - uses: tschm/cradle/actions/jupyter@v0.1.72
 
   book:
     runs-on: "ubuntu-latest"
@@ -86,4 +86,4 @@ jobs:
       # Step: Upload the generated documentation book
       # Skipped when running locally with 'act' to prevent accidental deployments
       - name: Upload the book
-        uses: tschm/cradle/actions/book@v0.1.71
+        uses: tschm/cradle/actions/book@v0.1.72
