@@ -16,14 +16,9 @@ jobs:
   marimo:
     runs-on: "ubuntu-latest"
     steps:
-      # Step: Set up the virtual environment
-      - name: "Build the virtual environment"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      - name: "Run the marimo notebooks"
-        uses: tschm/cradle/actions/marimo@main
+      - uses: jebel-quant/marimushka@v0.1.1
         with:
-          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
+          notebooks_wasm: 'book/marimo'
 
   # Generate API documentation using pdoc
   pdoc:
