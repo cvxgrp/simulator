@@ -25,11 +25,11 @@ jobs:
     steps:
       # Set up Python environment with dependencies for the specified version
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.1.80
         with:
           python-version: ${{ matrix.python-version }}
 
       # Run the test suite
-      - uses: tschm/cradle/actions/test@v0.1.72
+      - uses: tschm/cradle/actions/test@v0.1.80
         with:
           tests-folder: 'src/tests'
