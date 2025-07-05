@@ -19,7 +19,7 @@ jobs:
         # Test on both Ubuntu and Windows
         os: [ ubuntu-latest, windows-latest ]
         # Test across multiple Python versions for compatibility
-        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
+        python-version: [ '3.12', '3.13' ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
