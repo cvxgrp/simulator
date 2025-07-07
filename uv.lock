@@ -183,7 +183,7 @@ dev = [
     { name = "loguru" },
     { name = "marimo" },
     { name = "micropip", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
-    { name = "micropip", version = "0.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "micropip", version = "0.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -294,7 +294,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.0.26"
+version = "0.0.27"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
@@ -304,9 +304,9 @@ dependencies = [
     { name = "pyarrow" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/18/2a/be368fc1eed3171019950ff48c49234ba224d81df12dd4a929bab3d4421d/jquantstats-0.0.26.tar.gz", hash = "sha256:1f9cdabeb5ff61a879b725d3334d060bd0690272dd9b12a4ca1c50b01be949f6", size = 19487, upload-time = "2025-07-01T21:17:39.404Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/82/8af276f5a014a0d520c548359e61107e2d986bfa57eaf62f0236d5a6f87b/jquantstats-0.0.27.tar.gz", hash = "sha256:6d858a3aa74b87012579384dd012b4a90e46ed00bf3384c8f80f8eef6daab9d9", size = 19488, upload-time = "2025-07-05T15:42:47.047Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b2/2f/f58a8520bc6e83f11314408fd3e72906108a63d4b3ce9ccba0d2f4c15f38/jquantstats-0.0.26-py3-none-any.whl", hash = "sha256:16ea5b8307cfc4a75169e0e4c5e7c04488dc04f8bd22ea879f0ed9f486f2735e", size = 21502, upload-time = "2025-07-01T21:17:38.258Z" },
+    { url = "https://files.pythonhosted.org/packages/36/53/ad5752724f15f92199fe0d81fc81b734d360a0fa45f2dc2278cbaf061df6/jquantstats-0.0.27-py3-none-any.whl", hash = "sha256:f15f8476fb4546308021f065f8fbae94b25d70a71a1f1cb651462f2554714c49", size = 21502, upload-time = "2025-07-05T15:42:44.915Z" },
 ]
 
 [[package]]
@@ -416,14 +416,14 @@ wheels = [
 
 [[package]]
 name = "micropip"
-version = "0.10.0"
+version = "0.10.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.13'",
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/86/05/d93b918679d7f69c5161381d9ae7088ac3aae2c18685bb655e5dd30fe54a/micropip-0.10.0.tar.gz", hash = "sha256:618ba6b8be71b09ee2387f5ceee9fefdd2303bc0bbedefcd9940db062581aceb", size = 1784930, upload-time = "2025-07-03T11:05:52.013Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/72/f2/d4a2c5ab1fb78f31210c09faddf75f353b86250100f832354d9d9adfd6e6/micropip-0.10.1.tar.gz", hash = "sha256:f9f82234852818d4ca2973a8201af1be22fe51c92ad275e86a4170bd28467fff", size = 1785645, upload-time = "2025-07-05T12:29:39.689Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ce/2a/5768c12404dc4c7c7bcd32af2c1f69a109a8392009930ae886004628f93b/micropip-0.10.0-py3-none-any.whl", hash = "sha256:2b03473388a21e558735a01a66817faac1b01f5248f7b9b97e0a2bd0cef8eede", size = 114908, upload-time = "2025-07-03T11:05:50.727Z" },
+    { url = "https://files.pythonhosted.org/packages/6a/79/3dda562c22b4978493adda6a7810f43b513b46cef82cbfd2aef48c3e29e0/micropip-0.10.1-py3-none-any.whl", hash = "sha256:126a501fecb40fc87f7edb67974a45f32db87e8ff3d932452aefbbcde27e53f5", size = 115174, upload-time = "2025-07-05T12:29:38.123Z" },
 ]
 
 [[package]]
