@@ -51,25 +51,12 @@ jobs:
           tests-folder: 'src/tests'
           source-folder: 'src/cvxsimulator'
 
-  # Process Jupyter notebooks
-  jupyter:
-    runs-on: "ubuntu-latest"
-    #permissions:
-    #  contents: read
-    steps:
-      # Set up Python environment with dependencies
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.80
-
-      # Run Jupyter notebook processing
-      - uses: tschm/cradle/actions/jupyter@v0.1.80
-
   book:
     # don't try to publish the book if you are on a fork
     if: github.event.repository.fork == false
     runs-on: "ubuntu-latest"
     # This job depends on the completion of test, pdoc, and jupyter jobs
-    needs: [test, pdoc, jupyter, marimo]
+    needs: [test, pdoc, marimo]
 
     environment:
       name: github-pages
