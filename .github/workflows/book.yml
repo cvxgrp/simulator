@@ -28,10 +28,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.2.1
+        uses: tschm/cradle/actions/environment@v0.3.01
 
       # Generate API documentation for the source code
-      - uses: tschm/cradle/actions/pdoc@v0.2.1
+      - uses: tschm/cradle/actions/pdoc@v0.3.01
         with:
           source-folder: 'src/cvxsimulator'
 
@@ -43,10 +43,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.2.1
+        uses: tschm/cradle/actions/environment@v0.3.01
 
       # Run tests and generate coverage report
-      - uses: tschm/cradle/actions/coverage@v0.2.1
+      - uses: tschm/cradle/actions/coverage@v0.3.01
         with:
           tests-folder: 'src/tests'
           source-folder: 'src/cvxsimulator'
@@ -70,7 +70,7 @@ jobs:
       # Step: Upload the generated documentation book
       # Skipped when running locally with 'act' to prevent accidental deployments
       - name: Upload the book
-        uses: tschm/cradle/actions/book@v0.2.1
+        uses: tschm/cradle/actions/book@v0.3.01
         with:
           title: "cvxsimulator"
           links: |

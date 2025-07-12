@@ -14,7 +14,7 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.2.1
+        uses: tschm/cradle/actions/environment@v0.3.01
 
       - name: Run deptry
         run : |
@@ -29,4 +29,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Run all configured pre-commit hooks
-      - uses: tschm/cradle/actions/pre-commit@v0.2.1
+      - uses: tschm/cradle/actions/pre-commit@v0.3.01
