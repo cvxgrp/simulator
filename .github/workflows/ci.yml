@@ -19,17 +19,17 @@ jobs:
         # Test on both Ubuntu and Windows
         os: [ ubuntu-latest, windows-latest ]
         # Test across multiple Python versions for compatibility
-        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
+        python-version: [ '3.12', '3.13' ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Set up Python environment with dependencies for the specified version
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.3.01
         with:
           python-version: ${{ matrix.python-version }}
 
       # Run the test suite
-      - uses: tschm/cradle/actions/test@v0.1.72
+      - uses: tschm/cradle/actions/test@v0.3.01
         with:
           tests-folder: 'src/tests'

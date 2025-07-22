@@ -16,14 +16,9 @@ jobs:
   marimo:
     runs-on: "ubuntu-latest"
     steps:
-      # Step: Set up the virtual environment
-      - name: "Build the virtual environment"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      - name: "Run the marimo notebooks"
-        uses: tschm/cradle/actions/marimo@main
+      - uses: jebel-quant/marimushka@v0.1.4
         with:
-          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
+          notebooks_wasm: 'book/marimo'
 
   # Generate API documentation using pdoc
   pdoc:
@@ -33,10 +28,10 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.3.01
 
       # Generate API documentation for the source code
-      - uses: tschm/cradle/actions/pdoc@v0.1.72
+      - uses: tschm/cradle/actions/pdoc@v0.3.01
         with:
           source-folder: 'src/cvxsimulator'
 
@@ -48,33 +43,20 @@ jobs:
     steps:
       # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+        uses: tschm/cradle/actions/environment@v0.3.01
 
       # Run tests and generate coverage report
-      - uses: tschm/cradle/actions/coverage@v0.1.72
+      - uses: tschm/cradle/actions/coverage@v0.3.01
         with:
           tests-folder: 'src/tests'
           source-folder: 'src/cvxsimulator'
-
-  # Process Jupyter notebooks
-  jupyter:
-    runs-on: "ubuntu-latest"
-    #permissions:
-    #  contents: read
-    steps:
-      # Set up Python environment with dependencies
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
-
-      # Run Jupyter notebook processing
-      - uses: tschm/cradle/actions/jupyter@v0.1.72
 
   book:
     # don't try to publish the book if you are on a fork
     if: github.event.repository.fork == false
     runs-on: "ubuntu-latest"
     # This job depends on the completion of test, pdoc, and jupyter jobs
-    needs: [test, pdoc, jupyter, marimo]
+    needs: [test, pdoc, marimo]
 
     environment:
       name: github-pages
@@ -88,4 +70,10 @@ jobs:
       # Step: Upload the generated documentation book
       # Skipped when running locally with 'act' to prevent accidental deployments
       - name: Upload the book
-        uses: tschm/cradle/actions/book@v0.1.72
+        uses: tschm/cradle/actions/book@v0.3.01
+        with:
+          title: "cvxsimulator"
+          links: |
+            {
+              "API": "./pdoc/index.html"
+            }
