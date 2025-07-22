@@ -1,92 +1,104 @@
-# Makefile for cvxsimulator project
-# This file provides common development tasks and utilities for the project
-# Run 'make help' to see a list of available commands
+# This file is part of the tschm/.config-templates repository
+# (https://github.com/tschm/.config-templates).
+#
+# Colors for pretty output
+BLUE := \033[36m
+BOLD := \033[1m
+GREEN := \033[32m
+RESET := \033[0m
 
-# Colors for pretty output - used for formatting console messages
-BLUE  := \033[36m  # Used for command names and highlights
-BOLD  := \033[1m   # Used for emphasizing important text
-RESET := \033[0m   # Resets text formatting to default
+-include .env
+ifneq (,$(wildcard .env))
+    export $(shell sed 's/=.*//' .env)
+endif
 
-# Set the default goal to the help target when 'make' is run without arguments
+# Default values if not set in .env
+SOURCE_FOLDER ?= src
+TESTS_FOLDER ?= src/tests
+MARIMO_FOLDER ?= book/marimo
+
 .DEFAULT_GOAL := help
 
-# Declare phony targets - these don't represent actual files
-# This prevents conflicts with any files that might have the same names
-.PHONY: help install fmt test coverage marimo clean
-
-# Paths used throughout the Makefile
-VENV_MARKER  := .venv/.installed  # Marker file to track virtual environment installation
-TEST_DIR     := src/tests         # Directory containing test files
-SOURCE_DIR   := src               # Directory containing source code
-MARIMO_DIR   := book/marimo       # Directory containing marimo notebooks
+.PHONY: help verify install fmt lint test build check marimo clean docs
 
 ##@ Development Setup
-# This section contains targets for setting up the development environment
 
-# Target to create a Python virtual environment if it doesn't exist
-# This is an internal target not meant to be called directly by users
-$(VENV_MARKER):
-	@printf "$(BLUE)Setting up virtual environment...$(RESET)\n"
-	@if ! command -v uv >/dev/null 2>&1; then \
-		curl -LsSf https://astral.sh/uv/install.sh | sh; \
-	fi
-	@uv venv --python 3.12  # Create a Python 3.12 virtual environment using uv
-	@touch $(VENV_MARKER)   # Create a marker file to indicate successful installation
+uv:
+	@printf "$(BLUE)Creating virtual environment...$(RESET)\n"
+	@curl -LsSf https://astral.sh/uv/install.sh | sh
 
-install: $(VENV_MARKER) ## Install all dependencies using uv
+install: uv ## Install all dependencies using uv
 	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
-	@uv sync --dev --frozen --all-extras  # Install dependencies from pyproject.toml with all extras
-	@uv pip install pre-commit pytest pytest-cov marimo  # Install additional development tools
+	@uv venv --clear --python 3.12
+	@uv sync --all-extras --frozen
 
 ##@ Code Quality
-# This section contains targets for code formatting and linting
 
-fmt: install ## Run code formatting and linting
-	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uvx pre-commit install          # Install pre-commit hooks into the git repository
-	@uvx pre-commit run --all-files  # Run all pre-commit hooks on all files
+fmt: uv ## Run code formatters only
+	@printf "$(BLUE)Running formatters...$(RESET)\n"
+	@uvx ruff format src
 
-ty: install
-	@uvx ty check
+lint: uv ## Run linters only
+	@printf "$(BLUE)Running linters...$(RESET)\n"
+	@uvx pre-commit run --all-files
 
+check: lint test ## Run all checks (lint and test)
+	@printf "$(GREEN)All checks passed!$(RESET)\n"
 
 ##@ Testing
-# This section contains targets for running tests and generating coverage reports
 
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv run pytest $(TEST_DIR)  # Run all tests in the test directory
+	@uv run pytest $(TESTS_FOLDER) --cov=$(SOURCE_FOLDER) --cov-report=term
 
-coverage: install ## Run tests with coverage
-	@printf "$(BLUE)Running tests with coverage...$(RESET)\n"
-	# Generate coverage reports in both terminal and HTML formats
-	@uv run pytest --cov=src/cvx --cov-report=term --cov-report=html $(TEST_DIR) -k "not test_readme_path_not_found"
-	@printf "$(BLUE)HTML report generated at $(BOLD)htmlcov/index.html$(RESET)\n"
-	# Ensure code coverage is at least 100% for the main code (excluding tests)
-	@uv run pytest --cov=src/cvx --cov-fail-under=100 $(TEST_DIR) -k "not test_readme_path_not_found"
+##@ Building
 
-##@ Marimo & Jupyter
-# This section contains targets for working with Marimo notebooks
+build: install ## Build the package
+	@printf "$(BLUE)Building package...$(RESET)\n"
+	@uv pip install hatch
+	@uv run hatch build
 
-marimo: install ## Start a Marimo server
-	@printf "$(BLUE)Starting Marimo server...$(RESET)\n"
-	@uv run marimo edit $(MARIMO_DIR)  # Start a Marimo server for editing notebooks
+##@ Documentation
+
+docs: install ## Build documentation
+	@printf "$(BLUE)Building documentation...$(RESET)\n"
+	@uv pip install pdoc
+	@{ \
+		uv run pdoc -o pdoc $(SOURCE_FOLDER); \
+		if command -v xdg-open >/dev/null 2>&1; then \
+			xdg-open "pdoc/index.html"; \
+		elif command -v open >/dev/null 2>&1; then \
+			open "pdoc/index.html"; \
+		else \
+			echo "Documentation generated. Open pdoc/index.html manually"; \
+		fi; \
+	}
 
 ##@ Cleanup
-# This section contains targets for cleaning up generated files
 
 clean: ## Clean generated files and directories
 	@printf "$(BLUE)Cleaning project...$(RESET)\n"
-	@git clean -d -X -f  # Remove all untracked files and directories that are ignored by git
+	@git clean -d -X -f
+	@rm -rf dist build *.egg-info .coverage .pytest_cache
+	@printf "$(BLUE)Removing local branches with no remote counterpart...$(RESET)\n"
+	@git fetch -p
+	@git branch -vv | grep ': gone]' | awk '{print $$1}' | xargs -r git branch -D
+
+##@ Marimo
+
+marimo: uv ## Start a Marimo server (use FILE=filename.py to specify a file)
+	@if [ -z "$(FILE)" ]; then \
+		echo "❌ FILE is required. Usage: make marimo FILE=demo.py" >&2; \
+		exit 1; \
+	fi
+
+	@printf "$(BLUE)Start Marimo server with $(MARIMO_FOLDER)/$(FILE)...$(RESET)\n"
+	@uvx marimo edit --sandbox $(MARIMO_FOLDER)/$(FILE)
 
 ##@ Help
-# This section contains the help target that displays available commands
 
 help: ## Display this help message
 	@printf "$(BOLD)Usage:$(RESET)\n"
 	@printf "  make $(BLUE)<target>$(RESET)\n\n"
 	@printf "$(BOLD)Targets:$(RESET)\n"
-	# Parse the Makefile to extract targets and their descriptions
-	# - Looks for lines with pattern: target: ## description
-	# - Also processes section headers marked with ##@
 	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(BLUE)%-15s$(RESET) %s\n", $$1, $$2 } /^##@/ { printf "\n$(BOLD)%s$(RESET)\n", substr($$0, 5) }' $(MAKEFILE_LIST)
