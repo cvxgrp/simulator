@@ -5,7 +5,7 @@ version = "0.0.0"
 description = "Simple simulator for investors"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "jquantstats>=0.0.23",
     "numpy>=2.0",
@@ -28,7 +28,7 @@ dev = [
     "loguru",
     "tinycta",
     "marimo>=0.13.15",
-    "micropip>=0.9.0"
+    "python-dotenv==1.1.1"
 ]
 
 # Configuration for Ruff, a fast Python linter and code formatter

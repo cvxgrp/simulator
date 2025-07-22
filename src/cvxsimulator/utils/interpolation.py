@@ -32,12 +32,12 @@ def interpolate(ts):
     ts : pd.Series or pl.Series
         The time series to interpolate
 
-    Returns
+    Returns:
     -------
     pd.Series or pl.Series
         The interpolated time series
 
-    Examples
+    Examples:
     --------
     >>> import pandas as pd
     >>> import numpy as np
@@ -81,13 +81,13 @@ def valid(ts) -> bool:
     ts : pd.Series or pl.Series
         The time series to check
 
-    Returns
+    Returns:
     -------
     bool
         True if the time series has no missing values between the first and last valid indices,
         False otherwise
 
-    Examples
+    Examples:
     --------
     >>> import pandas as pd
     >>> import numpy as np
@@ -122,12 +122,12 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
     ts : pl.Series
         The time series to interpolate
 
-    Returns
+    Returns:
     -------
     pl.Series
         The interpolated time series
 
-    Examples
+    Examples:
     --------
     >>> import polars as pl
     >>> ts = pl.Series([1, None, None, 4, 5])
@@ -178,13 +178,13 @@ def valid_pl(ts: pl.Series) -> bool:
     ts : pl.Series
         The time series to check
 
-    Returns
+    Returns:
     -------
     bool
         True if the time series has no missing values between the first and last valid indices,
         False otherwise
 
-    Examples
+    Examples:
     --------
     >>> import polars as pl
     >>> ts1 = pl.Series([None, 1, 2, 3, None])  # Nulls only at beginning and end
@@ -223,12 +223,12 @@ def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
     df : pl.DataFrame
         The DataFrame to interpolate
 
-    Returns
+    Returns:
     -------
     pl.DataFrame
         The interpolated DataFrame
 
-    Examples
+    Examples:
     --------
     >>> import polars as pl
     >>> df = pl.DataFrame({
@@ -269,13 +269,13 @@ def valid_df_pl(df: pl.DataFrame) -> bool:
     df : pl.DataFrame
         The DataFrame to check
 
-    Returns
+    Returns:
     -------
     bool
         True if all columns in the DataFrame have no missing values between their first and last valid indices,
         False otherwise
 
-    Examples
+    Examples:
     --------
     >>> import polars as pl
     >>> df1 = pl.DataFrame({

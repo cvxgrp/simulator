@@ -27,7 +27,7 @@ def builder(prices: pd.DataFrame) -> Builder:
     prices : pd.DataFrame
         DataFrame of asset prices with dates as index and assets as columns
 
-    Returns
+    Returns:
     -------
     Builder
         A Builder instance initialized with the provided prices

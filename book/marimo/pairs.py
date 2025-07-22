@@ -81,7 +81,7 @@ def _():
     5. Builds and returns the final portfolio
 
 
-    Returns
+    Returns:
     -------
     tuple
         A tuple containing the built portfolio

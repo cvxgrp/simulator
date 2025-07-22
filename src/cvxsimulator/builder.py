@@ -78,7 +78,7 @@ class Builder:
         - Checks that the index is monotonically increasing
         - Checks that the index has unique values
 
-        Returns
+        Returns:
         -------
         None
 
@@ -110,14 +110,14 @@ class Builder:
         This property analyzes each column of the prices DataFrame to determine
         if there are any missing values between the first and last valid data points.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             A DataFrame with the same columns as prices, containing boolean values
             indicating whether each asset's price series is valid (True) or has
             missing values in the middle (False)
 
-        Notes
+        Notes:
         -----
         A valid price series can have missing values at the beginning or end,
         but not in the middle between the first and last valid data points.
@@ -131,14 +131,14 @@ class Builder:
 
         This property identifies the time range for which each asset has valid price data.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             A DataFrame with assets as rows and two columns:
             - 'first': The first valid index (timestamp) for each asset
             - 'last': The last valid index (timestamp) for each asset
 
-        Notes
+        Notes:
         -----
         This is useful for determining the valid trading period for each asset,
         especially when different assets have different data availability periods.
@@ -164,12 +164,12 @@ class Builder:
         This property retrieves the current prices from the internal state
         for all assets that are currently in the portfolio.
 
-        Returns
+        Returns:
         -------
         np.array
             An array of current prices for all assets in the portfolio
 
-        Notes
+        Notes:
         -----
         The prices are retrieved from the internal state, which is updated
         during iteration through the portfolio's time index.
@@ -222,7 +222,7 @@ class Builder:
         position : pd.Series
             A pandas Series containing the new position (number of units) for each asset
 
-        Returns
+        Returns:
         -------
         None
 
@@ -237,13 +237,13 @@ class Builder:
         This property calculates the cash value of each position by multiplying
         the number of units by the current price for each asset.
 
-        Returns
+        Returns:
         -------
         pd.Series
             A pandas Series containing the cash value of each position,
             indexed by asset
 
-        Notes
+        Notes:
         -----
         This is different from the 'cash' property, which represents
         uninvested money. This property represents the market value
@@ -259,13 +259,13 @@ class Builder:
         This property returns the entire DataFrame of holdings (units) for all
         assets over all time points in the portfolio.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             A DataFrame containing the number of units held for each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         This property is particularly useful for testing and for building
         the final Portfolio object via the build() method.
@@ -286,11 +286,11 @@ class Builder:
             A pandas Series containing the new cash value for each position,
             indexed by asset
 
-        Returns
+        Returns:
         -------
         None
 
-        Notes
+        Notes:
         -----
         This is a convenient way to specify positions in terms of currency
         amounts rather than number of units. The conversion formula is:
@@ -305,13 +305,13 @@ class Builder:
         This method creates a new immutable Portfolio object based on the
         current state of the Builder, which can be used for analysis and reporting.
 
-        Returns
+        Returns:
         -------
         Portfolio
             A new instance of the Portfolio class with the attributes
             (prices, units, aum) as specified in the Builder
 
-        Notes
+        Notes:
         -----
         The resulting Portfolio object will be immutable (frozen) and will
         have the same data as the Builder from which it was built, but
@@ -328,12 +328,12 @@ class Builder:
         from the internal state. Weights represent the proportion of the
         portfolio's value invested in each asset.
 
-        Returns
+        Returns:
         -------
         np.array
             An array of weights for each asset in the portfolio
 
-        Notes
+        Notes:
         -----
         Weights sum to 1.0 for a fully invested portfolio with no leverage.
         Negative weights represent short positions.
@@ -353,11 +353,11 @@ class Builder:
         weights : np.array
             An array of weights for each asset in the portfolio
 
-        Returns
+        Returns:
         -------
         None
 
-        Notes
+        Notes:
         -----
         This is a convenient way to rebalance the portfolio by specifying
         the desired allocation as weights rather than exact positions.
@@ -373,12 +373,12 @@ class Builder:
         This property returns the entire series of AUM values over time,
         representing the total value of the portfolio at each time point.
 
-        Returns
+        Returns:
         -------
         pd.Series
             A Series containing the AUM values over time, with dates as index
 
-        Notes
+        Notes:
         -----
         AUM (assets under management) represents the total value of the portfolio,
         including both invested positions and uninvested cash.
@@ -398,11 +398,11 @@ class Builder:
         aum : float
             The new AUM value to set
 
-        Returns
+        Returns:
         -------
         None
 
-        Notes
+        Notes:
         -----
         Changing the AUM affects the portfolio's ability to take positions,
         as position sizes are often calculated as a fraction of AUM.

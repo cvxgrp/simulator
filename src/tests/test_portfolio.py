@@ -30,7 +30,7 @@ def portfolio(prices: pd.DataFrame, nav: pd.Series) -> Portfolio:
     nav : pd.Series
         Series of portfolio NAV values over time
 
-    Returns
+    Returns:
     -------
     Portfolio
         A Portfolio instance initialized with the provided data
@@ -348,7 +348,7 @@ def test_csv_route(prices_pl, prices):
     prices : pandas.DataFrame
         The reference Pandas DataFrame for comparison.
 
-    Raises
+    Raises:
     ------
     AssertionError
         If the converted DataFrame does not match the reference DataFrame in structure,

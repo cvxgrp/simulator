@@ -75,7 +75,7 @@ def _():
        at each time step (automatically adapting when asset B fades out)
     3. Builds and returns the final portfolio
 
-    Returns
+    Returns:
     -------
     tuple
         A tuple containing the built portfolio
