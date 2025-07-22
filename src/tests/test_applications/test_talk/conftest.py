@@ -21,7 +21,7 @@ def resource_fixture():
     This fixture provides the path to the resources directory, which contains
     test data files such as prices_hashed.csv.
 
-    Returns
+    Returns:
     -------
     Path
         Path to the resources directory
@@ -42,7 +42,7 @@ def prices(resource_dir):
     resource_dir : Path
         Path to the resources directory
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame of interpolated asset prices with dates as index and assets as columns

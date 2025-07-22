@@ -23,7 +23,7 @@ def synthetic_returns(prices: pd.DataFrame, information_ratio: float, forward_sm
     forward_smoothing : int
         Number of periods to use for forward-looking rolling mean
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         A DataFrame of synthetic return predictions computed as
@@ -54,7 +54,7 @@ class OptimizationInput:
 
     At time t, we have data from t-lookback to t-1.
 
-    Attributes
+    Attributes:
     ----------
     mean : pd.Series
         Expected returns for each asset
@@ -73,7 +73,7 @@ class OptimizationInput:
     def n_assets(self) -> int:
         """Get the number of assets in the optimization problem.
 
-        Returns
+        Returns:
         -------
         int
             The number of assets, determined by the length of the mean vector
@@ -104,7 +104,7 @@ def basic_markowitz(inputs: OptimizationInput) -> np.ndarray | None:
         Input data for the optimization, including expected returns,
         covariance matrix, and risk target
 
-    Returns
+    Returns:
     -------
     tuple[np.ndarray, float]
         A tuple containing:

@@ -16,7 +16,7 @@ def resource_fixture():
     This fixture returns the path to the resources directory containing
     test data files. It has session scope, so it's created once per test session.
 
-    Returns
+    Returns:
     -------
     Path
         Path to the resources directory
@@ -38,7 +38,7 @@ def prices(resource_dir):
     resource_dir : Path
         Path to the resources directory (from the resource_dir fixture)
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame of price data with dates as index and assets as columns
@@ -62,7 +62,7 @@ def prices_pl(resource_dir):
     resource_dir : Path
         Path to the resources directory (from the resource_dir fixture)
 
-    Returns
+    Returns:
     -------
     pl.DataFrame
         Polars DataFrame of price data with a 'date' column and asset columns
@@ -86,7 +86,7 @@ def nav(resource_dir):
     resource_dir : Path
         Path to the resources directory (from the resource_dir fixture)
 
-    Returns
+    Returns:
     -------
     pd.Series
         Series of NAV values with dates as index
@@ -107,12 +107,12 @@ def readme_path() -> Path:
     This fixture searches for the README.md file by starting in the current
     directory and moving up through parent directories until it finds the file.
 
-    Returns
+    Returns:
     -------
     Path
         Path to the README.md file
 
-    Raises
+    Raises:
     ------
     FileNotFoundError
         If the README.md file cannot be found in any parent directory

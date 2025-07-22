@@ -129,7 +129,7 @@ def _():
     This cell imports the cvxpy library, which will be used to formulate
     and solve the 1/n portfolio optimization problems in subsequent cells.
 
-    Returns
+    Returns:
     -------
     tuple
         A tuple containing the cvxpy module

@@ -38,7 +38,7 @@ class Portfolio:
     calculating various metrics like NAV, profit, drawdown, and for visualizing
     the portfolio's performance.
 
-    Attributes
+    Attributes:
     ----------
     prices : pd.DataFrame
         DataFrame of asset prices over time, with dates as index and assets as columns
@@ -68,7 +68,7 @@ class Portfolio:
         - The index of units is a subset of the index of prices
         - The columns of units is a subset of the columns of prices
 
-        Raises
+        Raises:
         ------
         AssertionError
             If any of the validation checks fail
@@ -104,13 +104,13 @@ class Portfolio:
     def index(self) -> list[datetime]:
         """Get the time index of the portfolio.
 
-        Returns
+        Returns:
         -------
         pd.DatetimeIndex
             A DatetimeIndex representing the time period for which portfolio
             data is available
 
-        Notes
+        Notes:
         -----
         This property extracts the index from the prices DataFrame, which
         represents all time points in the portfolio history.
@@ -122,12 +122,12 @@ class Portfolio:
     def assets(self) -> list[str]:
         """Get the list of assets in the portfolio.
 
-        Returns
+        Returns:
         -------
         pd.Index
             An Index containing the names of all assets in the portfolio
 
-        Notes
+        Notes:
         -----
         This property extracts the column names from the prices DataFrame,
         which correspond to all assets for which price data is available.
@@ -143,7 +143,7 @@ class Portfolio:
         If aum is provided as a Series, it is used directly. Otherwise, the NAV
         is calculated from the cumulative profit plus the initial aum.
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series representing the NAV of the portfolio over time
@@ -165,12 +165,12 @@ class Portfolio:
         This calculates the profit or loss at each time point based on the
         previous positions and the returns of each asset.
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series representing the profit/loss at each time point
 
-        Notes
+        Notes:
         -----
         The profit is calculated by multiplying the previous day's positions
         (in currency terms) by the returns of each asset, and then summing
@@ -188,7 +188,7 @@ class Portfolio:
         This calculates the cash value of each position by multiplying
         the number of units by the price for each asset at each time point.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the cash value of each position over time,
@@ -204,7 +204,7 @@ class Portfolio:
         This calculates the percentage change in price for each asset
         from one time point to the next.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the returns of each asset over time,
@@ -220,13 +220,13 @@ class Portfolio:
         This calculates the changes in position (units) from one time point
         to the next for each asset.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the trades (changes in units) for each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         Calculated as the difference between consecutive position values.
         Positive values represent buys, negative values represent sells.
@@ -245,13 +245,13 @@ class Portfolio:
         This calculates the cash value of trades by multiplying the changes
         in position (units) by the current prices.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the cash value of trades for each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         Calculated by multiplying trades_units by prices.
         Positive values represent buys (cash outflows),
@@ -267,13 +267,13 @@ class Portfolio:
         This calculates the trades as a percentage of the portfolio NAV,
         which provides a measure of trading activity relative to portfolio size.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the relative turnover for each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         Calculated by dividing trades_currency by NAV.
         Positive values represent buys, negative values represent sells.
@@ -290,13 +290,13 @@ class Portfolio:
         which provides a measure of total trading activity regardless of
         direction (buy or sell).
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the absolute turnover for each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         Calculated as the absolute value of trades_currency.
         This is useful for calculating trading costs that apply equally
@@ -316,17 +316,17 @@ class Portfolio:
         time : Union[datetime, str, pd.Timestamp]
             The time index for which to retrieve the positions
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series containing the positions (units) for each asset at the specified time
 
-        Raises
+        Raises:
         ------
         KeyError
             If the specified time is not in the portfolio's index
 
-        Examples
+        Examples:
         --------
         ```
         portfolio['2023-01-01']  # Get positions on January 1, 2023
@@ -343,13 +343,13 @@ class Portfolio:
         This property returns the cash value of each position in the portfolio,
         calculated by multiplying the number of units by the price for each asset.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the cash value of each position over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         This is an alias for the cashposition property and returns the same values.
         The term "equity" is used in the context of the cash value of positions,
@@ -366,13 +366,13 @@ class Portfolio:
         by dividing the cash value of each position by the total portfolio
         value (NAV) at each time point.
 
-        Returns
+        Returns:
         -------
         pd.DataFrame
             DataFrame with the weight of each asset over time,
             with dates as index and assets as columns
 
-        Notes
+        Notes:
         -----
         The sum of weights across all assets at any given time should equal 1.0
         for a fully invested portfolio with no leverage. Weights can be negative
@@ -388,12 +388,12 @@ class Portfolio:
         This property provides access to various statistical metrics calculated
         for the portfolio, such as Sharpe ratio, volatility, drawdowns, etc.
 
-        Returns
+        Returns:
         -------
         object
             An object containing various statistical metrics for the portfolio
 
-        Notes
+        Notes:
         -----
         The statistics are calculated by the underlying jquantstats library
         and are based on the portfolio's NAV time series.
@@ -408,12 +408,12 @@ class Portfolio:
         This property provides access to various plotting functions for visualizing
         the portfolio's performance, returns, drawdowns, etc.
 
-        Returns
+        Returns:
         -------
         object
             An object containing various plotting methods for the portfolio
 
-        Notes
+        Notes:
         -----
         The plotting functions are provided by the underlying jquantstats library
         and operate on the portfolio's NAV time series.
@@ -428,12 +428,12 @@ class Portfolio:
         This property provides access to various reporting functions for generating
         performance reports, risk metrics, and other analytics for the portfolio.
 
-        Returns
+        Returns:
         -------
         object
             An object containing various reporting methods for the portfolio
 
-        Notes
+        Notes:
         -----
         The reporting functions are provided by the underlying jquantstats library
         and operate on the portfolio's NAV time series.
@@ -454,12 +454,12 @@ class Portfolio:
             For daily data, use 252; for weekly data, use 52; for monthly data, use 12.
             If None, no annualization is performed.
 
-        Returns
+        Returns:
         -------
         float
             The Sharpe ratio of the portfolio
 
-        Notes
+        Notes:
         -----
         The Sharpe ratio is calculated using the portfolio's NAV time series.
         A higher Sharpe ratio indicates better risk-adjusted performance.
@@ -483,12 +483,12 @@ class Portfolio:
         aum : float
             Assets under management
 
-        Returns
+        Returns:
         -------
         Portfolio
             A new Portfolio instance with units calculated from cash positions and prices
 
-        Notes
+        Notes:
         -----
         The units are calculated by dividing the cash positions by the prices.
         This is useful when you have the monetary value of each position rather
