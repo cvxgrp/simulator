@@ -1,4 +1,6 @@
-# cvxsimulator Code of Conduct
+# Code of Conduct
+
+This file is part of the tschm/.config-templates repository.
 
 ## Our Pledge
 
