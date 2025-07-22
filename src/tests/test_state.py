@@ -24,7 +24,7 @@ def prices() -> pd.DataFrame:
     This fixture creates a DataFrame with price data for four assets (A, B, C, D)
     at two time points (2020-01-01 and 2020-01-30).
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame with price data for testing
@@ -44,7 +44,7 @@ def prices_pl() -> pl.DataFrame:
     This fixture creates a Polars DataFrame with price data for four assets (A, B, C, D)
     at two time points (2020-01-01 and 2020-01-30).
 
-    Returns
+    Returns:
     -------
     pl.DataFrame
         Polars DataFrame with price data for testing
@@ -73,7 +73,7 @@ def state(prices: pd.DataFrame) -> State:
     prices : pd.DataFrame
         The price data fixture
 
-    Returns
+    Returns:
     -------
     State
         A State instance initialized with the first row of price data
@@ -96,7 +96,7 @@ def state_pl(prices_pl: pl.DataFrame) -> State:
     prices_pl : pl.DataFrame
         The prices polars data fixture
 
-    Returns
+    Returns:
     -------
     State
         A State instance initialized with the first row of price data

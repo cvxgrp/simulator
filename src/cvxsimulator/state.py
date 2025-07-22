@@ -37,7 +37,7 @@ class State:
     cash, NAV, value, weights, and leverage. It also provides setter methods
     for updating the portfolio state (aum, cash, position, prices).
 
-    Attributes
+    Attributes:
     ----------
     _prices : pd.Series
         Current prices of assets in the portfolio
@@ -68,7 +68,7 @@ class State:
     def cash(self) -> float:
         """Get the current amount of cash available in the portfolio.
 
-        Returns
+        Returns:
         -------
         float
             The cash component of the portfolio, calculated as NAV minus
@@ -99,12 +99,12 @@ class State:
         The NAV represents the total value of the portfolio, including
         both the value of positions and available cash.
 
-        Returns
+        Returns:
         -------
         float
             The net asset value of the portfolio
 
-        Notes
+        Notes:
         -----
         This is equivalent to the AUM (assets under management).
 
@@ -120,12 +120,12 @@ class State:
         This computes the total value of all holdings at current prices,
         not including cash.
 
-        Returns
+        Returns:
         -------
         float
             The sum of values of all positions
 
-        Notes
+        Notes:
         -----
         If positions are missing (None), the sum will effectively be zero.
 
@@ -139,7 +139,7 @@ class State:
         This computes the cash value of each position by multiplying
         the number of units by the current price for each asset.
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series with the cash value of each position, indexed by asset
@@ -151,7 +151,7 @@ class State:
     def position(self) -> pd.Series:
         """Get the current position (number of units) for each asset.
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series with the number of units held for each asset, indexed by asset.
@@ -195,7 +195,7 @@ class State:
         The gross market value is the sum of the absolute values of all positions,
         which represents the total market exposure including both long and short positions.
 
-        Returns
+        Returns:
         -------
         float
             The gross market value (abs(short) + long)
@@ -207,7 +207,7 @@ class State:
     def time(self) -> datetime | None:
         """Get the current time of the portfolio state.
 
-        Returns
+        Returns:
         -------
         Optional[datetime]
             The current time in the simulation, or None if not set
@@ -239,12 +239,12 @@ class State:
     def days(self) -> int:
         """Get the number of days between the current and previous time.
 
-        Returns
+        Returns:
         -------
         int
             Number of days between the current and previous time
 
-        Notes
+        Notes:
         -----
         This is useful for computing interest when holding cash or for
         time-dependent calculations.
@@ -256,7 +256,7 @@ class State:
     def assets(self) -> pd.Index:
         """Get the assets currently in the portfolio.
 
-        Returns
+        Returns:
         -------
         pd.Index
             Index of assets with valid prices in the portfolio.
@@ -272,13 +272,13 @@ class State:
     def trades(self) -> pd.Series | None:
         """Get the trades needed to reach the current position.
 
-        Returns
+        Returns:
         -------
         Optional[pd.Series]
             Series of trades (changes in position) needed to reach the current position.
             None if no trades have been calculated yet.
 
-        Notes
+        Notes:
         -----
         This is helpful when computing trading costs following a position change.
         Positive values represent buys, negative values represent sells.
@@ -290,7 +290,7 @@ class State:
     def mask(self) -> np.ndarray:
         """Get a boolean mask for assets with valid (non-NaN) prices.
 
-        Returns
+        Returns:
         -------
         np.ndarray
             Boolean array where True indicates a valid price and False indicates
@@ -306,7 +306,7 @@ class State:
     def prices(self) -> pd.Series:
         """Get the current prices of assets in the portfolio.
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series of current prices indexed by asset.
@@ -330,7 +330,7 @@ class State:
         prices : pd.Series
             New prices for assets in the portfolio
 
-        Notes
+        Notes:
         -----
         The profit is calculated as the difference between the portfolio value
         before and after the price update.
@@ -347,7 +347,7 @@ class State:
     def profit(self) -> float:
         """Get the profit achieved between the previous and current prices.
 
-        Returns
+        Returns:
         -------
         float
             The profit (or loss) achieved due to price changes since the
@@ -360,7 +360,7 @@ class State:
     def aum(self) -> float:
         """Get the current assets under management (AUM) of the portfolio.
 
-        Returns
+        Returns:
         -------
         float
             The total assets under management
@@ -387,13 +387,13 @@ class State:
         This computes the weighting of each asset as a fraction of the
         total portfolio value (NAV).
 
-        Returns
+        Returns:
         -------
         pd.Series
             Series containing the weight of each asset as a fraction of the
             total portfolio value, indexed by asset
 
-        Notes
+        Notes:
         -----
         If positions are missing, a series of zeros is effectively returned.
         The sum of weights equals 1.0 for a fully invested portfolio with no leverage.
@@ -412,12 +412,12 @@ class State:
         weights. For a long-only portfolio with no cash, this equals 1.0.
         For a portfolio with shorts or leverage, this will be greater than 1.0.
 
-        Returns
+        Returns:
         -------
         float
             The leverage ratio of the portfolio
 
-        Notes
+        Notes:
         -----
         A leverage of 2.0 means the portfolio has twice the market exposure
         compared to its net asset value, which could be achieved through

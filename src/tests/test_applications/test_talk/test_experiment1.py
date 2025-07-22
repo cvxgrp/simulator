@@ -30,7 +30,7 @@ def f(prices, fast=32, slow=96):
     slow : int, optional
         The com parameter for the slow exponential moving average, by default 96
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame of position signs (-1, 0, or 1) with the same shape as prices

@@ -31,7 +31,7 @@ def means(prices):
     prices : pd.DataFrame
         DataFrame of asset prices with dates as index and assets as columns
 
-    Returns
+    Returns:
     -------
     pd.DataFrame
         DataFrame of synthetic expected returns
@@ -63,7 +63,7 @@ def feasible(prices):
     prices : pd.DataFrame
         DataFrame of asset prices with dates as index and assets as columns
 
-    Returns
+    Returns:
     -------
     pd.DatetimeIndex
         A subset of dates from the price data
@@ -86,7 +86,7 @@ def covariance(prices):
     prices : pd.DataFrame
         DataFrame of asset prices with dates as index and assets as columns
 
-    Returns
+    Returns:
     -------
     dict
         A dictionary mapping dates to covariance matrices

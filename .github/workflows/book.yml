@@ -1,79 +1,114 @@
-# Workflow for building documentation and running tests
-name: "book"
+# This file is part of the tschm/.config-templates repository
+# (https://github.com/tschm/.config-templates).
+#
+# Workflow: Book
+# Purpose: This workflow builds and deploys comprehensive documentation for the project.
+#          It combines API documentation, test coverage reports, test results, and
+#          interactive notebooks into a single GitHub Pages site.
+#
+# Trigger: This workflow runs on every push to the main branch
+#
+# Components:
+#   - 📚 Parse .env file for configuration
+#   - 📓 Process Marimo notebooks
+#   - 📖 Generate API documentation with pdoc
+#   - 🧪 Run tests and generate coverage reports
+#   - 🚀 Deploy combined documentation to GitHub Pages
 
-# Set default permissions for all jobs
-permissions:
-  contents: read
+name: "BOOK"
 
-# Trigger workflow on push events
 on:
   push:
     branches:
       - main
 
+
 jobs:
-  # Process marimo notebooks
+  parse-env:
+    if: github.repository != 'tschm/.config-templates'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      source-folder: ${{ steps.export.outputs.SOURCE_FOLDER }}
+      tests-folder: ${{ steps.export.outputs.TESTS_FOLDER }}
+      marimo-folder: ${{ steps.export.outputs.MARIMO_FOLDER }}
+      title: ${{ steps.export.outputs.TITLE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse .env and export variables
+        id: export
+        run: |
+          set -a
+          source .env
+          echo "SOURCE_FOLDER=$SOURCE_FOLDER" >> "$GITHUB_OUTPUT"
+          echo "TESTS_FOLDER=$TESTS_FOLDER" >> "$GITHUB_OUTPUT"
+          echo "MARIMO_FOLDER=$MARIMO_FOLDER" >> "$GITHUB_OUTPUT"
+          echo "TITLE=$TITLE" >> "$GITHUB_OUTPUT"
+          set +a
+        shell: bash
+
   marimo:
+    if: github.repository != 'tschm/.config-templates'
     runs-on: "ubuntu-latest"
+    needs: parse-env
+    permissions:
+      contents: read
     steps:
       - uses: jebel-quant/marimushka@v0.1.4
         with:
-          notebooks_wasm: 'book/marimo'
+          notebooks: ${{ needs.parse-env.outputs.marimo-folder }}
 
-  # Generate API documentation using pdoc
   pdoc:
+    if: github.repository != 'tschm/.config-templates'
     runs-on: "ubuntu-latest"
-    #permissions:
-    #  contents: read
+    needs: parse-env
+    permissions:
+      contents: read
     steps:
-      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.3.01
+        uses: tschm/cradle/actions/environment@v0.3.04
 
-      # Generate API documentation for the source code
-      - uses: tschm/cradle/actions/pdoc@v0.3.01
+      - uses: tschm/cradle/actions/pdoc@v0.3.04
         with:
-          source-folder: 'src/cvxsimulator'
+          source-folder: ${{ needs.parse-env.outputs.source-folder }}
 
-  # Run tests with coverage reporting
   test:
+    if: github.repository != 'tschm/.config-templates'
     runs-on: "ubuntu-latest"
-    #permissions:
-    #  contents: read
+    needs: parse-env
+    permissions:
+      contents: read
     steps:
-      # Set up Python environment with dependencies
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.3.01
+        uses: tschm/cradle/actions/environment@v0.3.04
 
-      # Run tests and generate coverage report
-      - uses: tschm/cradle/actions/coverage@v0.3.01
+      - uses: tschm/cradle/actions/coverage@v0.3.04
         with:
-          tests-folder: 'src/tests'
-          source-folder: 'src/cvxsimulator'
+          tests-folder: ${{ needs.parse-env.outputs.tests-folder }}
+          source-folder: ${{ needs.parse-env.outputs.source-folder }}
 
   book:
-    # don't try to publish the book if you are on a fork
-    if: github.event.repository.fork == false
+    if: github.repository != 'tschm/.config-templates'
     runs-on: "ubuntu-latest"
-    # This job depends on the completion of test, pdoc, and jupyter jobs
-    needs: [test, pdoc, marimo]
+    needs: [test, pdoc, marimo, parse-env]
 
     environment:
-      name: github-pages
+      name: github-pages  # 👈 this is the critical missing piece
 
     permissions:
-      #contents: read
-      pages: write
-      id-token: write
+      pages: write            # Permission to deploy to Pages
+      id-token: write         # Permission to verify deployment origin
 
     steps:
-      # Step: Upload the generated documentation book
-      # Skipped when running locally with 'act' to prevent accidental deployments
-      - name: Upload the book
-        uses: tschm/cradle/actions/book@v0.3.01
+      - uses: tschm/cradle/actions/book@v0.3.04
         with:
-          title: "cvxsimulator"
+          title: ${{ needs.parse-env.outputs.title }}
           links: |
             {
-              "API": "./pdoc/index.html"
+              "API": "./pdoc/index.html",
+              "Coverage": "./tests/html-coverage/index.html",
+              "Test Report": "./tests/html-report/report.html",
+              "Notebooks": "./marimushka/index.html"
             }
