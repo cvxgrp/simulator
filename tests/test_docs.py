@@ -29,7 +29,7 @@ def root_fixture() -> Path:
         Path: The absolute path to the project root directory
 
     """
-    return Path(__file__).parent.parent.parent
+    return Path(__file__).parent.parent
 
 
 @pytest.fixture()
