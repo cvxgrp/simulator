@@ -1,51 +1,79 @@
-name: "Marimo Notebooks"
-# Workflow for running marimo notebooks
-# This workflow runs all marimo notebooks in the book/marimo directory in parallel
-# to ensure they execute without errors.
+# This workflow runs and tests all Marimo notebooks in the project
+# It creates a matrix of jobs, one for each notebook, and runs them in parallel
+name: "Marimo"
+permissions:
+  contents: read
 
 on:
-  push:  # Triggered on every push to the repository
-
-permissions:
-  contents: read  # Read-only access to repository contents
+  push
 
 jobs:
+  # Parse .env file and build a matrix of notebooks to test
   list-notebooks:
-    name: List Marimo Notebooks
     runs-on: ubuntu-latest
     outputs:
-      notebooks: ${{ steps.set-notebooks.outputs.notebooks }}
-
+      notebook-list: ${{ steps.notebooks.outputs.matrix }}
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.3.06
+      # Check out the repository code
+      - uses: actions/checkout@v5
 
-      - name: List notebooks
-        id: set-notebooks
+      # Find all Python files in the marimo folder and create a matrix for parallel execution
+      - name: Find notebooks and build matrix
+        id: notebooks
         run: |
-          cd book/marimo
-          # Get all .py files, excluding directories
-          NOTEBOOKS=$(ls -p | grep -v / | grep '\.py$' | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "notebooks=$NOTEBOOKS" >> $GITHUB_OUTPUT
-          echo "Found notebooks: $NOTEBOOKS"
+          NOTEBOOK_DIR="book/marimo"
+          echo "Searching notebooks in: $NOTEBOOK_DIR"
+          # Check if directory exists
+          if [ ! -d "$NOTEBOOK_DIR" ]; then
+            echo "Directory $NOTEBOOK_DIR does not exist. Setting empty matrix."
+            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          # Find notebooks and handle empty results
+          if [ -z "$(find "$NOTEBOOK_DIR" -name "*.py" 2>/dev/null)" ]; then
+            echo "No notebooks found in $NOTEBOOK_DIR. Setting empty matrix."
+            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+          else
+            notebooks=$(find "$NOTEBOOK_DIR" -name "*.py" -print0 | xargs -0 -n1 echo | jq -R -s -c 'split("\n")[:-1]')
+            echo "matrix=$notebooks" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
 
-  run-notebook:
-    name: Run ${{ matrix.notebook }}
-    needs: list-notebooks
+  # Create one job per notebook using the matrix strategy for parallel execution
+  test-notebooks:
+    if: needs.list-notebooks.outputs.notebook-list != '[]'
     runs-on: ubuntu-latest
+    needs: list-notebooks
     strategy:
-      fail-fast: false  # Continue with other notebooks even if one fails
       matrix:
-        notebook: ${{ fromJson(needs.list-notebooks.outputs.notebooks) }}
-
+        notebook: ${{ fromJson(needs.list-notebooks.outputs.notebook-list) }}
+      # Don't fail the entire workflow if one notebook fails
+      fail-fast: false
+    name: Run notebook ${{ matrix.notebook }}
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.3.06
+      # Check out the repository code
+      - uses: actions/checkout@v5
 
+      # install uv
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      # install task
+      - name: Install task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Install Python dependencies
+      - name: Install uv, uvx and the environment
+        run: |
+          task build:install -s
+        shell: bash
+
+      # Execute the notebook with the appropriate runner based on its content
       - name: Run notebook
         run: |
-          uv pip install --no-cache-dir marimo
-
-          cd book/marimo
-          echo "Processing ${{ matrix.notebook }}"
-          uv run python "${{ matrix.notebook }}"
+          uv run "${{ matrix.notebook }}"
+        shell: bash
