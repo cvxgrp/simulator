@@ -18,6 +18,8 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
+    from pathlib import Path
+
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -29,7 +31,7 @@ with app.setup:
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
 
-    path = mo.notebook_location() / "public" / "prices.csv"
+    path = Path(__file__).parent / "public" / "prices.csv"
 
     # from cvxsimulator.builder import polars2pandas
     date_col = "date"
