@@ -3,7 +3,10 @@
 #
 docs
 .DS_Store
-pdoc
+_pdoc
+_book
+_tests
+_marimushka
 
 quantstats.md
 
@@ -144,7 +147,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .envrc
 .venv
 env/
