@@ -69,7 +69,7 @@ tasks:
         if [ ! -d "{{.MARIMO_FOLDER}}" ]; then
           printf "${YELLOW}[WARN] Directory '{{.MARIMO_FOLDER}}' does not exist. Skipping marimushka.${RESET}\n"
         else
-          ./bin/uv pip install marimo
+          uv pip install marimo
           mkdir -p _marimushka
           py_files=$(find "{{.MARIMO_FOLDER}}" -maxdepth 1 -name "*.py" | tr '\n' ' ')
           if [ -z "$py_files" ]; then
@@ -155,7 +155,7 @@ tasks:
         printf "${BLUE}[INFO] Generated links.json:${RESET}\n"
         cat _book/links.json
 
-        ./bin/uvx minibook --title "{{.BOOK_TITLE}}" --subtitle "{{.BOOK_SUBTITLE}}" --links "$(cat _book/links.json)" --output "_book"
+        uvx minibook --title "{{.BOOK_TITLE}}" --subtitle "{{.BOOK_SUBTITLE}}" --links "$(cat _book/links.json)" --output "_book"
 
         touch "_book/.nojekyll"
 
