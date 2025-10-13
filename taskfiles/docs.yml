@@ -1,18 +1,3 @@
-# This file is part of the tschm/.config-templates repository
-# (https://github.com/tschm/.config-templates).
-#
-# Taskfile: Documentation and testing tasks
-#
-# Purpose: Provide tasks to run tests, generate API docs, export Marimo notebooks,
-#          assemble a combined documentation site ("book"), and run a Marimo server.
-#
-# Components:
-#   - test: run pytest with coverage and HTML report
-#   - docs: build API documentation with pdoc
-#   - marimushka: export Marimo notebooks to HTML and generate an index
-#   - book: assemble docs, test reports, and notebooks into a static site
-#   - marimo: start a Marimo server for interactive editing
-
 version: '3'
 
 includes:
@@ -69,7 +54,7 @@ tasks:
         if [ ! -d "{{.MARIMO_FOLDER}}" ]; then
           printf "${YELLOW}[WARN] Directory '{{.MARIMO_FOLDER}}' does not exist. Skipping marimushka.${RESET}\n"
         else
-          uv pip install marimo
+          ./bin/uv pip install marimo
           mkdir -p _marimushka
           py_files=$(find "{{.MARIMO_FOLDER}}" -maxdepth 1 -name "*.py" | tr '\n' ' ')
           if [ -z "$py_files" ]; then
@@ -87,10 +72,10 @@ tasks:
               # Check if the file has a script header ("# /// script")
               if grep -q "^# /// script" "$py_file"; then
                 printf " ${BLUE}[INFO] Script header detected, using --sandbox flag...${RESET}\n"
-                uvx marimo export html --sandbox --include-code --output "_marimushka/$dir_path/$base_name.html" "$py_file"
+                ./bin/uvx marimo export html --sandbox --include-code --output "_marimushka/$dir_path/$base_name.html" "$py_file"
               else
                 printf " ${BLUE}[INFO] No script header detected, using standard export...${RESET}\n"
-                uv run marimo export html --include-code --output "_marimushka/$dir_path/$base_name.html" "$py_file"
+                ./bin/uv run marimo export html --include-code --output "_marimushka/$dir_path/$base_name.html" "$py_file"
               fi
             done
             echo "<html><head><title>Marimo Notebooks</title></head><body><h1>Marimo Notebooks</h1><ul>" > _marimushka/index.html
@@ -155,7 +140,7 @@ tasks:
         printf "${BLUE}[INFO] Generated links.json:${RESET}\n"
         cat _book/links.json
 
-        uvx minibook --title "{{.BOOK_TITLE}}" --subtitle "{{.BOOK_SUBTITLE}}" --links "$(cat _book/links.json)" --output "_book"
+        ./bin/uvx minibook --title "{{.BOOK_TITLE}}" --subtitle "{{.BOOK_SUBTITLE}}" --links "$(cat _book/links.json)" --output "_book"
 
         touch "_book/.nojekyll"
 
@@ -168,6 +153,6 @@ tasks:
         if [ ! -d "{{.MARIMO_FOLDER}}" ]; then
           printf " ${YELLOW}[WARN] Marimo folder '{{.MARIMO_FOLDER}}' not found, skipping start${RESET}\n"
         else
-          ./bin/uv sync --all-extras
+          ./bin/uv sync --extra dev
           ./bin/uv run marimo edit "{{.MARIMO_FOLDER}}"
         fi
