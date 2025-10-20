@@ -16,6 +16,8 @@ RESET := \033[0m
 
 # Declare phony targets (they don't produce files)
 .PHONY: install-task install clean test marimo book fmt deptry help all
+# Declare phony targets (they don't produce files)
+.PHONY: install-task install clean test marimo book fmt deptry help all
 
 UV_INSTALL_DIR := "./bin"
 
@@ -28,6 +30,24 @@ install-task: ## ensure go-task (Taskfile) is installed
 		curl --location https://taskfile.dev/install.sh | sh -s -- -d -b ${UV_INSTALL_DIR}; \
 	fi
 
+##@ Bootstrap
+install-task: ## ensure go-task (Taskfile) is installed
+	@mkdir -p ./bin;
+	# install task
+	@if command -v ./bin/task >/dev/null 2>&1; then \
+		printf "$(GREEN)task is already installed$(RESET)\n"; \
+	else \
+		printf "$(BLUE)Installing go-task (Taskfile)$(RESET)\n"; \
+		sh -c "$$(curl --location https://taskfile.dev/install.sh)" -- -d -b ./bin; \
+	fi
+	# install uv
+	@if [ -x "./bin/uv" ]; then \
+		printf "${BLUE}[INFO] uv already present in ./bin, skipping installation${RESET}\n"; \
+	else \
+		curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR="./bin" sh || { printf "${RED}[ERROR] Failed to install uv${RESET}\n"; exit 1; }; \
+	fi
+	# verify task is installed
+	./bin/task --version
 
 install: install-task ## install
 	@./bin/task build:install --silent
