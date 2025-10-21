@@ -2,39 +2,34 @@
 # (https://github.com/tschm/.config-templates).
 #
 # Workflow: Pre-commit
+#
 # Purpose: This workflow runs pre-commit checks to ensure code quality
 #          and consistency across the codebase. It helps catch issues
 #          like formatting errors, linting issues, and other code quality
 #          problems before they are merged.
 #
-# Trigger: This workflow runs on every push
+# Trigger: This workflow runs on every push and on pull requests to main/master
+#          branches (including from forks)
 #
 # Components:
 #   - 🔍 Run pre-commit checks using reusable action
 
 name: "PRE-COMMIT"
+permissions:
+  contents: read
 
 on:
   push:
-
-permissions:
-  contents: read
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
+
     steps:
-      # Check out the repository code
       - uses: actions/checkout@v5
-
-      # Use the composite action to render the project
-      - name: Setup the project
-        uses: ./.github/actions/setup-project
-
-      - name: Lint
-        run: |
-          task quality:lint
-
-      - name: Format
-        run: |
-          task quality:fmt
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: pre-commit/action@v3.0.1
