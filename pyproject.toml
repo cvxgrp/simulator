@@ -7,10 +7,10 @@ authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "jquantstats>=0.0.23",
-    "numpy>=2.0",
+    "jquantstats>=0.0.29",
+    "numpy>=2.3.4",
     "pandas>=2.2.3",
-    "polars>=1.24.0"
+    "polars>=1.34.0"
 ]
 
 # Links to project resources
@@ -20,18 +20,15 @@ repository = "https://github.com/cvxgrp/simulator"
 # Additional dependencies for development, testing, and documentation
 [project.optional-dependencies]
 dev = [
-    "cvxpy-base>=1.5.1",
+    "cvxpy-base>=1.7.0",
     "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "pre-commit>=4.0.1",
     "clarabel>=0.9.0",
     "loguru",
     "tinycta",
-    "marimo>=0.13.15"
+    "marimo>=0.17.0"
 ]
-# Ruff
-# Current configuration:
-# select = ["E", "F", "I", "N", "D", "UP", "NPY", "PD", "C4", "B", "S", "W"]
 
 # Build system configuration
 # Hatchling is a modern, extensible Python build backend
