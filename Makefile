@@ -16,8 +16,6 @@ RESET := \033[0m
 
 # Declare phony targets (they don't produce files)
 .PHONY: install-task install clean test marimo book fmt deptry help all
-# Declare phony targets (they don't produce files)
-.PHONY: install-task install clean test marimo book fmt deptry help all
 
 UV_INSTALL_DIR := "./bin"
 
