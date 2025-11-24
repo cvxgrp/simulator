@@ -99,12 +99,6 @@ for t, state in b:
 ```
 
 ```result
-A
-951.409346
-B - 1884.867573
-Name: 2020 - 01 - 05
-00: 00:00, dtype: float64
-
 ```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
@@ -130,16 +124,6 @@ b2.units.iloc[-1]
 ```
 
 ```result
-A
-2508.939034
-B
-4970.539596
-C
-1254.469517
-D
-3334.665805
-Name: 2020 - 01 - 05
-00: 00:00, dtype: float64
 ```
 
 
@@ -160,16 +144,6 @@ b3.units.iloc[-1]
 ```
 
 ```result
-A
-2508.939034
-B
-4970.539596
-C
-1254.469517
-D
-3334.665805
-Name: 2020 - 01 - 05
-00: 00:00, dtype: float64
 ```
 
 ### Build the portfolio
@@ -190,7 +164,6 @@ type(portfolio).__name__
 ```
 
 ```result
-'Portfolio'
 ```
 
 ## 📈 Analytics
@@ -206,16 +179,6 @@ for t, state in b3:
     b3.aum = state.aum
 
 portfolio = b3.build()
-
-# Access portfolio properties
-len(portfolio.nav)  # Length of the NAV series
-5
-portfolio.nav.name  # Name of the NAV series
-'NAV'
-# Check the equity (positions in cash terms)
-portfolio.equity.shape
-(5, 4)
->> >
 ```
 
 ```result
