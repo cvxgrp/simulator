@@ -45,7 +45,7 @@ with app.setup:
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col)
 
-    from cvxsimulator import Builder
+    from cvx.simulator import Builder
 
 
 @app.cell

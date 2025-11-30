@@ -44,7 +44,7 @@ with app.setup:
     prices.loc["2022-01-03", "B"] = np.nan
     prices.loc["2022-01-04", "B"] = np.nan
 
-    from cvxsimulator import Builder
+    from cvx.simulator import Builder
 
 
 @app.cell

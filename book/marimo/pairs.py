@@ -29,9 +29,8 @@ with app.setup:
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col)
 
+    from cvx.simulator import Builder
     from loguru import logger
-
-    from cvxsimulator import Builder
 
     # Initialize random number generator once to be used by all cells
     rng = np.random.default_rng(42)
