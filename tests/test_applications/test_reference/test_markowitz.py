@@ -9,7 +9,7 @@ over time with interest on cash and borrowing fees.
 
 import pytest
 
-from cvxsimulator.builder import Builder
+from cvx.simulator.builder import Builder
 
 from .markowitz import (
     OptimizationInput,

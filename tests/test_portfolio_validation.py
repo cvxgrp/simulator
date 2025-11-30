@@ -8,7 +8,7 @@ and non-unique indices, as well as mismatches between prices and units.
 import pandas as pd
 import pytest
 
-from cvxsimulator import Portfolio
+from cvx.simulator import Portfolio
 
 
 def test_non_unique_prices_index():

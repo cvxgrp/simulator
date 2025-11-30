@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from cvxsimulator.utils import (
+from cvx.simulator.utils import (
     interpolate,
     interpolate_df_pl,
     valid,

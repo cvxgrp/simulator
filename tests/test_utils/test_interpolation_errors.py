@@ -7,7 +7,7 @@ which are used for filling missing values in time series data.
 import polars as pl
 import pytest
 
-from cvxsimulator.utils import interpolate, valid
+from cvx.simulator.utils import interpolate, valid
 
 
 def test_interpolate_invalid_type():

@@ -12,8 +12,8 @@ import polars as pl
 import polars.testing as pdt
 import pytest
 
-from cvxsimulator.builder import polars2pandas
-from cvxsimulator.portfolio import Portfolio
+from cvx.simulator.builder import polars2pandas
+from cvx.simulator.portfolio import Portfolio
 
 
 @pytest.fixture()

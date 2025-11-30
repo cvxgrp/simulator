@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from cvxsimulator import interpolate
+from cvx.simulator import interpolate
 
 
 @pytest.fixture(scope="session", name="resource_dir")

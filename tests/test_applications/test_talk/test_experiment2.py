@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from cvxsimulator import Portfolio
+from cvx.simulator import Portfolio
 
 
 # take two moving averages and apply the sign-function, adjust by volatility

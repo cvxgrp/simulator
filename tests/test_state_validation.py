@@ -9,7 +9,7 @@ from unittest.mock import PropertyMock, patch
 import pandas as pd
 import pytest
 
-from cvxsimulator import State
+from cvx.simulator import State
 
 
 def test_nav_not_equal_aum():

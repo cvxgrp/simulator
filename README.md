@@ -48,7 +48,7 @@ and initializing the amount of cash used in an experiment:
 
 ```python
 import pandas as pd
-from cvxsimulator import Builder
+from cvx.simulator import Builder
 
 # For doctest, we'll create a small DataFrame instead of reading from a file
 dates = pd.date_range('2020-01-01', periods=5)

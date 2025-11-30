@@ -9,7 +9,7 @@ alternative to Pandas DataFrames.
 import pandas as pd
 import polars as pl
 
-from cvxsimulator.builder import polars2pandas
+from cvx.simulator.builder import polars2pandas
 
 
 def test_iteration(prices_pl: pl.DataFrame):

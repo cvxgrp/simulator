@@ -39,7 +39,7 @@ build-backend = "hatchling.build"
 # Configuration for building wheel distributions
 # Specifies which packages to include in the wheel
 [tool.hatch.build.targets.wheel]
-packages = ["src/cvxsimulator"]
+packages = ["src/cvx"]
 
 # Deptry configuration for dependency checking
 # Specific rule ignores for dependency checking

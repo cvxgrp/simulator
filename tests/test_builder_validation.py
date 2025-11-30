@@ -8,7 +8,7 @@ and non-unique indices.
 import pandas as pd
 import pytest
 
-from cvxsimulator import Builder
+from cvx.simulator import Builder
 
 
 def test_non_monotonic_index():

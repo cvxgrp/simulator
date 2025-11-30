@@ -14,7 +14,7 @@ import polars as pl
 import polars.testing as pdt
 import pytest
 
-from cvxsimulator import State
+from cvx.simulator import State
 
 
 @pytest.fixture()
