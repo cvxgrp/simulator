@@ -14,7 +14,8 @@ __version__ = importlib.metadata.version("cvxsimulator")
 from .builder import Builder as Builder
 from .portfolio import Portfolio as Portfolio
 from .state import State as State
-from .utils import interpolate as interpolate, valid as valid
+from .utils import interpolate as interpolate
+from .utils import valid as valid
 
 __all__ = [
     "Builder",
