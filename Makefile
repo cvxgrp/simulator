@@ -47,7 +47,18 @@ install-uv: ## ensure uv/uvx is installed
 	  fi; \
 	fi
 
-install: install-uv ## install
+install-extras: ## run custom build script (if exists)
+	@if [ -x ".github/scripts/build-extras.sh" ]; then \
+		printf "${BLUE}[INFO] Running custom build script...${RESET}\n"; \
+		./.github/scripts/build-extras.sh; \
+	elif [ -f ".github/scripts/build-extras.sh" ]; then \
+		printf "${BLUE}[INFO] Running custom build script...${RESET}\n"; \
+		/bin/sh .github/scripts/build-extras.sh; \
+	else \
+		printf "${BLUE}[INFO] No custom build script found, skipping...${RESET}\n"; \
+	fi
+
+install: install-uv install-extras ## install
 	# Create the virtual environment only if it doesn't exist
 	@if [ ! -d ".venv" ]; then \
 	  ${UV_BIN} venv --python 3.12 || { printf "${RED}[ERROR] Failed to create virtual environment${RESET}\n"; exit 1; }; \
