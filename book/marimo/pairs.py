@@ -5,6 +5,7 @@
 #     "marimo==0.18.4",
 #     "plotly",
 #     "cvxsimulator",
+#     "loguru"
 # ]
 #
 # [tool.uv.sources]

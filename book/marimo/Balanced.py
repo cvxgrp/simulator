@@ -21,6 +21,8 @@ Each approach is implemented and visualized to compare performance.
 #     "marimo==0.18.4",
 #     "plotly",
 #     "cvxsimulator",
+#     "cvxpy-base",
+#     "clarabel==0.11.1",
 # ]
 #
 # [tool.uv.sources]
