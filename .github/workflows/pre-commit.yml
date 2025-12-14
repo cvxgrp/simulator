@@ -1,5 +1,5 @@
-# This file is part of the tschm/.config-templates repository
-# (https://github.com/tschm/.config-templates).
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
 #
 # Workflow: Pre-commit
 #
@@ -38,5 +38,6 @@ jobs:
       - uses: ./.github/actions/setup-project
         with:
           python-version: ${{ steps.get-python.outputs.python-version }}
+          uv-extra-index-url: ${{ secrets.UV_EXTRA_INDEX_URL }}
 
       - uses: pre-commit/action@v3.0.1

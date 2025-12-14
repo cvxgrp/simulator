@@ -47,7 +47,7 @@ esac
 cd "$MARIMO_FOLDER"
 
 # Run marimushka export
-"$UVX_BIN" marimushka export --notebooks "." --output "$OUTPUT_DIR"
+"$UVX_BIN" "marimushka>=0.1.9" export --notebooks "." --output "$OUTPUT_DIR" --bin-path "$CURRENT_DIR/bin"
 
 # Ensure GitHub Pages does not process with Jekyll
 : > "$OUTPUT_DIR/.nojekyll"

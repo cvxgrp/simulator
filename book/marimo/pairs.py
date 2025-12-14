@@ -1,5 +1,18 @@
 """pairs trading."""
 
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "plotly",
+#     "cvxsimulator",
+#     "loguru"
+# ]
+#
+# [tool.uv.sources]
+# cvxsimulator = { path = "../..", editable=true }
+#
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"

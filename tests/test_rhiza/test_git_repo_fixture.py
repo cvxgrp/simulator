@@ -35,13 +35,10 @@ class TestGitRepoFixture:
         bin_dir = git_repo / "bin"
         assert bin_dir.exists()
         assert (bin_dir / "uv").exists()
-        assert (bin_dir / "gpg").exists()
-        assert (bin_dir / "gpgv").exists()
-        assert (bin_dir / "git").exists()
 
     def test_git_repo_mock_tools_are_executable(self, git_repo):
         """Mock tools should be executable."""
-        for tool in ["uv", "gpg", "gpgv", "git"]:
+        for tool in ["uv"]:
             tool_path = git_repo / "bin" / tool
             assert os.access(tool_path, os.X_OK), f"{tool} is not executable"
 
@@ -139,9 +136,3 @@ class TestGitRepoFixture:
         bin_dir = str(git_repo / "bin")
         assert bin_dir in path_env
         assert path_env.startswith(bin_dir)
-
-    def test_git_repo_sets_gnupghome_environment(self, git_repo):
-        """Git repo should set GNUPGHOME environment variable."""
-        gnupghome = os.environ.get("GNUPGHOME")
-        assert gnupghome is not None
-        assert "gnupg" in gnupghome

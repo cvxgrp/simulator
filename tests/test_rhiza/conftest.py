@@ -1,4 +1,4 @@
-"""Pytest configuration and fixtures for setting up a mock git repository with versioning and GPG signing."""
+"""Pytest configuration and fixtures for setting up a mock git repository with versioning."""
 
 import logging
 import os
@@ -11,6 +11,12 @@ import pytest
 MOCK_UV_SCRIPT = """#!/usr/bin/env python3
 import sys
 import re
+
+try:
+    from packaging.version import parse, InvalidVersion
+    HAS_PACKAGING = True
+except ImportError:
+    HAS_PACKAGING = False
 
 def get_version():
     with open("pyproject.toml", "r") as f:
@@ -65,6 +71,16 @@ def main():
 
     # uv version <version> --dry-run
     if len(args) >= 2 and not args[1].startswith("-") and "--dry-run" in args:
+        version = args[1]
+        if HAS_PACKAGING:
+            try:
+                parse(version)
+            except InvalidVersion:
+                sys.exit(1)
+        else:
+            # Simple validation: must start with a digit
+            if not re.match(r"^\\d", version):
+                sys.exit(1)
         # Just exit 0 if valid
         return
 
@@ -102,7 +118,6 @@ def git_repo(root, tmp_path, monkeypatch):
     """Sets up a remote bare repo and a local clone with necessary files."""
     remote_dir = tmp_path / "remote.git"
     local_dir = tmp_path / "local"
-    gnupg_home = tmp_path / "gnupg"
 
     # 1. Create bare remote
     remote_dir.mkdir()
@@ -136,51 +151,8 @@ def git_repo(root, tmp_path, monkeypatch):
         f.write(MOCK_UV_SCRIPT)
     uv_path.chmod(0o755)
 
-    # Create bin/gpg mock and add bin to PATH
-    gpg_path = bin_dir / "gpg"
-    with open(gpg_path, "w") as f:
-        f.write("""#!/bin/sh
-# Mock gpg that produces a dummy signature for git tag -s
-echo "ARGS: $@" >> /tmp/gpg_args.log
-
-# Check if we are signing (look for -s or -b or -bsau)
-SIGN=0
-for arg in "$@"; do
-    case "$arg" in
-        *-bsau*) SIGN=1 ;;
-        *-s*)    SIGN=1 ;;
-        *-b*)    SIGN=1 ;;
-    esac
-done
-
-if [ "$SIGN" = "1" ]; then
-    # Output status to stderr (fd 2) as requested by --status-fd=2
-    echo "[GNUPG:] SIG_CREATED D 1 2 00 1234567890 1" >&2
-
-    # Output signature to stdout
-    echo "-----BEGIN PGP SIGNATURE-----"
-    echo ""
-    echo "Dummy Signature"
-    echo "-----END PGP SIGNATURE-----"
-fi
-exit 0
-""")
-    gpg_path.chmod(0o755)
-
-    # Also provide a gpgv shim that delegates to our gpg mock (git may use gpgv for verification)
-    gpgv_path = bin_dir / "gpgv"
-    with open(gpgv_path, "w") as f:
-        f.write("#!/bin/sh\nexit 0\n")
-    gpgv_path.chmod(0o755)
-
-    # Ensure our bin comes first on PATH so 'gpg' and 'uv' resolve to mocks
+    # Ensure our bin comes first on PATH so 'uv' resolves to mock
     monkeypatch.setenv("PATH", f"{bin_dir}:{os.environ.get('PATH', '')}")
-
-    # Provide a git shim to make `git tag -v` succeed in this mocked environment
-    git_wrapper = bin_dir / "git"
-    with open(git_wrapper, "w") as f:
-        f.write('#!/bin/sh\nif [ "$1" = "tag" ] && [ "$2" = "-v" ]; then exit 0; fi\nexec /usr/bin/git "$@"\n')
-    git_wrapper.chmod(0o755)
 
     # Copy scripts
     script_dir = local_dir / ".github" / "scripts"
@@ -191,10 +163,6 @@ exit 0
 
     (script_dir / "release.sh").chmod(0o755)
     (script_dir / "bump.sh").chmod(0o755)
-
-    # Set up a test GPG key for tag signing
-    gnupg_home.mkdir(mode=0o700)
-    monkeypatch.setenv("GNUPGHOME", str(gnupg_home))
 
     # Commit and push initial state
     subprocess.run(["git", "config", "user.email", "test@example.com"], check=True)

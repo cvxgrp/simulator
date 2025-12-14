@@ -1,5 +1,5 @@
-# This file is part of the tschm/.config-templates repository
-# (https://github.com/tschm/.config-templates).
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
 #
 # Release Workflow for Python Packages with Optional Devcontainer Publishing
 #
@@ -115,6 +115,7 @@ jobs:
         uses: ./.github/actions/setup-project
         with:
           python-version: ${{ vars.PYTHON_DEFAULT_VERSION || '3.14' }}
+          uv-extra-index-url: ${{ secrets.UV_EXTRA_INDEX_URL }}
 
       - name: Verify version matches tag
         if: hashFiles('pyproject.toml') != ''
@@ -139,7 +140,7 @@ jobs:
       - name: Upload dist artifact
         # not tested at runtime!
         if: hashFiles('pyproject.toml') != ''
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dist
           path: dist
@@ -176,7 +177,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
