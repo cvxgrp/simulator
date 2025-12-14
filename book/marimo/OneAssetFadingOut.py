@@ -12,6 +12,18 @@ The notebook shows:
 4. How to examine the resulting portfolio's prices, NAV, and weights
 """
 
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "plotly",
+#     "cvxsimulator",
+# ]
+#
+# [tool.uv.sources]
+# cvxsimulator = { path = "../..", editable=true }
+#
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"

@@ -16,6 +16,18 @@ different approaches to constructing and optimizing such portfolios:
 Each approach is implemented and visualized to compare performance.
 """
 
+# /// script
+# dependencies = [
+#     "marimo==0.18.4",
+#     "plotly",
+#     "cvxsimulator",
+# ]
+#
+# [tool.uv.sources]
+# cvxsimulator = { path = "../..", editable=true }
+#
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"
