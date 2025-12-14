@@ -31,7 +31,7 @@ def test_readme_runs(logger, root):
     # Trust boundary: we execute Python snippets sourced from README.md in this repo.
     # The README is part of the trusted repository content and reviewed in PRs.
     logger.debug("Executing README code via %s -c ...", sys.executable)
-    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)  # noqa: S603
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, cwd=root)  # noqa: S603
 
     stdout = result.stdout
     logger.debug("Execution finished with return code %d", result.returncode)
