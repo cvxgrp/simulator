@@ -139,7 +139,7 @@ jobs:
       - name: Upload dist artifact
         # not tested at runtime!
         if: hashFiles('pyproject.toml') != ''
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dist
           path: dist
@@ -176,7 +176,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
