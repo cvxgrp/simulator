@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cvxsimulator</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .markdown-content h1 { @apply text-3xl font-bold my-4; }
+        .markdown-content h2 { @apply text-2xl font-bold my-3; }
+        .markdown-content h3 { @apply text-xl font-bold my-2; }
+        .markdown-content h4 { @apply text-lg font-bold my-2; }
+        .markdown-content p { @apply my-2; }
+        .markdown-content ul { @apply list-disc ml-6 my-2; }
+        .markdown-content ol { @apply list-decimal ml-6 my-2; }
+        .markdown-content code { @apply bg-gray-100 px-1 rounded; }
+        .markdown-content pre { @apply bg-gray-100 p-4 rounded my-4 overflow-x-auto; }
+        .markdown-content a { @apply text-blue-600 hover:underline; }
+        .markdown-content blockquote { @apply border-l-4 border-gray-300 pl-4 italic; }
+        .markdown-content table { @apply border-collapse border border-gray-300 my-4; }
+        .markdown-content th, .markdown-content td { @apply border border-gray-300 px-4 py-2; }
+    </style>
+
+    <script>
+        // Function to load external content in the iframe
+        function loadExternalContent(url) {
+            // Show the iframe and hide the default content
+            document.getElementById('external-content').classList.remove('hidden');
+            document.getElementById('content-container').classList.add('hidden');
+
+            // Load the URL in the iframe
+            document.getElementById('external-content').src = url;
+
+            // Return false to prevent the default link behavior
+            return false;
+        }
+
+        // Function to show the default content (README)
+        function showDefaultContent() {
+            // Hide the iframe and show the default content
+            document.getElementById('external-content').classList.add('hidden');
+            document.getElementById('content-container').classList.remove('hidden');
+
+            // Clear the iframe source
+            document.getElementById('external-content').src = '';
+
+            // Return false to prevent the default link behavior
+            return false;
+        }
+    </script>
+</head>
+<body class="bg-white text-gray-800 font-sans min-h-screen flex flex-col">
+    <div class="max-w-6xl mx-auto p-4 w-full flex-grow">
+        <!-- Header -->
+        <header class="bg-gray-100 rounded-lg p-6 mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">cvxsimulator</h1>
+                    <p class="text-gray-600">Simple simulator for investors</p>
+                </div>
+                <nav class="hidden md:flex space-x-4">
+                    <a href="/" onclick="return showDefaultContent()" class="text-blue-600 hover:text-blue-800">Home</a>
+                    <a href="{{ docs_url }}" onclick="return loadExternalContent('{{ docs_url }}')" class="text-blue-600 hover:text-blue-800">Documentation</a>
+                    <a href="{{ tests_url }}" onclick="return loadExternalContent('{{ tests_url }}')" class="text-blue-600 hover:text-blue-800">Tests</a>
+                    <a href="{{ coverage_url }}" onclick="return loadExternalContent('{{ coverage_url }}')" class="text-blue-600 hover:text-blue-800">Coverage</a>
+                    <a href="{{ license_url }}" onclick="return loadExternalContent('{{ license_url }}')" class="text-blue-600 hover:text-blue-800">License</a>
+                    <a href="{{ github_url }}" target="_blank" class="text-blue-600 hover:text-blue-800">GitHub</a>
+                </nav>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="{{ pypi_url }}" target="_blank" class="inline-block">
+                    <img src="https://badge.fury.io/py/cvxsimulator.svg" alt="PyPI version">
+                </a>
+                <a href="{{ license_url }}" onclick="return loadExternalContent('{{ license_url }}')" class="inline-block">
+                    <img src="https://img.shields.io/badge/License-APACHEv2-brightgreen.svg" alt="Apache 2.0 License">
+                </a>
+                <a href="{{ downloads_url }}" target="_blank" class="inline-block">
+                    <img src="https://static.pepy.tech/personalized-badge/cvxsimulator?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month" alt="Downloads">
+                </a>
+                <a href="{{ coverage_badge_url }}" target="_blank" class="inline-block">
+                    <img src="https://coveralls.io/repos/github/cvxgrp/simulator/badge.png?branch=main" alt="Coverage Status">
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-white rounded-lg p-6 shadow-md markdown-content">
+            <div id="content-container">
+                <!-- Default content (README) will be shown here -->
+                {{ readme_html|safe }}
+            </div>
+
+            <!-- Iframe for external content -->
+            <iframe id="external-content" class="w-full h-screen border-none hidden" style="min-height: 600px;"></iframe>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 rounded-lg p-6 mt-8 text-center text-gray-600">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>Copyright 2023 Stanford University Convex Optimization Group</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="{{ github_url }}" target="_blank" class="text-blue-600 hover:underline">GitHub</a>
+                    <a href="{{ cvxgrp_url }}" target="_blank" class="text-blue-600 hover:underline">CVX Group</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
