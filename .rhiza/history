@@ -1,0 +1,59 @@
+# Rhiza Template History
+# This file lists all files managed by the Rhiza template.
+# Template repository: jebel-quant/rhiza
+# Template branch: main
+#
+# Files under template control:
+.devcontainer/bootstrap.sh
+.devcontainer/devcontainer.json
+.editorconfig
+.github/dependabot.yml
+.github/workflows/rhiza_book.yml
+.github/workflows/rhiza_ci.yml
+.github/workflows/rhiza_deptry.yml
+.github/workflows/rhiza_devcontainer.yml
+.github/workflows/rhiza_docker.yml
+.github/workflows/rhiza_marimo.yml
+.github/workflows/rhiza_pre-commit.yml
+.github/workflows/rhiza_release.yml
+.github/workflows/rhiza_sync.yml
+.github/workflows/rhiza_validate.yml
+.gitignore
+.pre-commit-config.yaml
+.rhiza/CONFIG.md
+.rhiza/TOKEN_SETUP.md
+.rhiza/scripts/book.sh
+.rhiza/scripts/bump.sh
+.rhiza/scripts/customisations/build-extras.sh
+.rhiza/scripts/customisations/post-release.sh
+.rhiza/scripts/marimushka.sh
+.rhiza/scripts/release.sh
+.rhiza/scripts/update-readme-help.sh
+.rhiza/utils/version_matrix.py
+.rhiza/utils/version_max.py
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+Makefile
+book/Makefile.book
+book/marimo/README.md
+book/marimo/rhiza.py
+book/minibook-templates/custom.html.jinja2
+book/pdoc-templates/module.html.jinja2
+pytest.ini
+renovate.json
+ruff.toml
+tests/Makefile.tests
+tests/test_rhiza/README.md
+tests/test_rhiza/benchmarks/.gitignore
+tests/test_rhiza/benchmarks/README.md
+tests/test_rhiza/benchmarks/analyze_benchmarks.py
+tests/test_rhiza/conftest.py
+tests/test_rhiza/test_bump_script.py
+tests/test_rhiza/test_docstrings.py
+tests/test_rhiza/test_git_repo_fixture.py
+tests/test_rhiza/test_makefile.py
+tests/test_rhiza/test_marimushka_script.py
+tests/test_rhiza/test_readme.py
+tests/test_rhiza/test_release_script.py
+tests/test_rhiza/test_structure.py
+tests/test_rhiza/test_updatereadme_script.py

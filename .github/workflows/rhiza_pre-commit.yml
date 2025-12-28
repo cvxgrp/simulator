@@ -1,0 +1,34 @@
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
+#
+# Workflow: Pre-commit
+#
+# Purpose: This workflow runs pre-commit checks to ensure code quality
+#          and consistency across the codebase. It helps catch issues
+#          like formatting errors, linting issues, and other code quality
+#          problems before they are merged.
+#
+# Trigger: This workflow runs on every push and on pull requests to main/master
+#          branches (including from forks)
+#
+# Components:
+#   - 🔍 Run pre-commit checks using reusable action
+
+name: "PRE-COMMIT"
+permissions:
+  contents: read
+
+on:
+  push:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pre-commit/action@v3.0.1
+

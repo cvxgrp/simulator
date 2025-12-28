@@ -1,0 +1,74 @@
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
+#
+# Workflow: Book
+# Purpose: This workflow builds and deploys comprehensive documentation for the project.
+#          It combines API documentation, test coverage reports, test results, and
+#          interactive notebooks into a single GitHub Pages site.
+#
+# Trigger: This workflow runs on every push to the main or master branch
+#
+# Components:
+#   - 📓 Process Marimo notebooks
+#   - 📖 Generate API documentation with pdoc
+#   - 🧪 Run tests and generate coverage reports
+#   - 🚀 Deploy combined documentation to GitHub Pages
+
+name: "BOOK"
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  book:
+    runs-on: "ubuntu-latest"
+
+    environment:
+      name: github-pages  # 👈 this is the critical missing piece
+
+    permissions:
+      contents: read
+      pages: write            # Permission to deploy to Pages
+      id-token: write         # Permission to verify deployment origin
+
+    steps:
+      # Check out the repository code
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.18"
+
+      - name: "Sync the virtual environment for ${{ github.repository }}"
+        shell: bash
+        run: |
+          export UV_EXTRA_INDEX_URL="${{ secrets.uv-extra-index-url }}"
+          # will just use .python-version?
+          uv sync --all-extras --frozen
+
+      - name: "Make the book"
+        run: |
+          make book
+
+      # Step 5: Package all artifacts for GitHub Pages deployment
+      # This prepares the combined outputs for deployment by creating a single artifact
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v4  # Official GitHub Pages artifact upload action
+        with:
+          path: _book/  # Path to the directory containing all artifacts to deploy
+
+      # Step 6: Deploy the packaged artifacts to GitHub Pages
+      # This step publishes the content to GitHub Pages
+      # The deployment is conditional based on whether the repository is a fork and the PUBLISH_COMPANION_BOOK variable is set
+      # If the repository is a fork, deployment is skipped to avoid unauthorized publishing
+      # If PUBLISH_COMPANION_BOOK is not set, it defaults to allowing deployment
+      - name: Deploy to GitHub Pages
+        if: ${{ !github.event.repository.fork && (vars.PUBLISH_COMPANION_BOOK == 'true' || vars.PUBLISH_COMPANION_BOOK == '') }}
+        uses: actions/deploy-pages@v4  # Official GitHub Pages deployment action
+        continue-on-error: true
