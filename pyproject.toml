@@ -18,12 +18,9 @@ dependencies = [
 repository = "https://github.com/cvxgrp/simulator"
 
 # Additional dependencies for development, testing, and documentation
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "cvxpy-base>=1.7.0",
-    "pytest-cov>=6.0.0",
-    "pytest>=8.3.3",
-    "pre-commit>=4.0.1",
     "clarabel>=0.9.0",
     "loguru",
     "tinycta",
@@ -45,9 +42,3 @@ packages = ["src/cvx"]
 # Specific rule ignores for dependency checking
 [tool.deptry.per_rule_ignores]
 DEP002 = ["jquantstats"]
-
-# General Deptry configuration
-# Deptry is a tool for checking dependency usage in Python projects
-[tool.deptry]
-# see https://deptry.com/usage/#pep-621-dev-dependency-groups
-pep621_dev_dependency_groups = ["dev"]

@@ -34,66 +34,57 @@ RESET := \033[0m
 	update-readme
 
 UV_INSTALL_DIR ?= ./bin
-UV_BIN := ${UV_INSTALL_DIR}/uv
-UVX_BIN := ${UV_INSTALL_DIR}/uvx
-MARIMO_FOLDER := book/marimo
-SOURCE_FOLDER := src
-SCRIPTS_FOLDER := .rhiza/scripts
-CUSTOM_SCRIPTS_FOLDER := .rhiza/scripts/customisations
+UV_BIN ?= $(shell command -v uv 2>/dev/null || echo ${UV_INSTALL_DIR}/uv)
+UVX_BIN ?= $(shell command -v uvx 2>/dev/null || echo ${UV_INSTALL_DIR}/uvx)
+VENV ?= .venv
 
 export UV_NO_MODIFY_PATH := 1
 export UV_VENV_CLEAR := 1
+
+# Load .rhiza.env (if present) and export its variables so recipes see them.
+include .rhiza.env
 
 # Include split Makefiles
 -include tests/Makefile.tests
 -include book/Makefile.book
 -include presentation/Makefile.presentation
+-include .rhiza/customisations/Makefile.customisations
 
 ##@ Bootstrap
 install-uv: ## ensure uv/uvx is installed
 	# Ensure the ${UV_INSTALL_DIR} folder exists
 	@mkdir -p ${UV_INSTALL_DIR}
 
-	# Install uv/uvx only if they are not already present
-	@if [ -x "${UV_INSTALL_DIR}/uv" ] && [ -x "${UV_INSTALL_DIR}/uvx" ]; then \
+	# Install uv/uvx only if they are not already present in PATH or in the install dir
+	@if command -v uv >/dev/null 2>&1 && command -v uvx >/dev/null 2>&1; then \
+	  :; \
+	elif [ -x "${UV_INSTALL_DIR}/uv" ] && [ -x "${UV_INSTALL_DIR}/uvx" ]; then \
 	  printf "${BLUE}[INFO] uv and uvx already installed in ${UV_INSTALL_DIR}, skipping.${RESET}\n"; \
 	else \
-	  printf "${BLUE}[INFO] Installing uv and uvx...${RESET}\n"; \
+	  printf "${BLUE}[INFO] Installing uv and uvx into ${UV_INSTALL_DIR}...${RESET}\n"; \
 	  if ! curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR="${UV_INSTALL_DIR}" sh >/dev/null 2>&1; then \
 	    printf "${RED}[ERROR] Failed to install uv${RESET}\n"; \
 	    exit 1; \
 	  fi; \
 	fi
 
-install-extras: ## run custom build script (if exists)
-	@if [ -x "${CUSTOM_SCRIPTS_FOLDER}/build-extras.sh" ]; then \
-		printf "${BLUE}[INFO] Running custom build script from customisations folder...${RESET}\n"; \
-		"${CUSTOM_SCRIPTS_FOLDER}"/build-extras.sh; \
-	elif [ -f "${CUSTOM_SCRIPTS_FOLDER}/build-extras.sh" ]; then \
-		printf "${BLUE}[INFO] Running custom build script from customisations folder...${RESET}\n"; \
-		/bin/sh "${CUSTOM_SCRIPTS_FOLDER}/build-extras.sh"; \
-	else \
-		printf "${BLUE}[INFO] No custom build script in ${CUSTOM_SCRIPTS_FOLDER}, skipping...${RESET}\n"; \
-	fi
+install-extras:: ## run custom build script (if exists)
+	@:
+
 
 install: install-uv install-extras ## install
 	# Create the virtual environment only if it doesn't exist
-	@if [ ! -d ".venv" ]; then \
-	  ${UV_BIN} venv $(if $(PYTHON_VERSION),--python $(PYTHON_VERSION)) || { printf "${RED}[ERROR] Failed to create virtual environment${RESET}\n"; exit 1; }; \
+	@if [ ! -d "${VENV}" ]; then \
+	  ${UV_BIN} venv $(if $(PYTHON_VERSION),--python $(PYTHON_VERSION)) ${VENV} || { printf "${RED}[ERROR] Failed to create virtual environment${RESET}\n"; exit 1; }; \
 	else \
-	  printf "${BLUE}[INFO] Using existing virtual environment at .venv, skipping creation${RESET}\n"; \
-	fi
-
-	# Check if there is requirements.txt file in the tests folder
-	@if [ -f "tests/requirements.txt" ]; then \
-	  ${UV_BIN} pip install -r tests/requirements.txt || { printf "${RED}[ERROR] Failed to install test requirements${RESET}\n"; exit 1; }; \
+	  printf "${BLUE}[INFO] Using existing virtual environment at ${VENV}, skipping creation${RESET}\n"; \
 	fi
 
 	# Install the dependencies from pyproject.toml (if it exists)
 	@if [ -f "pyproject.toml" ]; then \
 	  if [ -f "uv.lock" ]; then \
 	    printf "${BLUE}[INFO] Installing dependencies from lock file${RESET}\n"; \
-	    ${UV_BIN} sync --all-extras --frozen || { printf "${RED}[ERROR] Failed to install dependencies${RESET}\n"; exit 1; }; \
+	    ${UV_BIN} sync --all-extras --all-groups --frozen || { printf "${RED}[ERROR] Failed to install dependencies${RESET}\n"; exit 1; }; \
 	  else \
 	    printf "${YELLOW}[WARN] uv.lock not found. Generating lock file and installing dependencies...${RESET}\n"; \
 	    ${UV_BIN} sync --all-extras || { printf "${RED}[ERROR] Failed to install dependencies${RESET}\n"; exit 1; }; \
@@ -102,19 +93,45 @@ install: install-uv install-extras ## install
 	  printf "${YELLOW}[WARN] No pyproject.toml found, skipping install${RESET}\n"; \
 	fi
 
-sync: install-uv ## sync with template repository as defined in .github/template.yml
-	@${UVX_BIN} "rhiza>=0.7.1" materialize --force .
+	# Install dev dependencies from .rhiza/requirements/*.txt files
+	@if [ -d ".rhiza/requirements" ] && ls .rhiza/requirements/*.txt >/dev/null 2>&1; then \
+	  for req_file in .rhiza/requirements/*.txt; do \
+	    if [ -f "$$req_file" ]; then \
+	      printf "${BLUE}[INFO] Installing requirements from $$req_file${RESET}\n"; \
+	      ${UV_BIN} pip install -r "$$req_file" || { printf "${RED}[ERROR] Failed to install requirements from $$req_file${RESET}\n"; exit 1; }; \
+	    fi; \
+	  done; \
+	fi
 
-validate: install-uv ## validate project structure against template repository as defined in .github/template.yml
-	@${UVX_BIN} "rhiza>=0.7.1" validate .
+	# Check if there is requirements.txt file in the tests folder (legacy support)
+	@if [ -f "tests/requirements.txt" ]; then \
+	  printf "${BLUE}[INFO] Installing requirements from tests/requirements.txt${RESET}\n"; \
+	  ${UV_BIN} pip install -r tests/requirements.txt || { printf "${RED}[ERROR] Failed to install test requirements${RESET}\n"; exit 1; }; \
+	fi
+
+sync: ## sync with template repository as defined in .github/template.yml
+	@if git remote get-url origin 2>/dev/null | grep -iq 'jebel-quant/rhiza'; then \
+		printf "${BLUE}[INFO] Skipping sync in rhiza repository (no template.yml by design)${RESET}\n"; \
+	else \
+		$(MAKE) install-uv; \
+		${UVX_BIN} "rhiza>=0.7.1" materialize --force .; \
+	fi
+
+validate: ## validate project structure against template repository as defined in .github/template.yml
+	@if git remote get-url origin 2>/dev/null | grep -iq 'jebel-quant/rhiza'; then \
+		printf "${BLUE}[INFO] Skipping validate in rhiza repository (no template.yml by design)${RESET}\n"; \
+	else \
+		$(MAKE) install-uv; \
+		${UVX_BIN} "rhiza>=0.7.1" validate .; \
+	fi
 
 clean: ## Clean project artifacts and stale local branches
 	@printf "%bCleaning project...%b\n" "$(BLUE)" "$(RESET)"
 
-	# Remove ignored files/directories, but keep .env files
+	# Remove ignored files/directories, but keep .env files, tested with futures project
 	@git clean -d -X -f \
-		-e .env \
-		-e '.env.*'
+		-e '!.env' \
+		-e '!.env.*'
 
 	# Remove build & test artifacts
 	@rm -rf \
@@ -140,32 +157,38 @@ marimo: install ## fire up Marimo server
 
 ##@ Quality and Formatting
 deptry: install-uv ## Run deptry
-	@if [ -d src ]; then \
-		$(UVX_BIN) deptry src; \
-	else \
-		$(UVX_BIN) deptry .; \
+	@if [ -d ${SOURCE_FOLDER} ]; then \
+		$(UVX_BIN) deptry ${SOURCE_FOLDER}; \
+	fi
+
+	@if [ -d ${MARIMO_FOLDER} ]; then \
+		if [ -d ${SOURCE_FOLDER} ]; then \
+			$(UVX_BIN) deptry ${MARIMO_FOLDER} ${SOURCE_FOLDER} --ignore DEP004; \
+		else \
+		  	$(UVX_BIN) deptry ${MARIMO_FOLDER} --ignore DEP004; \
+		fi \
 	fi
 
 fmt: install-uv ## check the pre-commit hooks and the linting
 	@${UVX_BIN} pre-commit run --all-files
 
 ##@ Releasing and Versioning
-bump: install-uv ## bump version
-	@UV_BIN="${UV_BIN}" /bin/sh "${SCRIPTS_FOLDER}/bump.sh"
+bump: ## bump version
+	@if [ -f "pyproject.toml" ]; then \
+		$(MAKE) install; \
+		${UVX_BIN} "rhiza[tools]>=0.8.6" tools bump; \
+		printf "${BLUE}[INFO] Updating uv.lock file...${RESET}\n"; \
+		${UV_BIN} lock; \
+	else \
+		printf "${YELLOW}[WARN] No pyproject.toml found, skipping bump${RESET}\n"; \
+	fi 
 
 release: install-uv ## create tag and push to remote with prompts
 	@UV_BIN="${UV_BIN}" /bin/sh "${SCRIPTS_FOLDER}/release.sh"
 
-post-release: install-uv ## perform post-release tasks
-	@if [ -x "${CUSTOM_SCRIPTS_FOLDER}/post-release.sh" ]; then \
-		printf "${BLUE}[INFO] Running post-release script from customisations folder...${RESET}\n"; \
-		"${CUSTOM_SCRIPTS_FOLDER}"/post-release.sh; \
-	elif [ -f "${CUSTOM_SCRIPTS_FOLDER}/post-release.sh" ]; then \
-		printf "${BLUE}[INFO] Running post-release script from customisations folder...${RESET}\n"; \
-		/bin/sh "${CUSTOM_SCRIPTS_FOLDER}/post-release.sh"; \
-	else \
-		printf "${BLUE}[INFO] No post-release script in ${CUSTOM_SCRIPTS_FOLDER}, skipping...${RESET}\n"; \
-	fi
+post-release:: install-uv ## perform post-release tasks
+	@:
+
 
 ##@ Meta
 
@@ -187,21 +210,8 @@ customisations: ## list available customisation scripts
 update-readme: ## update README.md with current Makefile help output
 	@/bin/sh "${SCRIPTS_FOLDER}/update-readme-help.sh"
 
-# debugger tools
-custom-%: ## run a custom script (usage: make custom-scriptname)
-	@SCRIPT="${CUSTOM_SCRIPTS_FOLDER}/$*.sh"; \
-	if [ -x "$$SCRIPT" ]; then \
-		printf "${BLUE}[INFO] Running custom script $$SCRIPT...${RESET}\n"; \
-		"$$SCRIPT"; \
-	elif [ -f "$$SCRIPT" ]; then \
-		printf "${BLUE}[INFO] Running custom script $$SCRIPT with /bin/sh...${RESET}\n"; \
-		/bin/sh "$$SCRIPT"; \
-	else \
-		printf "${RED}[ERROR] Custom script '$$SCRIPT' not found.${RESET}\n"; \
-		printf "Available scripts:\n"; \
-		ls -1 "${CUSTOM_SCRIPTS_FOLDER}"/*.sh 2>/dev/null | xargs -n1 basename | sed 's/\.sh$$//' | sed 's/^/  - /'; \
-		exit 1; \
-	fi
+version-matrix: install-uv ## Emit the list of supported Python versions from pyproject.toml
+	@${UV_BIN} run .rhiza/utils/version_matrix.py
 
 print-% : ## print the value of a variable (usage: make print-VARIABLE)
 	@printf "${BLUE}[INFO] Printing value of variable '$*':${RESET}\n"
