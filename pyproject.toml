@@ -42,4 +42,6 @@ packages = ["src/cvx"]
 # Deptry configuration for dependency checking
 # Specific rule ignores for dependency checking
 [tool.deptry.per_rule_ignores]
-DEP002 = ["jquantstats"]
+#DEP002 = ["jquantstats"]
+DEP001 = ["cvx", "cvxpy"]
+
