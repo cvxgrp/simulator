@@ -172,6 +172,7 @@ dev = [
     { name = "cvxpy-base" },
     { name = "loguru" },
     { name = "marimo" },
+    { name = "plotly" },
     { name = "tinycta" },
 ]
 
@@ -189,6 +190,7 @@ dev = [
     { name = "cvxpy-base", specifier = ">=1.7.0" },
     { name = "loguru" },
     { name = "marimo", specifier = ">=0.17.0" },
+    { name = "plotly", specifier = ">=6.5" },
     { name = "tinycta" },
 ]
 

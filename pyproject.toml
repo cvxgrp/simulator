@@ -24,7 +24,8 @@ dev = [
     "clarabel>=0.9.0",
     "loguru",
     "tinycta",
-    "marimo>=0.17.0"
+    "marimo>=0.17.0",
+    "plotly>=6.5",
 ]
 
 # Build system configuration
