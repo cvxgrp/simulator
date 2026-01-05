@@ -14,6 +14,9 @@ import subprocess
 
 import pytest
 
+# Get absolute paths for executables to avoid S607 warnings
+GIT = shutil.which("git") or "/usr/bin/git"
+
 MOCK_MAKE_SCRIPT = """#!/usr/bin/env python3
 import sys
 
@@ -158,18 +161,18 @@ def git_repo(root, tmp_path, monkeypatch):
 
     # 1. Create bare remote
     remote_dir.mkdir()
-    subprocess.run(["git", "init", "--bare", str(remote_dir)], check=True)
+    subprocess.run([GIT, "init", "--bare", str(remote_dir)], check=True)
     # Ensure the remote's default HEAD points to master for predictable behavior
-    subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/master"], cwd=remote_dir, check=True)
+    subprocess.run([GIT, "symbolic-ref", "HEAD", "refs/heads/master"], cwd=remote_dir, check=True)
 
     # 2. Clone to local
-    subprocess.run(["git", "clone", str(remote_dir), str(local_dir)], check=True)
+    subprocess.run([GIT, "clone", str(remote_dir), str(local_dir)], check=True)
 
     # Use monkeypatch to safely change cwd for the duration of the test
     monkeypatch.chdir(local_dir)
 
     # Ensure local default branch is 'master' to match test expectations
-    subprocess.run(["git", "checkout", "-b", "master"], check=True)
+    subprocess.run([GIT, "checkout", "-b", "master"], check=True)
 
     # Create pyproject.toml
     with open("pyproject.toml", "w") as f:
@@ -206,20 +209,18 @@ def git_repo(root, tmp_path, monkeypatch):
     script_dir.mkdir(parents=True)
 
     shutil.copy(root / ".rhiza" / "scripts" / "release.sh", script_dir / "release.sh")
-    shutil.copy(root / ".rhiza" / "scripts" / "bump.sh", script_dir / "bump.sh")
     shutil.copy(root / ".rhiza" / "scripts" / "marimushka.sh", script_dir / "marimushka.sh")
     shutil.copy(root / ".rhiza" / "scripts" / "update-readme-help.sh", script_dir / "update-readme-help.sh")
 
     (script_dir / "release.sh").chmod(0o755)
-    (script_dir / "bump.sh").chmod(0o755)
     (script_dir / "marimushka.sh").chmod(0o755)
     (script_dir / "update-readme-help.sh").chmod(0o755)
 
     # Commit and push initial state
-    subprocess.run(["git", "config", "user.email", "test@example.com"], check=True)
-    subprocess.run(["git", "config", "user.name", "Test User"], check=True)
-    subprocess.run(["git", "add", "."], check=True)
-    subprocess.run(["git", "commit", "-m", "Initial commit"], check=True)
-    subprocess.run(["git", "push", "origin", "master"], check=True)
+    subprocess.run([GIT, "config", "user.email", "test@example.com"], check=True)
+    subprocess.run([GIT, "config", "user.name", "Test User"], check=True)
+    subprocess.run([GIT, "add", "."], check=True)
+    subprocess.run([GIT, "commit", "-m", "Initial commit"], check=True)
+    subprocess.run([GIT, "push", "origin", "master"], check=True)
 
     yield local_dir
