@@ -1,11 +1,38 @@
 ## Makefile.book - Documentation and book-building targets
-# This file is included by the main Makefile
+# This file is included by the main Makefile.
+# It provides targets for generating API documentation (pdoc),
+# exporting Marimo notebooks to HTML (marimushka), and compiling
+# a companion book (minibook).
 
 # Declare phony targets (they don't produce files)
 .PHONY: docs marimushka book
 
+# Default output directory for Marimushka (HTML exports of notebooks)
+MARIMUSHKA_OUTPUT ?= _marimushka
+
+# ----------------------------
+# Book sections (declarative)
+# ----------------------------
+# format:
+#   name | source index | book-relative index | source dir | book dir
+
+BOOK_SECTIONS := \
+  "API|_pdoc/index.html|pdoc/index.html|_pdoc|pdoc" \
+  "Coverage|_tests/html-coverage/index.html|tests/html-coverage/index.html|_tests/html-coverage|tests/html-coverage" \
+  "Test Report|_tests/html-report/report.html|tests/html-report/report.html|_tests/html-report|tests/html-report" \
+  "Notebooks|_marimushka/index.html|marimushka/index.html|_marimushka|marimushka"
+
+
 ##@ Documentation
+
+# The 'docs' target generates API documentation using pdoc.
+# 1. Identifies Python packages within the source folder.
+# 2. Detects the docformat (google, numpy, or sphinx) from ruff.toml or defaults to google.
+# 3. Installs pdoc and generates HTML documentation in _pdoc.
 docs:: install ## create documentation with pdoc
+	# Clean up previous docs
+	rm -rf _pdoc;
+
 	@if [ -d "${SOURCE_FOLDER}" ]; then \
 	  PKGS=""; for d in "${SOURCE_FOLDER}"/*; do [ -d "$$d" ] && PKGS="$$PKGS $$(basename "$$d")"; done; \
 	  if [ -z "$$PKGS" ]; then \
@@ -35,21 +62,77 @@ docs:: install ## create documentation with pdoc
 	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, skipping docs${RESET}\n"; \
 	fi
 
+# The 'marimushka' target exports Marimo notebooks (.py files) to static HTML.
+# 1. Detects notebooks in the MARIMO_FOLDER.
+# 2. Converts them using 'marimushka export'.
+# 3. Generates a placeholder index.html if no notebooks are found.
 marimushka:: install-uv ## export Marimo notebooks to HTML
+	# Clean up previous marimushka output
+	rm -rf "${MARIMUSHKA_OUTPUT}";
+
 	@printf "${BLUE}[INFO] Exporting notebooks from ${MARIMO_FOLDER}...${RESET}\n"
 	@if [ ! -d "${MARIMO_FOLDER}" ]; then \
 	  printf "${YELLOW}[WARN] Directory '${MARIMO_FOLDER}' does not exist. Skipping marimushka.${RESET}\n"; \
 	else \
-	  MARIMO_FOLDER="${MARIMO_FOLDER}" UV_BIN="${UV_BIN}" UVX_BIN="${UVX_BIN}" /bin/sh "${SCRIPTS_FOLDER}/marimushka.sh"; \
+	  mkdir -p "${MARIMUSHKA_OUTPUT}"; \
+	  if ! ls "${MARIMO_FOLDER}"/*.py >/dev/null 2>&1; then \
+	    printf "${YELLOW}[WARN] No Python files found in '${MARIMO_FOLDER}'.${RESET}\n"; \
+	    printf '%s\n' '<html><head><title>Marimo Notebooks</title></head>' \
+	      '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
+	      > "${MARIMUSHKA_OUTPUT}/index.html"; \
+	  else \
+	    CURRENT_DIR=$$(pwd); \
+	    OUTPUT_DIR="$$CURRENT_DIR/${MARIMUSHKA_OUTPUT}"; \
+	    cd "${MARIMO_FOLDER}" && \
+	    "${UVX_BIN}" "marimushka>=0.1.9" export --notebooks "." --output "$$OUTPUT_DIR" --bin-path "$$UV_INSTALL_DIR" && \
+	    cd "$$CURRENT_DIR"; \
+	  fi; \
 	fi
 
+# The 'book' target assembles the final documentation book.
+# 1. Aggregates API docs, coverage, test reports, and notebooks into _book.
+# 2. Generates links.json to define the book structure.
+# 3. Uses 'minibook' to compile the final HTML site.
 book:: test docs marimushka ## compile the companion book
-	@${UV_BIN} pip install marimo
-	@/bin/sh "${SCRIPTS_FOLDER}/book.sh"
+	@printf "${BLUE}[INFO] Building combined documentation...${RESET}\n"
+	@rm -rf _book && mkdir -p _book
+
+	@printf "{\n" > _book/links.json
+	@first=1; \
+	for entry in $(BOOK_SECTIONS); do \
+	  name=$${entry%%|*}; \
+	  rest=$${entry#*|}; \
+	  src_index=$${rest%%|*}; rest=$${rest#*|}; \
+	  book_index=$${rest%%|*}; rest=$${rest#*|}; \
+	  src_dir=$${rest%%|*}; book_dir=$${rest#*|}; \
+	  if [ -f "$$src_index" ]; then \
+	    printf "${BLUE}[INFO] Adding $$name...${RESET}\n"; \
+	    mkdir -p "_book/$$book_dir"; \
+	    cp -r "$$src_dir/"* "_book/$$book_dir"; \
+	    if [ $$first -eq 0 ]; then \
+	      printf ",\n" >> _book/links.json; \
+	    fi; \
+	    printf "  \"%s\": \"./%s\"" "$$name" "$$book_index" >> _book/links.json; \
+	    first=0; \
+	  else \
+	    printf "${YELLOW}[WARN] Missing $$name, skipping${RESET}\n"; \
+	  fi; \
+	done; \
+	printf "\n}\n" >> _book/links.json
+
+	@printf "${BLUE}[INFO] Generated links.json:${RESET}\n"
+	@cat _book/links.json
+
 	@TEMPLATE_ARG=""; \
-	if [ -f "${BOOK_TEMPLATE}" ]; then \
-	  TEMPLATE_ARG="--template ${BOOK_TEMPLATE}"; \
-	  printf "${BLUE}[INFO] Using book template ${BOOK_TEMPLATE}${RESET}\n"; \
+	if [ -f "$(BOOK_TEMPLATE)" ]; then \
+	  TEMPLATE_ARG="--template $(BOOK_TEMPLATE)"; \
+	  printf "${BLUE}[INFO] Using book template $(BOOK_TEMPLATE)${RESET}\n"; \
 	fi; \
-	${UVX_BIN} minibook --title "${BOOK_TITLE}" --subtitle "${BOOK_SUBTITLE}" $$TEMPLATE_ARG --links "$$(python3 -c 'import json,sys; print(json.dumps(json.load(open("_book/links.json"))))')" --output "_book"
+	"$(UVX_BIN)" minibook \
+	  --title "$(BOOK_TITLE)" \
+	  --subtitle "$(BOOK_SUBTITLE)" \
+	  $$TEMPLATE_ARG \
+	  --links "$$(python3 -c 'import json;print(json.dumps(json.load(open("_book/links.json"))))')" \
+	  --output "_book"
+
 	@touch "_book/.nojekyll"

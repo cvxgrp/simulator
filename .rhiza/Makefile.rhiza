@@ -13,7 +13,7 @@ endef
 export RHIZA_LOGO
 
 # Declare phony targets
-.PHONY: print-logo sync validate
+.PHONY: print-logo sync validate readme
 
 ##@ Rhiza Workflows
 
@@ -36,3 +36,6 @@ validate: ## validate project structure against template repository as defined i
 		$(MAKE) install-uv; \
 		${UVX_BIN} "rhiza>=0.7.1" validate .; \
 	fi
+
+readme: install-uv ## update README.md with current Makefile help output
+	@${UVX_BIN} "rhiza-tools>=0.2.0" update-readme

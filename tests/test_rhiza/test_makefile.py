@@ -153,12 +153,13 @@ class TestMakefile:
         # assert f"{expected_uv} run pytest" in out
 
     def test_book_target_dry_run(self, logger):
-        """Book target should run inline commands to assemble the book without go-task."""
+        """Book target should run inline commands to assemble the book."""
         proc = run_make(logger, ["book"])
         out = proc.stdout
-        # Expect marimushka export to install marimo and minibook to be invoked
-        # Check for uvx command with the configured path
-        assert "uvx minibook" in out
+        # Expect directory creation, links.json generation and minibook to be invoked
+        assert "mkdir -p _book" in out
+        assert "links.json" in out
+        assert "minibook" in out
 
     @pytest.mark.parametrize("target", ["book", "docs", "marimushka"])
     def test_book_related_targets_fallback_without_book_folder(self, logger, tmp_path, target):

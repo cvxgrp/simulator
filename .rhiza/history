@@ -35,11 +35,7 @@
 .rhiza/requirements/marimo.txt
 .rhiza/requirements/tests.txt
 .rhiza/requirements/tools.txt
-.rhiza/scripts/book.sh
-.rhiza/scripts/generate-coverage-badge.sh
-.rhiza/scripts/marimushka.sh
 .rhiza/scripts/release.sh
-.rhiza/scripts/update-readme-help.sh
 .rhiza/utils/version_matrix.py
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
@@ -59,7 +55,6 @@ tests/test_rhiza/benchmarks/.gitignore
 tests/test_rhiza/benchmarks/README.md
 tests/test_rhiza/benchmarks/analyze_benchmarks.py
 tests/test_rhiza/conftest.py
-tests/test_rhiza/test_coverage_badge.py
 tests/test_rhiza/test_docstrings.py
 tests/test_rhiza/test_git_repo_fixture.py
 tests/test_rhiza/test_makefile.py
@@ -70,4 +65,3 @@ tests/test_rhiza/test_readme.py
 tests/test_rhiza/test_release_script.py
 tests/test_rhiza/test_requirements_folder.py
 tests/test_rhiza/test_structure.py
-tests/test_rhiza/test_updatereadme_script.py
