@@ -40,6 +40,19 @@ build-backend = "hatchling.build"
 packages = ["src/cvx"]
 
 # Deptry configuration for dependency checking
+# Map package names to their module names
+[tool.deptry.package_module_name_map]
+cvxpy-base = "cvxpy"
+jquantstats = "jquantstats"
+numpy = "numpy"
+pandas = "pandas"
+polars = "polars"
+clarabel = "clarabel"
+loguru = "loguru"
+tinycta = "tinycta"
+marimo = "marimo"
+plotly = "plotly"
+
 # Specific rule ignores for dependency checking
 [tool.deptry.per_rule_ignores]
 #DEP002 = ["jquantstats"]
