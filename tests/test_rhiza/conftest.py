@@ -181,14 +181,16 @@ def git_repo(root, tmp_path, monkeypatch):
     # Ensure our bin comes first on PATH so 'uv' resolves to mock
     monkeypatch.setenv("PATH", f"{bin_dir}:{os.environ.get('PATH', '')}")
 
-    # Copy scripts
+    # Copy scripts and core Rhiza Makefiles
     script_dir = local_dir / ".rhiza" / "scripts"
     script_dir.mkdir(parents=True)
 
     shutil.copy(root / ".rhiza" / "scripts" / "release.sh", script_dir / "release.sh")
+    shutil.copy(root / ".rhiza" / "rhiza.mk", local_dir / ".rhiza" / "rhiza.mk")
     shutil.copy(root / "Makefile", local_dir / "Makefile")
-    os.makedirs(local_dir / "book", exist_ok=True)
-    shutil.copy(root / "book" / "Makefile.book", local_dir / "book" / "Makefile.book")
+    os.makedirs(local_dir / "book" / "marimo", exist_ok=True)
+    shutil.copy(root / "book" / "book.mk", local_dir / "book" / "book.mk")
+    shutil.copy(root / "book" / "marimo" / "marimo.mk", local_dir / "book" / "marimo" / "marimo.mk")
 
     (script_dir / "release.sh").chmod(0o755)
 
@@ -199,4 +201,4 @@ def git_repo(root, tmp_path, monkeypatch):
     subprocess.run([GIT, "commit", "-m", "Initial commit"], check=True)
     subprocess.run([GIT, "push", "origin", "master"], check=True)
 
-    yield local_dir
+    return local_dir

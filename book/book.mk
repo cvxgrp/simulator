@@ -1,4 +1,4 @@
-## Makefile.book - Documentation and book-building targets
+## book.mk - Documentation and book-building targets
 # This file is included by the main Makefile.
 # It provides targets for generating API documentation (pdoc),
 # exporting Marimo notebooks to HTML (marimushka), and compiling
@@ -60,33 +60,6 @@ docs:: install ## create documentation with pdoc
 	  fi; \
 	else \
 	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, skipping docs${RESET}\n"; \
-	fi
-
-# The 'marimushka' target exports Marimo notebooks (.py files) to static HTML.
-# 1. Detects notebooks in the MARIMO_FOLDER.
-# 2. Converts them using 'marimushka export'.
-# 3. Generates a placeholder index.html if no notebooks are found.
-marimushka:: install-uv ## export Marimo notebooks to HTML
-	# Clean up previous marimushka output
-	rm -rf "${MARIMUSHKA_OUTPUT}";
-
-	@printf "${BLUE}[INFO] Exporting notebooks from ${MARIMO_FOLDER}...${RESET}\n"
-	@if [ ! -d "${MARIMO_FOLDER}" ]; then \
-	  printf "${YELLOW}[WARN] Directory '${MARIMO_FOLDER}' does not exist. Skipping marimushka.${RESET}\n"; \
-	else \
-	  mkdir -p "${MARIMUSHKA_OUTPUT}"; \
-	  if ! ls "${MARIMO_FOLDER}"/*.py >/dev/null 2>&1; then \
-	    printf "${YELLOW}[WARN] No Python files found in '${MARIMO_FOLDER}'.${RESET}\n"; \
-	    printf '%s\n' '<html><head><title>Marimo Notebooks</title></head>' \
-	      '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
-	      > "${MARIMUSHKA_OUTPUT}/index.html"; \
-	  else \
-	    CURRENT_DIR=$$(pwd); \
-	    OUTPUT_DIR="$$CURRENT_DIR/${MARIMUSHKA_OUTPUT}"; \
-	    cd "${MARIMO_FOLDER}" && \
-	    "${UVX_BIN}" "marimushka>=0.1.9" export --notebooks "." --output "$$OUTPUT_DIR" --bin-path "$$UV_INSTALL_DIR" && \
-	    cd "$$CURRENT_DIR"; \
-	  fi; \
 	fi
 
 # The 'book' target assembles the final documentation book.

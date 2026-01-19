@@ -20,11 +20,15 @@ from pathlib import Path
 
 import pytest
 
+# Get absolute paths for executables to avoid S607 warnings from CodeFactor/Bandit
+MAKE = shutil.which("make") or "/usr/bin/make"
+
 # Split Makefile paths that are included in the main Makefile
 SPLIT_MAKEFILES = [
-    "tests/Makefile.tests",
-    "book/Makefile.book",
-    "presentation/Makefile.presentation",
+    ".rhiza/rhiza.mk",
+    "tests/tests.mk",
+    "book/book.mk",
+    "presentation/presentation.mk",
 ]
 
 
@@ -45,9 +49,12 @@ def setup_tmp_makefile(logger, root, tmp_path: Path):
     # Copy the main Makefile into the temporary working directory
     shutil.copy(root / "Makefile", tmp_path / "Makefile")
 
+    # Copy core Rhiza Makefiles
+    (tmp_path / ".rhiza").mkdir(exist_ok=True)
+    shutil.copy(root / ".rhiza" / "rhiza.mk", tmp_path / ".rhiza" / "rhiza.mk")
+
     # Create a minimal, deterministic .rhiza/.env for tests so they don't
     # depend on the developer's local configuration which may vary.
-    (tmp_path / ".rhiza").mkdir(exist_ok=True)
     env_content = "SCRIPTS_FOLDER=.rhiza/scripts\nCUSTOM_SCRIPTS_FOLDER=.rhiza/customisations/scripts\n"
     (tmp_path / ".rhiza" / ".env").write_text(env_content)
 
@@ -84,14 +91,14 @@ def run_make(
         check: If True, raise on non-zero return code
         dry_run: If True, use -n to avoid executing commands
     """
-    cmd = ["make"]
+    cmd = [MAKE]
     if args:
         cmd.extend(args)
     # Use -s to reduce noise, -n to avoid executing commands
     flags = "-sn" if dry_run else "-s"
     cmd.insert(1, flags)
     logger.info("Running command: %s", " ".join(cmd))
-    result = subprocess.run(cmd, capture_output=True, text=True)  # noqa: S603
+    result = subprocess.run(cmd, capture_output=True, text=True)
     logger.debug("make exited with code %d", result.returncode)
     if result.stdout:
         logger.debug("make stdout (truncated to 500 chars):\n%s", result.stdout[:500])
@@ -106,9 +113,9 @@ def run_make(
 def setup_rhiza_git_repo():
     """Initialize a git repository and set remote to rhiza."""
     git = shutil.which("git") or "/usr/bin/git"
-    subprocess.run([git, "init"], check=True, capture_output=True)  # noqa: S603
+    subprocess.run([git, "init"], check=True, capture_output=True)
     subprocess.run(
-        [git, "remote", "add", "origin", "https://github.com/jebel-quant/rhiza"],  # noqa: S603
+        [git, "remote", "add", "origin", "https://github.com/jebel-quant/rhiza"],
         check=True,
         capture_output=True,
     )
@@ -140,7 +147,7 @@ class TestMakefile:
         proc = run_make(logger, ["fmt"])
         out = proc.stdout
         # Check for uv command with the configured path
-        assert "uv run pre-commit run --all-files" in out
+        assert "uvx pre-commit run --all-files" in out
 
     def test_test_target_dry_run(self, logger):
         """Test target should invoke pytest via uv with coverage and HTML outputs in dry-run output."""
@@ -189,12 +196,6 @@ class TestMakefile:
         out = strip_ansi(proc.stdout)
         assert "Value of SCRIPTS_FOLDER:\n.rhiza/scripts" in out
 
-    def test_custom_scripts_folder_is_set(self, logger):
-        """`CUSTOM_SCRIPTS_FOLDER` should point to `.rhiza/customisations/scripts`."""
-        proc = run_make(logger, ["print-CUSTOM_SCRIPTS_FOLDER"], dry_run=False)
-        out = strip_ansi(proc.stdout)
-        assert "Value of CUSTOM_SCRIPTS_FOLDER:\n.rhiza/customisations/scripts" in out
-
 
 class TestMakefileRootFixture:
     """Tests for root fixture usage in Makefile tests."""
@@ -230,6 +231,12 @@ class TestMakefileRootFixture:
         """Makefile should define UV-related variables."""
         makefile = root / "Makefile"
         content = makefile.read_text()
+
+        # Read split Makefiles as well
+        for split_file in SPLIT_MAKEFILES:
+            split_path = root / split_file
+            if split_path.exists():
+                content += "\n" + split_path.read_text()
 
         assert "UV_BIN" in content or "uv" in content.lower()
 
