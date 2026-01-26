@@ -192,14 +192,14 @@ def test_weights_on_wrong_days(resource_dir: Any) -> None:
     b = Builder(prices=prices, initial_aum=50000)
 
     for _t, _ in b:
-        with pytest.raises(ValueError, match="could not broadcast"):
+        with pytest.raises(ValueError, match="could not be broadcast"):
             b.weights = np.array((0.5, 0.25, 0.25))
 
-        with pytest.raises(ValueError, match="could not broadcast"):
+        with pytest.raises(ValueError, match="could not be broadcast"):
             # C is not there yet
             b.cashposition = np.array((5, 5, 5))
 
-        with pytest.raises(ValueError, match="could not broadcast"):
+        with pytest.raises(ValueError, match="setting an array element with a sequence"):
             # C is not there yet
             b.position = np.array((5, 5, 5))
 
