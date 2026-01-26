@@ -1,4 +1,4 @@
-## Makefile.book - Documentation and book-building targets
+## book.mk - Documentation and book-building targets
 # This file is included by the main Makefile.
 # It provides targets for generating API documentation (pdoc),
 # exporting Marimo notebooks to HTML (marimushka), and compiling
@@ -7,8 +7,25 @@
 # Declare phony targets (they don't produce files)
 .PHONY: docs marimushka book
 
+# Define a default no-op marimushka target that will be used
+# when book/marimo/marimo.mk doesn't exist or doesn't define marimushka
+marimushka:: install-uv
+	@if [ ! -d "book/marimo" ]; then \
+	  printf "${BLUE}[INFO] No Marimo directory found, creating placeholder${RESET}\n"; \
+	  mkdir -p "${MARIMUSHKA_OUTPUT}"; \
+	  printf '%s\n' '<html><head><title>Marimo Notebooks</title></head>' \
+	    '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
+	    > "${MARIMUSHKA_OUTPUT}/index.html"; \
+	fi
+
 # Default output directory for Marimushka (HTML exports of notebooks)
 MARIMUSHKA_OUTPUT ?= _marimushka
+
+# Logo file for pdoc (relative to project root).
+# 1. Defaults to the Rhiza logo if present.
+# 2. Can be overridden in Makefile or local.mk (e.g. LOGO_FILE := my-logo.png)
+# 3. If set to empty string, no logo will be used.
+LOGO_FILE ?= assets/rhiza-logo.svg
 
 # ----------------------------
 # Book sections (declarative)
@@ -55,38 +72,22 @@ docs:: install ## create documentation with pdoc
 	    else \
 	      printf "${BLUE}[INFO] Using provided docformat: $$DOCFORMAT${RESET}\n"; \
 	    fi; \
+	    LOGO_ARG=""; \
+	    if [ -n "$(LOGO_FILE)" ]; then \
+	      if [ -f "$(LOGO_FILE)" ]; then \
+	        MIME=$$(file --mime-type -b "$(LOGO_FILE)"); \
+	        DATA=$$(base64 < "$(LOGO_FILE)" | tr -d '\n'); \
+	        LOGO_ARG="--logo data:$$MIME;base64,$$DATA"; \
+	        printf "${BLUE}[INFO] Embedding logo: $(LOGO_FILE)${RESET}\n"; \
+	      else \
+	        printf "${YELLOW}[WARN] Logo file $(LOGO_FILE) not found, skipping${RESET}\n"; \
+	      fi; \
+	    fi; \
 	    ${UV_BIN} pip install pdoc && \
-	    PYTHONPATH="${SOURCE_FOLDER}" ${UV_BIN} run pdoc --docformat $$DOCFORMAT --output-dir _pdoc $$TEMPLATE_ARG $$PKGS; \
+	    PYTHONPATH="${SOURCE_FOLDER}" ${UV_BIN} run pdoc --docformat $$DOCFORMAT --output-dir _pdoc $$TEMPLATE_ARG $$LOGO_ARG $$PKGS; \
 	  fi; \
 	else \
 	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, skipping docs${RESET}\n"; \
-	fi
-
-# The 'marimushka' target exports Marimo notebooks (.py files) to static HTML.
-# 1. Detects notebooks in the MARIMO_FOLDER.
-# 2. Converts them using 'marimushka export'.
-# 3. Generates a placeholder index.html if no notebooks are found.
-marimushka:: install-uv ## export Marimo notebooks to HTML
-	# Clean up previous marimushka output
-	rm -rf "${MARIMUSHKA_OUTPUT}";
-
-	@printf "${BLUE}[INFO] Exporting notebooks from ${MARIMO_FOLDER}...${RESET}\n"
-	@if [ ! -d "${MARIMO_FOLDER}" ]; then \
-	  printf "${YELLOW}[WARN] Directory '${MARIMO_FOLDER}' does not exist. Skipping marimushka.${RESET}\n"; \
-	else \
-	  mkdir -p "${MARIMUSHKA_OUTPUT}"; \
-	  if ! ls "${MARIMO_FOLDER}"/*.py >/dev/null 2>&1; then \
-	    printf "${YELLOW}[WARN] No Python files found in '${MARIMO_FOLDER}'.${RESET}\n"; \
-	    printf '%s\n' '<html><head><title>Marimo Notebooks</title></head>' \
-	      '<body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>' \
-	      > "${MARIMUSHKA_OUTPUT}/index.html"; \
-	  else \
-	    CURRENT_DIR=$$(pwd); \
-	    OUTPUT_DIR="$$CURRENT_DIR/${MARIMUSHKA_OUTPUT}"; \
-	    cd "${MARIMO_FOLDER}" && \
-	    "${UVX_BIN}" "marimushka>=0.1.9" export --notebooks "." --output "$$OUTPUT_DIR" --bin-path "$$UV_INSTALL_DIR" && \
-	    cd "$$CURRENT_DIR"; \
-	  fi; \
 	fi
 
 # The 'book' target assembles the final documentation book.
@@ -96,6 +97,23 @@ marimushka:: install-uv ## export Marimo notebooks to HTML
 book:: test docs marimushka ## compile the companion book
 	@printf "${BLUE}[INFO] Building combined documentation...${RESET}\n"
 	@rm -rf _book && mkdir -p _book
+
+	@if [ -f "_tests/coverage.json" ]; then \
+	  printf "${BLUE}[INFO] Generating coverage badge JSON...${RESET}\n"; \
+	  mkdir -p _book/tests; \
+	  ${UV_BIN} run python -c "\
+import json; \
+data = json.load(open('_tests/coverage.json')); \
+pct = int(data['totals']['percent_covered']); \
+color = 'brightgreen' if pct >= 90 else 'green' if pct >= 80 else 'yellow' if pct >= 70 else 'orange' if pct >= 60 else 'red'; \
+badge = {'schemaVersion': 1, 'label': 'coverage', 'message': f'{pct}%', 'color': color}; \
+json.dump(badge, open('_book/tests/coverage-badge.json', 'w'))"; \
+	  printf "${BLUE}[INFO] Coverage badge JSON:${RESET}\n"; \
+	  cat _book/tests/coverage-badge.json; \
+	  printf "\n"; \
+	else \
+	  printf "${YELLOW}[WARN] No coverage.json found, skipping badge generation${RESET}\n"; \
+	fi
 
 	@printf "{\n" > _book/links.json
 	@first=1; \
