@@ -21,7 +21,7 @@ import pandas as pd
 import polars as pl
 
 
-def interpolate(ts):
+def interpolate(ts: pd.Series | pl.Series) -> pd.Series | pl.Series:
     """Interpolate missing values in a time series between the first and last valid indices.
 
     This function fills forward (ffill) missing values in a time series, but only
@@ -70,7 +70,7 @@ def interpolate(ts):
     return ts
 
 
-def valid(ts) -> bool:
+def valid(ts: pd.Series | pl.Series) -> bool:
     """Check if a time series has no missing values between the first and last valid indices.
 
     This function verifies that a time series doesn't have any NaN/null values in the middle.
@@ -108,7 +108,7 @@ def valid(ts) -> bool:
         return valid_pl(ts)
     # Check if the series with NaNs dropped has the same indices as the interpolated series with NaNs dropped
     # If they're the same, there are no NaNs in the middle of the series
-    return ts.dropna().index.equals(interpolate(ts).dropna().index)
+    return bool(ts.dropna().index.equals(interpolate(ts).dropna().index))
 
 
 def interpolate_pl(ts: pl.Series) -> pl.Series:
@@ -208,7 +208,7 @@ def valid_pl(ts: pl.Series) -> bool:
 
     # If all values between first and last valid indices are non-null,
     # then the count of non-null values should equal the range size
-    return len([i for i in non_null_indices if first <= i <= last]) == expected_count
+    return bool(len([i for i in non_null_indices if first <= i <= last]) == expected_count)
 
 
 def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
