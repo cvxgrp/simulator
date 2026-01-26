@@ -29,7 +29,7 @@ def resource_fixture():
     return Path(__file__).parent / "resources"
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices(resource_dir):
     """Create a fixture for price data.
 
@@ -50,7 +50,7 @@ def prices(resource_dir):
     return pd.read_csv(resource_dir / "prices.csv", parse_dates=True, index_col=0).tail(1000)
 
 
-@pytest.fixture()
+@pytest.fixture
 def spreads(resource_dir, prices):
     """Fixture for the spread.
 

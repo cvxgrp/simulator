@@ -58,3 +58,7 @@ plotly = "plotly"
 #DEP002 = ["jquantstats"]
 DEP001 = ["cvx", "cvxpy"]
 
+# MyPy configuration for type checking
+[tool.mypy]
+ignore_missing_imports = true
+

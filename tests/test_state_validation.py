@@ -37,5 +37,5 @@ def test_nav_not_equal_aum():
         mock_nav.return_value = 300.0
 
         # Verify that accessing the weights property raises a ValueError
-        with pytest.raises(ValueError, match="300.0 != 400"):
+        with pytest.raises(ValueError, match=r"300\.0 != 400"):
             _ = state.weights

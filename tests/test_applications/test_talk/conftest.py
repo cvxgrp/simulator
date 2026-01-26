@@ -30,7 +30,7 @@ def resource_fixture():
     return Path(__file__).parent / "resources"
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices(resource_dir):
     """Create a fixture for price data.
 

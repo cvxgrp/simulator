@@ -17,7 +17,7 @@ import pytest
 from cvx.simulator import State
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices() -> pd.DataFrame:
     """Create a price data fixture for testing.
 
@@ -37,7 +37,7 @@ def prices() -> pd.DataFrame:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices_pl() -> pl.DataFrame:
     """Create a price data fixture for testing using Polars.
 
@@ -61,7 +61,7 @@ def prices_pl() -> pl.DataFrame:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def state(prices: pd.DataFrame) -> State:
     """Create a State fixture for testing.
 
@@ -84,7 +84,7 @@ def state(prices: pd.DataFrame) -> State:
     return state
 
 
-@pytest.fixture()
+@pytest.fixture
 def state_pl(prices_pl: pl.DataFrame) -> State:
     """Create a State fixture for testing.
 

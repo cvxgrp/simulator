@@ -9,7 +9,7 @@ from tinycta.signal import osc, returns_adjust
 from cvx.simulator.portfolio import Portfolio
 
 
-@pytest.fixture()
+@pytest.fixture
 def portfolio(prices) -> Portfolio:
     """Compute the portfolio."""
 

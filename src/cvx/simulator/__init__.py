@@ -21,7 +21,7 @@ __all__ = [
     "Builder",
     "Portfolio",
     "State",
+    "__version__",
     "interpolate",
     "valid",
-    "__version__",
 ]
