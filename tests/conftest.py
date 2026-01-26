@@ -25,7 +25,7 @@ def resource_fixture():
     return Path(__file__).parent / "resources"
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices(resource_dir):
     """Provide a pandas DataFrame of price data for testing.
 
@@ -49,7 +49,7 @@ def prices(resource_dir):
     return frame
 
 
-@pytest.fixture()
+@pytest.fixture
 def prices_pl(resource_dir):
     """Provide a polars DataFrame of price data for testing.
 
@@ -73,7 +73,7 @@ def prices_pl(resource_dir):
     return frame.fill_null(strategy="forward")
 
 
-@pytest.fixture()
+@pytest.fixture
 def nav(resource_dir):
     """Provide a pandas Series of NAV (Net Asset Value) data for testing.
 
@@ -100,7 +100,7 @@ def nav(resource_dir):
     ).squeeze()
 
 
-@pytest.fixture()
+@pytest.fixture
 def readme_path() -> Path:
     """Provide the path to the project's README.md file.
 
@@ -124,4 +124,4 @@ def readme_path() -> Path:
         if candidate.is_file():
             return candidate
         current_dir = current_dir.parent
-    raise FileNotFoundError("README.md not found in any parent directory")
+    raise FileNotFoundError("README.md not found in any parent directory")  # noqa: TRY003

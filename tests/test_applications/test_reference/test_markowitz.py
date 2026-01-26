@@ -18,7 +18,7 @@ from .markowitz import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def means(prices):
     """Create synthetic expected returns for testing.
 
@@ -41,7 +41,7 @@ def means(prices):
     return synthetic_returns(prices, information_ratio=0.15, forward_smoothing=forward_smoothing).shift(-1).dropna()
 
 
-@pytest.fixture()
+@pytest.fixture
 def builder(prices):
     """Create a builder for testing."""
     return Builder(
@@ -50,7 +50,7 @@ def builder(prices):
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def feasible(prices):
     """Create a subset of dates for testing.
 
@@ -72,7 +72,7 @@ def feasible(prices):
     return prices.index[200:-10]
 
 
-@pytest.fixture()
+@pytest.fixture
 def covariance(prices):
     """Create a covariance matrix for each date in the price data.
 

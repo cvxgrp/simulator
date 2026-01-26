@@ -21,7 +21,7 @@ license_path = project_root / "LICENSE"
 
 
 # Set up Jinja2 environment
-env = Environment(loader=FileSystemLoader(templates_dir))
+env = Environment(loader=FileSystemLoader(templates_dir), autoescape=True)
 
 
 def read_readme():
@@ -49,10 +49,11 @@ def read_license():
     try:
         with open(license_path, encoding="utf-8") as f:
             license_content = f.read()
-        return license_content
     except Exception as e:
         print(f"Error reading LICENSE: {e}")
         return "<p>Error loading LICENSE content.</p>"
+    else:
+        return license_content
 
 
 # Functions for running tests and coverage have been removed

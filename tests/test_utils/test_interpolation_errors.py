@@ -16,7 +16,7 @@ def test_interpolate_invalid_type():
     This test calls interpolate with a list and verifies that it raises a TypeError.
     """
     # Call interpolate with a list
-    with pytest.raises(TypeError, match="Expected pd.Series or pl.Series, got <class 'list'>"):
+    with pytest.raises(TypeError, match=r"Expected pd\.Series or pl\.Series, got <class 'list'>"):
         interpolate([1, 2, 3])
 
 
@@ -26,7 +26,7 @@ def test_valid_invalid_type():
     This test calls valid with a list and verifies that it raises a TypeError.
     """
     # Call valid with a list
-    with pytest.raises(TypeError, match="Expected pd.Series or pl.Series, got <class 'list'>"):
+    with pytest.raises(TypeError, match=r"Expected pd\.Series or pl\.Series, got <class 'list'>"):
         valid([1, 2, 3])
 
 

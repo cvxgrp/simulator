@@ -400,7 +400,7 @@ class State:
 
         """
         if not np.isclose(self.nav, self.aum):
-            raise ValueError(f"{self.nav} != {self.aum}")
+            raise ValueError(f"{self.nav} != {self.aum}")  # noqa: TRY003
 
         return self.cashposition / self.nav
 

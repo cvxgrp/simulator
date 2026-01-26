@@ -16,7 +16,7 @@ from cvx.simulator.builder import polars2pandas
 from cvx.simulator.portfolio import Portfolio
 
 
-@pytest.fixture()
+@pytest.fixture
 def portfolio(prices: pd.DataFrame, nav: pd.Series) -> Portfolio:
     """Create a Portfolio fixture for testing.
 
@@ -245,7 +245,7 @@ def test_monotonic() -> None:
     when initialized with price data that has a non-monotonic index.
     """
     prices = pd.DataFrame(index=[2, 1], columns=["A"])
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="monotonic increasing"):
         Portfolio(prices=prices, units=prices, aum=1e6)
 
 

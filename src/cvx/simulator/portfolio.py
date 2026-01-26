@@ -75,24 +75,24 @@ class Portfolio:
 
         """
         if not self.prices.index.is_monotonic_increasing:
-            raise ValueError("`prices` index must be monotonic increasing.")
+            raise ValueError("`prices` index must be monotonic increasing.")  # noqa: TRY003
 
         if not self.prices.index.is_unique:
-            raise ValueError("`prices` index must be unique.")
+            raise ValueError("`prices` index must be unique.")  # noqa: TRY003
 
         if not self.units.index.is_monotonic_increasing:
-            raise ValueError("`units` index must be monotonic increasing.")
+            raise ValueError("`units` index must be monotonic increasing.")  # noqa: TRY003
 
         if not self.units.index.is_unique:
-            raise ValueError("`units` index must be unique.")
+            raise ValueError("`units` index must be unique.")  # noqa: TRY003
 
         missing_dates = self.units.index.difference(self.prices.index)
         if not missing_dates.empty:
-            raise ValueError(f"`units` index contains dates not present in `prices`: {missing_dates.tolist()}")
+            raise ValueError(f"`units` index contains dates not present in `prices`: {missing_dates.tolist()}")  # noqa: TRY003
 
         missing_assets = self.units.columns.difference(self.prices.columns)
         if not missing_assets.empty:
-            raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")
+            raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")  # noqa: TRY003
 
         frame = self.nav.pct_change().to_frame()
         frame.index.name = "Date"
