@@ -130,7 +130,7 @@ class State:
         If positions are missing (None), the sum will effectively be zero.
 
         """
-        return self.cashposition.sum()
+        return float(self.cashposition.sum())
 
     @property
     def cashposition(self) -> pd.Series:
@@ -201,7 +201,7 @@ class State:
             The gross market value (abs(short) + long)
 
         """
-        return self.cashposition.abs().sum()
+        return float(self.cashposition.abs().sum())
 
     @property
     def time(self) -> datetime | None:
@@ -318,7 +318,7 @@ class State:
         return self._prices
 
     @prices.setter
-    def prices(self, prices: pd.Series | dict) -> None:
+    def prices(self, prices: pd.Series | dict[str, float]) -> None:
         """Update the prices of assets in the portfolio.
 
         This method updates the prices and calculates the profit achieved

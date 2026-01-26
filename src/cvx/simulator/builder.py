@@ -16,7 +16,8 @@
 from __future__ import annotations
 
 from collections.abc import Generator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -27,7 +28,7 @@ from .state import State
 from .utils.interpolation import valid
 
 
-def polars2pandas(dframe: pl.DataFrame, date_col="date") -> pd.DataFrame:
+def polars2pandas(dframe: pl.DataFrame, date_col: str = "date") -> pd.DataFrame:
     """Convert a Polars DataFrame to a Pandas DataFrame.
 
     Ensuring the date column is cast to a datetime format and
@@ -62,7 +63,7 @@ class Builder:
 
     prices: pd.DataFrame
 
-    _state: State | None = None
+    _state: State = field(default_factory=State)
     _units: pd.DataFrame | None = None
     _aum: pd.Series | None = None
     initial_aum: float = 1e6
@@ -90,8 +91,6 @@ class Builder:
         if not self.prices.index.is_unique:
             raise ValueError("Index must have unique values")  # noqa: TRY003
 
-        self._state = State()
-
         self._units = pd.DataFrame(
             index=self.prices.index,
             columns=self.prices.columns,
@@ -104,7 +103,7 @@ class Builder:
         self._state.aum = self.initial_aum
 
     @property
-    def valid(self):
+    def valid(self) -> pd.DataFrame:
         """Check the validity of price data for each asset.
 
         This property analyzes each column of the prices DataFrame to determine
@@ -126,7 +125,7 @@ class Builder:
         return self.prices.apply(valid)
 
     @property
-    def intervals(self):
+    def intervals(self) -> pd.DataFrame:
         """Get the first and last valid index for each asset's price series.
 
         This property identifies the time range for which each asset has valid price data.
@@ -208,6 +207,7 @@ class Builder:
 
         Returns: pd.Series: a pandas Series object containing the current position of the portfolio.
         """
+        assert self._units is not None
         return self._units.loc[self._state.time]
 
     @position.setter
@@ -227,11 +227,12 @@ class Builder:
         None
 
         """
+        assert self._units is not None
         self._units.loc[self._state.time, self._state.assets] = position
         self._state.position = position
 
     @property
-    def cashposition(self):
+    def cashposition(self) -> pd.Series:
         """Get the current cash value of each position in the portfolio.
 
         This property calculates the cash value of each position by multiplying
@@ -251,27 +252,6 @@ class Builder:
 
         """
         return self.position * self.current_prices
-
-    @property
-    def units(self):
-        """Get the complete history of portfolio holdings.
-
-        This property returns the entire DataFrame of holdings (units) for all
-        assets over all time points in the portfolio.
-
-        Returns:
-        -------
-        pd.DataFrame
-            A DataFrame containing the number of units held for each asset over time,
-            with dates as index and assets as columns
-
-        Notes:
-        -----
-        This property is particularly useful for testing and for building
-        the final Portfolio object via the build() method.
-
-        """
-        return self._units
 
     @cashposition.setter
     def cashposition(self, cashposition: pd.Series) -> None:
@@ -299,7 +279,28 @@ class Builder:
         """
         self.position = cashposition / self.current_prices
 
-    def build(self):
+    @property
+    def units(self) -> pd.DataFrame | None:
+        """Get the complete history of portfolio holdings.
+
+        This property returns the entire DataFrame of holdings (units) for all
+        assets over all time points in the portfolio.
+
+        Returns:
+        -------
+        pd.DataFrame
+            A DataFrame containing the number of units held for each asset over time,
+            with dates as index and assets as columns
+
+        Notes:
+        -----
+        This property is particularly useful for testing and for building
+        the final Portfolio object via the build() method.
+
+        """
+        return self._units
+
+    def build(self) -> Portfolio:
         """Create a new Portfolio instance from the current builder state.
 
         This method creates a new immutable Portfolio object based on the
@@ -367,7 +368,7 @@ class Builder:
         self.position = self._state.nav * weights / self.current_prices
 
     @property
-    def aum(self):
+    def aum(self) -> pd.Series | None:
         """Get the assets under management (AUM) history of the portfolio.
 
         This property returns the entire series of AUM values over time,
@@ -387,7 +388,7 @@ class Builder:
         return self._aum
 
     @aum.setter
-    def aum(self, aum):
+    def aum(self, aum: float) -> None:
         """Set the current assets under management (AUM) of the portfolio.
 
         This setter updates the AUM value at the current time point and
@@ -408,5 +409,6 @@ class Builder:
         as position sizes are often calculated as a fraction of AUM.
 
         """
+        assert self._aum is not None
         self._aum[self._state.time] = aum
         self._state.aum = aum

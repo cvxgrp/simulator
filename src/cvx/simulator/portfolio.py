@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any
 
 import pandas as pd
 from jquantstats._data import Data
@@ -116,7 +117,7 @@ class Portfolio:
         represents all time points in the portfolio history.
 
         """
-        return pd.DatetimeIndex(self.prices.index).to_list()
+        return list(pd.DatetimeIndex(self.prices.index))
 
     @property
     def assets(self) -> list[str]:
@@ -133,7 +134,7 @@ class Portfolio:
         which correspond to all assets for which price data is available.
 
         """
-        return self.prices.columns.to_list()
+        return list(self.prices.columns)
 
     @property
     def nav(self) -> pd.Series:
@@ -382,7 +383,7 @@ class Portfolio:
         return self.equity.apply(lambda x: x / self.nav)
 
     @property
-    def stats(self):
+    def stats(self) -> Any:
         """Get statistical analysis data for the portfolio.
 
         This property provides access to various statistical metrics calculated
@@ -402,7 +403,7 @@ class Portfolio:
         return self._data.stats
 
     @property
-    def plots(self):
+    def plots(self) -> Any:
         """Get visualization tools for the portfolio.
 
         This property provides access to various plotting functions for visualizing
@@ -422,7 +423,7 @@ class Portfolio:
         return self._data.plots
 
     @property
-    def reports(self):
+    def reports(self) -> Any:
         """Get reporting tools for the portfolio.
 
         This property provides access to various reporting functions for generating
@@ -441,7 +442,7 @@ class Portfolio:
         """
         return self._data.reports
 
-    def sharpe(self, periods=None):
+    def sharpe(self, periods: int | None = None) -> float:
         """Calculate the Sharpe ratio for the portfolio.
 
         The Sharpe ratio is a measure of risk-adjusted return, calculated as
@@ -465,10 +466,10 @@ class Portfolio:
         A higher Sharpe ratio indicates better risk-adjusted performance.
 
         """
-        return self.stats.sharpe(periods=periods)["NAV"]
+        return float(self.stats.sharpe(periods=periods)["NAV"])
 
     @classmethod
-    def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float):
+    def from_cashpos_prices(cls, prices: pd.DataFrame, cashposition: pd.DataFrame, aum: float) -> Portfolio:
         """Create a Portfolio instance from cash positions and prices.
 
         This class method provides an alternative way to create a Portfolio instance
@@ -498,7 +499,7 @@ class Portfolio:
         units = cashposition.div(prices, fill_value=0.0)
         return cls(prices=prices, units=units, aum=aum)
 
-    def snapshot(self, title: str = "Portfolio Summary", log_scale: bool = True):
+    def snapshot(self, title: str = "Portfolio Summary", log_scale: bool = True) -> Any:
         """Generate and display a snapshot of the portfolio summary.
 
         This method creates a visual representation of the portfolio summary
