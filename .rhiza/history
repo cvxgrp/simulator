@@ -30,7 +30,6 @@
 .gitignore
 .pre-commit-config.yaml
 .rhiza/.cfg.toml
-.rhiza/.env
 .rhiza/.gitignore
 .rhiza/.rhiza-version
 .rhiza/docs/CONFIG.md

@@ -17,3 +17,4 @@ include:
 - renovate.json
 exclude:
 - .github/workflows/rhiza_docker.yml
+- .rhiza/.env
