@@ -60,5 +60,8 @@ DEP001 = ["cvx", "cvxpy"]
 
 # MyPy configuration for type checking
 [tool.mypy]
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true
 ignore_missing_imports = true
 
