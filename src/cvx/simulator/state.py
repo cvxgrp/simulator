@@ -300,7 +300,7 @@ class State:
         if self._prices is None:
             return np.empty(0, dtype=bool)
 
-        return np.isfinite(self.prices.values)
+        return np.asarray(np.isfinite(self.prices.values))
 
     @property
     def prices(self) -> pd.Series:

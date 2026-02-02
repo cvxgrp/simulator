@@ -175,7 +175,7 @@ class Builder:
         during iteration through the portfolio's time index.
 
         """
-        return self._state.prices[self._state.assets].to_numpy()
+        return np.asarray(self._state.prices[self._state.assets])
 
     def __iter__(self) -> Generator[tuple[pd.DatetimeIndex, State]]:
         """Iterate over object in a for loop.
@@ -339,7 +339,7 @@ class Builder:
         Negative weights represent short positions.
 
         """
-        return self._state.weights[self._state.assets].to_numpy()
+        return np.asarray(self._state.weights[self._state.assets])
 
     @weights.setter
     def weights(self, weights: np.ndarray) -> None:

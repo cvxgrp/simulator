@@ -17,6 +17,8 @@ This module provides functions for interpolating missing values in time series
 and validating that time series don't have missing values in the middle.
 """
 
+from typing import cast
+
 import pandas as pd
 import polars as pl
 
@@ -108,7 +110,8 @@ def valid(ts: pd.Series | pl.Series) -> bool:
         return valid_pl(ts)
     # Check if the series with NaNs dropped has the same indices as the interpolated series with NaNs dropped
     # If they're the same, there are no NaNs in the middle of the series
-    return bool(ts.dropna().index.equals(interpolate(ts).dropna().index))
+    interpolated = cast(pd.Series, interpolate(ts))
+    return bool(ts.dropna().index.equals(interpolated.dropna().index))
 
 
 def interpolate_pl(ts: pl.Series) -> pl.Series:
