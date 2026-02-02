@@ -358,5 +358,5 @@ def test_csv_route(prices_pl, prices):
     ppp = polars2pandas(prices_pl, date_col="date")
     pd.testing.assert_frame_equal(ppp, prices)
 
-    assert ppp.index.dtype == "datetime64[ns]"
+    assert ppp.index.dtype == "datetime64[us]"
     assert np.all(np.array(ppp.dtypes) == np.dtype("float64"))

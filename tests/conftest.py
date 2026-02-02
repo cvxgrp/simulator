@@ -69,7 +69,7 @@ def prices_pl(resource_dir):
 
     """
     frame = pl.read_csv(resource_dir / "price.csv", try_parse_dates=True)
-    frame = frame.with_columns(pl.col("date").cast(pl.Datetime("ns")))
+    frame = frame.with_columns(pl.col("date").cast(pl.Datetime("us")))
     return frame.fill_null(strategy="forward")
 
 
