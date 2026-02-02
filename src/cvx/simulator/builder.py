@@ -41,7 +41,7 @@ def polars2pandas(dframe: pl.DataFrame, date_col: str = "date") -> pd.DataFrame:
         pd.DataFrame: The converted Pandas DataFrame with the date column as its index.
 
     """
-    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("us")))
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     return dframe.to_pandas().set_index(date_col)
 
