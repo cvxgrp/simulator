@@ -4,7 +4,7 @@
 # executing performance benchmarks.
 
 # Declare phony targets (they don't produce files)
-.PHONY: test benchmark typecheck security mutate docs-coverage
+.PHONY: test benchmark typecheck security docs-coverage hypothesis-test
 
 # Default directory for tests
 TESTS_FOLDER := tests
@@ -23,25 +23,25 @@ COVERAGE_FAIL_UNDER ?= 90
 test: install ## run all tests
 	@rm -rf _tests;
 
-	@if [ -d ${TESTS_FOLDER} ]; then \
-	  mkdir -p _tests/html-coverage _tests/html-report; \
-	  if [ -d ${SOURCE_FOLDER} ]; then \
-	    ${VENV}/bin/python -m pytest ${TESTS_FOLDER} \
-	    --ignore=${TESTS_FOLDER}/benchmarks \
-	    --cov=${SOURCE_FOLDER} \
-	    --cov-report=term \
-	    --cov-report=html:_tests/html-coverage \
-	    --cov-fail-under=$(COVERAGE_FAIL_UNDER) \
-	    --cov-report=json:_tests/coverage.json \
-	    --html=_tests/html-report/report.html; \
-	  else \
-	    printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, running tests without coverage${RESET}\n"; \
-	    ${VENV}/bin/python -m pytest ${TESTS_FOLDER} \
-	    --ignore=${TESTS_FOLDER}/benchmarks \
-	    --html=_tests/html-report/report.html; \
-	  fi \
+	if [ -z "$$(find ${TESTS_FOLDER} -name 'test_*.py' -o -name '*_test.py' 2>/dev/null)" ]; then \
+	  printf "${YELLOW}[WARN] No test files found in ${TESTS_FOLDER}, skipping tests.${RESET}\n"; \
+	  exit 0; \
+	fi; \
+	mkdir -p _tests/html-coverage _tests/html-report; \
+	if [ -d ${SOURCE_FOLDER} ]; then \
+	  ${UV_BIN} run pytest \
+	  --ignore=${TESTS_FOLDER}/benchmarks \
+	  --cov=${SOURCE_FOLDER} \
+	  --cov-report=term \
+	  --cov-report=html:_tests/html-coverage \
+	  --cov-fail-under=$(COVERAGE_FAIL_UNDER) \
+	  --cov-report=json:_tests/coverage.json \
+	  --html=_tests/html-report/report.html; \
 	else \
-	  printf "${YELLOW}[WARN] Test folder ${TESTS_FOLDER} not found, skipping tests${RESET}\n"; \
+	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, running tests without coverage${RESET}\n"; \
+	  ${UV_BIN} run pytest \
+	  --ignore=${TESTS_FOLDER}/benchmarks \
+	  --html=_tests/html-report/report.html; \
 	fi
 
 # The 'typecheck' target runs static type analysis using mypy.
@@ -62,16 +62,7 @@ security: install ## run security scans (pip-audit and bandit)
 	@printf "${BLUE}[INFO] Running pip-audit for dependency vulnerabilities...${RESET}\n"
 	@${UVX_BIN} pip-audit
 	@printf "${BLUE}[INFO] Running bandit security scan...${RESET}\n"
-	@${UVX_BIN} bandit -r ${SOURCE_FOLDER} -ll -q
-
-# The 'mutate' target performs mutation testing using mutmut.
-# 1. Runs mutmut to apply mutations to the source code and check if tests fail.
-# 2. Displays the results of the mutation testing.
-mutate: install ## run mutation testing with mutmut (slow, for CI or thorough testing)
-	@printf "${BLUE}[INFO] Running mutation testing with mutmut...${RESET}\n"
-	@printf "${YELLOW}[WARN] This may take a while...${RESET}\n"
-	@${UVX_BIN} mutmut run --paths-to-mutate=${SOURCE_FOLDER}
-	@${UVX_BIN} mutmut results
+	@${UVX_BIN} bandit -r ${SOURCE_FOLDER} -ll -q -c pyproject.toml
 
 # The 'benchmark' target runs performance benchmarks using pytest-benchmark.
 # 1. Installs benchmarking dependencies (pytest-benchmark, pygal).
@@ -82,11 +73,12 @@ benchmark: install ## run performance benchmarks
 	@if [ -d "${TESTS_FOLDER}/benchmarks" ]; then \
 	  printf "${BLUE}[INFO] Running performance benchmarks...${RESET}\n"; \
 	  ${UV_BIN} pip install pytest-benchmark==5.2.3 pygal==3.1.0; \
-	  ${VENV}/bin/python -m pytest "${TESTS_FOLDER}/benchmarks/" \
+	  mkdir -p _tests/benchmarks; \
+	  ${UV_BIN} run pytest "${TESTS_FOLDER}/benchmarks/" \
 	  		--benchmark-only \
-			--benchmark-histogram=tests/test_rhiza/benchmarks/benchmarks \
-			--benchmark-json=tests/test_rhiza/benchmarks/benchmarks.json; \
-	  ${VENV}/bin/python tests/test_rhiza/benchmarks/analyze_benchmarks.py ; \
+			--benchmark-histogram=_tests/benchmarks/histogram \
+			--benchmark-json=_tests/benchmarks/results.json; \
+	  ${UVX_BIN} "rhiza-tools>=0.2.3" analyze-benchmarks --benchmarks-json _tests/benchmarks/results.json --output-html _tests/benchmarks/report.html; \
 	else \
 	  printf "${YELLOW}[WARN] Benchmarks folder not found, skipping benchmarks${RESET}\n"; \
 	fi
@@ -97,8 +89,27 @@ benchmark: install ## run performance benchmarks
 docs-coverage: install ## check documentation coverage with interrogate
 	@if [ -d "${SOURCE_FOLDER}" ]; then \
 	  printf "${BLUE}[INFO] Checking documentation coverage in ${SOURCE_FOLDER}...${RESET}\n"; \
-	  ${VENV}/bin/python -m interrogate -vv ${SOURCE_FOLDER}; \
+	  ${UV_BIN} run interrogate -vv ${SOURCE_FOLDER}; \
 	else \
 	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} not found, skipping docs-coverage${RESET}\n"; \
 	fi
 
+# The 'hypothesis-test' target runs property-based tests using Hypothesis.
+# 1. Checks if hypothesis tests exist in the tests directory.
+# 2. Runs pytest with hypothesis-specific settings and statistics.
+# 3. Generates detailed hypothesis examples and statistics.
+hypothesis-test: install ## run property-based tests with Hypothesis
+	@if [ -z "$$(find ${TESTS_FOLDER} -name 'test_*.py' -o -name '*_test.py' 2>/dev/null)" ]; then \
+	  printf "${YELLOW}[WARN] No test files found in ${TESTS_FOLDER}, skipping hypothesis tests.${RESET}\n"; \
+	  exit 0; \
+	fi; \
+	printf "${BLUE}[INFO] Running Hypothesis property-based tests...${RESET}\n"; \
+	mkdir -p _tests/hypothesis; \
+	${UV_BIN} run pytest \
+	  --ignore=${TESTS_FOLDER}/benchmarks \
+	  -v \
+	  --hypothesis-show-statistics \
+	  --hypothesis-seed=0 \
+	  -m "hypothesis or property" \
+	  --tb=short \
+	  --html=_tests/hypothesis/report.html

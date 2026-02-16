@@ -12,6 +12,7 @@ _tests
 _book
 _pdoc
 _marimushka
+_mkdocs
 _benchmarks
 _jupyter
 
@@ -74,6 +75,7 @@ coverage.json
 *.cover
 *.py,cover
 .hypothesis/
+.benchmarks/
 .pytest_cache/
 cover/
 
