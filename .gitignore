@@ -2,6 +2,7 @@
 .idea
 .venv
 .ruff_cache
+.ty_cache
 
 ### Don't expose API keys, etc.
 .env
@@ -12,6 +13,7 @@ _tests
 _book
 _pdoc
 _marimushka
+_mkdocs
 _benchmarks
 _jupyter
 
@@ -74,6 +76,7 @@ coverage.json
 *.cover
 *.py,cover
 .hypothesis/
+.benchmarks/
 .pytest_cache/
 cover/
 
@@ -96,4 +99,6 @@ cython_debug/
 
 # Makefile
 local.mk
+
+.bandit-baseline.json
 
