@@ -336,6 +336,9 @@ class State:
         before and after the price update.
 
         """
+        # Convert dict to Series if necessary
+        prices = pd.Series(prices)
+
         value_before = (self.prices * self.position).sum()  # self.cashposition.sum()
         value_after = (prices * self.position).sum()
 
