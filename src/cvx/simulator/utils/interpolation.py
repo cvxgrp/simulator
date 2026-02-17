@@ -296,8 +296,4 @@ def valid_df_pl(df: pl.DataFrame) -> bool:
 
     """
     # Check each column
-    for col in df.columns:
-        if not valid_pl(df[col]):
-            return False
-
-    return True
+    return all(valid_pl(df[col]) for col in df.columns)
