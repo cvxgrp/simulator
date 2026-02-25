@@ -3,6 +3,10 @@
 This module contains fixtures that are used by multiple test files in the
 test_reference module. It provides access to test resources such as price
 data and spread data.
+
+Security Notes:
+- S101 (assert usage): Asserts are appropriate in test code for validating conditions
+- S603/S607 (subprocess usage): Any subprocess calls use controlled inputs in test environments
 """
 
 from __future__ import annotations

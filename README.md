@@ -61,8 +61,6 @@ prices = pd.DataFrame({
 b = Builder(prices=prices, initial_aum=1e6)
 ```
 
-```result
-```
 
 Prices have to be valid, there may be NaNs only at the beginning and the end of
 each column in the frame.
@@ -98,8 +96,6 @@ for t, state in b:
     b.units.iloc[-1][['A', 'B']]
 ```
 
-```result
-```
 
 Here t is the growing list of timestamps, e.g. in the first iteration
 t is $t1$, in the second iteration it will be $t1, t2$ etc.
@@ -123,8 +119,6 @@ for t, state in b2:
 b2.units.iloc[-1]
 ```
 
-```result
-```
 
 
 Note that we update the position at the last element in the t list
@@ -143,8 +137,6 @@ for t, state in b3:
 b3.units.iloc[-1]
 ```
 
-```result
-```
 
 ### Build the portfolio
 
@@ -163,8 +155,6 @@ portfolio = b3.build()
 type(portfolio).__name__
 ```
 
-```result
-```
 
 ## 📈 Analytics
 
@@ -181,8 +171,6 @@ for t, state in b3:
 portfolio = b3.build()
 ```
 
-```result
-```
 
 It is possible to generate a snapshot of the portfolio:
 
@@ -198,8 +186,6 @@ fig = portfolio.snapshot()
 
 ```
 
-```result
-```
 
 ## 🛠️ Development
 
