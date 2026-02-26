@@ -200,7 +200,7 @@ jobs:
 
       - name: Generate SLSA provenance attestations
         if: steps.buildable.outputs.buildable == 'true' && github.event.repository.private == false
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: dist/*
 
