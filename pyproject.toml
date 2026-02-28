@@ -6,6 +6,7 @@ description = "Simple simulator for investors"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
+# Private :: Do Not Upload (prevents rhiza_release.yml from publishing to PyPI)
 dependencies = [
     "jquantstats>=0.0.29",
     "numpy>=2.3.4",
