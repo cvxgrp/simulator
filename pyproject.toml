@@ -1,7 +1,7 @@
 # Project metadata and core configuration
 [project]
 name = "cvxsimulator"
-version = "0.0.0"
+version = "1.4.5"
 description = "Simple simulator for investors"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
