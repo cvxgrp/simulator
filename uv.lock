@@ -628,15 +628,15 @@ wheels = [
 
 [[package]]
 name = "plotly"
-version = "6.5.2"
+version = "6.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "narwhals" },
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/4f/8a10a9b9f5192cb6fdef62f1d77fa7d834190b2c50c0cd256bd62879212b/plotly-6.5.2.tar.gz", hash = "sha256:7478555be0198562d1435dee4c308268187553cc15516a2f4dd034453699e393", size = 7015695, upload-time = "2026-01-14T21:26:51.222Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/fb/41efe84970cfddefd4ccf025e2cbfafe780004555f583e93dba3dac2cdef/plotly-6.6.0.tar.gz", hash = "sha256:b897f15f3b02028d69f755f236be890ba950d0a42d7dfc619b44e2d8cea8748c", size = 7027956, upload-time = "2026-03-02T21:10:25.321Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/67/f95b5460f127840310d2187f916cf0023b5875c0717fdf893f71e1325e87/plotly-6.5.2-py3-none-any.whl", hash = "sha256:91757653bd9c550eeea2fa2404dba6b85d1e366d54804c340b2c874e5a7eb4a4", size = 9895973, upload-time = "2026-01-14T21:26:47.135Z" },
+    { url = "https://files.pythonhosted.org/packages/52/d2/c6e44dba74f17c6216ce1b56044a9b93a929f1c2d5bdaff892512b260f5e/plotly-6.6.0-py3-none-any.whl", hash = "sha256:8d6daf0f87412e0c0bfe72e809d615217ab57cc715899a1e5145135a7800d1d0", size = 9910315, upload-time = "2026-03-02T21:10:18.131Z" },
 ]
 
 [[package]]
@@ -938,15 +938,15 @@ wheels = [
 
 [[package]]
 name = "tinycta"
-version = "0.9.0"
+version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/05/2d/3eb3715b7d521cda81647face7b5e670c278f07a02fdf11a5087e5df4b4e/tinycta-0.9.0.tar.gz", hash = "sha256:27acc51ab0defa5371277959ae97e30f8d7b60ce06f3a764646d52fbc33be5fb", size = 1591604, upload-time = "2026-02-13T19:52:25.798Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9b/a2/7bb04610e6c9cc9fc75f6a46f991950bd9acaa12ed628af7633894fd8e0d/tinycta-0.9.1.tar.gz", hash = "sha256:3c1c9e71d7a4b629c72e2eefb9aa7d3e2aedae96f12fe7d03862bff722568c6e", size = 1629276, upload-time = "2026-02-24T11:54:13.262Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/db/00/179a9620b64335e3d1eeda09f366292fad39107772a697fe166a6783b1c0/tinycta-0.9.0-py3-none-any.whl", hash = "sha256:2b51c8d36575b8005257875bf71ec202725974ecaff6f01e8690443a5b388cb6", size = 8040, upload-time = "2026-02-13T19:52:24.08Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/82/5a1a8e673092108687580d9256c61d618ccde9fad67b2cff5f68dc2f431d/tinycta-0.9.1-py3-none-any.whl", hash = "sha256:8d1723f914276791642821ecc4bc1bd065e4ef5019253870e5bba3d224b826d6", size = 8387, upload-time = "2026-02-24T11:54:11.722Z" },
 ]
 
 [[package]]
