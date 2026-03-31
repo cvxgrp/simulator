@@ -11,7 +11,8 @@ dependencies = [
     "jquantstats>=0.0.29",
     "numpy>=2.3.4",
     "pandas>=2.2.3",
-    "polars>=1.34.0"
+    "polars>=1.34.0",
+    "pyarrow>=19.0.0"
 ]
 
 # Links to project resources
@@ -58,6 +59,7 @@ plotly = "plotly"
 [tool.deptry.per_rule_ignores]
 #DEP002 = ["jquantstats"]
 DEP001 = ["cvx", "cvxpy"]
+DEP002 = ["pyarrow"]
 
 # MyPy configuration for type checking
 [tool.mypy]

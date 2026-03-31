@@ -26,8 +26,7 @@ from datetime import datetime
 from typing import Any
 
 import pandas as pd
-from jquantstats._data import Data
-from jquantstats.api import build_data
+from jquantstats.data import Data
 
 
 @dataclass(frozen=True)
@@ -95,9 +94,9 @@ class Portfolio:
         if not missing_assets.empty:
             raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")  # noqa: TRY003
 
-        frame = self.nav.pct_change().to_frame()
-        frame.index.name = "Date"
-        d = build_data(returns=frame)
+        frame = self.nav.pct_change().to_frame().reset_index()
+        frame.columns = ["Date", frame.columns[1]]
+        d = Data.from_returns(returns=frame)
 
         object.__setattr__(self, "_data", d)
 
