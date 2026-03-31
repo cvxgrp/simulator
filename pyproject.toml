@@ -59,6 +59,7 @@ plotly = "plotly"
 [tool.deptry.per_rule_ignores]
 #DEP002 = ["jquantstats"]
 DEP001 = ["cvx", "cvxpy"]
+DEP002 = ["pyarrow"]
 
 # MyPy configuration for type checking
 [tool.mypy]
