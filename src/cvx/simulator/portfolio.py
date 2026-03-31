@@ -515,4 +515,4 @@ class Portfolio:
             The generated plot object representing the portfolio snapshot.
 
         """
-        return self.plots.plot_snapshot(title=title, log_scale=log_scale)
+        return self.plots.snapshot(title=title, log_scale=log_scale)
