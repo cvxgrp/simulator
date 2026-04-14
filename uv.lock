@@ -271,7 +271,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.6.3"
+version = "0.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -281,9 +281,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/67/c2/3283f53eb880b2c76e4ac9d8d58680119c74d467ed07f945d998f705a6e9/jquantstats-0.6.3.tar.gz", hash = "sha256:05130e3fc94e4233b2d9ee4e434eab1ab5b73940693d1b715593da264a4fad6b", size = 92013, upload-time = "2026-03-31T09:50:49.495Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/c1/ca904d149294f83116fecaf4864847e0a4d3577203f0c39102a72e5e6d47/jquantstats-0.6.4.tar.gz", hash = "sha256:c383f1e6dfdb66398a13cba3f718932068b16ee624717b2d1c1a20cd9129738c", size = 92166, upload-time = "2026-04-12T10:44:35.103Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/af/599a0e4bf5b41cd81f0b1dcb37052108367051a8444365d1ad575d1bfcb5/jquantstats-0.6.3-py3-none-any.whl", hash = "sha256:c17c564be9d997924b727eac8ad21bac69bc2111bb34e8c4b654a100ff6ec6d9", size = 104389, upload-time = "2026-03-31T09:50:48.079Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/86/bc17f0188dc8f8907a1df3b22e6ffcf20069689e22eb9f8137d3b82a2939/jquantstats-0.6.4-py3-none-any.whl", hash = "sha256:ae6d04948ce8ab5320683678ff0bc3b896a373a76704d46d294c6bcf8bed8917", size = 104386, upload-time = "2026-04-12T10:44:33.461Z" },
 ]
 
 [[package]]
@@ -391,7 +391,7 @@ wheels = [
 
 [[package]]
 name = "marimo"
-version = "0.23.0"
+version = "0.23.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -413,9 +413,9 @@ dependencies = [
     { name = "uvicorn" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1b/65/7dc6568f5973e4aba1bfd47e4c6d5339719ea9e483ae9f53d172505250d8/marimo-0.23.0.tar.gz", hash = "sha256:c125d0db5b369383d2a28d3760cb93b5ca53a3e45910d2fc21294d3de2c843ad", size = 38268543, upload-time = "2026-04-08T17:28:45.828Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d5/95/b7bb0fd8f00fc7b567a46eb6230492d0c0f53a622bd3c16fa142b54eef81/marimo-0.23.1.tar.gz", hash = "sha256:c1c1ed859cfac45f4bb54fe882fc6941ac22b3b4b7a4505285e6139e0321f886", size = 38270839, upload-time = "2026-04-10T23:14:04.103Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c8/4a/d4dd553b1a56efd23c1b7295bd9fe43b63fc2b156e394f16e802739ac2f8/marimo-0.23.0-py3-none-any.whl", hash = "sha256:6bfc3114cf388c485389a2e52e64008378b0be8d87da55329fa6e064f2806115", size = 38690254, upload-time = "2026-04-08T17:28:42.773Z" },
+    { url = "https://files.pythonhosted.org/packages/db/b4/53ca91d287b52ae1806ce947659a4357472cd4ab1f54ae5638cff8cc8a25/marimo-0.23.1-py3-none-any.whl", hash = "sha256:fb2546fdd669fcba5cf3b1aaaa8fd84196c292935bc2dce457cf8077ae2e8608", size = 38696007, upload-time = "2026-04-10T23:14:00.126Z" },
 ]
 
 [[package]]
@@ -717,15 +717,15 @@ wheels = [
 
 [[package]]
 name = "plotly"
-version = "6.6.0"
+version = "6.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "narwhals" },
     { name = "packaging" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/24/fb/41efe84970cfddefd4ccf025e2cbfafe780004555f583e93dba3dac2cdef/plotly-6.6.0.tar.gz", hash = "sha256:b897f15f3b02028d69f755f236be890ba950d0a42d7dfc619b44e2d8cea8748c", size = 7027956, upload-time = "2026-03-02T21:10:25.321Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3a/7f/0f100df1172aadf88a929a9dbb902656b0880ba4b960fe5224867159d8f4/plotly-6.7.0.tar.gz", hash = "sha256:45eea0ff27e2a23ccd62776f77eb43aa1ca03df4192b76036e380bb479b892c6", size = 6911286, upload-time = "2026-04-09T20:36:45.738Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/52/d2/c6e44dba74f17c6216ce1b56044a9b93a929f1c2d5bdaff892512b260f5e/plotly-6.6.0-py3-none-any.whl", hash = "sha256:8d6daf0f87412e0c0bfe72e809d615217ab57cc715899a1e5145135a7800d1d0", size = 9910315, upload-time = "2026-03-02T21:10:18.131Z" },
+    { url = "https://files.pythonhosted.org/packages/90/ad/cba91b3bcf04073e4d1655a5c1710ef3f457f56f7d1b79dcc3d72f4dd912/plotly-6.7.0-py3-none-any.whl", hash = "sha256:ac8aca1c25c663a59b5b9140a549264a5badde2e057d79b8c772ae2920e32ff0", size = 9898444, upload-time = "2026-04-09T20:36:39.812Z" },
 ]
 
 [[package]]
@@ -1085,15 +1085,15 @@ wheels = [
 
 [[package]]
 name = "tinycta"
-version = "0.9.4"
+version = "0.9.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/32/36/0c713a0aa4474722a34e2d41931dc40efbe0ace7da415ba0ca6b58bb62a5/tinycta-0.9.4.tar.gz", hash = "sha256:476693c9debd3c23f4a8986489349b9276db6e01580c2f113aed3b6532cb0b5d", size = 1614551, upload-time = "2026-03-22T05:49:54.095Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ed/40/d0eee27b526963a4c8c300a5f2fe9e4dd6d0eecb6b2dab5dcab6111b5362/tinycta-0.9.5.tar.gz", hash = "sha256:e8783f4e35caf4e0441dbeb737cea98d704c90205f01123da100d77abc141e38", size = 1619492, upload-time = "2026-04-12T19:25:06.48Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c2/46/90f900a88ff6ee2cf0c5d481641d5d957b3e49b6efec6819c148bdb658a2/tinycta-0.9.4-py3-none-any.whl", hash = "sha256:8a136fa577022f8b06f99c08040c7e9e34d0470b281d8d0026a9f9261b5fa075", size = 8462, upload-time = "2026-03-22T05:49:52.687Z" },
+    { url = "https://files.pythonhosted.org/packages/91/e1/14e85b282a5549be4d3bc260eab863795b12e9371ff1b806ba08c6c0940f/tinycta-0.9.5-py3-none-any.whl", hash = "sha256:6a3c2d34811fe5176c3b4accb63067fd6f88a4a2f4d252f0fcfdce190d22b1b4", size = 8465, upload-time = "2026-04-12T19:25:04.658Z" },
 ]
 
 [[package]]
