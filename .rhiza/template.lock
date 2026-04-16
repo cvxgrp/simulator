@@ -11,6 +11,8 @@ exclude:
 - .rhiza/make.d/custom-task.mk
 - .rhiza/make.d/gh-aw.mk
 - .rhiza/make.d/github.mk
+- .rhiza/tests/api/test_gh_aw_targets.py
+- .rhiza/tests/api/test_github_targets.py
 templates:
 - github
 - legal
@@ -64,8 +66,6 @@ files:
 - .rhiza/rhiza.mk
 - .rhiza/tests/README.md
 - .rhiza/tests/api/conftest.py
-- .rhiza/tests/api/test_gh_aw_targets.py
-- .rhiza/tests/api/test_github_targets.py
 - .rhiza/tests/api/test_makefile_api.py
 - .rhiza/tests/api/test_makefile_targets.py
 - .rhiza/tests/conftest.py
@@ -104,5 +104,5 @@ files:
 - docs/mkdocs-base.yml
 - pytest.ini
 - ruff.toml
-synced_at: '2026-04-16T05:56:04Z'
+synced_at: '2026-04-16T06:45:26Z'
 strategy: merge
