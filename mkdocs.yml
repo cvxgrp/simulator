@@ -12,5 +12,5 @@ nav:
   - Development:
       - Marimo: development/MARIMO.md
       - Tests: development/TESTS.md
-  - ADR:
-      - Template: adr/0000-adr-template.md
+  - Notebooks: notebooks.md
+  - Reports: reports.md
