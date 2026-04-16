@@ -4,7 +4,7 @@ host: github
 ref: v0.9.5
 include: []
 exclude:
-- docs
+- .rhiza/docs
 templates:
 - github
 - legal
@@ -44,13 +44,6 @@ files:
 - .rhiza/CODE_OF_CONDUCT.md
 - .rhiza/CONTRIBUTING.md
 - .rhiza/assets/rhiza-logo.svg
-- .rhiza/docs/ASSETS.md
-- .rhiza/docs/CONFIG.md
-- .rhiza/docs/LFS.md
-- .rhiza/docs/PRIVATE_PACKAGES.md
-- .rhiza/docs/RELEASING.md
-- .rhiza/docs/TOKEN_SETUP.md
-- .rhiza/docs/WORKFLOWS.md
 - .rhiza/make.d/README.md
 - .rhiza/make.d/agentic.mk
 - .rhiza/make.d/book.mk
@@ -103,7 +96,13 @@ files:
 - LICENSE
 - Makefile
 - SECURITY.md
+- docs/adr/0000-adr-template.md
+- docs/assets/rhiza-logo.svg
+- docs/development/MARIMO.md
+- docs/development/TESTS.md
+- docs/index.md
+- docs/mkdocs-base.yml
 - pytest.ini
 - ruff.toml
-synced_at: '2026-04-16T05:50:42Z'
+synced_at: '2026-04-16T05:51:07Z'
 strategy: merge
