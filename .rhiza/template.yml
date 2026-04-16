@@ -6,3 +6,6 @@ templates:
   - legal
   - tests
   - marimo
+
+exclude:
+  - docs
