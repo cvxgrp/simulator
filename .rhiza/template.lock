@@ -3,7 +3,8 @@ repo: jebel-quant/rhiza
 host: github
 ref: v0.9.5
 include: []
-exclude: []
+exclude:
+- docs
 templates:
 - github
 - legal
@@ -102,13 +103,7 @@ files:
 - LICENSE
 - Makefile
 - SECURITY.md
-- docs/adr/0000-adr-template.md
-- docs/assets/rhiza-logo.svg
-- docs/development/MARIMO.md
-- docs/development/TESTS.md
-- docs/index.md
-- docs/mkdocs-base.yml
 - pytest.ini
 - ruff.toml
-synced_at: '2026-04-16T05:19:34Z'
+synced_at: '2026-04-16T05:50:42Z'
 strategy: merge
