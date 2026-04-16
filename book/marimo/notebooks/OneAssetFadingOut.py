@@ -20,7 +20,7 @@ The notebook shows:
 # ]
 #
 # [tool.uv.sources]
-# cvxsimulator = { path = "../..", editable=true }
+# cvxsimulator = { path = "../../..", editable=true }
 #
 # ///
 
