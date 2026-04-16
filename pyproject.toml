@@ -8,7 +8,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 # Private :: Do Not Upload (prevents rhiza_release.yml from publishing to PyPI)
 dependencies = [
-    "jquantstats>=0.0.29",
+    "jquantstats>=0.6.5",
     "numpy>=2.3.4",
     "pandas>=2.2.3",
     "polars>=1.34.0",
