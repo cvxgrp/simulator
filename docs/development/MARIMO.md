@@ -1,27 +1,17 @@
 # Marimo Notebooks
 
-This directory contains interactive [Marimo](https://marimo.io/) notebooks for the Rhiza project.
+This repository contains interactive [Marimo](https://marimo.io/) notebooks.
 
 ## Available Notebooks
 
-### 📊 rhiza.py - Marimo Feature Showcase
+Notebooks live in `book/marimo/notebooks/` (configured via `MARIMO_FOLDER` in `.rhiza/.env`):
 
-A comprehensive demonstration of Marimo's most useful features, including:
-
-- **Interactive UI Elements**: Sliders, dropdowns, text inputs, checkboxes, and multiselect
-- **Reactive Programming**: Automatic cell updates when dependencies change
-- **Data Visualisation**: Interactive plots using Plotly
-- **DataFrames**: Working with Pandas data
-- **Layout Components**: Columns, tabs, and accordions for organised content
-- **Forms**: Dictionary-based forms for collecting user input
-- **Rich Text**: Markdown and LaTeX support for documentation
-- **Advanced Features**: Callouts, collapsible accordions, and more
-
-This notebook is perfect for:
-- Learning Marimo's capabilities
-- Understanding reactive programming in notebooks
-- Seeing real examples of interactive UI components
-- Getting started with Marimo in your own projects
+| Notebook | Description |
+|---|---|
+| `Balanced.py` | Balanced portfolio simulation |
+| `monkey.py` | Random monkey portfolio |
+| `OneAssetFadingOut.py` | Single asset fade-out analysis |
+| `pairs.py` | Pairs trading simulation |
 
 ## Running the Notebooks
 
@@ -33,14 +23,22 @@ From the repository root:
 make marimo
 ```
 
-This will start the Marimo server and open all notebooks in the `docs/notebooks` directory.
+This will start the Marimo server and open all notebooks in the notebooks folder as specified in `.rhiza/.env`.
+
+### Validating Notebooks
+
+To validate that all notebooks run without errors:
+
+```bash
+make marimo-validate
+```
 
 ### Running a Specific Notebook
 
 To run a single notebook:
 
 ```bash
-marimo edit docs/notebooks/rhiza.py
+marimo edit book/marimo/notebooks/monkey.py
 ```
 
 ### Using uv (Recommended)
@@ -48,7 +46,7 @@ marimo edit docs/notebooks/rhiza.py
 The notebooks include inline dependency metadata, making them self-contained:
 
 ```bash
-uv run docs/notebooks/rhiza.py
+uv run book/marimo/notebooks/monkey.py
 ```
 
 This will automatically install the required dependencies and run the notebook.
@@ -57,10 +55,10 @@ This will automatically install the required dependencies and run the notebook.
 
 Marimo notebooks are **pure Python files** (`.py`), not JSON. This means:
 
-- ✅ Easy version control with Git
-- ✅ Standard code review workflows  
-- ✅ No hidden metadata
-- ✅ Compatible with all Python tools
+- Easy version control with Git
+- Standard code review workflows
+- No hidden metadata
+- Compatible with all Python tools
 
 Each notebook includes inline metadata that specifies its dependencies:
 
@@ -68,8 +66,8 @@ Each notebook includes inline metadata that specifies its dependencies:
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "marimo==0.18.4",
-#     "numpy>=1.24.0",
+#     "marimo==0.23.1",
+#     "cvxsimulator>=1.4.6",
 # ]
 # ///
 ```
@@ -83,11 +81,17 @@ Marimo is configured in `pyproject.toml` to properly import the local package:
 pythonpath = ["src"]
 ```
 
+The notebook folder is configured in `.rhiza/.env`:
+
+```env
+MARIMO_FOLDER=book/marimo/notebooks
+```
+
 ## CI/CD Integration
 
-The `.github/workflows/marimo.yml` workflow automatically:
+The `.github/workflows/rhiza_marimo.yml` workflow automatically:
 
-1. Discovers all `.py` files in this directory
+1. Discovers all `.py` files in `book/marimo/notebooks/`
 2. Runs each notebook in a fresh environment
 3. Verifies that notebooks can bootstrap themselves
 4. Ensures reproducibility
@@ -98,9 +102,9 @@ This guarantees that all notebooks remain functional and up-to-date.
 
 To create a new Marimo notebook:
 
-1. Create a new `.py` file in this directory:
+1. Create a new `.py` file in the notebooks directory:
    ```bash
-   marimo edit docs/notebooks/my_notebook.py
+   marimo edit book/marimo/notebooks/my_notebook.py
    ```
 
 2. Add inline metadata at the top:
@@ -108,7 +112,7 @@ To create a new Marimo notebook:
    # /// script
    # requires-python = ">=3.11"
    # dependencies = [
-   #     "marimo==0.18.4",
+   #     "marimo==0.23.1",
    #     # ... other dependencies
    # ]
    # ///
@@ -118,10 +122,10 @@ To create a new Marimo notebook:
 
 4. Test it runs in a clean environment:
    ```bash
-   uv run docs/notebooks/my_notebook.py
+   uv run book/marimo/notebooks/my_notebook.py
    ```
 
-5. Commit and push - the CI will validate it automatically
+5. Commit and push — the CI will validate it automatically
 
 ## Learn More
 
@@ -136,7 +140,3 @@ To create a new Marimo notebook:
 - **Git-Friendly**: Notebooks diff and merge like regular Python files
 - **Self-Contained**: Use inline metadata to make notebooks reproducible
 - **Interactive**: Take advantage of Marimo's rich UI components for better user experience
-
----
-
-*Happy exploring with Marimo! 🚀*
