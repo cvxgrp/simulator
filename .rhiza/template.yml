@@ -8,4 +8,4 @@ templates:
   - marimo
 
 exclude:
-  - docs
+  - .rhiza/docs
