@@ -83,7 +83,7 @@ jobs:
       - name: Run Semgrep
         env:
           UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
-        run: make semgrep
+        run: uvx semgrep --config .github/semgrep.yml .
 
   pip-audit:
     name: Dependency vulnerability scan
