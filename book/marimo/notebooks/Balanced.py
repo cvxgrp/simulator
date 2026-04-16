@@ -26,7 +26,7 @@ Each approach is implemented and visualized to compare performance.
 # ]
 #
 # [tool.uv.sources]
-# cvxsimulator = { path = "../..", editable=true }
+# cvxsimulator = { path = "../../..", editable=true }
 #
 # ///
 

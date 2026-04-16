@@ -1,0 +1,16 @@
+INHERIT: docs/mkdocs-base.yml
+
+site_name: CVX Simulator
+site_url: https://cvxgrp.github.io/simulator/
+repo_url: https://github.com/cvxgrp/simulator
+repo_name: cvxgrp/simulator
+
+docs_dir: docs
+
+nav:
+  - Home: index.md
+  - Development:
+      - Marimo: development/MARIMO.md
+      - Tests: development/TESTS.md
+  - ADR:
+      - Template: adr/0000-adr-template.md
