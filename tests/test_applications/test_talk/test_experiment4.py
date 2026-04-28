@@ -3,10 +3,23 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
-from tinycta.signal import osc, returns_adjust
 
 from cvx.simulator.portfolio import Portfolio
+
+
+def osc(prices: pd.DataFrame, fast: int = 32, slow: int = 96, scaling: bool = True) -> pd.DataFrame:
+    """Compute EWMA-based oscillator, optionally scaled by its standard deviation."""
+    diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+    s = diff.std() if scaling else 1
+    return diff / s
+
+
+def returns_adjust(price: pd.DataFrame, com: int = 32, min_periods: int = 300, clip: float = 4.2) -> pd.DataFrame:
+    """Return volatility-normalised log returns clipped to [-clip, +clip]."""
+    r = price.apply(np.log).diff()
+    return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
 
 
 # take two moving averages and apply the sign-function, adjust by volatility
