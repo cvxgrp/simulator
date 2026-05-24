@@ -2,16 +2,18 @@
 
 This repository contains interactive [Marimo](https://marimo.io/) notebooks.
 
-## Available Notebooks
+## Features
 
-Notebooks live in `book/marimo/notebooks/` (configured via `MARIMO_FOLDER` in `.rhiza/.env`):
+Marimo notebooks support a wide range of features, including:
 
-| Notebook | Description |
-|---|---|
-| `Balanced.py` | Balanced portfolio simulation |
-| `monkey.py` | Random monkey portfolio |
-| `OneAssetFadingOut.py` | Single asset fade-out analysis |
-| `pairs.py` | Pairs trading simulation |
+- **Interactive UI Elements**: Sliders, dropdowns, text inputs, checkboxes, and multiselect
+- **Reactive Programming**: Automatic cell updates when dependencies change
+- **Data Visualisation**: Interactive plots using Plotly
+- **DataFrames**: Working with Pandas data
+- **Layout Components**: Columns, tabs, and accordions for organised content
+- **Forms**: Dictionary-based forms for collecting user input
+- **Rich Text**: Markdown and LaTeX support for documentation
+- **Advanced Features**: Callouts, collapsible accordions, and more
 
 ## Running the Notebooks
 
@@ -38,7 +40,7 @@ make marimo-validate
 To run a single notebook:
 
 ```bash
-marimo edit book/marimo/notebooks/monkey.py
+marimo edit docs/notebooks/my_notebook.py
 ```
 
 ### Using uv (Recommended)
@@ -46,7 +48,7 @@ marimo edit book/marimo/notebooks/monkey.py
 The notebooks include inline dependency metadata, making them self-contained:
 
 ```bash
-uv run book/marimo/notebooks/monkey.py
+uv run docs/notebooks/my_notebook.py
 ```
 
 This will automatically install the required dependencies and run the notebook.

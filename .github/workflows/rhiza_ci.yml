@@ -24,15 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.versions.outputs.list }}
+      os_matrix: ${{ steps.os.outputs.list }}
     steps:
       - uses: actions/checkout@v6.0.2
         with:
           lfs: true
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -51,13 +52,22 @@ jobs:
         run: |
           echo "Python versions: ${{ steps.versions.outputs.list }}"
 
+      - id: os
+        run: |
+          OS_MATRIX=$(make -f .rhiza/rhiza.mk -s ci-os-matrix)
+          echo "list=$OS_MATRIX" >> "$GITHUB_OUTPUT"
+
+      - name: Debug OS matrix
+        run: |
+          echo "OS versions: ${{ steps.os.outputs.list }}"
+
   test:
     needs: generate-matrix
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: ${{ fromJson(needs.generate-matrix.outputs.os_matrix) }}
       fail-fast: false
 
     steps:
@@ -67,9 +77,18 @@ jobs:
           lfs: true
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        id: install-uv
+        continue-on-error: true
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Retry uv installation
+        if: steps.install-uv.outcome == 'failure'
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "0.11.16"
           python-version: ${{ matrix.python-version }}
 
       - name: Configure git auth for private packages
@@ -100,9 +119,9 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -124,9 +143,9 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -167,9 +186,9 @@ jobs:
         uses: actions/checkout@v6.0.2
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -192,9 +211,9 @@ jobs:
           lfs: true
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -214,9 +233,9 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -236,9 +255,9 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
+        uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.16"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -262,56 +281,3 @@ jobs:
           name: LICENSES.md
           path: LICENSES.md
           if-no-files-found: ignore
-
-  coverage-badge:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6.0.2
-        with:
-          token: ${{ secrets.GH_PAT || github.token }}
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v8.0.0
-        with:
-          version: "0.11.6"
-
-      - name: Download coverage report
-        id: download-coverage
-        continue-on-error: true
-        uses: actions/download-artifact@v8
-        with:
-          name: coverage-report
-          path: _tests/
-
-      - name: Generate coverage badge
-        if: steps.download-coverage.outcome == 'success'
-        run: |
-          uvx "genbadge[coverage]" coverage -i _tests/coverage.xml -o /tmp/coverage-badge.svg
-
-      - name: Push badge to gh-pages
-        if: steps.download-coverage.outcome == 'success'
-        run: |
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-
-          if git fetch origin gh-pages 2>/dev/null; then
-            git checkout gh-pages
-          else
-            git checkout --orphan gh-pages
-            git rm -rf .
-          fi
-
-          cp /tmp/coverage-badge.svg coverage-badge.svg
-          git add coverage-badge.svg
-
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update coverage badge [skip ci]"
-            git push origin gh-pages
-          else
-            echo "Coverage badge unchanged, skipping push"
-          fi
