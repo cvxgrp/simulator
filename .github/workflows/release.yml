@@ -32,7 +32,7 @@ jobs:
           version: "0.10.7"
 
       - name: Build
-        run: uv build
+        run: uvx hatch build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
