@@ -18,6 +18,13 @@ import pytest
 from cvx.simulator import interpolate
 
 
+def pytest_collection_modifyitems(items):
+    """Apply 180s timeout to all notebook tests in test_talk."""
+    for item in items:
+        if "test_talk" in str(item.fspath):
+            item.add_marker(pytest.mark.timeout(180))
+
+
 @pytest.fixture(scope="session", name="resource_dir")
 def resource_fixture():
     """Create a fixture for the resource directory.
