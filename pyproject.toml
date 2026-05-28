@@ -6,6 +6,7 @@ description = "Simple simulator for investors"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
+license = "Apache-2.0"
 # Private :: Do Not Upload (prevents rhiza_release.yml from publishing to PyPI)
 dependencies = [
     "jquantstats>=0.6.5",
@@ -17,7 +18,8 @@ dependencies = [
 
 # Links to project resources
 [project.urls]
-repository = "https://github.com/cvxgrp/simulator"
+Homepage = "https://github.com/cvxgrp/simulator"
+Repository = "https://github.com/cvxgrp/simulator"
 
 # Additional dependencies for development, testing, and documentation
 [dependency-groups]
@@ -29,6 +31,10 @@ dev = [
     "marimo>=0.17.0",
     "plotly>=6.5",
 ]
+test = [
+    "pytest",
+]
+lint = []
 
 # Build system configuration
 # Hatchling is a modern, extensible Python build backend
