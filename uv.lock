@@ -266,7 +266,7 @@ dev = [
     { name = "loguru" },
     { name = "marimo", specifier = ">=0.17.0" },
     { name = "plotly", specifier = ">=6.5" },
-    { name = "tinycta" },
+    { name = "tinycta", specifier = ">=0.5.0" },
 ]
 lint = []
 test = [{ name = "pytest", specifier = ">=7.0" }]
