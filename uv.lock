@@ -230,6 +230,11 @@ dependencies = [
     { name = "pyarrow" },
 ]
 
+[package.optional-dependencies]
+test = [
+    { name = "pytest" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "clarabel" },
@@ -250,7 +255,9 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "polars", specifier = ">=1.34.0" },
     { name = "pyarrow", specifier = ">=19.0.0" },
+    { name = "pytest", marker = "extra == 'test'", specifier = ">=7.0" },
 ]
+provides-extras = ["test"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -262,7 +269,7 @@ dev = [
     { name = "tinycta" },
 ]
 lint = []
-test = [{ name = "pytest" }]
+test = [{ name = "pytest", specifier = ">=7.0" }]
 
 [[package]]
 name = "docutils"

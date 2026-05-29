@@ -22,6 +22,11 @@ Homepage = "https://github.com/cvxgrp/simulator"
 Repository = "https://github.com/cvxgrp/simulator"
 
 # Additional dependencies for development, testing, and documentation
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
+
 [dependency-groups]
 dev = [
     "cvxpy-base>=1.7.0",
@@ -32,7 +37,7 @@ dev = [
     "plotly>=6.5",
 ]
 test = [
-    "pytest",
+    "pytest>=7.0",
 ]
 lint = []
 
