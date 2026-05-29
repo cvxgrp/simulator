@@ -22,12 +22,17 @@ Homepage = "https://github.com/cvxgrp/simulator"
 Repository = "https://github.com/cvxgrp/simulator"
 
 # Additional dependencies for development, testing, and documentation
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
+
 [dependency-groups]
 dev = [
     "cvxpy-base>=1.7.0",
     "clarabel>=0.9.0",
     "loguru",
-    "tinycta",
+    "tinycta>=0.5.0",
     "marimo>=0.17.0",
     "plotly>=6.5",
 ]
@@ -65,7 +70,7 @@ plotly = "plotly"
 [tool.deptry.per_rule_ignores]
 #DEP002 = ["jquantstats"]
 DEP001 = ["cvx", "cvxpy"]
-DEP002 = ["pyarrow"]
+DEP002 = ["pyarrow", "pytest"]
 
 # MyPy configuration for type checking
 [tool.mypy]
