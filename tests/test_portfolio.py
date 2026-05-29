@@ -188,8 +188,7 @@ def test_units(portfolio: Portfolio) -> None:
         The Portfolio fixture to test
 
     """
-    stocks = pd.DataFrame(index=portfolio.index, columns=portfolio.assets, data=1.0)
-    stocks.index.name = "date"
+    stocks = pd.DataFrame(index=portfolio.units.index, columns=portfolio.assets, data=1.0)
     pd.testing.assert_frame_equal(portfolio.units, stocks)
 
 
