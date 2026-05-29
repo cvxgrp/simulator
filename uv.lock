@@ -262,7 +262,7 @@ dev = [
     { name = "tinycta" },
 ]
 lint = []
-test = [{ name = "pytest" }]
+test = [{ name = "pytest", specifier = ">=7.0" }]
 
 [[package]]
 name = "docutils"

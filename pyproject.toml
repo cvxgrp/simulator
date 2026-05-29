@@ -32,7 +32,7 @@ dev = [
     "plotly>=6.5",
 ]
 test = [
-    "pytest",
+    "pytest>=7.0",
 ]
 lint = []
 
