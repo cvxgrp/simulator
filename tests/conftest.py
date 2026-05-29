@@ -50,6 +50,7 @@ def prices(resource_dir):
 
     """
     frame = pd.read_csv(resource_dir / "price.csv", index_col=0, parse_dates=True, header=0).ffill()
+    frame.index = frame.index.astype("datetime64[us]")
     frame.index.name = "date"
     return frame
 
