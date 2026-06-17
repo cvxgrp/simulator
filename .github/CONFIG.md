@@ -1,33 +1,66 @@
-# GitHub Configuration
+# GitHub Actions Configuration
 
-This directory contains the GitHub-specific configuration for the repository.
+This document describes the secrets used by the Rhiza-provided GitHub Actions workflows
+(`.github/workflows/rhiza_*.yml`) and how to configure them.
 
-## Important Documentation
+## PAT_TOKEN (template sync)
 
-- **[TOKEN_SETUP.md](TOKEN_SETUP.md)** - Instructions for setting up the `PAT_TOKEN` secret required for the SYNC workflow
+The sync workflow (`.github/workflows/rhiza_sync.yml`) keeps your repository up to date with the
+upstream Rhiza template. It commits the synced files directly to a branch or opens a pull request.
 
-## Workflows
+By default the workflow authenticates with the automatic `github.token`. That token **cannot push
+changes to files under `.github/workflows/`** — GitHub rejects such pushes unless the token has the
+`workflow` scope. Since template syncs regularly update workflow files, you should configure a
+Personal Access Token (PAT) with that scope and store it as a repository secret named `PAT_TOKEN`.
 
-The repository uses several automated workflows:
+If `PAT_TOKEN` is not configured, the workflow falls back to `github.token` and prints a warning.
+Syncs that touch only non-workflow files will still succeed.
 
-- **SYNC** (`workflows/sync.yml`) - Synchronizes with the template repository
-  - **Requires:** `PAT_TOKEN` secret with `workflow` scope when modifying workflow files
-  - See [TOKEN_SETUP.md](TOKEN_SETUP.md) for configuration
-- **CI** (`workflows/ci.yml`) - Continuous integration tests
-- **Pre-commit** (`workflows/pre-commit.yml`) - Code quality checks
-- **Book** (`workflows/book.yml`) - Documentation deployment
-- **Release** (`workflows/release.yml`) - Package publishing
-- **Deptry** (`workflows/deptry.yml`) - Dependency checks
-- **Marimo** (`workflows/marimo.yml`) - Interactive notebooks
+### Creating the token
 
-## Template Synchronization
+**Fine-grained PAT** (recommended):
 
-This repository is synchronized with the template repository defined in `template.yml`.
+1. Go to **Settings → Developer settings → Fine-grained tokens → Generate new token**
+   (<https://github.com/settings/personal-access-tokens/new>).
+2. Restrict **Repository access** to the repository (or repositories) using Rhiza.
+3. Under **Repository permissions**, grant:
+   - **Contents**: Read and write
+   - **Workflows**: Read and write
+   - **Pull requests**: Read and write (needed for the scheduled sync-PR mode)
+4. Generate the token and copy it.
 
-The synchronization includes:
-- GitHub workflows and actions
-- Development tools configuration (`.editorconfig`, `ruff.toml`, etc.)
-- Testing infrastructure
-- Documentation templates
+**Classic PAT** (alternative):
 
-See `template.yml` for the complete list of synchronized files and exclusions.
+1. Go to **Settings → Developer settings → Tokens (classic) → Generate new token**.
+2. Select the `repo` and `workflow` scopes.
+3. Generate the token and copy it.
+
+### Storing the secret
+
+In the repository that consumes Rhiza:
+
+1. Go to **Settings → Secrets and variables → Actions → New repository secret**.
+2. Name: `PAT_TOKEN`
+3. Value: the token created above.
+
+Or with the GitHub CLI:
+
+```bash
+gh secret set PAT_TOKEN
+```
+
+A PAT expires; when sync pushes start failing with a `refusing to allow ... workflow` error,
+regenerate the token and update the secret.
+
+## Release workflow secrets (optional)
+
+The release workflow (`.github/workflows/rhiza_release.yml`) supports additional secrets, all
+optional depending on which release features you use:
+
+| Secret | Purpose |
+| --- | --- |
+| `PYPI_TOKEN` | Publish the built package to PyPI. Not needed when using trusted publishing (OIDC). |
+| `GH_PAT` | Git authentication for installing private dependencies during the release build. |
+| `UV_EXTRA_INDEX_URL` | Extra package index URL (with credentials) for private dependencies. |
+
+`GITHUB_TOKEN` is provided automatically by GitHub Actions and needs no configuration.
