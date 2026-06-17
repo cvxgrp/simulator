@@ -24,7 +24,7 @@ license_path = project_root / "LICENSE"
 env = Environment(loader=FileSystemLoader(templates_dir), autoescape=True)
 
 
-def read_readme():
+def read_readme() -> str:
     """Read and convert README.md to HTML."""
     try:
         with open(readme_path, encoding="utf-8") as f:
@@ -39,17 +39,17 @@ def read_readme():
                 "markdown.extensions.codehilite",
             ],
         )
-    except Exception as e:
+    except OSError as e:
         print(f"Error reading README.md: {e}")
         return "<p>Error loading README content.</p>"
 
 
-def read_license():
+def read_license() -> str:
     """Read LICENSE file."""
     try:
         with open(license_path, encoding="utf-8") as f:
             license_content = f.read()
-    except Exception as e:
+    except OSError as e:
         print(f"Error reading LICENSE: {e}")
         return "<p>Error loading LICENSE content.</p>"
     else:
@@ -63,7 +63,7 @@ def read_license():
 class WebHandler(http.server.SimpleHTTPRequestHandler):
     """Custom request handler for our web server."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize the handler and set URL constants and cached content."""
         # URLs for the template
         self.docs_url = "https://www.cvxgrp.org/simulator/pdoc/"
@@ -84,7 +84,7 @@ class WebHandler(http.server.SimpleHTTPRequestHandler):
 
         super().__init__(*args, **kwargs)
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         """Handle GET requests."""
         if self.path == "/" or self.path == "/index.html":
             self.serve_index()
@@ -94,7 +94,7 @@ class WebHandler(http.server.SimpleHTTPRequestHandler):
             # Serve static files
             super().do_GET()
 
-    def serve_index(self):
+    def serve_index(self) -> None:
         """Serve the index page."""
         template = env.get_template("base.html.j2")
         content = template.render(
@@ -116,7 +116,7 @@ class WebHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(content.encode())
 
-    def serve_license(self):
+    def serve_license(self) -> None:
         """Serve the license content."""
         # Create a simple HTML page with the license text in a pre tag
         html = f"""<!DOCTYPE html>
@@ -140,7 +140,7 @@ class WebHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(html.encode())
 
 
-def main():
+def main() -> None:
     """Run the web server."""
     port = 8000
     handler = WebHandler
