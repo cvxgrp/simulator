@@ -70,21 +70,34 @@ class Portfolio:
 
         Raises:
         ------
-        AssertionError
+        ValueError
             If any of the validation checks fail
 
         """
-        if not self.prices.index.is_monotonic_increasing:
-            raise ValueError("`prices` index must be monotonic increasing.")  # noqa: TRY003
+        self._validate()
+        self._build_data()
 
-        if not self.prices.index.is_unique:
-            raise ValueError("`prices` index must be unique.")  # noqa: TRY003
+    def _validate(self) -> None:
+        """Validate the prices and units dataframes.
 
-        if not self.units.index.is_monotonic_increasing:
-            raise ValueError("`units` index must be monotonic increasing.")  # noqa: TRY003
+        Checks that both frames have monotonic increasing, unique indices and
+        that the units index and columns are subsets of the prices index and
+        columns respectively.
 
-        if not self.units.index.is_unique:
-            raise ValueError("`units` index must be unique.")  # noqa: TRY003
+        Raises:
+        ------
+        ValueError
+            If any of the validation checks fail
+        """
+        index_checks = (
+            (self.prices.index.is_monotonic_increasing, "`prices` index must be monotonic increasing."),
+            (self.prices.index.is_unique, "`prices` index must be unique."),
+            (self.units.index.is_monotonic_increasing, "`units` index must be monotonic increasing."),
+            (self.units.index.is_unique, "`units` index must be unique."),
+        )
+        for is_valid, message in index_checks:
+            if not is_valid:
+                raise ValueError(message)
 
         missing_dates = self.units.index.difference(self.prices.index)
         if not missing_dates.empty:
@@ -94,6 +107,14 @@ class Portfolio:
         if not missing_assets.empty:
             raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")  # noqa: TRY003
 
+    def _build_data(self) -> None:
+        """Build and cache the derived quantstats Data from the portfolio NAV.
+
+        This constructs the returns-based :class:`~jquantstats.data.Data` object
+        used by the reporting and statistics helpers and stores it on the frozen
+        instance's ``_data`` field. It is invoked from ``__post_init__`` after
+        the input validation has passed.
+        """
         frame = self.nav.pct_change().to_frame().reset_index()
         frame.columns = ["Date", frame.columns[1]]
         d = Data.from_returns(returns=frame)
