@@ -23,6 +23,17 @@ import pandas as pd
 import polars as pl
 
 
+def _check_series_type(ts: object) -> None:
+    """Raise ``TypeError`` unless ``ts`` is a pandas or polars Series."""
+    if not isinstance(ts, pd.Series | pl.Series):
+        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")  # noqa: TRY003
+
+
+def _pl_non_null_indices(ts: pl.Series) -> pl.Series:
+    """Return the positions of the non-null entries in ``ts``, in ascending order."""
+    return ts.is_not_null().arg_true()
+
+
 def interpolate(ts: pd.Series | pl.Series) -> pd.Series | pl.Series:
     """Interpolate missing values in a time series between the first and last valid indices.
 
@@ -53,9 +64,7 @@ def interpolate(ts: pd.Series | pl.Series) -> pd.Series | pl.Series:
     dtype: float64
 
     """
-    # Check if the input is a valid type
-    if not isinstance(ts, pd.Series | pl.Series):
-        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")  # noqa: TRY003
+    _check_series_type(ts)
 
     # If the input is a polars Series, use the polars-specific function
     if isinstance(ts, pl.Series):
@@ -101,9 +110,7 @@ def valid(ts: pd.Series | pl.Series) -> bool:
     False
 
     """
-    # Check if the input is a valid type
-    if not isinstance(ts, pd.Series | pl.Series):
-        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")  # noqa: TRY003
+    _check_series_type(ts)
 
     # If the input is a polars Series, use the polars-specific function
     if isinstance(ts, pl.Series):
@@ -147,7 +154,7 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
 
     """
     # Find first and last valid indices
-    non_null_indices = ts.is_not_null().arg_true()
+    non_null_indices = _pl_non_null_indices(ts)
 
     if len(non_null_indices) == 0:
         return ts
@@ -199,19 +206,16 @@ def valid_pl(ts: pl.Series) -> bool:
 
     """
     # Get indices of non-null values
-    non_null_indices = ts.is_not_null().arg_true()
+    non_null_indices = _pl_non_null_indices(ts)
 
     if len(non_null_indices) <= 1:
         return True
 
-    # Check if the range of indices is continuous
+    # The series is valid when the non-null values form a contiguous run: their
+    # count equals the span between the first and last non-null index (inclusive).
     first = non_null_indices[0]
     last = non_null_indices[-1]
-    expected_count = last - first + 1
-
-    # If all values between first and last valid indices are non-null,
-    # then the count of non-null values should equal the range size
-    return bool(len([i for i in non_null_indices if first <= i <= last]) == expected_count)
+    return bool(len(non_null_indices) == last - first + 1)
 
 
 def interpolate_df_pl(df: pl.DataFrame) -> pl.DataFrame:
