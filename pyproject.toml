@@ -7,7 +7,19 @@ authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
-# Private :: Do Not Upload (prevents rhiza_release.yml from publishing to PyPI)
+# `Private :: Do Not Upload` keeps rhiza_release.yml from publishing to PyPI.
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Private :: Do Not Upload",
+]
 dependencies = [
     "jquantstats>=0.6.5",
     "numpy>=2.3.4",

@@ -26,7 +26,8 @@ import polars as pl
 def _check_series_type(ts: object) -> None:
     """Raise ``TypeError`` unless ``ts`` is a pandas or polars Series."""
     if not isinstance(ts, pd.Series | pl.Series):
-        raise TypeError(f"Expected pd.Series or pl.Series, got {type(ts)}")  # noqa: TRY003
+        msg = f"Expected pd.Series or pl.Series, got {type(ts)}"
+        raise TypeError(msg)
 
 
 def _pl_non_null_indices(ts: pl.Series) -> pl.Series:

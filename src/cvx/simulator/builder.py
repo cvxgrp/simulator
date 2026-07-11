@@ -85,10 +85,12 @@ class Builder:
         """
         # assert isinstance(self.prices, pd.DataFrame)
         if not self.prices.index.is_monotonic_increasing:
-            raise ValueError("Index must be monotonically increasing")  # noqa: TRY003
+            msg = "Index must be monotonically increasing"
+            raise ValueError(msg)
 
         if not self.prices.index.is_unique:
-            raise ValueError("Index must have unique values")  # noqa: TRY003
+            msg = "Index must have unique values"
+            raise ValueError(msg)
 
         self._state = State()
 
