@@ -105,11 +105,13 @@ class Portfolio(PortfolioAnalytics):
 
         missing_dates = self.units.index.difference(self.prices.index)
         if not missing_dates.empty:
-            raise ValueError(f"`units` index contains dates not present in `prices`: {missing_dates.tolist()}")  # noqa: TRY003
+            msg = f"`units` index contains dates not present in `prices`: {missing_dates.tolist()}"
+            raise ValueError(msg)
 
         missing_assets = self.units.columns.difference(self.prices.columns)
         if not missing_assets.empty:
-            raise ValueError(f"`units` contains assets not present in `prices`: {missing_assets.tolist()}")  # noqa: TRY003
+            msg = f"`units` contains assets not present in `prices`: {missing_assets.tolist()}"
+            raise ValueError(msg)
 
     @property
     def index(self) -> list[datetime]:
