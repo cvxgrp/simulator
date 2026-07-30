@@ -16,6 +16,15 @@ pip3 install .
 # the frozen fuzzer crashes at runtime with
 # "No module named 'numpy._core._exceptions'". --collect-all pulls in every
 # numpy submodule, data file and shared library.
+#
+# scipy needs the same treatment. It is not a direct dependency, but
+# jquantstats 0.10.0 imports it eagerly (_portfolio_cost -> _stats._basic_core),
+# so it is now on cvx.simulator's import path at fuzzer startup. Without
+# --collect-all, PyInstaller misses the compiled scipy._cyutility and the frozen
+# binary dies with "The `scipy` install you are using seems to be broken".
 for fuzzer in tests/fuzz/fuzz_*.py; do
-  compile_python_fuzzer "$fuzzer" --collect-all numpy --collect-all pandas
+  compile_python_fuzzer "$fuzzer" \
+    --collect-all numpy \
+    --collect-all pandas \
+    --collect-all scipy
 done
