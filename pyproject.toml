@@ -12,7 +12,6 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
@@ -51,7 +50,6 @@ dev = [
 test = [
     "pytest>=7.0",
 ]
-lint = []
 
 # Build system configuration
 # Hatchling is a modern, extensible Python build backend

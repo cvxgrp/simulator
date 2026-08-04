@@ -241,7 +241,6 @@ dev = [
     { name = "plotly", specifier = ">=6.5" },
     { name = "tinycta", specifier = ">=0.5.0" },
 ]
-lint = []
 test = [{ name = "pytest", specifier = ">=7.0" }]
 
 [[package]]
