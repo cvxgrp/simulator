@@ -67,6 +67,9 @@ uv sync --group docs        # docs/notebook stack (marimo, numpy, pandas, plotly
 uv sync --all-groups        # full development environment
 ```
 
+There is no `lint` group: `make fmt` runs the hooks through prek, which provisions each
+linter itself, so there is nothing for such a group to install.
+
 ## Contributing code
 
 To contribute to the project, send us pull requests.
