@@ -86,3 +86,14 @@ DEP002 = ["pyarrow", "pytest"]
 [tool.mypy]
 ignore_missing_imports = true
 
+# bump-my-version only auto-discovers .bumpversion.toml, .bumpversion.cfg,
+# setup.cfg and pyproject.toml. Without a table here it falls back to
+# `git describe`, so a release can be cut at an already-published version.
+# It reads and rewrites [project].version natively — hence no current_version
+# and no [[tool.bumpversion.files]] entry for it.
+[tool.bumpversion]
+allow_dirty = false
+# The release flow commits and tags itself so the changelog lands in the bump commit.
+commit = false
+tag = false
+
