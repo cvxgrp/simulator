@@ -314,7 +314,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.9.7"
+version = "0.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -324,9 +324,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8d/fd/1d78503aed2bc78c02c0994ec1aba6cdfdd6706afa210502d9669a8c5efa/jquantstats-0.9.7.tar.gz", hash = "sha256:ce6eabc933227cc1a9c3816ea8f901d15d47aef0ea5ece34ae844ba0e6ebd78b", size = 108508, upload-time = "2026-07-10T07:02:23.604Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/7a/9ded313e0d7e56ef23470a5cbb50ada8654e3ff13efacb34dcb833310918/jquantstats-0.10.0.tar.gz", hash = "sha256:ccfebb86f754263c53cbe9fda48a47b3a01c9e067f7153d1a8adf937bee2bb2c", size = 112687, upload-time = "2026-07-29T16:16:42.422Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/44/5a81458f0454387633ea623345edcaedd377d4b462a094352b7cfd620d6c/jquantstats-0.9.7-py3-none-any.whl", hash = "sha256:88e77cc313c90ab00fa0ffc570bcbb5773bd6cd83a0709bc483630f5b7ee7b6b", size = 138483, upload-time = "2026-07-10T07:02:21.869Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/f2/58ec595d000137c2a8a170342197386700bcdca6229db701f7e800b81a21/jquantstats-0.10.0-py3-none-any.whl", hash = "sha256:e5a7fea934b18f2225adf59a3ae70a26f07b1ebeca4d18356900785a8d0f7d17", size = 143008, upload-time = "2026-07-29T16:16:40.917Z" },
 ]
 
 [[package]]
@@ -434,7 +434,7 @@ wheels = [
 
 [[package]]
 name = "marimo"
-version = "0.23.15"
+version = "0.23.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click", marker = "sys_platform != 'emscripten'" },
@@ -454,12 +454,13 @@ dependencies = [
     { name = "pyzmq", marker = "python_full_version < '3.15' and sys_platform != 'emscripten'" },
     { name = "starlette", marker = "sys_platform != 'emscripten'" },
     { name = "tomlkit" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
     { name = "uvicorn", marker = "sys_platform != 'emscripten'" },
     { name = "websockets", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f9/3b/e4a1e24ad97a652d25388ac602a5c35daa62980c0e4b876caddaedce4114/marimo-0.23.15.tar.gz", hash = "sha256:3c672256b420abc2b0509f2bfaedd2ee20af5902306c943cb6632e4d33b82c88", size = 38742179, upload-time = "2026-07-23T19:21:55.696Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/83/c0/b6b7101dc9d3760c51d67714d4547047cb2c29c11f26691bed6a64d8a995/marimo-0.23.16.tar.gz", hash = "sha256:378c892f0e1bc3985bc0b5b61109078e09fc767438b95234bfec9faa45858c98", size = 38789959, upload-time = "2026-07-31T20:04:47.92Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/12/97b4295858db7bf5251880ffc77919a28a2179d80de62d91923f6933f264/marimo-0.23.15-py3-none-any.whl", hash = "sha256:3198ffa0403f4c5f3e2958e2d2c4d67d12de979d6a001385f95513ea411bb338", size = 39194981, upload-time = "2026-07-23T19:21:51.21Z" },
+    { url = "https://files.pythonhosted.org/packages/69/7a/db0583b21d1f03403fc26800cb4638f59e95a33efd333f7a4d45ac348b82/marimo-0.23.16-py3-none-any.whl", hash = "sha256:e0bba0a44b395d402072c65d686fb459bd8955c9ab8b0d6135a22f729c989373", size = 39241287, upload-time = "2026-07-31T20:04:43.678Z" },
 ]
 
 [[package]]
