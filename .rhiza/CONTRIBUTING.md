@@ -62,7 +62,6 @@ Windows Subsystem for Linux instead:
 For faster, focused installs you can sync only the dependency groups you need:
 
 ```bash
-uv sync --group lint        # linting + pre-commit tooling
 uv sync --group test        # test tooling
 uv sync --group docs        # docs/notebook stack (marimo, numpy, pandas, plotly)
 uv sync --all-groups        # full development environment

@@ -51,7 +51,6 @@ dev = [
 test = [
     "pytest>=7.0",
 ]
-lint = []
 
 # Build system configuration
 # Hatchling is a modern, extensible Python build backend
