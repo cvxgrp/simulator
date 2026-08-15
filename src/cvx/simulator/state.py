@@ -54,6 +54,37 @@ class State:
     _aum : float
         Current assets under management (AUM) of the portfolio
 
+    Examples:
+    --------
+    A state starts empty and is filled in by assignment. Order matters: prices
+    define which assets exist, so they are set before any position.
+
+    >>> import pandas as pd
+    >>> from cvx.simulator import State
+    >>> state = State()
+    >>> state.aum = 1000.0
+    >>> state.prices = pd.Series({"A": 100.0, "B": 50.0})
+    >>> state.position = pd.Series({"A": 5.0, "B": 4.0})
+
+    The derived quantities follow from those three assignments:
+
+    >>> state.cashposition
+    A    500.0
+    B    200.0
+    dtype: float64
+    >>> state.value
+    700.0
+    >>> float(state.cash)
+    300.0
+
+    Updating the prices books the profit and moves the AUM with it:
+
+    >>> state.prices = pd.Series({"A": 110.0, "B": 50.0})
+    >>> float(state.profit)
+    50.0
+    >>> float(state.nav)
+    1050.0
+
     """
 
     _prices: pd.Series | None = None
@@ -73,6 +104,25 @@ class State:
         float
             The cash component of the portfolio, calculated as NAV minus
             the value of all positions
+
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import State
+        >>> state = State()
+        >>> state.aum = 1000.0
+        >>> state.prices = pd.Series({"A": 100.0, "B": 50.0})
+
+        With nothing invested the whole AUM is cash:
+
+        >>> float(state.cash)
+        1000.0
+
+        Buying 700 of stock moves that amount out of cash:
+
+        >>> state.position = pd.Series({"A": 5.0, "B": 4.0})
+        >>> float(state.cash)
+        300.0
 
         """
         return self.nav - self.value
@@ -157,6 +207,32 @@ class State:
             Series with the number of units held for each asset, indexed by asset.
             If the position is not yet set, returns an empty series with the
             correct index.
+
+        Examples:
+        --------
+        Before anything is bought the position carries the assets, but no units:
+
+        >>> import pandas as pd
+        >>> from cvx.simulator import State
+        >>> state = State()
+        >>> state.aum = 1000.0
+        >>> state.prices = pd.Series({"A": 100.0, "B": 50.0})
+        >>> state.position
+        A   NaN
+        B   NaN
+        dtype: float64
+
+        Assigning a position also records the trades needed to reach it:
+
+        >>> state.position = pd.Series({"A": 5.0, "B": 4.0})
+        >>> state.position
+        A    5.0
+        B    4.0
+        dtype: float64
+        >>> state.trades
+        A    5.0
+        B    4.0
+        dtype: float64
 
         """
         if self._position is None:
@@ -401,6 +477,25 @@ class State:
         If positions are missing, a series of zeros is effectively returned.
         The sum of weights equals 1.0 for a fully invested portfolio with no leverage.
 
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import State
+        >>> state = State()
+        >>> state.aum = 1000.0
+        >>> state.prices = pd.Series({"A": 100.0, "B": 50.0})
+        >>> state.position = pd.Series({"A": 5.0, "B": 4.0})
+
+        The weights are fractions of NAV, so they sum to less than 1.0 here —
+        the remaining 0.3 is the uninvested cash:
+
+        >>> state.weights
+        A    0.5
+        B    0.2
+        dtype: float64
+        >>> float(state.weights.sum())
+        0.7
+
         """
         if not np.isclose(self.nav, self.aum):
             msg = f"{self.nav} != {self.aum}"
@@ -426,6 +521,26 @@ class State:
         A leverage of 2.0 means the portfolio has twice the market exposure
         compared to its net asset value, which could be achieved through
         borrowing or short selling.
+
+        Examples:
+        --------
+        A long 1000 / short 500 book on a NAV of 1000. The net exposure is only
+        500, but the leverage counts both legs:
+
+        >>> import pandas as pd
+        >>> from cvx.simulator import State
+        >>> state = State()
+        >>> state.aum = 1000.0
+        >>> state.prices = pd.Series({"A": 100.0, "B": 50.0})
+        >>> state.position = pd.Series({"A": 10.0, "B": -10.0})
+        >>> state.weights
+        A    1.0
+        B   -0.5
+        dtype: float64
+        >>> state.leverage
+        1.5
+        >>> state.gmv
+        1500.0
 
         """
         return float(self.weights.abs().sum())
