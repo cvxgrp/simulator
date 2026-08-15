@@ -58,6 +58,39 @@ class Builder:
 
     After the iteration has been completed we build a Portfolio object
     by calling the build method.
+
+    Examples:
+    --------
+    Load the prices, then iterate. Each step yields the timestamps seen so far
+    and the current state; assigning to the builder records that day's position.
+
+    >>> import pandas as pd
+    >>> from cvx.simulator import Builder
+    >>> dates = pd.date_range("2020-01-01", periods=4)
+    >>> prices = pd.DataFrame(
+    ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+    ...     index=dates,
+    ... )
+    >>> builder = Builder(prices=prices, initial_aum=1000.0)
+    >>> for t, state in builder:
+    ...     builder.position = pd.Series({"A": 5.0, "B": 4.0})
+    ...     builder.aum = state.aum
+
+    The AUM series tracks the value of the book as prices move:
+
+    >>> builder.aum
+    2020-01-01    1000.0
+    2020-01-02    1014.0
+    2020-01-03    1028.0
+    2020-01-04    1019.0
+    Freq: D, dtype: float64
+
+    Once the loop is done, freeze the result into a Portfolio:
+
+    >>> portfolio = builder.build()
+    >>> type(portfolio).__name__
+    'Portfolio'
+
     """
 
     prices: pd.DataFrame
@@ -319,6 +352,35 @@ class Builder:
         have the same data as the Builder from which it was built, but
         with a different interface focused on analysis rather than construction.
 
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import Builder
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> builder = Builder(prices=prices, initial_aum=1000.0)
+        >>> for t, state in builder:
+        ...     builder.position = pd.Series({"A": 5.0, "B": 4.0})
+        ...     builder.aum = state.aum
+        >>> portfolio = builder.build()
+
+        The portfolio carries the units the loop accumulated:
+
+        >>> portfolio.units.iloc[-1]
+        A    5.0
+        B    4.0
+        Name: 2020-01-04 00:00:00, dtype: float64
+
+        The result is frozen — analysis only, no further construction:
+
+        >>> portfolio.aum = 10.0
+        Traceback (most recent call last):
+            ...
+        dataclasses.FrozenInstanceError: cannot assign to field 'aum'
+
         """
         return Portfolio(prices=self.prices, units=self.units, aum=self.aum)
 
@@ -364,6 +426,30 @@ class Builder:
         This is a convenient way to rebalance the portfolio by specifying
         the desired allocation as weights rather than exact positions.
         The conversion formula is: position = NAV * weights / prices
+
+        Examples:
+        --------
+        Hold an equal-weighted book, rebalanced every day. The weights are
+        constant, so the units drift as the relative prices move:
+
+        >>> import numpy as np
+        >>> import pandas as pd
+        >>> from cvx.simulator import Builder
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> builder = Builder(prices=prices, initial_aum=1000.0)
+        >>> for t, state in builder:
+        ...     builder.weights = np.array([0.5, 0.5])
+        ...     builder.aum = state.aum
+        >>> builder.units.round(4)
+                       A        B
+        2020-01-01  5.00  10.0000
+        2020-01-02  5.00  10.0000
+        2020-01-03  5.00  10.0000
+        2020-01-04  4.90   9.8971
 
         """
         self.position = self._state.nav * weights / self.current_prices

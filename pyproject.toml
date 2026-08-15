@@ -86,6 +86,18 @@ DEP002 = ["pyarrow", "pytest"]
 [tool.mypy]
 ignore_missing_imports = true
 
+# Tests here are grouped by the behaviour they exercise, not by the module they
+# import: interpolation splits into happy-path/error cases, and the portfolio
+# and state suites each pair a behavioural file with a validation file. A 1:1
+# tests/cvx/simulator/test_<module>.py mirror would scatter those groupings
+# across the package tree without verifying anything more. What the mirror is
+# there to guarantee — that no module drifts loose from its tests — is instead
+# guaranteed by COVERAGE_FAIL_UNDER=100 in .rhiza/.env, which fails the build if
+# any statement in src/ goes uncovered.
+[tool.check_test_layout]
+enforce = false
+reason = "Tests are grouped by behaviour rather than mirroring source modules; per-module coverage is guaranteed instead by the 100% COVERAGE_FAIL_UNDER gate in .rhiza/.env."
+
 # bump-my-version only auto-discovers .bumpversion.toml, .bumpversion.cfg,
 # setup.cfg and pyproject.toml. Without a table here it falls back to
 # `git describe`, so a release can be cut at an already-published version.

@@ -38,6 +38,33 @@ class PortfolioAnalytics:
     :class:`jquantstats.data.Data` object (in :meth:`_build_data`) and exposes
     the ``stats``/``plots``/``reports`` surface plus the :meth:`sharpe` and
     :meth:`snapshot` convenience helpers on top of it.
+
+    Examples:
+    --------
+    The mixin is not used directly — :class:`~cvx.simulator.portfolio.Portfolio`
+    inherits it, so every portfolio carries the analytics surface:
+
+    >>> import pandas as pd
+    >>> from cvx.simulator import Portfolio
+    >>> from cvx.simulator._analytics import PortfolioAnalytics
+    >>> issubclass(Portfolio, PortfolioAnalytics)
+    True
+
+    >>> dates = pd.date_range("2020-01-01", periods=4)
+    >>> prices = pd.DataFrame(
+    ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+    ...     index=dates,
+    ... )
+    >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+    >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+
+    All of it is derived from the NAV alone:
+
+    >>> portfolio.nav.tolist()
+    [1000.0, 1020.0, 1040.0, 1025.0]
+    >>> sorted(m for m in ("stats", "plots", "reports") if hasattr(portfolio, m))
+    ['plots', 'reports', 'stats']
+
     """
 
     if TYPE_CHECKING:
@@ -146,6 +173,33 @@ class PortfolioAnalytics:
         -----
         The Sharpe ratio is calculated using the portfolio's NAV time series.
         A higher Sharpe ratio indicates better risk-adjusted performance.
+
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+        >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+
+        Without ``periods`` the ratio is left unannualized:
+
+        >>> round(portfolio.sharpe(), 2)
+        8.12
+
+        Passing the number of periods per year annualizes it — 252 for daily
+        data, 52 for weekly, 12 for monthly:
+
+        >>> round(portfolio.sharpe(periods=252), 2)
+        6.74
+
+        Both numbers are meaningless as investment results: three returns is far
+        too short a sample to say anything about risk-adjusted performance. They
+        demonstrate the call, not a realistic figure.
 
         """
         return float(self.stats.sharpe(periods=periods)["NAV"])
