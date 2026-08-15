@@ -51,6 +51,45 @@ class Portfolio(PortfolioAnalytics):
     aum : Union[float, pd.Series]
         Assets under management, either as a constant float or as a Series over time
 
+    Examples:
+    --------
+    A portfolio is usually produced by :meth:`Builder.build`, but it can be
+    constructed directly from prices, units and a starting AUM:
+
+    >>> import pandas as pd
+    >>> from cvx.simulator import Portfolio
+    >>> dates = pd.date_range("2020-01-01", periods=4)
+    >>> prices = pd.DataFrame(
+    ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+    ...     index=dates,
+    ... )
+    >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+    >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+    >>> portfolio.assets
+    ['A', 'B']
+
+    The cash value of each holding, and the NAV it rolls up to:
+
+    >>> portfolio.cashposition
+                    A      B
+    2020-01-01  500.0  500.0
+    2020-01-02  510.0  510.0
+    2020-01-03  520.0  520.0
+    2020-01-04  515.0  510.0
+    >>> portfolio.nav
+    2020-01-01    1000.0
+    2020-01-02    1020.0
+    2020-01-03    1040.0
+    2020-01-04    1025.0
+    Freq: D, Name: NAV, dtype: float64
+
+    The object is frozen, so analysis can never mutate the record:
+
+    >>> portfolio.aum = 2000.0
+    Traceback (most recent call last):
+        ...
+    dataclasses.FrozenInstanceError: cannot assign to field 'aum'
+
     """
 
     prices: pd.DataFrame
@@ -161,6 +200,38 @@ class Portfolio(PortfolioAnalytics):
         pd.Series
             Series representing the NAV of the portfolio over time
 
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+
+        Passing a scalar ``aum`` makes the NAV the cumulative profit on top of it:
+
+        >>> Portfolio(prices=prices, units=units, aum=1000.0).nav
+        2020-01-01    1000.0
+        2020-01-02    1020.0
+        2020-01-03    1040.0
+        2020-01-04    1025.0
+        Freq: D, Name: NAV, dtype: float64
+
+        Passing a Series instead uses it verbatim — which is what
+        :meth:`Builder.build` does, so a strategy that adds or withdraws capital
+        is recorded rather than inferred:
+
+        >>> aum = pd.Series([1000.0, 1100.0, 1200.0, 1300.0], index=dates)
+        >>> Portfolio(prices=prices, units=units, aum=aum).nav
+        2020-01-01    1000.0
+        2020-01-02    1100.0
+        2020-01-03    1200.0
+        2020-01-04    1300.0
+        Freq: D, Name: NAV, dtype: float64
+
         """
         if isinstance(self.aum, pd.Series):
             series = self.aum
@@ -188,6 +259,32 @@ class Portfolio(PortfolioAnalytics):
         The profit is calculated by multiplying the previous day's positions
         (in currency terms) by the returns of each asset, and then summing
         across all assets.
+
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+        >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+
+        The first day has no previous position, so it books no profit:
+
+        >>> portfolio.profit
+        2020-01-01     0.0
+        2020-01-02    20.0
+        2020-01-03    20.0
+        2020-01-04   -15.0
+        Freq: D, Name: Profit, dtype: float64
+
+        Cumulating the profit onto the starting AUM reproduces the NAV:
+
+        >>> (portfolio.profit.cumsum() + 1000.0).equals(portfolio.nav.rename("Profit"))
+        True
 
         """
         series = (self.cashposition.shift(1) * self.returns.fillna(0.0)).sum(axis=1)
@@ -341,10 +438,34 @@ class Portfolio(PortfolioAnalytics):
 
         Examples:
         --------
-        ```
-        portfolio['2023-01-01']  # Get positions on January 1, 2023
-        portfolio[pd.Timestamp('2023-01-01')]  # Same as above
-        ```
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+        >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+
+        Index with a string or a Timestamp — both reach the same row:
+
+        >>> portfolio["2020-01-02"]
+        A     5.0
+        B    10.0
+        Name: 2020-01-02 00:00:00, dtype: float64
+        >>> portfolio[pd.Timestamp("2020-01-02")].equals(portfolio["2020-01-02"])
+        True
+
+        A date outside the index raises. (Caught here rather than shown as a
+        traceback: pandas chains several exceptions on the way out, and the
+        intermediate frames are an implementation detail, not a contract.)
+
+        >>> try:
+        ...     portfolio["2021-01-01"]
+        ... except KeyError as err:
+        ...     print(err)
+        '2021-01-01'
 
         """
         return self.units.loc[time]
@@ -391,6 +512,32 @@ class Portfolio(PortfolioAnalytics):
         for a fully invested portfolio with no leverage. Weights can be negative
         for short positions.
 
+        Examples:
+        --------
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [5.0] * 4, "B": [10.0] * 4}, index=dates)
+        >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+
+        Holding the units fixed, the weights drift with the relative prices:
+
+        >>> portfolio.weights.round(4)
+                         A       B
+        2020-01-01  0.5000  0.5000
+        2020-01-02  0.5000  0.5000
+        2020-01-03  0.5000  0.5000
+        2020-01-04  0.5024  0.4976
+
+        This book is fully invested, so each row sums to 1.0:
+
+        >>> portfolio.weights.sum(axis=1).round(6).unique().tolist()
+        [1.0]
+
         """
         return self.equity.apply(lambda x: x / self.nav)
 
@@ -420,6 +567,31 @@ class Portfolio(PortfolioAnalytics):
         The units are calculated by dividing the cash positions by the prices.
         This is useful when you have the monetary value of each position rather
         than the number of units.
+
+        Examples:
+        --------
+        Specify the book in currency rather than units — 500 in each name:
+
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=4)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 102.0, 104.0, 103.0], "B": [50.0, 51.0, 52.0, 51.0]},
+        ...     index=dates,
+        ... )
+        >>> cashposition = pd.DataFrame({"A": [500.0] * 4, "B": [500.0] * 4}, index=dates)
+        >>> portfolio = Portfolio.from_cashpos_prices(
+        ...     prices=prices, cashposition=cashposition, aum=1000.0
+        ... )
+
+        The units are the cash amounts divided by the prices:
+
+        >>> portfolio.units.round(4)
+                         A        B
+        2020-01-01  5.0000  10.0000
+        2020-01-02  4.9020   9.8039
+        2020-01-03  4.8077   9.6154
+        2020-01-04  4.8544   9.8039
 
         """
         units = cashposition.div(prices, fill_value=0.0)
