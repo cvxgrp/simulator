@@ -142,7 +142,7 @@ def interpolate_pl(ts: pl.Series) -> pl.Series:
     --------
     >>> import polars as pl
     >>> ts = pl.Series([1, None, None, 4, 5])
-    >>> interpolate_pl(ts)
+    >>> interpolate_pl(ts)  # doctest: +NORMALIZE_WHITESPACE
     shape: (5,)
     Series: '' [i64]
     [
