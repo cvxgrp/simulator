@@ -1,3 +1,17 @@
+# This is NOT a duplicate of rhiza_release.yml — do not "consolidate" the two.
+#
+# The split is deliberate. pyproject.toml carries the `Private :: Do Not Upload`
+# classifier, which rhiza_release.yml greps for and, finding it, skips its own
+# PyPI publish step. rhiza_release.yml therefore does the tag, the GitHub release
+# and the changelog; this file is the *only* thing that publishes to PyPI.
+# Deleting it stops releases reaching PyPI entirely.
+#
+# It cannot be folded into rhiza_release.yml either: PyPI Trusted Publishing
+# (OIDC) validates the exact workflow file path and repository that invokes
+# pypa/gh-action-pypi-publish, and the configured publisher names this file.
+#
+# Publishing is manual (workflow_dispatch) and has to be triggered after the
+# version bump lands.
 name: RELEASE TO PYPI
 
 on:
@@ -35,7 +49,9 @@ jobs:
         run: uvx hatch build
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        # Pinned to a tag rather than the moving `release/v1` branch: this is the
+        # step holding `id-token: write`. rhiza_release.yml pins the same version.
+        uses: pypa/gh-action-pypi-publish@v1.14.2
         with:
           packages-dir: dist/
           skip-existing: true
