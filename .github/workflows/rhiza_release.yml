@@ -127,7 +127,7 @@ jobs:
       tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -254,7 +254,7 @@ jobs:
       attestations: write   # SLSA provenance + SBOM attestations (public repos only)
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -384,7 +384,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -435,7 +435,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -492,7 +492,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -571,7 +571,7 @@ jobs:
       image_name: ${{ steps.image_name.outputs.image_name }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
@@ -658,7 +658,7 @@ jobs:
       contents: write   # Needed to undraft/publish the GitHub release
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
         with:
           fetch-depth: 0
 
