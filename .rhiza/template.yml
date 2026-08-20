@@ -1,8 +1,44 @@
 repository: "jebel-quant/rhiza"
-ref: "v1.3.3"
+ref: "v1.4.2"
 
 profiles:
   - github-project
 
 templates:
   - legal
+
+# Template-owned paths this repo declines to sync. Matched against *destination*
+# paths — where the file lands here — so entries are written as `.github/...`,
+# never clone-relative (`bundles/github/...`), which matches nothing silently.
+# A directory entry covers everything under it.
+exclude:
+  # Mutation testing, declined. The caller gates on `vars.MUTATION_ENABLED == 'true'`
+  # and that variable is not set on this repository, so every run since the workflow
+  # arrived has completed as `skipped` in 0-9s. The suite is held to 100% coverage
+  # (see coverage_fail_under below), which is the cheaper answer to the
+  # assertion-strength question mutation testing asks.
+  #
+  # Note the trade: excluding *and* deleting the caller means setting
+  # MUTATION_ENABLED=true later will no longer switch the gate back on — the file has
+  # to be restored from the template first. That is deliberate, not an oversight.
+  #
+  # `rhiza_fuzzing.yml` is deliberately NOT in this list. FUZZING_ENABLED is 'true'
+  # here and `.clusterfuzzlite/` carries a real build.sh and Dockerfile, so
+  # `fuzzing / ClusterFuzzLite PR fuzzing` does ~10 minutes of actual fuzzing on every
+  # pull request. It is a live gate; excluding it would delete one.
+  - .github/workflows/rhiza_mutation.yml
+
+  # The template's PAT_TOKEN and release-secret walkthrough. It documents secrets a
+  # consumer configures once in the GitHub UI, addressed to whoever set the repository
+  # up rather than to anyone reading the tree. Upstream is where it belongs.
+  - .github/CONFIG.md
+
+  # Discussion forms for a repository with Discussions disabled and zero discussions:
+  # three templates that no one can reach.
+  - .github/DISCUSSION_TEMPLATE
+
+  # The issue forms, `bug_report.yml` and `feature_request.yml`. Issues stay enabled
+  # and actively used here, but they are opened by the people who wrote the code, so a
+  # required "steps to reproduce" textarea puts the friction entirely on the one
+  # audience a form's structure was never meant to discipline. Free-form instead.
+  - .github/ISSUE_TEMPLATE
