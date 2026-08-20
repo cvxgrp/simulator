@@ -62,6 +62,75 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvx"]
 
+[tool.rhiza-task]
+# Settings for the task runner that replaced the synced make layer in rhiza v1.4.0. Read as
+# layer 3 of rhiza-task's resolution order (defaults -> .rhiza/.env -> pyproject.toml ->
+# RHIZA_* environment). Only entries that differ from the CLI's defaults belong here;
+# `uvx rhiza-task print <setting>` shows what one resolves to.
+#
+# This table is the missing half of the v1.4.2 migration: `chore: drop the retired make
+# layer` deleted the files that set the three values below, and every one of them is a
+# non-default, so without this table the gates quietly relaxed. Verified after the deletion
+# and before this table existed, `print` returned 90 / ty / ubuntu-latest.
+#
+# The defaults quoted below are rhiza-task 0.3.1's, which is the version the gates actually
+# run: rhiza_ci.yml@v1.4.2 hardcodes `RHIZA_TASK: rhiza-task@0.3.1` for every gate step
+# rather than reading a consumer's value, so the `RHIZA_TASK` pin in the root Makefile
+# governs local `make` alone.
+
+# `.rhiza/.env` had `COVERAGE_FAIL_UNDER=100`; the CLI defaults to 90, so the deletion
+# lowered the bar by ten points. There is no [tool.coverage.report] table in this file, so
+# .env was the *only* place the 100% gate lived — and a config file would not have saved it
+# anyway, because `test` passes --cov-fail-under on the command line, which outranks one.
+#
+# [tool.check_test_layout] below sets enforce = false and cites this gate by name as the
+# guarantee that replaces 1:1 test/source mirroring. That opt-out is only honest while the
+# number is 100, which makes this line load-bearing for a second gate as well as its own.
+coverage-fail-under = 100
+
+# The retired python.mk had `TYPECHECKER ?= both`; the CLI defaults to `ty` alone, so the
+# deletion dropped `mypy --strict` from the typecheck gate entirely. `both` is also stricter
+# here than it was under make: the old shell `case` let mypy's exit status win, so a `ty`
+# failure could pass, where the CLI raises on each run. Confirm from the CI log rather than
+# from `print` — the typecheck job should show both `ty check` and `mypy --strict`.
+typechecker = "both"
+
+# `.rhiza/.env` had the three-OS matrix; the CLI defaults to ubuntu-latest alone.
+# rhiza_ci.yml's `generate-matrix` job asks the CLI for this, so leaving it unset would have
+# narrowed `ci / test` from nine jobs to three with nothing in the diff saying so — and this
+# package reads paths and writes files, which is exactly what Windows and macOS catch.
+ci-os-matrix = ["ubuntu-latest", "macos-latest", "windows-latest"]
+
+# Not set, on purpose. This list is what stops the next person re-adding them:
+#   source-folder         -- `.rhiza/.env` said `src`, already the CLI default.
+#   marimo-folder         -- `.rhiza/.env` said `docs/notebooks`, which IS the CLI default,
+#                            so this migration changes nothing. Note separately that the
+#                            notebooks actually live in `book/marimo/notebooks`, so the
+#                            marimo gate has been building an empty matrix and passing;
+#                            pre-existing, and a fix belongs in its own PR, not here.
+#   mkdocs-extra-packages -- the deleted Makefile carried only
+#                            `--with 'mkdocstrings[python]'`, which is now the default list.
+#                            Restating it would be worse than omitting it: naming this
+#                            setting REPLACES the default, so the line becomes the one
+#                            someone edits to add a package, silently dropping mkdocstrings
+#                            from the book build.
+#   license-ignore-packages -- the only source was `LICENSE_IGNORE_PACKAGES += docutils` in
+#                            the template's own marimo.mk. rhiza-task appends docutils itself
+#                            whenever marimo is in the task registry, which it is here.
+#   pytest-rhiza          -- no `RHIZA_CHECKS_VERSION` existed anywhere in the make layer;
+#                            this repo ran the in-tree `.rhiza/tests/` suite that v1.4.2
+#                            retires. Adopting the CLI's default is therefore an upgrade
+#                            decision, not a value being preserved, so it stays unset.
+#   python-version        -- the CLI reads `.python-version` (3.12) directly, as make did.
+#   layers                -- the default registry already contains every task this repo uses,
+#                            including book, marimo, lfs and paper.
+#   book-output, zensical-version, uv-sync-args, license-fail-on, tests-folder,
+#   deptry-ignore, strict, rhiza-checks -- the make layer's values were already the defaults.
+#
+# Not settings at all: PROJECT_NAME_EXTRA and LOG_LEVEL (cosmetic, from custom-env.mk),
+# SHELL_KIND (belonged to completions.mk's install-completions, which v1.4.2 retires with no
+# successor task), and LOGO_FILE from the old Makefile, which nothing in the tree read.
+
 # Deptry configuration for dependency checking
 # Map package names to their module names to suppress warnings
 [tool.deptry.package_module_name_map]
@@ -96,7 +165,7 @@ ignore_missing_imports = true
 # any statement in src/ goes uncovered.
 [tool.check_test_layout]
 enforce = false
-reason = "Tests are grouped by behaviour rather than mirroring source modules; per-module coverage is guaranteed instead by the 100% COVERAGE_FAIL_UNDER gate in .rhiza/.env."
+reason = "Tests are grouped by behaviour rather than mirroring source modules; per-module coverage is guaranteed instead by the total-coverage gate, coverage-fail-under = 100 in [tool.rhiza-task]. It moved there from .rhiza/.env when rhiza v1.4.2 retired the make layer."
 
 # bump-my-version only auto-discovers .bumpversion.toml, .bumpversion.cfg,
 # setup.cfg and pyproject.toml. Without a table here it falls back to

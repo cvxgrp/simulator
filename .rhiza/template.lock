@@ -1,9 +1,13 @@
-sha: ac4d27b015edf70b47f0454b8251ac618f9d2bda
+sha: 31e1a11237419f746770c5339f8aa468fd1c0deb
 repo: jebel-quant/rhiza
 host: github
-ref: v1.3.3
+ref: v1.4.2
 include: []
-exclude: []
+exclude:
+- .github/workflows/rhiza_mutation.yml
+- .github/CONFIG.md
+- .github/DISCUSSION_TEMPLATE
+- .github/ISSUE_TEMPLATE
 templates:
 - legal
 profiles:
@@ -11,14 +15,7 @@ profiles:
 files:
 - .bandit
 - .editorconfig
-- .github/CONFIG.md
-- .github/DISCUSSION_TEMPLATE/help-wanted.yml
-- .github/DISCUSSION_TEMPLATE/ideas.yml
-- .github/DISCUSSION_TEMPLATE/q-and-a.yml
-- .github/ISSUE_TEMPLATE/bug_report.yml
-- .github/ISSUE_TEMPLATE/feature_request.yml
 - .github/dependabot.yml
-- .github/pull_request_template.md
 - .github/release.yml
 - .github/rulesets/main-branch-protection.json
 - .github/rulesets/tag-protection.json
@@ -29,43 +26,16 @@ files:
 - .github/workflows/rhiza_codeql.yml
 - .github/workflows/rhiza_fuzzing.yml
 - .github/workflows/rhiza_marimo.yml
-- .github/workflows/rhiza_mutation.yml
 - .github/workflows/rhiza_release.yml
 - .github/workflows/rhiza_scorecard.yml
 - .github/workflows/rhiza_weekly.yml
 - .gitignore
 - .pre-commit-config.yaml
 - .python-version
-- .rhiza/.env
-- .rhiza/.gitignore
 - .rhiza/CODE_OF_CONDUCT.md
 - .rhiza/CONTRIBUTING.md
-- .rhiza/assets/rhiza-logo.svg
-- .rhiza/completions/README.md
-- .rhiza/completions/rhiza-completion.bash
-- .rhiza/completions/rhiza-completion.zsh
-- .rhiza/make.d/book.mk
-- .rhiza/make.d/bootstrap.mk
-- .rhiza/make.d/completions.mk
-- .rhiza/make.d/custom-env.mk
-- .rhiza/make.d/custom-task.mk
-- .rhiza/make.d/doctor.mk
-- .rhiza/make.d/github.mk
-- .rhiza/make.d/marimo.mk
-- .rhiza/make.d/python.mk
-- .rhiza/make.d/quality.mk
-- .rhiza/make.d/test.mk
-- .rhiza/rhiza.mk
 - .rhiza/semgrep.yml
-- .rhiza/tests/README.md
-- .rhiza/tests/conftest.py
-- .rhiza/tests/test_docstrings.py
-- .rhiza/tests/test_pyproject.py
-- .rhiza/tests/test_readme.py
-- .rhiza/tests/test_readme_validation.py
-- .rhiza/tests/test_release_tags.py
 - LICENSE
-- Makefile
 - SECURITY.md
 - cliff.toml
 - docs/assets/rhiza-logo.svg
@@ -76,5 +46,5 @@ files:
 - pytest.ini
 - ruff.toml
 - tests/test_rhiza_packaging.py
-synced_at: '2026-08-11T09:17:26Z'
+synced_at: '2026-08-20T15:34:18Z'
 strategy: merge
