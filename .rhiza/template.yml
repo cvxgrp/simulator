@@ -33,12 +33,3 @@ exclude:
   # up rather than to anyone reading the tree. Upstream is where it belongs.
   - .github/CONFIG.md
 
-  # Discussion forms for a repository with Discussions disabled and zero discussions:
-  # three templates that no one can reach.
-  - .github/DISCUSSION_TEMPLATE
-
-  # The issue forms, `bug_report.yml` and `feature_request.yml`. Issues stay enabled
-  # and actively used here, but they are opened by the people who wrote the code, so a
-  # required "steps to reproduce" textarea puts the friction entirely on the one
-  # audience a form's structure was never meant to discipline. Free-form instead.
-  - .github/ISSUE_TEMPLATE
