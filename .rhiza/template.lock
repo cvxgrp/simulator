@@ -5,6 +5,7 @@ ref: v1.6.0
 include: []
 exclude:
 - .github/CONFIG.md
+- SECURITY.md
 templates:
 - legal
 profiles:
@@ -33,7 +34,6 @@ files:
 - .rhiza/semgrep.yml
 - LICENSE
 - Makefile
-- SECURITY.md
 - cliff.toml
 - docs/assets/rhiza-logo.svg
 - docs/development/MARIMO.md
@@ -43,5 +43,5 @@ files:
 - pytest.ini
 - ruff.toml
 - tests/test_rhiza_packaging.py
-synced_at: '2026-08-25T07:21:40Z'
+synced_at: '2026-08-25T07:27:19Z'
 strategy: merge
