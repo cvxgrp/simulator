@@ -101,13 +101,16 @@ typechecker = "both"
 # package reads paths and writes files, which is exactly what Windows and macOS catch.
 ci-os-matrix = ["ubuntu-latest", "macos-latest", "windows-latest"]
 
+# `.rhiza/.env` said `docs/notebooks`, which IS the CLI default -- but this repo has no such
+# folder; the notebooks live in `book/marimo/notebooks`. The v1.4.2 migration note recorded
+# that as pre-existing and deferred it, on the grounds that the marimo gate merely built an
+# empty matrix and passed. v1.6.0 removed the "and passing" half: `rhiza_book.yml` gained a
+# `book-nav` gate, and `_export_notebooks()` reads this setting, so a folder that is not
+# there means no `notebooks/*.html` is ever exported.
+marimo-folder = "book/marimo/notebooks"
+
 # Not set, on purpose. This list is what stops the next person re-adding them:
 #   source-folder         -- `.rhiza/.env` said `src`, already the CLI default.
-#   marimo-folder         -- `.rhiza/.env` said `docs/notebooks`, which IS the CLI default,
-#                            so this migration changes nothing. Note separately that the
-#                            notebooks actually live in `book/marimo/notebooks`, so the
-#                            marimo gate has been building an empty matrix and passing;
-#                            pre-existing, and a fix belongs in its own PR, not here.
 #   mkdocs-extra-packages -- the deleted Makefile carried only
 #                            `--with 'mkdocstrings[python]'`, which is now the default list.
 #                            Restating it would be worse than omitting it: naming this
