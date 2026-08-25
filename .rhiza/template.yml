@@ -17,3 +17,10 @@ exclude:
   # up rather than to anyone reading the tree. Upstream is where it belongs.
   - .github/CONFIG.md
 
+  # SECURITY.md. The template's copy enumerates security measures generically;
+  # the accurate list differs per repo, so this one is maintained here. Excluding
+  # it does not delete the file — an excluded path is never treated as an orphan,
+  # so the existing SECURITY.md stays exactly as it is and simply stops being
+  # overwritten on each sync.
+  - SECURITY.md
+
