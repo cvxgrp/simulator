@@ -12,5 +12,11 @@ nav:
   - Development:
       - Marimo: development/MARIMO.md
       - Tests: development/TESTS.md
-  - Notebooks: notebooks.md
-  - Reports: reports.md
+  - Notebooks:
+      - Balanced: notebooks/Balanced.html
+      - One Asset Fading Out: notebooks/OneAssetFadingOut.html
+      - Monkey: notebooks/monkey.html
+      - Pairs: notebooks/pairs.html
+  - Reports:
+      - Test Report: reports/html-report/report.html
+      - Coverage Report: reports/html-coverage/index.html
