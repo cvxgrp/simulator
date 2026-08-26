@@ -76,7 +76,6 @@ This project implements several security measures:
 - **SLSA Provenance**: Build attestations for release artifacts (public repositories only)
 - **Locked Dependencies**: `uv.lock` ensures reproducible builds
 - **Dependabot**: Automated dependency updates with security patches (version and security updates)
-- **Renovate**: Additional automated dependency update management
 
 ### Release Security
 - **OIDC Publishing**: PyPI trusted publishing without stored credentials
