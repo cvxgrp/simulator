@@ -1,5 +1,5 @@
 repository: "jebel-quant/rhiza"
-ref: "v1.6.0"
+ref: "v1.7.0"
 
 profiles:
   - github-project
@@ -24,3 +24,9 @@ exclude:
   # overwritten on each sync.
   - SECURITY.md
 
+  # Branch and tag rulesets. The template ships a generic pair; the protection
+  # rules that actually apply here (required checks, tag patterns) are decided
+  # per repo, so they are maintained in this tree. Excluding them does not
+  # delete the files — an excluded path is never treated as an orphan.
+  - .github/rulesets/main-branch-protection.json
+  - .github/rulesets/tag-protection.json
