@@ -72,6 +72,9 @@ theme:
         icon: material/weather-night
         name: Switch to light mode
 
+  logo: https://jebel-quant.github.io/rhiza/assets/rhiza-logo.svg
+  favicon: https://jebel-quant.github.io/rhiza/assets/rhiza-logo.svg
+  
 # ----------------------------------------------------------------------------
 # Markdown extensions
 # ----------------------------------------------------------------------------
