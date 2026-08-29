@@ -1,7 +1,7 @@
 # 🔄 [cvxsimulator](https://www.cvxgrp.org/simulator)
 
 [![PyPI version](https://badge.fury.io/py/cvxsimulator.svg)](https://badge.fury.io/py/cvxsimulator)
-[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/master/LICENSE)
+[![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/cvxgrp/simulator/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/cvxsimulator?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/cvxsimulator)
 [![Coverage](https://www.cvxgrp.org/simulator/coverage-badge.svg)](https://www.cvxgrp.org/simulator/reports/html-coverage/)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
@@ -214,7 +214,7 @@ This will install and start marimo for interactive notebook development.
 
 ## 📚 Documentation
 
-- Full documentation is available at [cvxgrp.org/simulator/book](https://www.cvxgrp.org/simulator/book)
+- Full documentation is available at [cvxgrp.org/simulator](https://www.cvxgrp.org/simulator)
 - API reference can be found in the documentation
 - Example notebooks are included in the repository under the `book` directory
 
