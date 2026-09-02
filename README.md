@@ -51,13 +51,16 @@ import pandas as pd
 from cvx.simulator import Builder
 
 # For doctest, we'll create a small DataFrame instead of reading from a file
-dates = pd.date_range('2020-01-01', periods=5)
-prices = pd.DataFrame({
-    'A': [100, 102, 104, 103, 105],
-    'B': [50, 51, 52, 51, 53],
-    'C': [200, 202, 198, 205, 210],
-    'D': [75, 76, 77, 78, 79]
-}, index = dates)
+dates = pd.date_range("2020-01-01", periods=5)
+prices = pd.DataFrame(
+    {
+        "A": [100, 102, 104, 103, 105],
+        "B": [50, 51, 52, 51, 53],
+        "C": [200, 202, 198, 205, 210],
+        "D": [75, 76, 77, 78, 79],
+    },
+    index=dates,
+)
 b = Builder(prices=prices, initial_aum=1e6)
 ```
 
@@ -84,7 +87,7 @@ np.random.seed(42)  # Set seed for reproducibility
 
 for t, state in b:
     # pick two assets deterministically for doctest
-    pair = ['A', 'B']  # Use first two assets instead of random choice
+    pair = ["A", "B"]  # Use first two assets instead of random choice
     # compute the pair
     units = pd.Series(index=state.assets, data=0.0)
     units[pair] = [state.nav, -state.nav] / state.prices[pair].values
@@ -93,7 +96,7 @@ for t, state in b:
     # Do not apply trading costs
     b.aum = state.aum
     # Check the final positions
-    b.units.iloc[-1][['A', 'B']]
+    b.units.iloc[-1][["A", "B"]]
 ```
 
 
@@ -183,7 +186,6 @@ portfolio = b3.build()
 
 # Generate a snapshot (returns a plotly figure)
 fig = portfolio.snapshot()
-
 ```
 
 
