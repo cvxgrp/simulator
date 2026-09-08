@@ -314,7 +314,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.10.0"
+version = "0.11.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -324,9 +324,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/19/7a/9ded313e0d7e56ef23470a5cbb50ada8654e3ff13efacb34dcb833310918/jquantstats-0.10.0.tar.gz", hash = "sha256:ccfebb86f754263c53cbe9fda48a47b3a01c9e067f7153d1a8adf937bee2bb2c", size = 112687, upload-time = "2026-07-29T16:16:42.422Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/cd/18a5becec5ac530cb963ebc317db9d3b1ec2e7d76e1fa3ec4e5ca57fd35f/jquantstats-0.11.0.tar.gz", hash = "sha256:806b80eb6913cb30dae689358d1e1c14ddfb8533b4139e145b30cd8370f79e99", size = 162893, upload-time = "2026-08-31T17:54:30.428Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/f2/58ec595d000137c2a8a170342197386700bcdca6229db701f7e800b81a21/jquantstats-0.10.0-py3-none-any.whl", hash = "sha256:e5a7fea934b18f2225adf59a3ae70a26f07b1ebeca4d18356900785a8d0f7d17", size = 143008, upload-time = "2026-07-29T16:16:40.917Z" },
+    { url = "https://files.pythonhosted.org/packages/26/9d/631ca8a45a923482e937db788a69f0d45f59c0577e774e4f95974ffd0e3a/jquantstats-0.11.0-py3-none-any.whl", hash = "sha256:c340d390807610f95ae247d5290e9d947d4c107f9bf8f0cb82e1c225bf64a5e6", size = 200268, upload-time = "2026-08-31T17:54:28.849Z" },
 ]
 
 [[package]]
