@@ -1,7 +1,10 @@
 # Project metadata and core configuration
 [project]
 name = "cvxsimulator"
-version = "1.5.3"
+# [project].version is derived from the newest git tag by hatch-vcs, so the number
+# lives in exactly one place. A build from a checkout that cannot see the tag falls
+# back to a dev version, hence fetch-depth: 0 in any job that builds a distribution.
+dynamic = ["version"]
 description = "Simple simulator for investors"
 authors = [{name = "Thomas Schmelzer", email = "thomas.schmelzer@gmail.com"}]
 readme = "README.md"
@@ -54,11 +57,14 @@ test = [
 # Build system configuration
 # Hatchling is a modern, extensible Python build backend
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 # Configuration for building wheel distributions
 # Specifies which packages to include in the wheel
+[tool.hatch.version]
+source = "vcs"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvx"]
 
@@ -171,10 +177,12 @@ enforce = false
 reason = "Tests are grouped by behaviour rather than mirroring source modules; per-module coverage is guaranteed instead by the total-coverage gate, coverage-fail-under = 100 in [tool.rhiza-task]. It moved there from .rhiza/.env when rhiza v1.4.2 retired the make layer."
 
 # bump-my-version only auto-discovers .bumpversion.toml, .bumpversion.cfg,
-# setup.cfg and pyproject.toml. Without a table here it falls back to
-# `git describe`, so a release can be cut at an already-published version.
-# It reads and rewrites [project].version natively — hence no current_version
-# and no [[tool.bumpversion.files]] entry for it.
+# setup.cfg and pyproject.toml, and this table is what it finds. There is no
+# current_version and no [[tool.bumpversion.files]] entry because [project].version
+# is dynamic: there is no written number to read or rewrite, so it reads the newest
+# tag via `git describe` — which is the same source hatch-vcs builds from, so the
+# bump it offers and the version it produces cannot disagree. What is left here are
+# the two settings the release flow needs.
 [tool.bumpversion]
 allow_dirty = false
 # The release flow commits and tags itself so the changelog lands in the bump commit.

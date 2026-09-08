@@ -193,7 +193,6 @@ wheels = [
 
 [[package]]
 name = "cvxsimulator"
-version = "1.5.3"
 source = { editable = "." }
 dependencies = [
     { name = "jquantstats" },
