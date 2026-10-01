@@ -415,6 +415,49 @@ class Portfolio(PortfolioAnalytics):
         """
         return self.trades_currency.abs()
 
+    @property
+    def trade_volume(self) -> pd.Series:
+        """Get the total traded value in currency at each point in time.
+
+        This sums the absolute turnover across all assets, giving one number
+        per timestamp for the cash value that changed hands, buys and sells
+        alike.
+
+        Returns:
+        -------
+        pd.Series
+            Series with the total traded value at each point in time,
+            indexed by date
+
+        Notes:
+        -----
+        Calculated as turnover summed across assets. Sum the series for the
+        total traded value over the whole backtest.
+
+        Examples:
+        --------
+        Buy into A and B, double the B position, then sell out of A:
+
+        >>> import pandas as pd
+        >>> from cvx.simulator import Portfolio
+        >>> dates = pd.date_range("2020-01-01", periods=3)
+        >>> prices = pd.DataFrame(
+        ...     {"A": [100.0, 110.0, 120.0], "B": [50.0, 50.0, 50.0]},
+        ...     index=dates,
+        ... )
+        >>> units = pd.DataFrame({"A": [1.0, 1.0, 0.0], "B": [2.0, 4.0, 4.0]}, index=dates)
+        >>> portfolio = Portfolio(prices=prices, units=units, aum=1000.0)
+        >>> portfolio.trade_volume
+        2020-01-01    200.0
+        2020-01-02    100.0
+        2020-01-03    120.0
+        Freq: D, dtype: float64
+        >>> float(portfolio.trade_volume.sum())
+        420.0
+
+        """
+        return self.turnover.sum(axis=1)
+
     def __getitem__(self, time: datetime | str | pd.Timestamp) -> pd.Series:
         """Get the portfolio positions (units) at a specific time.
 

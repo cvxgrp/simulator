@@ -142,6 +142,20 @@ def test_turnover(portfolio: Portfolio) -> None:
     pd.testing.assert_frame_equal(v.abs(), portfolio.turnover)
 
 
+def test_trade_volume(portfolio: Portfolio) -> None:
+    """Test that the trade volume is the turnover summed across assets.
+
+    Parameters
+    ----------
+    portfolio : Portfolio
+        The Portfolio fixture to test
+
+    """
+    expected = (portfolio.trades_units * portfolio.prices).abs().sum(axis=1)
+    pd.testing.assert_series_equal(expected, portfolio.trade_volume)
+    pd.testing.assert_index_equal(portfolio.trade_volume.index, portfolio.prices.index)
+
+
 def test_turnover_relative(portfolio: Portfolio) -> None:
     """Test that the relative turnover calculations are correct.
 
