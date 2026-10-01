@@ -116,13 +116,12 @@ class Builder:
         None
 
         """
-        # assert isinstance(self.prices, pd.DataFrame)
         if not self.prices.index.is_monotonic_increasing:
-            msg = "Index must be monotonically increasing"
+            msg = "`prices` index must be monotonic increasing."
             raise ValueError(msg)
 
         if not self.prices.index.is_unique:
-            msg = "Index must have unique values"
+            msg = "`prices` index must be unique."
             raise ValueError(msg)
 
         self._state = State()

@@ -4,38 +4,24 @@ This module contains tests for the validation checks in the State class,
 specifically testing error conditions in the weights property.
 """
 
-from unittest.mock import PropertyMock, patch
-
 import pandas as pd
 import pytest
 
 from cvx.simulator import State
 
 
-def test_nav_not_equal_aum():
-    """Test that State.weights raises an error when nav != aum.
+@pytest.mark.parametrize("aum", [0.0, float("nan"), float("inf")])
+def test_weights_undefined_for_degenerate_nav(aum):
+    """Test that State.weights raises an error when the NAV is zero or not finite.
 
-    This test verifies that the State.weights property correctly raises a ValueError
-    when the net asset value (nav) is not equal to the assets under management (aum).
+    Weights are fractions of NAV, so a zero or non-finite NAV leaves them
+    undefined. The default State has an AUM of 0.0, which is the case a
+    caller most easily reaches by forgetting to set it.
     """
-    # Create a State instance
     state = State()
+    state.prices = pd.Series({"A": 100.0, "B": 200.0})
+    state.position = pd.Series({"A": 1.0, "B": 1.0})
+    state.aum = aum
 
-    # Set up prices and positions
-    prices = pd.Series({"A": 100, "B": 200})
-    position = pd.Series({"A": 1, "B": 1})
-
-    # Set the prices and position
-    state.prices = prices
-    state.position = position
-
-    # Set aum to 400
-    state.aum = 400
-
-    # Patch the nav property to return a different value (300) than aum (400)
-    with patch.object(State, "nav", new_callable=PropertyMock) as mock_nav:
-        mock_nav.return_value = 300.0
-
-        # Verify that accessing the weights property raises a ValueError
-        with pytest.raises(ValueError, match=r"300\.0 != 400"):
-            _ = state.weights
+    with pytest.raises(ValueError, match="weights are undefined for a NAV of"):
+        _ = state.weights

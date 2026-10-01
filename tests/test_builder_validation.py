@@ -22,7 +22,7 @@ def test_non_monotonic_index():
     prices = pd.DataFrame(index=dates, data={"A": [1, 2, 3]})
 
     # Verify that initializing a Builder with this DataFrame raises a ValueError
-    with pytest.raises(ValueError, match="Index must be monotonically increasing"):
+    with pytest.raises(ValueError, match="`prices` index must be monotonic increasing"):
         Builder(prices=prices)
 
 
@@ -37,5 +37,5 @@ def test_non_unique_index():
     prices = pd.DataFrame(index=dates, data={"A": [1, 2, 3]})
 
     # Verify that initializing a Builder with this DataFrame raises a ValueError
-    with pytest.raises(ValueError, match="Index must have unique values"):
+    with pytest.raises(ValueError, match="`prices` index must be unique"):
         Builder(prices=prices)
