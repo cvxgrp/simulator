@@ -159,8 +159,6 @@ class State:
         This is equivalent to the AUM (assets under management).
 
         """
-        # assert np.isclose(self.value + self.cash, self.aum), f"{self.value + self.cash} != {self.aum}"
-        # return self.value + self.cash
         return self.aum
 
     @property
@@ -472,6 +470,12 @@ class State:
             Series containing the weight of each asset as a fraction of the
             total portfolio value, indexed by asset
 
+        Raises:
+        ------
+        ValueError
+            If a position is held while the NAV is zero or not finite, so no
+            weight is defined
+
         Notes:
         -----
         If positions are missing, a series of zeros is effectively returned.
@@ -497,8 +501,9 @@ class State:
         0.7
 
         """
-        if not np.isclose(self.nav, self.aum):
-            msg = f"{self.nav} != {self.aum}"
+        holding = bool((self.cashposition.abs() > 0).any())
+        if holding and (self.nav == 0 or not np.isfinite(self.nav)):
+            msg = f"weights are undefined for a NAV of {self.nav}; set `aum` to a finite, non-zero value first."
             raise ValueError(msg)
 
         return self.cashposition / self.nav
