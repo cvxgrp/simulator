@@ -6,7 +6,7 @@ positions, prices, cash, and other portfolio metrics, and that it updates these
 values correctly when the state changes.
 """
 
-import datetime
+import datetime as dt
 
 import numpy as np
 import pandas as pd
@@ -32,7 +32,7 @@ def prices() -> pd.DataFrame:
     """
     return pd.DataFrame(
         columns=["A", "B", "C", "D"],
-        index=pd.Index([datetime.date(2020, 1, 1), datetime.date(2020, 1, 30)], name="date"),
+        index=pd.Index([dt.date(2020, 1, 1), dt.date(2020, 1, 30)], name="date"),
         data=[[1.0, 2.0, 3.0, 4.0], [1.3, 2.3, 2.7, 4.2]],
     )
 
@@ -52,7 +52,7 @@ def prices_pl() -> pl.DataFrame:
     """
     return pl.DataFrame(
         {
-            "date": [datetime.date(2020, 1, 1), datetime.date(2020, 1, 30)],
+            "date": [dt.date(2020, 1, 1), dt.date(2020, 1, 30)],
             "A": [1.0, 1.3],
             "B": [2.0, 2.3],
             "C": [3.0, 2.7],
@@ -80,7 +80,7 @@ def state(prices: pd.DataFrame) -> State:
 
     """
     state = State()
-    state.prices = prices.loc[datetime.date(2020, 1, 1)]
+    state.prices = prices.loc[dt.date(2020, 1, 1)]
     return state
 
 
@@ -160,7 +160,7 @@ def test_assets_partial(prices: pd.DataFrame) -> None:
 
     """
     state = State()
-    state.prices = prices[["A", "B", "C"]].loc[datetime.date(2020, 1, 1)]
+    state.prices = prices[["A", "B", "C"]].loc[dt.date(2020, 1, 1)]
     pd.testing.assert_index_equal(state.assets, pd.Index(["A", "B", "C"]))
 
 
@@ -274,7 +274,7 @@ def test_init(prices: pd.DataFrame) -> None:
     assert state.leverage == 0.0
 
     # Test state after setting prices
-    state.prices = prices.loc[datetime.date(2020, 1, 1)]
+    state.prices = prices.loc[dt.date(2020, 1, 1)]
 
     assert state.cash == 1e4
     assert state.aum == 1e4
@@ -287,30 +287,28 @@ def test_init(prices: pd.DataFrame) -> None:
     # Test state after updating position and weights
     state.position = np.ones(len(state.assets))
 
-    assert state.cash == 1e4 - prices.loc[datetime.date(2020, 1, 1)].sum()
+    assert state.cash == 1e4 - prices.loc[dt.date(2020, 1, 1)].sum()
     assert state.aum == 1e4
     assert state.nav == 1e4
-    assert state.value == prices.loc[datetime.date(2020, 1, 1)].sum()
+    assert state.value == prices.loc[dt.date(2020, 1, 1)].sum()
     assert state.profit == 0.0
     pd.testing.assert_series_equal(state.trades, pd.Series(1.0, index=state.assets))
 
-    pd.testing.assert_series_equal(
-        state.weights, prices.loc[datetime.date(2020, 1, 1)].div(state.nav), check_names=False
-    )
+    pd.testing.assert_series_equal(state.weights, prices.loc[dt.date(2020, 1, 1)].div(state.nav), check_names=False)
 
     assert state.leverage == pytest.approx(state.weights.abs().sum())
 
     # Test state after updating prices
-    state.prices = prices.loc[datetime.date(2020, 1, 30)]
+    state.prices = prices.loc[dt.date(2020, 1, 30)]
     assert state.profit == 0.5
-    assert state.cash == 1e4 - prices.loc[datetime.date(2020, 1, 1)].sum()
+    assert state.cash == 1e4 - prices.loc[dt.date(2020, 1, 1)].sum()
     assert state.aum == 1e4 + state.profit
     assert state.nav == 1e4 + state.profit
-    assert state.value == prices.loc[datetime.date(2020, 1, 30)].sum()
+    assert state.value == prices.loc[dt.date(2020, 1, 30)].sum()
 
     # Test state after updating cash
     state.cash = 1.01 * state.cash
-    assert state.cash == 1.01 * (1e4 - prices.loc[datetime.date(2020, 1, 1)].sum())
+    assert state.cash == 1.01 * (1e4 - prices.loc[dt.date(2020, 1, 1)].sum())
 
 
 def test_cash_set_aum(state: State) -> None:
@@ -385,12 +383,12 @@ def test_after_price(prices: pd.DataFrame) -> None:
 
     """
     state = State()
-    state.prices = prices.loc[datetime.date(2020, 1, 1)]
+    state.prices = prices.loc[dt.date(2020, 1, 1)]
     state.time = prices.index[0]
 
     pd.testing.assert_index_equal(state.assets, pd.Index(["A", "B", "C", "D"], dtype=str))
     np.testing.assert_array_equal(state.mask, np.array((True, True, True, True)))
-    pd.testing.assert_series_equal(state.prices, prices.loc[datetime.date(2020, 1, 1)])
+    pd.testing.assert_series_equal(state.prices, prices.loc[dt.date(2020, 1, 1)])
     pd.testing.assert_series_equal(state.weights, pd.Series(index=["A", "B", "C", "D"]))
     pd.testing.assert_series_equal(state.position, pd.Series(index=["A", "B", "C", "D"]))
     pd.testing.assert_series_equal(state.cashposition, pd.Series(index=["A", "B", "C", "D"]))
