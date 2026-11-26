@@ -141,6 +141,13 @@ marimo-folder = "book/marimo/notebooks"
 # successor task), and LOGO_FILE from the old Makefile, which nothing in the tree read.
 
 # Deptry configuration for dependency checking
+# `cvx` is a namespace package (no src/cvx/__init__.py), so deptry cannot detect
+# it as this project's own code. Declare it first-party so imports of
+# cvx.simulator — e.g. from the marimo notebooks scanned since rhiza v1.14 — are
+# not reported as missing (DEP001) or transitive (DEP003).
+[tool.deptry]
+known_first_party = ["cvx"]
+
 # Map package names to their module names to suppress warnings
 [tool.deptry.package_module_name_map]
 cvxpy-base = "cvxpy"
@@ -157,7 +164,7 @@ plotly = "plotly"
 # Specific rule ignores for dependency checking
 [tool.deptry.per_rule_ignores]
 #DEP002 = ["jquantstats"]
-DEP001 = ["cvx", "cvxpy"]
+DEP001 = ["cvxpy"]
 DEP002 = ["pyarrow", "pytest"]
 
 # MyPy configuration for type checking
